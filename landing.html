@@ -73,11 +73,13 @@
     <div class="auth-box">
       <h3>Entre ou Cadastre-se</h3>
       <p>Digite seu e-mail para receber o link de acesso instantâneo.</p>
-      <div class="field">
-        <span>Seu e-mail principal</span>
-        <input type="email" id="emailInput" placeholder="exemplo@gamer.com">
-      </div>
-      <button class="auth-btn" id="loginBtn">Entrar com Magic Link ⚡</button>
+      <form id="loginForm">
+        <div class="field">
+          <span>Seu e-mail principal</span>
+          <input type="email" id="emailInput" placeholder="exemplo@gamer.com" required autocomplete="email">
+        </div>
+        <button type="submit" class="auth-btn" id="loginBtn">Entrar com Magic Link ⚡</button>
+      </form>
     </div>
   </main>
 
@@ -133,7 +135,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  document.getElementById('loginBtn').addEventListener('click', async () => {
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
     const email = document.getElementById('emailInput').value.trim();
     if (!email || !email.includes('@')) {
       toast('Por favor, insira um e-mail válido.');
