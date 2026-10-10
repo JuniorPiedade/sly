@@ -55,10 +55,25 @@
       }
     },
 
+    async updateRole(userId, newRole) {
+      if (!client) return 'Cliente indisponível.';
+      try {
+        const { error } = await client.from('profiles').update({ role: newRole }).eq('id', userId);
+        return error ? error.message : null;
+      } catch (e) {
+        return e.message;
+      }
+    },
+
     async signIn(email) {
       if (!client) return 'Cliente indisponível.';
       try {
-        const { error } = await client.auth.signInWithOtp({ email });
+        const { error } = await client.auth.signInWithOtp({ 
+          email,
+          options: {
+            emailRedirectTo: window.location.origin + '/index.html'
+          }
+        });
         return error ? error.message : null;
       } catch (e) {
         return e.message;
