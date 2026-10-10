@@ -1,5 +1,5 @@
 // ==========================================
-// MÓDULO DE INTEGRAÇÃO SUPABASE — ISLY.ME
+// MÓDULO DE INTEGRAÇÃO SUPABASE (NATIVO FETCH) — ISLY.ME
 // ==========================================
 (function() {
   const SUPABASE_URL = 'https://hmnuafaihsbvjejqsakt.supabase.co'.trim();
@@ -12,11 +12,7 @@
     if (window.supabase && typeof window.supabase.createClient === 'function') {
       try {
         client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          auth: {
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
-          }
+          auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
         });
       } catch (e) {
         console.error("Erro ao criar cliente Supabase:", e);
@@ -60,25 +56,34 @@
       }
     },
 
+    // LOGIN VIA FETCH NATIVO (Isola completamente o SDK e mostra o erro real)
     async signIn(email) {
-      const sb = initSupabase();
-      if (!sb) return 'Cliente Supabase não inicializado.';
-      
       try {
-        // Chamada direta e limpa para o Magic Link
-        const { data, error } = await sb.auth.signInWithOtp({
-          email: email.trim(),
-          options: {
-            emailRedirectTo: 'https://sly-inky.vercel.app/landing'
-          }
+        const response = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            create_user: true,
+            gotrue_meta_security: {},
+            options: {
+              emailRedirectTo: 'https://sly-inky.vercel.app/landing'
+            }
+          })
         });
 
-        if (error) {
-          return error.message;
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          return errData.msg || errData.error_description || `Erro HTTP ${response.status}: Falha na autenticação.`;
         }
-        return null; // Sem erros, sucesso!
+
+        return null; // Sucesso absoluto
       } catch (err) {
-        return err.message || 'Erro de conexão ao enviar Magic Link.';
+        return 'Falha de rede ao contactar o Supabase. Verifique extensões do browser ou bloqueadores.';
       }
     },
 
