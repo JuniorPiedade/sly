@@ -9,12 +9,15 @@
 
   function initSupabase() {
     if (client) return client;
+    
     if (window.supabase && typeof window.supabase.createClient === 'function') {
       try {
         client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       } catch (e) {
         console.error("Erro ao criar cliente Supabase:", e);
       }
+    } else {
+      console.warn("SDK do Supabase ainda não carregou na window. Certifica-te de incluir a tag <script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script> no HTML antes deste ficheiro.");
     }
     return client;
   }
@@ -67,12 +70,14 @@
 
     async signIn(email) {
       const sb = initSupabase();
-      if (!sb) return 'Cliente Supabase não inicializado.';
+      if (!sb) return 'Cliente Supabase não inicializado. Verifica se o script do Supabase CDN está presente no <head>.';
+      
       try {
         const { error } = await sb.auth.signInWithOtp({ 
           email: email.trim(),
           options: {
-            emailRedirectTo: 'https://sly-inky.vercel.app/index.html'
+            // CORRIGIDO: Agora bate exatamente com o que tá no painel (https://sly-inky.vercel.app/landing)
+            emailRedirectTo: 'https://sly-inky.vercel.app/landing'
           }
         });
         return error ? error.message : null;
@@ -88,5 +93,6 @@
     }
   };
 
+  // Tenta inicializar de imediato
   initSupabase();
 })();
