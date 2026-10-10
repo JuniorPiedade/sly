@@ -123,161 +123,424 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-// ==========================================
-// CONFIGURAÇÃO SEGURA DO SUPABASE
-// ==========================================
-let supabase = null;
-const SUPABASE_URL = 'https://hmnuafaihsbvjejqsakt.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
+document.addEventListener("DOMContentLoaded", () => {
+  // CONFIGURAÇÃO DO SUPABASE
+  let supabase = null;
+  const SUPABASE_URL = 'https://hmnuafaihsbvjejqsakt.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
 
-if (window.supabase) {
-  try {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  } catch(e) {
-    console.warn("Supabase não pôde ser inicializado:", e);
-  }
-}
-
-const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const STORAGE_KEY='isly_me_mvp_v1';
-const defaults={name:'Nyx.exe',handle:'nyx.exe',bio:'Gamer por escolha. Geek por essência. ✨',avatarUrl:'',avatarEmoji:'👾',statusEmoji:'🎮',statusLabel:'Jogando agora',activity:'Valorant',duration:'2 horas',emblems:['gamer','geek'],theme:'cyber',links:[{title:'Meu setup & jogos',url:'https://example.com/setup',emoji:'🎮'},{title:'Vem pro Discord',url:'https://discord.com',emoji:'💬'},{title:'Vídeos e lives',url:'https://youtube.com',emoji:'▶'}]};
-let state=structuredClone(defaults);
-let currentUser=null;
-
-const emblemInfo={gamer:{emoji:'🎮',name:'Gamer'},geek:{emoji:'👾',name:'Geek'},rpg:{emoji:'🐉',name:'Mestre do RPG'},anime:{emoji:'🍥',name:'Anime lover'},artist:{emoji:'🎨',name:'Criador'},founder:{emoji:'💎',name:'Fundador'}};
-
-function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),2500)}
-function safeHandle(v){return v.trim().replace(/^@/,'').replace(/[^a-zA-Z0-9._-]/g,'').slice(0,24)}
-function readFields(){state.name=$('#name').value.trim()||'Seu nome';state.handle=safeHandle($('#handle').value)||'seunick';state.bio=$('#bio').value.trim();state.avatarUrl=$('#avatarUrl').value.trim();state.avatarEmoji=$('#avatarEmoji').value.trim()||'👾';state.activity=$('#activity').value.trim();state.duration=$('#duration').value}
-
-function renderLinks(){const host=$('#linksList');host.innerHTML='';state.links.forEach((link,i)=>{const row=document.createElement('div');row.className='link-row';const title=document.createElement('input');title.maxLength=40;title.placeholder='Nome do link';title.setAttribute('aria-label','Nome do link '+(i+1));title.value=link.title;title.addEventListener('input',()=>{state.links[i].title=title.value;renderPreviewLinks()});const url=document.createElement('input');url.placeholder='https://...';url.setAttribute('aria-label','URL do link '+(i+1));url.value=link.url;url.addEventListener('input',()=>{state.links[i].url=url.value;renderPreviewLinks()});const del=document.createElement('button');del.className='icon-btn';del.type='button';del.textContent='×';del.setAttribute('aria-label','Remover link');del.addEventListener('click',()=>{state.links.splice(i,1);renderLinks();renderPreviewLinks();$('#linkCount').textContent=state.links.length+' / 6'});row.append(title,url,del);host.append(row)});$('#linkCount').textContent=state.links.length+' / 6';$('#addLink').disabled=state.links.length>=6;$('#addLink').style.opacity=state.links.length>=6?'.45':'1'}
-
-function renderPreviewLinks(){const host=$('#previewLinks');host.innerHTML='';state.links.forEach(link=>{const a=document.createElement('a');a.className='public-link';a.href=link.url||'#';a.target='_blank';const left=document.createElement('span');left.className='left';const emoji=document.createElement('span');emoji.textContent=link.emoji||'↗';const title=document.createElement('span');title.textContent=link.title||'Link sem título';left.append(emoji,title);const arr=document.createElement('span');arr.className='arr';arr.textContent='↗';a.append(left,arr);host.append(a)})}
-
-function renderEmblems(){const host=$('#previewEmblems');host.innerHTML='';state.emblems.forEach(id=>{const info=emblemInfo[id];if(!info)return;const el=document.createElement('span');el.textContent=info.emoji+' '+info.name;host.append(el)});$('#emblemCount').textContent=state.emblems.length+' / 3';$$('.emblem').forEach(btn=>btn.classList.toggle('selected',state.emblems.includes(btn.dataset.id)))}
-
-function renderPreview(){readFields();$('#previewName').textContent=state.name;$('#previewHandle').textContent='@'+state.handle;$('#previewBio').textContent=state.bio||'Seu universo, um só link.';$('#previewStatusEmoji').textContent=state.statusEmoji;$('#previewStatusText').textContent=state.statusLabel+(state.activity?' · '+state.activity:'');$('#statusEmoji').textContent=state.statusEmoji;$('#statusLine').textContent=state.statusLabel+(state.activity?' · '+state.activity:'');$('#statusDuration').textContent='Visível por '+state.duration.toLowerCase();$('#shareUrl').value='isly.me/'+state.handle;$('#bioCount').textContent=$('#bio').value.length;const av=$('#previewAvatar');av.innerHTML='';if(state.avatarUrl){const img=document.createElement('img');img.alt='Avatar de '+state.name;img.src=state.avatarUrl;img.onerror=()=>{av.textContent=state.avatarEmoji;toast('Não foi possível carregar a imagem do avatar.')};av.append(img)}else av.textContent=state.avatarEmoji;$('#profileCard').classList.toggle('theme-sakura',state.theme==='sakura');$('#profileCard').classList.toggle('theme-matrix',state.theme==='matrix');$$('.theme').forEach(b=>b.classList.toggle('selected',b.dataset.theme===state.theme));renderEmblems();renderPreviewLinks()}
-
-function fillFields(){for(const key of ['name','handle','bio','avatarUrl','avatarEmoji','activity','duration']){$('#'+key).value=state[key]??''}$$('.status-choice').forEach(b=>b.classList.toggle('active',b.dataset.emoji===state.statusEmoji&&b.dataset.label===state.statusLabel));renderLinks();renderPreview()}
-
-function loadLocalState(){try{const saved=localStorage.getItem(STORAGE_KEY);if(saved){const parsed=JSON.parse(saved);state={...structuredClone(defaults),...parsed};state.links=Array.isArray(state.links)?state.links.slice(0,6):structuredClone(defaults.links);state.emblems=Array.isArray(state.emblems)?state.emblems.slice(0,3):[]}}catch(e){state=structuredClone(defaults)}fillFields()}
-
-async function save(){
-  readFields();
-  try{
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-  }catch(e){}
-
-  if(supabase){
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if(user){
-        const payload = {
-          id: user.id,
-          handle: state.handle,
-          name: state.name,
-          bio: state.bio,
-          avatar_url: state.avatarUrl,
-          avatar_emoji: state.avatarEmoji,
-          status_emoji: state.statusEmoji,
-          status_label: state.statusLabel,
-          activity: state.activity,
-          duration: state.duration,
-          emblems: state.emblems,
-          theme: state.theme,
-          links: state.links,
-          updated_at: new Date()
-        };
-
-        const { error } = await supabase.from('profiles').upsert(payload);
-        if(error) toast('Erro ao salvar no Supabase: ' + error.message);
-        else toast('Perfil salvo na nuvem com sucesso! ✓');
-        renderPreview();
-        return;
-      }
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     } catch(e) {
-      console.error(e);
+      console.warn("Supabase init error:", e);
     }
   }
-  
-  toast('Perfil salvo neste navegador ✓');
-  renderPreview();
-}
 
-// REGISTRO DE EVENTOS (Garante que a UI funcione instantaneamente)
-$('#year').textContent=new Date().getFullYear();
-['name','handle','bio','avatarUrl','avatarEmoji','activity','duration'].forEach(id=>$('#'+id).addEventListener('input',renderPreview));
-$('#duration').addEventListener('change',renderPreview);
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const STORAGE_KEY = 'isly_me_mvp_v1';
+  const defaults = {
+    name: 'Nyx.exe',
+    handle: 'nyx.exe',
+    bio: 'Gamer por escolha. Geek por essência. ✨',
+    avatarUrl: '',
+    avatarEmoji: '👾',
+    statusEmoji: '🎮',
+    statusLabel: 'Jogando agora',
+    activity: 'Valorant',
+    duration: '2 horas',
+    emblems: ['gamer', 'geek'],
+    theme: 'cyber',
+    links: [
+      {title: 'Meu setup & jogos', url: 'https://example.com/setup', emoji: '🎮'},
+      {title: 'Vem pro Discord', url: 'https://discord.com', emoji: '💬'},
+      {title: 'Vídeos e lives', url: 'https://youtube.com', emoji: '▶'}
+    ]
+  };
 
-$$('.status-choice').forEach(b=>b.addEventListener('click',()=>{state.statusEmoji=b.dataset.emoji;state.statusLabel=b.dataset.label;$$('.status-choice').forEach(x=>x.classList.toggle('active',x===b));renderPreview()}));
+  let state = structuredClone(defaults);
+  let currentUser = null;
 
-$$('.emblem').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.id;if(state.emblems.includes(id))state.emblems=state.emblems.filter(x=>x!==id);else if(state.emblems.length<3)state.emblems.push(id);else{toast('Você pode escolher até 3 emblemas.');return}renderEmblems()}));
+  const emblemInfo = {
+    gamer: {emoji: '🎮', name: 'Gamer'},
+    geek: {emoji: '👾', name: 'Geek'},
+    rpg: {emoji: '🐉', name: 'Mestre do RPG'},
+    anime: {emoji: '🍥', name: 'Anime lover'},
+    artist: {emoji: '🎨', name: 'Criador'},
+    founder: {emoji: '💎', name: 'Fundador'}
+  };
 
-$$('.theme').forEach(b=>b.addEventListener('click',()=>{state.theme=b.dataset.theme;renderPreview();toast('Tema '+b.querySelector('strong').textContent+' selecionado')}));
+  function toast(msg) {
+    const el = $('#toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => el.classList.remove('show'), 2500);
+  }
 
-$('#addLink').addEventListener('click',()=>{if(state.links.length>=6)return;state.links.push({title:'Novo link',url:'https://',emoji:'↗'});renderLinks();renderPreviewLinks()});
-$('#saveBtn').addEventListener('click',save);
-$('#saveBottom').addEventListener('click',save);
+  function safeHandle(v) {
+    return v.trim().replace(/^@/, '').replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 24);
+  }
 
-$('#resetBtn').addEventListener('click',()=>{state=structuredClone(defaults);fillFields();try{localStorage.removeItem(STORAGE_KEY)}catch(e){}toast('Exemplo restaurado')});
+  function readFields() {
+    state.name = $('#name')?.value.trim() || 'Seu nome';
+    state.handle = safeHandle($('#handle')?.value || '') || 'seunick';
+    state.bio = $('#bio')?.value.trim() || '';
+    state.avatarUrl = $('#avatarUrl')?.value.trim() || '';
+    state.avatarEmoji = $('#avatarEmoji')?.value.trim() || '👾';
+    state.activity = $('#activity')?.value.trim() || '';
+    state.duration = $('#duration')?.value || '2 horas';
+  }
 
-$('#copyHandle').addEventListener('click',async()=>{const text=$('#shareUrl').value;try{await navigator.clipboard.writeText(text);toast('Endereço copiado')}catch(e){$('#shareUrl').select();toast('Selecione e copie o endereço')}});
+  function renderLinks() {
+    const host = $('#linksList');
+    if (!host) return;
+    host.innerHTML = '';
+    state.links.forEach((link, i) => {
+      const row = document.createElement('div');
+      row.className = 'link-row';
 
-$$('[data-section]').forEach(btn=>btn.addEventListener('click',()=>{const id=btn.dataset.section;$$('[data-section]').forEach(b=>b.classList.toggle('active',b.dataset.section===id));const target=$('#section-'+id);if(target)target.scrollIntoView({behavior:'smooth',block:'start'})}));
+      const title = document.createElement('input');
+      title.maxLength = 40;
+      title.placeholder = 'Nome do link';
+      title.value = link.title;
+      title.addEventListener('input', () => {
+        state.links[i].title = title.value;
+        renderPreviewLinks();
+      });
 
-// Carregar estado local inicial
-loadLocalState();
+      const url = document.createElement('input');
+      url.placeholder = 'https://...';
+      url.value = link.url;
+      url.addEventListener('input', () => {
+        state.links[i].url = url.value;
+        renderPreviewLinks();
+      });
 
-// Tentar conectar ao Supabase em segundo plano
-if(supabase){
-  supabase.auth.getUser().then(({ data: { user } }) => {
-    if(user){
-      currentUser = user;
-      $('#authBtn').textContent = '👤 ' + (user.email ? user.email.split('@')[0] : 'Conta');
-      $('#authStatusLabel').textContent = 'Sessão ativa na nuvem';
-      
-      supabase.from('profiles').select('*').eq('id', user.id).single().then(({ data }) => {
-        if(data){
-          state = {
-            name: data.name,
-            handle: data.handle,
-            bio: data.bio || '',
-            avatarUrl: data.avatar_url || '',
-            avatarEmoji: data.avatar_emoji || '👾',
-            statusEmoji: data.status_emoji || '🎮',
-            statusLabel: data.status_label || 'Jogando agora',
-            activity: data.activity || '',
-            duration: data.duration || '2 horas',
-            emblems: data.emblems || [],
-            theme: data.theme || 'cyber',
-            links: data.links || []
+      const del = document.createElement('button');
+      del.className = 'icon-btn';
+      del.type = 'button';
+      del.textContent = '×';
+      del.addEventListener('click', () => {
+        state.links.splice(i, 1);
+        renderLinks();
+        renderPreviewLinks();
+        const linkCount = $('#linkCount');
+        if (linkCount) linkCount.textContent = state.links.length + ' / 6';
+      });
+
+      row.append(title, url, del);
+      host.append(row);
+    });
+
+    const linkCount = $('#linkCount');
+    if (linkCount) linkCount.textContent = state.links.length + ' / 6';
+    const addLinkBtn = $('#addLink');
+    if (addLinkBtn) {
+      addLinkBtn.disabled = state.links.length >= 6;
+      addLinkBtn.style.opacity = state.links.length >= 6 ? '.45' : '1';
+    }
+  }
+
+  function renderPreviewLinks() {
+    const host = $('#previewLinks');
+    if (!host) return;
+    host.innerHTML = '';
+    state.links.forEach(link => {
+      const a = document.createElement('a');
+      a.className = 'public-link';
+      a.href = link.url || '#';
+      a.target = '_blank';
+      const left = document.createElement('span');
+      left.className = 'left';
+      const emoji = document.createElement('span');
+      emoji.textContent = link.emoji || '↗';
+      const title = document.createElement('span');
+      title.textContent = link.title || 'Link sem título';
+      left.append(emoji, title);
+      const arr = document.createElement('span');
+      arr.className = 'arr';
+      arr.textContent = '↗';
+      a.append(left, arr);
+      host.append(a);
+    });
+  }
+
+  function renderEmblems() {
+    const host = $('#previewEmblems');
+    if (!host) return;
+    host.innerHTML = '';
+    state.emblems.forEach(id => {
+      const info = emblemInfo[id];
+      if (!info) return;
+      const el = document.createElement('span');
+      el.textContent = info.emoji + ' ' + info.name;
+      host.append(el);
+    });
+    const emblemCount = $('#emblemCount');
+    if (emblemCount) emblemCount.textContent = state.emblems.length + ' / 3';
+    $$('.emblem').forEach(btn => btn.classList.toggle('selected', state.emblems.includes(btn.dataset.id)));
+  }
+
+  function renderPreview() {
+    readFields();
+    if ($('#previewName')) $('#previewName').textContent = state.name;
+    if ($('#previewHandle')) $('#previewHandle').textContent = '@' + state.handle;
+    if ($('#previewBio')) $('#previewBio').textContent = state.bio || 'Seu universo, um só link.';
+    if ($('#previewStatusEmoji')) $('#previewStatusEmoji').textContent = state.statusEmoji;
+    if ($('#previewStatusText')) $('#previewStatusText').textContent = state.statusLabel + (state.activity ? ' · ' + state.activity : '');
+    if ($('#statusEmoji')) $('#statusEmoji').textContent = state.statusEmoji;
+    if ($('#statusLine')) $('#statusLine').textContent = state.statusLabel + (state.activity ? ' · ' + state.activity : '');
+    if ($('#statusDuration')) $('#statusDuration').textContent = 'Visível por ' + state.duration.toLowerCase();
+    if ($('#shareUrl')) $('#shareUrl').value = 'isly.me/' + state.handle;
+    if ($('#bioCount') && $('#bio')) $('#bioCount').textContent = $('#bio').value.length;
+
+    const av = $('#previewAvatar');
+    if (av) {
+      av.innerHTML = '';
+      if (state.avatarUrl) {
+        const img = document.createElement('img');
+        img.alt = 'Avatar de ' + state.name;
+        img.src = state.avatarUrl;
+        img.onerror = () => { av.textContent = state.avatarEmoji; };
+        av.append(img);
+      } else {
+        av.textContent = state.avatarEmoji;
+      }
+    }
+
+    const profileCard = $('#profileCard');
+    if (profileCard) {
+      profileCard.classList.toggle('theme-sakura', state.theme === 'sakura');
+      profileCard.classList.toggle('theme-matrix', state.theme === 'matrix');
+    }
+
+    $$('.theme').forEach(b => b.classList.toggle('selected', b.dataset.theme === state.theme));
+    renderEmblems();
+    renderPreviewLinks();
+  }
+
+  function fillFields() {
+    for (const key of ['name', 'handle', 'bio', 'avatarUrl', 'avatarEmoji', 'activity', 'duration']) {
+      const el = $('#' + key);
+      if (el) el.value = state[key] ?? '';
+    }
+    $$('.status-choice').forEach(b => b.classList.toggle('active', b.dataset.emoji === state.statusEmoji && b.dataset.label === state.statusLabel));
+    renderLinks();
+    renderPreview();
+  }
+
+  function loadLocalState() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        state = {...structuredClone(defaults), ...parsed};
+        state.links = Array.isArray(state.links) ? state.links.slice(0, 6) : structuredClone(defaults.links);
+        state.emblems = Array.isArray(state.emblems) ? state.emblems.slice(0, 3) : [];
+      }
+    } catch (e) {
+      state = structuredClone(defaults);
+    }
+    fillFields();
+  }
+
+  async function save() {
+    readFields();
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
+
+    if (supabase) {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const payload = {
+            id: user.id,
+            handle: state.handle,
+            name: state.name,
+            bio: state.bio,
+            avatar_url: state.avatarUrl,
+            avatar_emoji: state.avatarEmoji,
+            status_emoji: state.statusEmoji,
+            status_label: state.statusLabel,
+            activity: state.activity,
+            duration: state.duration,
+            emblems: state.emblems,
+            theme: state.theme,
+            links: state.links,
+            updated_at: new Date()
           };
-          fillFields();
+
+          const { error } = await supabase.from('profiles').upsert(payload);
+          if (error) toast('Erro ao salvar no Supabase: ' + error.message);
+          else toast('Perfil salvo na nuvem com sucesso! ✓');
+          renderPreview();
+          return;
+        }
+      } catch (e) {}
+    }
+    toast('Perfil salvo neste navegador ✓');
+    renderPreview();
+  }
+
+  // REGISTRO DE EVENTOS GARANTIDO
+  const yearEl = $('#year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  ['name', 'handle', 'bio', 'avatarUrl', 'avatarEmoji', 'activity', 'duration'].forEach(id => {
+    const el = $('#' + id);
+    if (el) el.addEventListener('input', renderPreview);
+  });
+
+  const durationEl = $('#duration');
+  if (durationEl) durationEl.addEventListener('change', renderPreview);
+
+  $$('.status-choice').forEach(b => {
+    b.addEventListener('click', () => {
+      state.statusEmoji = b.dataset.emoji;
+      state.statusLabel = b.dataset.label;
+      $$('.status-choice').forEach(x => x.classList.toggle('active', x === b));
+      renderPreview();
+    });
+  });
+
+  $$('.emblem').forEach(b => {
+    b.addEventListener('click', () => {
+      const id = b.dataset.id;
+      if (state.emblems.includes(id)) {
+        state.emblems = state.emblems.filter(x => x !== id);
+      } else if (state.emblems.length < 3) {
+        state.emblems.push(id);
+      } else {
+        toast('Você pode escolher até 3 emblemas.');
+        return;
+      }
+      renderEmblems();
+    });
+  });
+
+  $$('.theme').forEach(b => {
+    b.addEventListener('click', () => {
+      state.theme = b.dataset.theme;
+      renderPreview();
+      const strongEl = b.querySelector('strong');
+      toast('Tema ' + (strongEl ? strongEl.textContent : '') + ' selecionado');
+    });
+  });
+
+  const addLinkBtn = $('#addLink');
+  if (addLinkBtn) {
+    addLinkBtn.addEventListener('click', () => {
+      if (state.links.length >= 6) return;
+      state.links.push({title: 'Novo link', url: 'https://', emoji: '↗'});
+      renderLinks();
+      renderPreviewLinks();
+    });
+  }
+
+  const saveBtn = $('#saveBtn');
+  if (saveBtn) saveBtn.addEventListener('click', save);
+
+  const saveBottom = $('#saveBottom');
+  if (saveBottom) saveBottom.addEventListener('click', save);
+
+  const resetBtn = $('#resetBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      state = structuredClone(defaults);
+      fillFields();
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      toast('Exemplo restaurado');
+    });
+  }
+
+  const copyHandle = $('#copyHandle');
+  if (copyHandle) {
+    copyHandle.addEventListener('click', async () => {
+      const shareUrlInput = $('#shareUrl');
+      if (!shareUrlInput) return;
+      const text = shareUrlInput.value;
+      try {
+        await navigator.clipboard.writeText(text);
+        toast('Endereço copiado');
+      } catch (e) {
+        shareUrlInput.select();
+        toast('Selecione e copie o endereço');
+      }
+    });
+  }
+
+  $$('[data-section]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.section;
+      $$('[data-section]').forEach(b => b.classList.toggle('active', b.dataset.section === id));
+      const target = $('#section-' + id);
+      if (target) target.scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
+  });
+
+  // Inicializar estado local
+  loadLocalState();
+
+  // Sincronização em segundo plano com Supabase
+  if (supabase) {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        currentUser = user;
+        const authBtn = $('#authBtn');
+        if (authBtn) authBtn.textContent = '👤 ' + (user.email ? user.email.split('@')[0] : 'Conta');
+        const authStatusLabel = $('#authStatusLabel');
+        if (authStatusLabel) authStatusLabel.textContent = 'Sessão ativa na nuvem';
+
+        supabase.from('profiles').select('*').eq('id', user.id).single().then(({ data }) => {
+          if (data) {
+            state = {
+              name: data.name,
+              handle: data.handle,
+              bio: data.bio || '',
+              avatarUrl: data.avatar_url || '',
+              avatarEmoji: data.avatar_emoji || '👾',
+              statusEmoji: data.status_emoji || '🎮',
+              statusLabel: data.status_label || 'Jogando agora',
+              activity: data.activity || '',
+              duration: data.duration || '2 horas',
+              emblems: data.emblems || [],
+              theme: data.theme || 'cyber',
+              links: data.links || []
+            };
+            fillFields();
+          }
+        });
+      }
+    }).catch(() => {});
+
+    const authBtn = $('#authBtn');
+    if (authBtn) {
+      authBtn.addEventListener('click', async () => {
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            if (confirm('Deseja sair da sua conta?')) {
+              await supabase.auth.signOut();
+              location.reload();
+            }
+          } else {
+            const email = prompt('Digite seu e-mail para entrar/cadastrar no Supabase:');
+            if (!email) return;
+            const { error } = await supabase.auth.signInWithOtp({ email });
+            if (error) toast('Erro: ' + error.message);
+            else toast('Link de acesso enviado para seu e-mail!');
+          }
+        } catch (e) {
+          toast('Serviço de autenticação temporariamente indisponível.');
         }
       });
     }
-  }).catch(e => console.warn("Modo offline / Supabase não responsivo"));
-
-  $('#authBtn').addEventListener('click', async()=>{
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if(user){
-        if(confirm('Deseja sair da sua conta?')){
-          await supabase.auth.signOut();
-          location.reload();
-        }
-      } else {
-        const email = prompt('Digite seu e-mail para entrar/cadastrar no Supabase:');
-        if(!email) return;
-        const { error } = await supabase.auth.signInWithOtp({ email });
-        if(error) toast('Erro: ' + error.message);
-        else toast('Link de acesso enviado para seu e-mail!');
-      }
-    } catch(e) {
-      toast('Serviço de autenticação temporariamente indisponível.');
-    }
-  });
-}
+  }
+});
 </script>
 </body>
 </html>
