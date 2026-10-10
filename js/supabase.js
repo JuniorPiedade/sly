@@ -61,7 +61,7 @@
         const { error } = await client.auth.signInWithOtp({ 
           email,
           options: {
-            emailRedirectTo: window.location.origin + '/index.html'
+            emailRedirectTo: 'https://sly-inky.vercel.app/index.html'
           }
         });
         return error ? error.message : null;
