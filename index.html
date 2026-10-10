@@ -178,12 +178,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     toast.timer = setTimeout(() => el.classList.remove('show'), 2500);
   }
 
+  // Segurança aprimorada contra falha de rede/SDK
   if (window.islySupabase) {
-    const user = await window.islySupabase.getUser();
-    if (!user) return;
-    currentUser = user;
-    $('#authLockScreen').classList.add('hidden');
-  } else return;
+    try {
+      const user = await window.islySupabase.getUser();
+      if (user) {
+        currentUser = user;
+        $('#authLockScreen').classList.add('hidden');
+      }
+    } catch (err) {
+      console.warn("Erro ao obter utilizador:", err);
+    }
+  }
 
   const emblemInfo = {
     gamer: {emoji: '🎮', name: 'Gamer'}, geek: {emoji: '👾', name: 'Geek'},
@@ -327,7 +333,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function save() {
     readFields();
-    if (!currentUser) return;
+    if (!currentUser) {
+      toast('Sessão expirada. Faça login novamente.');
+      return;
+    }
     const payload = {
       id: currentUser.id, handle: state.handle, name: state.name, role: state.role, bio: state.bio,
       avatar_url: state.avatarUrl, avatar_emoji: state.avatarEmoji,
@@ -341,16 +350,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderPreview();
   }
 
-  const cloudData = await window.islySupabase.getProfileById(currentUser.id);
-  if (cloudData) {
-    state = {
-      name: cloudData.name || 'Seu nome', handle: cloudData.handle || 'seunick',
-      role: cloudData.role || 'Fundador', bio: cloudData.bio || '',
-      avatarUrl: cloudData.avatar_url || '', avatarEmoji: cloudData.avatar_emoji || '👾',
-      statusEmoji: cloudData.status_emoji || '🎮', statusLabel: cloudData.status_label || 'Jogando agora',
-      activity: cloudData.activity || '', duration: cloudData.duration || '2 horas',
-      emblems: cloudData.emblems || [], theme: cloudData.theme || 'cyber', links: cloudData.links || []
-    };
+  if (currentUser) {
+    try {
+      const cloudData = await window.islySupabase.getProfileById(currentUser.id);
+      if (cloudData) {
+        state = {
+          name: cloudData.name || 'Seu nome', handle: cloudData.handle || 'seunick',
+          role: cloudData.role || 'Fundador', bio: cloudData.bio || '',
+          avatarUrl: cloudData.avatar_url || '', avatarEmoji: cloudData.avatar_emoji || '👾',
+          statusEmoji: cloudData.status_emoji || '🎮', statusLabel: cloudData.status_label || 'Jogando agora',
+          activity: cloudData.activity || '', duration: cloudData.duration || '2 horas',
+          emblems: cloudData.emblems || [], theme: cloudData.theme || 'cyber', links: cloudData.links || []
+        };
+      }
+    } catch (e) {
+      console.warn("Não foi possível carregar dados da nuvem, usando predefinições.");
+    }
   }
   fillFields();
 
@@ -363,8 +378,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   $$('.status-choice').forEach(b => {
     b.addEventListener('click', () => {
-      state.statusEmoji = b.dataset.emoji; state.statusLabel = b.dataset.label;
-      $$('.status-choice').forEach(x => x.classList.toggle('active', x === b));
+      state.statusEmoji = b.dataset.emoji; 
+      state.statusLabel = b.dataset.label;
+      $$('.status-choice').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
       renderPreview();
     });
   });
@@ -372,10 +389,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   $$('.emblem').forEach(b => {
     b.addEventListener('click', () => {
       const id = b.dataset.id;
-      if (state.emblems.includes(id)) state.emblems = state.emblems.filter(x => x !== id);
-      else if (state.emblems.length < 3) state.emblems.push(id);
-      else { toast('Você pode escolher até 3 emblemas.'); return; }
+      if (state.emblems.includes(id)) {
+        state.emblems = state.emblems.filter(x => x !== id);
+      } else {
+        if (state.emblems.length < 3) state.emblems.push(id);
+        else toast('Máximo de 3 emblemas permitidos.');
+      }
       renderEmblems();
+      renderPreview();
     });
   });
 
@@ -383,51 +404,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     b.addEventListener('click', () => {
       state.theme = b.dataset.theme;
       renderPreview();
-      toast('Tema ' + (b.querySelector('strong')?.textContent || '') + ' selecionado');
     });
   });
 
-  if ($('#addLink')) {
-    $('#addLink').addEventListener('click', () => {
-      if (state.links.length >= 6) return;
-      state.links.push({title: 'Novo link', url: 'https://', emoji: '↗'});
-      renderLinks(); renderPreviewLinks();
-    });
-  }
-
-  if ($('#saveBtn')) $('#saveBtn').addEventListener('click', save);
-  if ($('#saveBottom')) $('#saveBottom').addEventListener('click', save);
-
-  if ($('#authBtn')) {
-    $('#authBtn').addEventListener('click', async () => {
-      if (confirm('Deseja sair da sua conta?')) {
-        await window.islySupabase.signOut();
-        window.location.href = 'landing.html';
+  const addLinkBtn = $('#addLink');
+  if (addLinkBtn) {
+    addLinkBtn.addEventListener('click', () => {
+      if (state.links.length < 6) {
+        state.links.push({title: '', url: '', emoji: '↗'});
+        renderLinks();
+        renderPreviewLinks();
       }
     });
   }
 
-  if ($('#copyHandle')) {
-    $('#copyHandle').addEventListener('click', async () => {
-      const val = $('#shareUrl')?.value;
-      if (!val) return;
-      try {
-        await navigator.clipboard.writeText(val);
-        toast('Link público copiado!');
-      } catch (e) {
-        toast('Erro ao copiar link.');
-      }
+  const saveBtn = $('#saveBtn');
+  if (saveBtn) saveBtn.addEventListener('click', save);
+
+  const saveBottom = $('#saveBottom');
+  if (saveBottom) saveBottom.addEventListener('click', save);
+
+  const authBtn = $('#authBtn');
+  if (authBtn) {
+    authBtn.addEventListener('click', async () => {
+      if (window.islySupabase) await window.islySupabase.signOut();
+      window.location.href = 'landing.html';
     });
   }
 
-  $$('[data-section]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.dataset.section;
-      $$('[data-section]').forEach(b => b.classList.toggle('active', b.dataset.section === id));
-      const target = $('#section-' + id);
-      if (target) target.scrollIntoView({behavior: 'smooth', block: 'start'});
+  const copyHandle = $('#copyHandle');
+  if (copyHandle) {
+    copyHandle.addEventListener('click', () => {
+      const shareUrlInput = $('#shareUrl');
+      if (shareUrlInput) {
+        shareUrlInput.select();
+        navigator.clipboard.writeText(shareUrlInput.value);
+        toast('Link copiado para a área de transferência! 📋');
+      }
     });
-  });
+  }
 });
 </script>
 </body>
