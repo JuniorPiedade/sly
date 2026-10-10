@@ -2,77 +2,81 @@
 // MÓDULO DE INTEGRAÇÃO SUPABASE — ISLY.ME
 // ==========================================
 (function() {
-  const SUPABASE_URL = 'https://hmnuafaihsbvjejqsakt.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
+  // Limpeza rigorosa de espaços para evitar erros de fetch por URL corrompido
+  const SUPABASE_URL = 'https://hmnuafaihsbvjejqsakt.supabase.co'.trim();
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU'.trim();
 
   let client = null;
-  if (window.supabase && typeof window.supabase.createClient === 'function') {
-    try {
-      client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (e) {
-      console.warn("Erro ao iniciar Supabase client:", e);
+
+  function initSupabase() {
+    if (client) return client;
+
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      try {
+        client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("🟢 Supabase Client inicializado com sucesso.");
+      } catch (e) {
+        console.error("🔴 Erro crítico ao criar cliente Supabase:", e);
+      }
+    } else {
+      console.warn("⚠️ Biblioteca global do Supabase ainda não está disponível.");
     }
+    return client;
   }
 
   window.islySupabase = {
     async getUser() {
-      if (!client) return null;
+      const sb = initSupabase();
+      if (!sb) return null;
       try {
-        const { data: { user } } = await client.auth.getUser();
+        const { data: { user }, error } = await sb.auth.getUser();
+        if (error) throw error;
         return user;
       } catch (e) {
+        console.error("Erro ao obter utilizador:", e.message);
         return null;
-      }
-    },
-
-    async getProfileById(userId) {
-      if (!client) return null;
-      try {
-        const { data, error } = await client.from('profiles').select('*').eq('id', userId).single();
-        return error ? null : data;
-      } catch (e) {
-        return null;
-      }
-    },
-
-    async getProfileByHandle(handle) {
-      if (!client) return null;
-      try {
-        const { data, error } = await client.from('profiles').select('*').eq('handle', handle).single();
-        return error ? null : data;
-      } catch (e) {
-        return null;
-      }
-    },
-
-    async saveProfile(payload) {
-      if (!client) return 'Cliente Supabase indisponível.';
-      try {
-        const { error } = await client.from('profiles').upsert(payload);
-        return error ? error.message : null;
-      } catch (e) {
-        return e.message;
       }
     },
 
     async signIn(email) {
-      if (!client) return 'Cliente indisponível.';
+      const sb = initSupabase();
+      if (!sb) {
+        return "Erro crítico: Cliente Supabase não foi inicializado. Verifique a ligação ao CDN.";
+      }
+      
       try {
-        const { error } = await client.auth.signInWithOtp({ 
-          email,
+        console.log("🔄 A enviar Magic Link para:", email);
+        const { error } = await sb.auth.signInWithOtp({ 
+          email: email.trim(),
           options: {
             emailRedirectTo: 'https://sly-inky.vercel.app/index.html'
           }
         });
-        return error ? error.message : null;
+
+        if (error) {
+          console.error("🔴 Erro retornado pelo Supabase Auth:", error);
+          return error.message;
+        }
+
+        console.log("🟢 Magic link enviado com sucesso!");
+        return null; // Sem erros
       } catch (e) {
-        return e.message;
+        console.error("🔴 Exceção de rede capturada (Failed to fetch):", e);
+        return e.message || "Erro de ligação à rede (Failed to fetch). Verifique o seu bloqueador de anúncios ou consola.";
       }
     },
 
     async signOut() {
-      if (!client) return;
-      try { await client.auth.signOut(); } catch (e) {}
+      const sb = initSupabase();
+      if (!sb) return;
+      try { await sb.auth.signOut(); } catch (e) {}
     }
   };
+
+  // Tentar inicializar logo ao carregar o script
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSupabase);
+  } else {
+    initSupabase();
+  }
 })();
