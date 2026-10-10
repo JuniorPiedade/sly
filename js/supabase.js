@@ -9,10 +9,15 @@
 
   function initSupabase() {
     if (client) return client;
-    
     if (window.supabase && typeof window.supabase.createClient === 'function') {
       try {
-        client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        });
       } catch (e) {
         console.error("Erro ao criar cliente Supabase:", e);
       }
@@ -44,17 +49,6 @@
       }
     },
 
-    async getProfileByHandle(handle) {
-      const sb = initSupabase();
-      if (!sb) return null;
-      try {
-        const { data, error } = await sb.from('profiles').select('*').eq('handle', handle).single();
-        return error ? null : data;
-      } catch (e) {
-        return null;
-      }
-    },
-
     async saveProfile(payload) {
       const sb = initSupabase();
       if (!sb) return 'Cliente Supabase indisponível.';
@@ -68,18 +62,23 @@
 
     async signIn(email) {
       const sb = initSupabase();
-      if (!sb) return 'Cliente Supabase não inicializado. Verifique a conexão do script SDK.';
+      if (!sb) return 'Cliente Supabase não inicializado.';
       
       try {
-        const { error } = await sb.auth.signInWithOtp({ 
+        // Chamada direta e limpa para o Magic Link
+        const { data, error } = await sb.auth.signInWithOtp({
           email: email.trim(),
           options: {
             emailRedirectTo: 'https://sly-inky.vercel.app/landing'
           }
         });
-        return error ? error.message : null;
-      } catch (e) {
-        return e.message;
+
+        if (error) {
+          return error.message;
+        }
+        return null; // Sem erros, sucesso!
+      } catch (err) {
+        return err.message || 'Erro de conexão ao enviar Magic Link.';
       }
     },
 
