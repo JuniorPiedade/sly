@@ -5,24 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
 <meta name="description" content="isly.me — sua identidade digital gamer e geek.">
-<title>isly.me — Seu universo, um só link</title>
+<title>Painel Editor — isly.me</title>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}a{color:inherit;text-decoration:none}button{color:inherit}.app{min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.22),transparent 45%),var(--bg)}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #a78bfa1f}.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:850;letter-spacing:-1.3px}.brand-mark{height:34px;width:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#090914;box-shadow:0 0 25px #9333ea44}.dot{color:var(--blue)}.top-actions{display:flex;align-items:center;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:11px 15px;background:#ffffff08;color:var(--text);font-weight:700;font-size:13px;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px);border-color:#8b5cf6}.btn.primary{border:0;background:linear-gradient(105deg,#7c3aed,#9333ea 58%,#2563eb);box-shadow:0 8px 30px #7c3aed38}.btn.small{padding:9px 12px}.layout{display:grid;grid-template-columns:225px minmax(0,1fr);gap:24px;padding:26px 0 60px}.sidebar{align-self:start;position:sticky;top:18px;border:1px solid var(--line);border-radius:18px;background:#10101bcc;padding:13px}.side-label{padding:10px 10px 7px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8582a5;font-weight:800}.side-btn{width:100%;display:flex;align-items:center;gap:11px;text-align:left;padding:11px 12px;border:1px solid transparent;background:transparent;border-radius:11px;color:#b9b6d2;font-size:13px;font-weight:650;cursor:pointer}.side-btn .ico{width:24px;text-align:center;font-size:16px}.side-btn:hover,.side-btn.active{background:#8b5cf619;border-color:#8b5cf63b;color:#fff}.side-bottom{border-top:1px solid var(--line);margin-top:13px;padding-top:13px}.side-note{font-size:11px;line-height:1.6;color:#8582a5;padding:10px}.content{min-width:0}.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px}.eyebrow{color:#c084fc;text-transform:uppercase;letter-spacing:.15em;font-size:10px;font-weight:850}.page-head h1{font-size:clamp(27px,4vw,38px);line-height:1.1;letter-spacing:-.05em;margin:7px 0}.page-head p{color:var(--muted);font-size:13px;margin:0;line-height:1.7}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;border:1px solid #86efac36;background:#86efac0d;color:#bbf7d0;font-size:11px;font-weight:750;white-space:nowrap}.dot-live{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80}.grid-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(275px,.78fr);gap:18px;align-items:start}.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#141422,#0d0d18);padding:20px;min-width:0}.panel+.panel{margin-top:16px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.panel-head h2{font-size:15px;margin:0;letter-spacing:-.02em}.panel-head p{font-size:11px;color:var(--muted);margin:4px 0 0}.tiny{font-size:10px;color:#9692b2}.field{display:block;margin:14px 0}.field>span{display:block;font-size:11px;color:#c7c4dd;margin-bottom:7px;font-weight:650}.field input,.field textarea,.field select{width:100%;border:1px solid #35334e;border-radius:11px;padding:11px 12px;background:#0a0a14;color:#fff;outline:none;font-size:13px}.field textarea{min-height:76px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#a855f7;box-shadow:0 0 0 3px #a855f71b}.field small{display:block;margin-top:6px;color:#777491;font-size:10px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}.status-options{display:flex;flex-wrap:wrap;gap:7px}.status-choice{border:1px solid #33324d;background:#ffffff04;border-radius:10px;padding:8px 10px;font-size:11px;cursor:pointer;color:#c9c5e2}.status-choice.active{border-color:#22d3ee80;background:#22d3ee10;color:#cffafe}.status-current{padding:12px;border:1px solid #22d3ee35;background:#22d3ee09;border-radius:12px;display:flex;align-items:center;gap:10px;margin-top:12px}.status-current .emoji{font-size:22px}.status-current strong{display:block;font-size:12px}.status-current span{display:block;color:var(--muted);font-size:10px;margin-top:2px}.link-row{display:grid;grid-template-columns:1fr 1.25fr auto;gap:8px;align-items:center;margin:9px 0}.link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:9px;padding:9px;background:#0a0a14;color:#fff;font-size:11px}.icon-btn{width:34px;height:34px;border:1px solid #3a304b;border-radius:9px;background:#ffffff05;cursor:pointer;color:#fda4af}.add-link{width:100%;margin-top:8px;border:1px dashed #514174;background:#8b5cf609;border-radius:10px;padding:10px;color:#d8b4fe;font-size:12px;font-weight:700;cursor:pointer}.emblem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.emblem{border:1px solid #34314d;border-radius:12px;background:#ffffff04;padding:12px 7px;text-align:center;cursor:pointer;transition:.2s}.emblem .symbol{display:block;font-size:24px;margin-bottom:5px;filter:grayscale(1);opacity:.6}.emblem strong{display:block;font-size:10px}.emblem small{display:block;font-size:9px;color:#8885a5;margin-top:3px}.emblem.selected{border-color:#a855f7;background:#a855f712;box-shadow:0 0 0 1px #a855f722}.emblem.selected .symbol{filter:none;opacity:1;text-shadow:0 0 18px #a855f7}.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.theme{border:1px solid #34314d;background:#ffffff04;border-radius:12px;padding:7px;text-align:left;cursor:pointer}.theme.selected{border-color:#a855f7;box-shadow:0 0 0 1px #a855f733}.theme-art{height:78px;border-radius:8px;display:grid;place-items:center;font-size:27px}.theme-art.cyber{background:radial-gradient(circle at 50% 40%,#9333ea77,transparent 55%),linear-gradient(135deg,#21103b,#080b19);color:#c084fc}.theme-art.sakura{background:radial-gradient(circle at 70% 20%,#f472b666,transparent 45%),linear-gradient(135deg,#35152f,#111020);color:#f9a8d4}.theme-art.matrix{background:radial-gradient(circle at 50% 40%,#22c55e44,transparent 55%),linear-gradient(135deg,#0b211d,#080e15);color:#86efac}.theme strong{display:block;font-size:10px;margin:8px 2px 2px}.theme small{display:block;font-size:9px;color:#8e8aa9;margin:0 2px 3px}.preview-panel{position:sticky;top:18px}.preview-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.preview-top strong{font-size:13px}.preview-top span{font-size:10px;color:#8c89a8}.profile-card{overflow:hidden;border:1px solid #49406c;border-radius:22px;background:linear-gradient(155deg,#19172b,#0e0e1b 75%);box-shadow:0 18px 60px #0006;text-align:center;--accent:#c084fc}.profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}.profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}.cover{height:88px;position:relative;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d)}.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,#f472b688,transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,#4ade8088,transparent 30%),linear-gradient(120deg,#10392d,#101923)}.cover:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(120deg,transparent 0 24px,#ffffff08 25px 26px)}.avatar{width:76px;height:76px;margin:-38px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:24px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 0 30px #9333ea55;font-size:30px;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.profile-card h3{margin:7px 0 1px;font-size:20px}.verified{color:var(--blue);font-size:12px}.handle{font-size:11px;color:var(--accent)}.bio-preview{font-size:11px;color:#aaa7c7;margin:10px 18px 12px;overflow-wrap:anywhere}.live-status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #22d3ee45;background:#22d3ee0d;color:#cffafe;border-radius:999px;font-size:10px;margin:0 auto 14px;max-width:90%}.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:0 14px 13px}.preview-emblems span{display:inline-flex;align-items:center;gap:4px;padding:4px 7px;border:1px solid #a855f733;background:#a855f70d;border-radius:7px;font-size:9px;color:#ddd6fe}.social-preview{display:flex;justify-content:center;gap:7px;margin:0 0 14px}.social-preview span{display:grid;place-items:center;width:27px;height:27px;border:1px solid #34314d;border-radius:8px;color:var(--accent);font-size:11px}.public-links{padding:0 14px}.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:11px 10px;border:1px solid #39324f;border-radius:11px;background:linear-gradient(100deg,#ffffff08,#ffffff03);font-size:10px;font-weight:700;text-align:left;overflow-wrap:anywhere}.public-link .left{display:flex;align-items:center;gap:8px;min-width:0}.public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}.public-link .arr{color:var(--accent)}.profile-foot{font-size:8px;color:#777391;letter-spacing:.13em;padding:16px 0}.share-box{margin-top:14px;border:1px solid var(--line);background:#ffffff03;border-radius:13px;padding:12px}.share-box label{font-size:10px;color:#aaa7c7;display:block;margin-bottom:7px}.share-url{display:flex;gap:6px}.share-url input{min-width:0;flex:1;width:100%;border:1px solid #35334e;border-radius:8px;padding:8px;background:#0a0a14;color:#d8b4fe;font-size:10px}.share-url button{border:1px solid #4b3671;background:#8b5cf618;border-radius:8px;padding:7px 9px;font-size:10px;cursor:pointer}.hint{font-size:10px;line-height:1.65;color:#8582a5;margin:10px 0 0}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:50;background:#1c1b2d;border:1px solid #514174;color:#f5f3ff;border-radius:12px;padding:11px 15px;font-size:12px;box-shadow:0 10px 40px #0008;transition:.25s;max-width:calc(100% - 28px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.mobile-tabs{display:none}.footer{border-top:1px solid #24243a;padding:22px 0 28px;color:#8f8da9;font-size:11px}.footer-inner{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}a{color:inherit;text-decoration:none}button{color:inherit}.app{min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.22),transparent 45%),var(--bg)}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #a78bfa1f}.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:850;letter-spacing:-1.3px}.brand-mark{height:34px;width:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#090914;box-shadow:0 0 25px #9333ea44}.dot{color:var(--blue)}.top-actions{display:flex;align-items:center;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:11px 15px;background:#ffffff08;color:var(--text);font-weight:700;font-size:13px;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px);border-color:#8b5cf6}.btn.primary{border:0;background:linear-gradient(105deg,#7c3aed,#9333ea 58%,#2563eb);box-shadow:0 8px 30px #7c3aed38}.btn.small{padding:9px 12px}.layout{display:grid;grid-template-columns:225px minmax(0,1fr);gap:24px;padding:26px 0 60px}.sidebar{align-self:start;position:sticky;top:18px;border:1px solid var(--line);border-radius:18px;background:#10101bcc;padding:13px}.side-label{padding:10px 10px 7px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8582a5;font-weight:800}.side-btn{width:100%;display:flex;align-items:center;gap:11px;text-align:left;padding:11px 12px;border:1px solid transparent;background:transparent;border-radius:11px;color:#b9b6d2;font-size:13px;font-weight:650;cursor:pointer}.side-btn .ico{width:24px;text-align:center;font-size:16px}.side-btn:hover,.side-btn.active{background:#8b5cf619;border-color:#8b5cf63b;color:#fff}.side-bottom{border-top:1px solid var(--line);margin-top:13px;padding-top:13px}.side-note{font-size:11px;line-height:1.6;color:#8582a5;padding:10px}.content{min-width:0}.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px}.eyebrow{color:#c084fc;text-transform:uppercase;letter-spacing:.15em;font-size:10px;font-weight:850}.page-head h1{font-size:clamp(27px,4vw,38px);line-height:1.1;letter-spacing:-.05em;margin:7px 0}.page-head p{color:var(--muted);font-size:13px;margin:0;line-height:1.7}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;border:1px solid #86efac36;background:#86efac0d;color:#bbf7d0;font-size:11px;font-weight:750;white-space:nowrap}.dot-live{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80}.grid-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(275px,.78fr);gap:18px;align-items:start}.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#141422,#0d0d18);padding:20px;min-width:0}.panel+.panel{margin-top:16px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.panel-head h2{font-size:15px;margin:0;letter-spacing:-.02em}.panel-head p{font-size:11px;color:var(--muted);margin:4px 0 0}.tiny{font-size:10px;color:#9692b2}.field{display:block;margin:14px 0}.field>span{display:block;font-size:11px;color:#c7c4dd;margin-bottom:7px;font-weight:650}.field input,.field textarea,.field select{width:100%;border:1px solid #35334e;border-radius:11px;padding:11px 12px;background:#0a0a14;color:#fff;outline:none;font-size:13px}.field textarea{min-height:76px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#a855f7;box-shadow:0 0 0 3px #a855f71b}.field small{display:block;margin-top:6px;color:#777491;font-size:10px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}.status-options{display:flex;flex-wrap:wrap;gap:7px}.status-choice{border:1px solid #33324d;background:#ffffff04;border-radius:10px;padding:8px 10px;font-size:11px;cursor:pointer;color:#c9c5e2}.status-choice.active{border-color:#22d3ee80;background:#22d3ee10;color:#cffafe}.status-current{padding:12px;border:1px solid #22d3ee35;background:#22d3ee09;border-radius:12px;display:flex;align-items:center;gap:10px;margin-top:12px}.status-current .emoji{font-size:22px}.status-current strong{display:block;font-size:12px}.status-current span{display:block;color:var(--muted);font-size:10px;margin-top:2px}.link-row{display:grid;grid-template-columns:1fr 1.25fr auto;gap:8px;align-items:center;margin:9px 0}.link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:9px;padding:9px;background:#0a0a14;color:#fff;font-size:11px}.icon-btn{width:34px;height:34px;border:1px solid #3a304b;border-radius:9px;background:#ffffff05;cursor:pointer;color:#fda4af}.add-link{width:100%;margin-top:8px;border:1px dashed #514174;background:#8b5cf609;border-radius:10px;padding:10px;color:#d8b4fe;font-size:12px;font-weight:700;cursor:pointer}.emblem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.emblem{border:1px solid #34314d;border-radius:12px;background:#ffffff04;padding:12px 7px;text-align:center;cursor:pointer;transition:.2s}.emblem .symbol{display:block;font-size:24px;margin-bottom:5px;filter:grayscale(1);opacity:.6}.emblem strong{display:block;font-size:10px}.emblem small{display:block;font-size:9px;color:#8885a5;margin-top:3px}.emblem.selected{border-color:#a855f7;background:#a855f712;box-shadow:0 0 0 1px #a855f722}.emblem.selected .symbol{filter:none;opacity:1;text-shadow:0 0 18px #a855f7}.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.theme{border:1px solid #34314d;background:#ffffff04;border-radius:12px;padding:7px;text-align:left;cursor:pointer}.theme.selected{border-color:#a855f7;box-shadow:0 0 0 1px #a855f733}.theme-art{height:78px;border-radius:8px;display:grid;place-items:center;font-size:27px}.theme-art.cyber{background:radial-gradient(circle at 50% 40%,#9333ea77,transparent 55%),linear-gradient(135deg,#21103b,#080b19);color:#c084fc}.theme-art.sakura{background:radial-gradient(circle at 70% 20%,#f472b666,transparent 45%),linear-gradient(135deg,#35152f,#111020);color:#f9a8d4}.theme-art.matrix{background:radial-gradient(circle at 50% 40%,#22c55e44,transparent 55%),linear-gradient(135deg,#0b211d,#080e15);color:#86efac}.theme strong{display:block;font-size:10px;margin:8px 2px 2px}.theme small{display:block;font-size:9px;color:#8e8aa9;margin:0 2px 3px}.preview-panel{position:sticky;top:18px}.preview-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.preview-top strong{font-size:13px}.preview-top span{font-size:10px;color:#8c89a8}.profile-card{overflow:hidden;border:1px solid #49406c;border-radius:22px;background:linear-gradient(155deg,#19172b,#0e0e1b 75%);box-shadow:0 18px 60px #0006;text-align:center;--accent:#c084fc}.profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}.profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}.cover{height:88px;position:relative;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d)}.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,#f472b688,transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,#4ade8088,transparent 30%),linear-gradient(120deg,#10392d,#101923)}.cover:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(120deg,transparent 0 24px,#ffffff08 25px 26px)}.avatar{width:76px;height:76px;margin:-38px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:24px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 0 30px #9333ea55;font-size:30px;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.profile-card h3{margin:7px 0 1px;font-size:20px}.verified{color:var(--blue);font-size:12px}.handle{font-size:11px;color:var(--accent)}.bio-preview{font-size:11px;color:#aaa7c7;margin:10px 18px 12px;overflow-wrap:anywhere}.live-status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #22d3ee45;background:#22d3ee0d;color:#cffafe;border-radius:999px;font-size:10px;margin:0 auto 14px;max-width:90%}.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:0 14px 13px}.preview-emblems span{display:inline-flex;align-items:center;gap:4px;padding:4px 7px;border:1px solid #a855f733;background:#a855f70d;border-radius:7px;font-size:9px;color:#ddd6fe}.social-preview{display:flex;justify-content:center;gap:7px;margin:0 0 14px}.social-preview span{display:grid;place-items:center;width:27px;height:27px;border:1px solid #34314d;border-radius:8px;color:var(--accent);font-size:11px}.public-links{padding:0 14px}.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:11px 10px;border:1px solid #39324f;border-radius:11px;background:linear-gradient(100deg,#ffffff08,#ffffff03);font-size:10px;font-weight:700;text-align:left;overflow-wrap:anywhere}.public-link .left{display:flex;align-items:center;gap:8px;min-width:0}.public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}.public-link .arr{color:var(--accent)}.profile-foot{font-size:8px;color:#777391;letter-spacing:.13em;padding:16px 0}.share-box{margin-top:14px;border:1px solid var(--line);background:#ffffff03;border-radius:13px;padding:12px}.share-box label{font-size:10px;color:#aaa7c7;display:block;margin-bottom:7px}.share-url{display:flex;gap:6px}.share-url input{min-width:0;flex:1;width:100%;border:1px solid #35334e;border-radius:8px;padding:8px;background:#0a0a14;color:#d8b4fe;font-size:10px}.share-url button{border:1px solid #4b3671;background:#8b5cf618;border-radius:8px;padding:7px 9px;font-size:10px;cursor:pointer}.hint{font-size:10px;line-height:1.65;color:#8582a5;margin:10px 0 0}.hidden{display:none!important}.notice{border:1px solid #7c5c2b;background:#f59e0b0d;border-radius:12px;padding:12px 14px;color:#fcd9a1;font-size:11px;line-height:1.65;margin-bottom:18px}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:50;background:#1c1b2d;border:1px solid #514174;color:#f5f3ff;border-radius:12px;padding:11px 15px;font-size:12px;box-shadow:0 10px 40px #0008;transition:.25s;max-width:calc(100% - 28px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.mobile-tabs{display:none}.footer{border-top:1px solid #24243a;padding:22px 0 28px;color:#8f8da9;font-size:11px}.footer-inner{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+/* TELA DE BLOQUEIO DE SEGURANÇA */
+#authLockScreen{position:fixed;inset:0;background:var(--bg);z-index:999;display:grid;place-items:center;padding:20px;text-align:center}
+#authLockScreen.hidden{display:none}
+.lock-card{max-width:420px;border:1px solid var(--line);background:linear-gradient(145deg,#141422,#0d0d18);border-radius:22px;padding:34px;box-shadow:0 20px 60px #000a}
+.lock-card h2{margin:0 0 10px;font-size:22px}
+.lock-card p{color:var(--muted);font-size:13px;margin:0 0 24px;line-height:1.6}
+
 @media(max-width:950px){.layout{grid-template-columns:190px minmax(0,1fr);gap:16px}.grid-main{grid-template-columns:minmax(0,1fr)}.preview-panel{position:static;max-width:430px;width:100%;margin:0 auto}.panel+.panel{margin-top:14px}.theme-art{height:95px}}
 @media(max-width:650px){.wrap{width:calc(100% - 24px)}.topbar{height:66px}.brand{font-size:21px}.top-actions .btn:first-child{display:none}.layout{display:block;padding:18px 0 38px}.sidebar{display:none}.mobile-tabs{display:flex;gap:6px;overflow:auto;margin:0 0 18px;padding-bottom:4px}.mobile-tabs .side-btn{white-space:nowrap;width:auto;flex:0 0 auto;padding:9px 11px;font-size:11px}.page-head{display:block}.page-head .pill{margin-top:12px}.panel{padding:15px}.two-col{grid-template-columns:1fr}.theme-art{height:72px}.emblem-grid{grid-template-columns:repeat(3,1fr)}.link-row{grid-template-columns:.8fr 1.2fr auto;gap:5px}.link-row input{padding:8px 7px;font-size:10px}.icon-btn{width:30px;height:32px}.preview-panel{margin-top:16px}.footer-inner{display:block}.footer-inner span{display:block;margin-top:8px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body>
+
+<!-- TELA DE BLOQUEIO CASO NÃO ESTEJA LOGADO -->
+<div id="authLockScreen">
+  <div class="lock-card">
+    <div style="font-size:36px;margin-bottom:12px">🔒</div>
+    <h2>Acesso Restrito</h2>
+    <p>Você precisa estar autenticado para acessar o painel de edição do seu universo no isly.me.</p>
+    <a href="landing.html" class="btn primary" style="width:100%;padding:13px;justify-content:center">Fazer Login / Criar Conta ⚡</a>
+  </div>
+</div>
+
 <div class="app">
 <header class="wrap topbar">
-<a class="brand" href="#" aria-label="isly.me"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
+<a class="brand" href="landing.html" aria-label="isly.me"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
 <div class="top-actions">
-  <button class="btn small" id="authBtn">🔑 Entrar</button>
-  <button class="btn small" id="resetBtn">↺ Restaurar exemplo</button>
+  <button class="btn small" id="authBtn">👤 Sair</button>
   <button class="btn primary small" id="saveBtn">Salvar alterações ✓</button>
 </div>
 </header>
@@ -34,21 +52,21 @@
 <button class="side-btn" data-section="emblems"><span class="ico">✦</span>Emblemas</button>
 <button class="side-btn" data-section="themes"><span class="ico">◐</span>Temas</button>
 <button class="side-btn" data-section="links"><span class="ico">↗</span>Meus links</button>
-<div class="side-bottom"><div class="side-label">Sincronização</div><div class="side-note">Edite os campos e veja em tempo real. Faça login para manter tudo salvo no Supabase.</div></div>
+<div class="side-bottom"><div class="side-label">Sincronização</div><div class="side-note">Edite os campos e salve diretamente na nuvem do Supabase.</div></div>
 </aside>
 <section class="content">
 <div class="mobile-tabs">
 <button class="side-btn active" data-section="identity">◈ Perfil</button><button class="side-btn" data-section="status">◉ Status</button><button class="side-btn" data-section="emblems">✦ Emblemas</button><button class="side-btn" data-section="themes">◐ Temas</button><button class="side-btn" data-section="links">↗ Links</button>
 </div>
-<div class="page-head"><div><div class="eyebrow">Painel do seu universo</div><h1>Monte sua identidade.</h1><p>Deixe seu perfil com a sua cara. As mudanças aparecem na prévia ao lado.</p></div><div class="pill"><span class="dot-live"></span> <span id="authStatusLabel">Editor interativo</span></div></div>
-<div class="notice"><strong>Conectado ao Supabase:</strong> Faça login para salvar seu perfil de forma permanente na nuvem e garantir seu endereço personalizado.</div>
+<div class="page-head"><div><div class="eyebrow">Painel do seu universo</div><h1>Monte sua identidade.</h1><p>Deixe seu perfil com a sua cara. As mudanças aparecem na prévia ao lado.</p></div><div class="pill"><span class="dot-live"></span> <span id="authStatusLabel">Sessão Segura</span></div></div>
+<div class="notice"><strong>Painel Protegido:</strong> Suas alterações são sincronizadas diretamente com a sua conta no Supabase.</div>
 <div class="grid-main">
 <div class="editor">
 <section class="panel" id="section-identity">
 <div class="panel-head"><div><h2>◈ Identidade</h2><p>Como as pessoas vão conhecer você.</p></div><span class="tiny">01 / 05</span></div>
 <div class="two-col">
 <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" value="Nyx.exe" placeholder="Seu nome"></label>
-<label class="field"><span>Seu @ (endereço desejado)</span><input id="handle" maxlength="24" pattern="[A-Za-z0-9._-]+" value="nyx.exe" placeholder="seunick"><small>Endereço público: isly.me/perfil.html?u=seunick</small></label>
+<label class="field"><span>Seu @ (endereço desejado)</span><input id="handle" maxlength="24" pattern="[A-Za-z0-9._-]+" value="nyx.exe" placeholder="seunick"><small>Endereço público</small></label>
 </div>
 <label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte um pouco sobre você...">Gamer por escolha. Geek por essência. ✨</textarea><small><span id="bioCount">38</span>/140 caracteres</small></label>
 <div class="two-col">
@@ -118,14 +136,14 @@
 </div>
 </section>
 </main>
-<footer class="footer"><div class="wrap footer-inner"><span>⌬ isly.me — Seu universo. Um só link.</span><span>Protótipo MVP · Supabase Integrado · © <span id="year"></span></span></div></footer>
+<footer class="footer"><div class="wrap footer-inner"><span>⌬ isly.me — Seu universo. Um só link.</span><span>Painel do Editor · © <span id="year"></span></span></div></footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- Importação do script modular -->
 <script src="js/supabase.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const STORAGE_KEY = 'isly_me_mvp_v1';
@@ -144,12 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let state = structuredClone(defaults);
   let currentUser = null;
 
-  const emblemInfo = {
-    gamer: {emoji: '🎮', name: 'Gamer'}, geek: {emoji: '👾', name: 'Geek'},
-    rpg: {emoji: '🐉', name: 'Mestre do RPG'}, anime: {emoji: '🍥', name: 'Anime lover'},
-    artist: {emoji: '🎨', name: 'Criador'}, founder: {emoji: '💎', name: 'Fundador'}
-  };
-
   function toast(msg) {
     const el = $('#toast');
     if (!el) return;
@@ -158,6 +170,26 @@ document.addEventListener("DOMContentLoaded", () => {
     clearTimeout(toast.timer);
     toast.timer = setTimeout(() => el.classList.remove('show'), 2500);
   }
+
+  // VERIFICAÇÃO DE SEGURANÇA: Bloqueia se não estiver logado
+  if (window.islySupabase) {
+    const user = await window.islySupabase.getUser();
+    if (!user) {
+      // Mantém a tela de bloqueio visível
+      return;
+    }
+    currentUser = user;
+    $('#authLockScreen').classList.add('hidden'); // Libera o acesso ao editor
+  } else {
+    // Se falhar o script do Supabase, bloqueia por segurança
+    return;
+  }
+
+  const emblemInfo = {
+    gamer: {emoji: '🎮', name: 'Gamer'}, geek: {emoji: '👾', name: 'Geek'},
+    rpg: {emoji: '🐉', name: 'Mestre do RPG'}, anime: {emoji: '🍥', name: 'Anime lover'},
+    artist: {emoji: '🎨', name: 'Criador'}, founder: {emoji: '💎', name: 'Fundador'}
+  };
 
   function safeHandle(v) {
     return v.trim().replace(/^@/, '').replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 24);
@@ -216,7 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
     state.links.forEach(link => {
       const a = document.createElement('a');
       a.className = 'public-link'; a.href = link.url || '#'; a.target = '_blank';
-      a.addEventListener('click', () => toast('Links abrem direto no perfil público.'));
       const left = document.createElement('span'); left.className = 'left';
       const emoji = document.createElement('span'); emoji.textContent = link.emoji || '↗';
       const title = document.createElement('span'); title.textContent = link.title || 'Link sem título';
@@ -253,7 +284,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if ($('#statusLine')) $('#statusLine').textContent = state.statusLabel + (state.activity ? ' · ' + state.activity : '');
     if ($('#statusDuration')) $('#statusDuration').textContent = 'Visível por ' + state.duration.toLowerCase();
     
-    // Gerar URL pública real baseada no domínio atual
     const publicUrl = window.location.origin + window.location.pathname.replace('index.html', '') + 'perfil.html?u=' + state.handle;
     if ($('#shareUrl')) $('#shareUrl').value = publicUrl;
 
@@ -295,32 +325,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function save() {
     readFields();
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
-
-    if (window.islySupabase) {
-      try {
-        const user = await window.islySupabase.getUser();
-        if (user) {
-          const payload = {
-            id: user.id, handle: state.handle, name: state.name, bio: state.bio,
-            avatar_url: state.avatarUrl, avatar_emoji: state.avatarEmoji,
-            status_emoji: state.statusEmoji, status_label: state.statusLabel,
-            activity: state.activity, duration: state.duration, emblems: state.emblems,
-            theme: state.theme, links: state.links, updated_at: new Date()
-          };
-          const error = await window.islySupabase.saveProfile(payload);
-          if (error) toast('Erro ao salvar no Supabase: ' + error);
-          else toast('Perfil salvo na nuvem com sucesso! ✓');
-          renderPreview();
-          return;
-        }
-      } catch (e) {}
-    }
-    toast('Perfil salvo neste navegador ✓');
+    if (!currentUser) return;
+    const payload = {
+      id: currentUser.id, handle: state.handle, name: state.name, bio: state.bio,
+      avatar_url: state.avatarUrl, avatar_emoji: state.avatarEmoji,
+      status_emoji: state.statusEmoji, status_label: state.statusLabel,
+      activity: state.activity, duration: state.duration, emblems: state.emblems,
+      theme: state.theme, links: state.links, updated_at: new Date()
+    };
+    const error = await window.islySupabase.saveProfile(payload);
+    if (error) toast('Erro ao salvar no Supabase: ' + error);
+    else toast('Perfil salvo na nuvem com sucesso! ✓');
     renderPreview();
   }
 
-  // Eventos
+  // Carregar dados reais do usuário do Supabase
+  const cloudData = await window.islySupabase.getProfileById(currentUser.id);
+  if (cloudData) {
+    state = {
+      name: cloudData.name, handle: cloudData.handle, bio: cloudData.bio || '',
+      avatarUrl: cloudData.avatar_url || '', avatarEmoji: cloudData.avatar_emoji || '👾',
+      statusEmoji: cloudData.status_emoji || '🎮', statusLabel: cloudData.status_label || 'Jogando agora',
+      activity: cloudData.activity || '', duration: cloudData.duration || '2 horas',
+      emblems: cloudData.emblems || [], theme: cloudData.theme || 'cyber', links: cloudData.links || []
+    };
+  }
+  fillFields();
+
+  // Eventos de interface
   if ($('#year')) $('#year').textContent = new Date().getFullYear();
   ['name', 'handle', 'bio', 'avatarUrl', 'avatarEmoji', 'activity', 'duration'].forEach(id => {
     const el = $('#' + id);
@@ -365,12 +397,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if ($('#saveBtn')) $('#saveBtn').addEventListener('click', save);
   if ($('#saveBottom')) $('#saveBottom').addEventListener('click', save);
 
-  if ($('#resetBtn')) {
-    $('#resetBtn').addEventListener('click', () => {
-      state = structuredClone(defaults);
-      fillFields();
-      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-      toast('Exemplo restaurado');
+  if ($('#authBtn')) {
+    $('#authBtn').addEventListener('click', async () => {
+      if (confirm('Deseja sair da sua conta?')) {
+        await window.islySupabase.signOut();
+        window.location.href = 'landing.html';
+      }
     });
   }
 
@@ -395,59 +427,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (target) target.scrollIntoView({behavior: 'smooth', block: 'start'});
     });
   });
-
-  // Carregar dados locais ou da nuvem
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      state = {...structuredClone(defaults), ...parsed};
-      state.links = Array.isArray(state.links) ? state.links.slice(0, 6) : structuredClone(defaults.links);
-      state.emblems = Array.isArray(state.emblems) ? state.emblems.slice(0, 3) : [];
-    }
-  } catch (e) {}
-  fillFields();
-
-  if (window.islySupabase) {
-    window.islySupabase.getUser().then(user => {
-      if (user) {
-        currentUser = user;
-        if ($('#authBtn')) $('#authBtn').textContent = '👤 ' + (user.email ? user.email.split('@')[0] : 'Conta');
-        if ($('#authStatusLabel')) $('#authStatusLabel').textContent = 'Sessão ativa na nuvem';
-        
-        window.islySupabase.getProfileById(user.id).then(data => {
-          if (data) {
-            state = {
-              name: data.name, handle: data.handle, bio: data.bio || '',
-              avatarUrl: data.avatar_url || '', avatarEmoji: data.avatar_emoji || '👾',
-              statusEmoji: data.status_emoji || '🎮', statusLabel: data.status_label || 'Jogando agora',
-              activity: data.activity || '', duration: data.duration || '2 horas',
-              emblems: data.emblems || [], theme: data.theme || 'cyber', links: data.links || []
-            };
-            fillFields();
-          }
-        });
-      }
-    });
-
-    if ($('#authBtn')) {
-      $('#authBtn').addEventListener('click', async () => {
-        const user = await window.islySupabase.getUser();
-        if (user) {
-          if (confirm('Deseja sair da sua conta?')) {
-            await window.islySupabase.signOut();
-            location.reload();
-          }
-        } else {
-          const email = prompt('Digite seu e-mail para entrar/cadastrar no Supabase:');
-          if (!email) return;
-          const err = await window.islySupabase.signIn(email);
-          if (err) toast('Erro: ' + err);
-          else toast('Link de acesso enviado para seu e-mail!');
-        }
-      });
-    }
-  }
 });
 </script>
 </body>
