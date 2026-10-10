@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080812">
+<title id="pageTitle">isly.me — Perfil</title>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.22),transparent 45%),var(--bg);color:var(--text);font-family:Inter,sans-serif;display:grid;place-items:center;padding:20px}
+.container{width:100%;max-width:420px}.profile-card{overflow:hidden;border:1px solid #49406c;border-radius:22px;background:linear-gradient(155deg,#19172b,#0e0e1b 75%);box-shadow:0 18px 60px #0006;text-align:center;--accent:#c084fc}.profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}.profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}
+.cover{height:88px;position:relative;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d)}.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,#f472b688,transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,#4ade8088,transparent 30%),linear-gradient(120deg,#10392d,#101923)}
+.avatar{width:76px;height:76px;margin:-38px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:24px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 0 30px #9333ea55;font-size:30px;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}
+.profile-card h3{margin:7px 0 1px;font-size:20px}.verified{color:var(--blue);font-size:12px}.handle{font-size:11px;color:var(--accent)}
+.bio-preview{font-size:11px;color:#aaa7c7;margin:10px 18px 12px;overflow-wrap:anywhere}
+.live-status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #22d3ee45;background:#22d3ee0d;color:#cffafe;border-radius:999px;font-size:10px;margin:0 auto 14px;max-width:90%}
+.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:0 14px 13px}.preview-emblems span{display:inline-flex;align-items:center;gap:4px;padding:4px 7px;border:1px solid #a855f733;background:#a855f70d;border-radius:7px;font-size:9px;color:#ddd6fe}
+.social-preview{display:flex;justify-content:center;gap:7px;margin:0 0 14px}.social-preview span{display:grid;place-items:center;width:27px;height:27px;border:1px solid #34314d;border-radius:8px;color:var(--accent);font-size:11px}
+.public-links{padding:0 14px 18px}.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:12px 14px;border:1px solid #39324f;border-radius:11px;background:linear-gradient(100deg,#ffffff08,#ffffff03);font-size:11px;font-weight:700;text-align:left;text-decoration:none;color:#fff;transition:.2s}.public-link:hover{border-color:var(--accent);transform:translateY(-1px)}.public-link .left{display:flex;align-items:center;gap:10px;min-width:0}.public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}.public-link .arr{color:var(--accent)}
+.profile-foot{font-size:9px;color:#777391;letter-spacing:.13em;padding:16px 0;text-align:center}
+.error-box{text-align:center;padding:30px;color:#fcd9a1}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="profile-card" id="profileCard">
+    <div class="cover"></div>
+    <div class="avatar" id="avatar">👾</div>
+    <h3 id="name">Carregando... <span class="verified">✦</span></h3>
+    <div class="handle" id="handle">@...</div>
+    <p class="bio-preview" id="bio"></p>
+    <div class="live-status" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
+    <div class="preview-emblems" id="emblems"></div>
+    <div class="social-preview"><span>◎</span><span>▶</span><span>⌘</span><span>◈</span></div>
+    <div class="public-links" id="links"></div>
+    <div class="profile-foot"><a href="index.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
+  </div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const handle = urlParams.get('u') || urlParams.get('user');
+
+  const emblemInfo = {
+    gamer: {emoji: '🎮', name: 'Gamer'}, geek: {emoji: '👾', name: 'Geek'},
+    rpg: {emoji: '🐉', name: 'Mestre do RPG'}, anime: {emoji: '🍥', name: 'Anime lover'},
+    artist: {emoji: '🎨', name: 'Criador'}, founder: {emoji: '💎', name: 'Fundador'}
+  };
+
+  if (!handle || !window.islySupabase) {
+    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+    return;
+  }
+
+  const data = await window.islySupabase.getProfileByHandle(handle);
+  if (!data) {
+    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
+    return;
+  }
+
+  document.getElementById('pageTitle').textContent = data.name + ' — isly.me';
+  document.getElementById('name').innerHTML = `${data.name} <span class="verified">✦</span>`;
+  document.getElementById('handle').textContent = '@' + data.handle;
+  document.getElementById('bio').textContent = data.bio || '';
+  document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
+  document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
+
+  const avatarEl = document.getElementById('avatar');
+  if (data.avatar_url) {
+    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name}">`;
+  } else {
+    avatarEl.textContent = data.avatar_emoji || '👾';
+  }
+
+  if (data.theme === 'sakura') document.getElementById('profileCard').classList.add('theme-sakura');
+  if (data.theme === 'matrix') document.getElementById('profileCard').classList.add('theme-matrix');
+
+  const emblemsEl = document.getElementById('emblems');
+  emblemsEl.innerHTML = (data.emblems || []).map(id => {
+    const info = emblemInfo[id];
+    return info ? `<span>${info.emoji} ${info.name}</span>` : '';
+  }).join('');
+
+  const linksEl = document.getElementById('links');
+  linksEl.innerHTML = (data.links || []).map(link => `
+    <a class="public-link" href="${link.url || '#'}" target="_blank" rel="noopener">
+      <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
+      <span class="arr">↗</span>
+    </a>
+  `).join('');
+});
+</script>
+</body>
+</html>
