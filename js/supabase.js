@@ -30,8 +30,7 @@
       const sb = initSupabase();
       if (!sb) return null;
       try {
-        // Aguarda um momento para garantir que a sessão no hash do URL foi processada
-        const { data: { session }, error: sessionError } = await sb.auth.getSession();
+        const { data: { session } } = await sb.auth.getSession();
         if (session && session.user) return session.user;
 
         const { data: { user }, error } = await sb.auth.getUser();
@@ -105,11 +104,9 @@
       if (!sb) return 'Cliente Supabase não inicializado.';
       
       try {
-        // Descobre dinamicamente a origem atual (funciona tanto em localhost como na Vercel)
-        const currentOrigin = window.location.origin;
-        const redirectUrl = currentOrigin + '/index.html';
+        const redirectUrl = window.location.origin + '/index.html';
 
-        const { data, error } = await sb.auth.signInWithOtp({
+        const { error } = await sb.auth.signInWithOtp({
           email: email.trim(),
           options: {
             emailRedirectTo: redirectUrl
