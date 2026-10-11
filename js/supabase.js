@@ -2,7 +2,7 @@
 // MÓDULO DE INTEGRAÇÃO SUPABASE — ISLY.ME
 // ==========================================
 (function() {
-  const SUPABASE_URL = 'https://hmnuafaihsbvjejqsakt.supabase.co'.trim();
+  const SUPABASE_URL = 'https://hmnuafaihsbvzejqsakt.supabase.co'.trim();
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU'.trim();
 
   let client = null;
