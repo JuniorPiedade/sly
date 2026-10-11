@@ -113,7 +113,21 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/supabase.js"></script>
+
+<script>
+(function () {
+  const script = document.createElement('script');
+  script.src = '/js/supabase.js';
+  script.onload = function () {
+    console.log('Módulo ISLY carregado:', typeof window.islySupabase);
+  };
+  script.onerror = function () {
+    console.error('Falha ao carregar /js/supabase.js');
+  };
+  document.head.appendChild(script);
+})();
+</script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById('year');
