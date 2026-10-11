@@ -1,5 +1,5 @@
 // ==========================================
-// MÓDULO DE INTEGRAÇÃO SUPABASE (NATIVO FETCH) — ISLY.ME
+// MÓDULO DE INTEGRAÇÃO SUPABASE — ISLY.ME
 // ==========================================
 (function() {
   const SUPABASE_URL = 'https://hmnuafaihsbvzejqsakt.supabase.co'.trim();
@@ -12,7 +12,11 @@
     if (window.supabase && typeof window.supabase.createClient === 'function') {
       try {
         client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
         });
       } catch (e) {
         console.error("Erro ao criar cliente Supabase:", e);
@@ -45,10 +49,27 @@
       }
     },
 
+    async getProfileByHandle(handle) {
+      const sb = initSupabase();
+      if (!sb) return null;
+      try {
+        const cleanHandle = String(handle).trim().replace(/^@/, '');
+        // Usamos ilike para garantir busca case-insensitive
+        const { data, error } = await sb.from('profiles').select('*').ilike('handle', cleanHandle).single();
+        return error ? null : data;
+      } catch (e) {
+        return null;
+      }
+    },
+
     async saveProfile(payload) {
       const sb = initSupabase();
       if (!sb) return 'Cliente Supabase indisponível.';
       try {
+        // Garante que o handle seja salvo limpo sem o @
+        if (payload.handle) {
+          payload.handle = payload.handle.trim().replace(/^@/, '');
+        }
         const { error } = await sb.from('profiles').upsert(payload);
         return error ? error.message : null;
       } catch (e) {
@@ -56,34 +77,24 @@
       }
     },
 
-    // LOGIN VIA FETCH NATIVO (Isola completamente o SDK e mostra o erro real)
     async signIn(email) {
+      const sb = initSupabase();
+      if (!sb) return 'Cliente Supabase não inicializado.';
+      
       try {
-        const response = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            email: email.trim(),
-            create_user: true,
-            gotrue_meta_security: {},
-            options: {
-              emailRedirectTo: 'https://sly-inky.vercel.app/landing'
-            }
-          })
+        const { data, error } = await sb.auth.signInWithOtp({
+          email: email.trim(),
+          options: {
+            emailRedirectTo: 'https://sly-inky.vercel.app/landing'
+          }
         });
 
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          return errData.msg || errData.error_description || `Erro HTTP ${response.status}: Falha na autenticação.`;
+        if (error) {
+          return error.message;
         }
-
-        return null; // Sucesso absoluto
+        return null;
       } catch (err) {
-        return 'Falha de rede ao contactar o Supabase. Verifique extensões do browser ou bloqueadores.';
+        return err.message || 'Erro de conexão ao enviar Magic Link.';
       }
     },
 
