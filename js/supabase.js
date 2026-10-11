@@ -138,10 +138,10 @@ async signIn(email) {
   } catch (error) {
     console.error('Erro inesperado no login:', error);
 
+    
     return 'Falha ao solicitar o login. Confira o console do navegador.';
   }
-}
+};
 
-
-  initSupabase();
+initSupabase();
 })();
