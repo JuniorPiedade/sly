@@ -1,125 +1,478 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
+<meta name="description" content="Confira a identidade digital, os links e o universo gamer de um membro do isly.me.">
 <title id="pageTitle">isly.me — Perfil</title>
-<!-- Supabase SDK via CDN Principal + Fallback Automático para unpkg -->
+
+<!-- SDK Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   if (typeof supabase === 'undefined') {
     document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
   }
 </script>
+
+<!-- Integração ISLY.ME -->
+<script src="/js/supabase.js"></script>
+
 <style>
-:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.22),transparent 45%),var(--bg);color:var(--text);font-family:Inter,sans-serif;display:grid;place-items:center;padding:20px}
-.container{width:100%;max-width:420px}.profile-card{overflow:hidden;border:1px solid #49406c;border-radius:22px;background:linear-gradient(155deg,#19172b,#0e0e1b 75%);box-shadow:0 18px 60px #0006;text-align:center;--accent:#c084fc}.profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}.profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}
-.cover{height:88px;position:relative;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d)}.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,#f472b688,transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,#4ade8088,transparent 30%),linear-gradient(120deg,#10392d,#101923)}
-.avatar{width:76px;height:76px;margin:-38px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:24px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 0 30px #9333ea55;font-size:30px;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}
-.profile-card h3{margin:7px 0 1px;font-size:20px}.verified{color:var(--blue);font-size:12px}.handle{font-size:11px;color:var(--accent)}
-.role-badge{display:inline-block;margin:6px 0 4px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:#8b5cf620;border:1px solid #8b5cf650;color:#c084fc}
-.bio-preview{font-size:11px;color:#aaa7c7;margin:10px 18px 12px;overflow-wrap:anywhere}
-.live-status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #22d3ee45;background:#22d3ee0d;color:#cffafe;border-radius:999px;font-size:10px;margin:0 auto 14px;max-width:90%}
-.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:0 14px 13px}.preview-emblems span{display:inline-flex;align-items:center;gap:4px;padding:4px 7px;border:1px solid #a855f733;background:#a855f70d;border-radius:7px;font-size:9px;color:#ddd6fe}
-.social-preview{display:flex;justify-content:center;gap:7px;margin:0 0 14px}.social-preview span{display:grid;place-items:center;width:27px;height:27px;border:1px solid #34314d;border-radius:8px;color:var(--accent);font-size:11px}
-.public-links{padding:0 14px 18px}.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:12px 14px;border:1px solid #39324f;border-radius:11px;background:linear-gradient(100deg,#ffffff08,#ffffff03);font-size:11px;font-weight:700;text-align:left;text-decoration:none;color:#fff;transition:.2s}.public-link:hover{border-color:var(--accent);transform:translateY(-1px)}.public-link .left{display:flex;align-items:center;gap:10px;min-width:0}.public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}.public-link .arr{color:var(--accent)}
-.profile-foot{font-size:9px;color:#777391;letter-spacing:.13em;padding:16px 0;text-align:center}
-.error-box{text-align:center;padding:30px;color:#fcd9a1}
+:root{
+  color-scheme:dark;
+  --bg:#080812;
+  --panel:#11111f;
+  --line:#292944;
+  --text:#f6f4ff;
+  --muted:#a6a4c4;
+  --purple:#a855f7;
+  --blue:#22d3ee;
+  --pink:#f472b6;
+  --green:#86efac
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.22),transparent 45%),var(--bg);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  display:grid;
+  place-items:center;
+  padding:20px
+}
+a{color:inherit;text-decoration:none}
+.container{width:100%;max-width:420px}
+.profile-card{
+  overflow:hidden;
+  border:1px solid #49406c;
+  border-radius:22px;
+  background:linear-gradient(155deg,#19172b,#0e0e1b 75%);
+  box-shadow:0 18px 60px #0006;
+  text-align:center;
+  --accent:#c084fc
+}
+.profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}
+.profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}
+.cover{
+  height:88px;
+  position:relative;
+  background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d)
+}
+.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,#f472b688,transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}
+.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,#4ade8088,transparent 30%),linear-gradient(120deg,#10392d,#101923)}
+.avatar{
+  width:76px;
+  height:76px;
+  margin:-38px auto 10px;
+  position:relative;
+  display:grid;
+  place-items:center;
+  border:3px solid #151426;
+  border-radius:24px;
+  background:linear-gradient(135deg,#9333ea,#2563eb);
+  box-shadow:0 0 30px #9333ea55;
+  font-size:30px;
+  overflow:hidden
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.profile-card h3{margin:7px 0 1px;font-size:20px;overflow-wrap:anywhere}
+.verified{color:var(--blue);font-size:12px}
+.handle{font-size:11px;color:var(--accent);overflow-wrap:anywhere}
+.role-badge{
+  display:inline-block;
+  margin:6px 0 4px;
+  font-size:10px;
+  font-weight:700;
+  padding:3px 10px;
+  border-radius:99px;
+  background:#8b5cf620;
+  border:1px solid #8b5cf650;
+  color:#c084fc
+}
+.bio-preview{
+  font-size:11px;
+  color:#aaa7c7;
+  margin:10px 18px 12px;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap
+}
+.live-status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border:1px solid #22d3ee45;
+  background:#22d3ee0d;
+  color:#cffafe;
+  border-radius:999px;
+  font-size:10px;
+  margin:0 auto 14px;
+  max-width:90%;
+  overflow-wrap:anywhere
+}
+.preview-emblems{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:5px;
+  padding:0 14px 13px
+}
+.preview-emblems span{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 7px;
+  border:1px solid #a855f733;
+  background:#a855f70d;
+  border-radius:7px;
+  font-size:9px;
+  color:#ddd6fe
+}
+.social-preview{display:flex;justify-content:center;gap:7px;margin:0 0 14px}
+.social-preview span{
+  display:grid;
+  place-items:center;
+  width:27px;
+  height:27px;
+  border:1px solid #34314d;
+  border-radius:8px;
+  color:var(--accent);
+  font-size:11px
+}
+.public-links{padding:0 14px 18px}
+.public-link{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:8px;
+  padding:12px 14px;
+  border:1px solid #39324f;
+  border-radius:11px;
+  background:linear-gradient(100deg,#ffffff08,#ffffff03);
+  font-size:11px;
+  font-weight:700;
+  text-align:left;
+  color:#fff;
+  transition:.2s
+}
+.public-link:hover{border-color:var(--accent);transform:translateY(-1px)}
+.public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
+.public-link .left .link-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.public-link .arr{color:var(--accent);flex-shrink:0}
+.profile-foot{
+  font-size:9px;
+  color:#777391;
+  letter-spacing:.13em;
+  padding:16px 0;
+  text-align:center
+}
+.profile-foot a:hover{color:var(--blue)}
+.error-box{
+  text-align:center;
+  padding:30px 22px;
+  color:#fcd9a1;
+  border:1px solid #49406c;
+  border-radius:22px;
+  background:linear-gradient(155deg,#19172b,#0e0e1b 75%);
+  overflow-wrap:anywhere
+}
+.error-box h2{font-size:19px}
+.error-box p{font-size:13px;color:var(--muted);line-height:1.7}
+.error-box a{display:inline-block;margin-top:12px;color:#c084fc}
+.loading{color:var(--muted);text-align:center;padding:30px}
 </style>
 </head>
+
 <body>
-<div class="container">
+<main class="container" id="profileContainer">
   <div class="profile-card" id="profileCard">
     <div class="cover"></div>
-    <div class="avatar" id="avatar">👾</div>
-    <h3 id="name">Carregando... <span class="verified">✦</span></h3>
+    <div class="avatar" id="avatar" aria-label="Avatar do perfil">👾</div>
+    <h3 id="name">Carregando...</h3>
     <div class="handle" id="handle">@...</div>
-    <div class="role-badge" id="roleBadge">💎 Fundador</div>
+    <div class="role-badge" id="roleBadge">👾 Membro</div>
     <p class="bio-preview" id="bio"></p>
-    <div class="live-status" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
+    <div class="live-status" id="statusBox">
+      <span id="statusEmoji">🎮</span>
+      <span id="statusText">Buscando universo...</span>
+    </div>
     <div class="preview-emblems" id="emblems"></div>
-    <div class="social-preview"><span>◎</span><span>▶</span><span>⌘</span><span>◈</span></div>
+    <div class="social-preview" aria-label="Universo gamer">
+      <span>◎</span><span>▶</span><span>⌘</span><span>◈</span>
+    </div>
     <div class="public-links" id="links"></div>
-    <div class="profile-foot"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
+    <div class="profile-foot">
+      <a href="/landing.html">CRIADO NO ISLY.ME ✦</a>
+    </div>
   </div>
-</div>
+</main>
 
-<script src="js/supabase.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const rawHandle = urlParams.get('u') || urlParams.get('user');
+(function () {
+  'use strict';
 
   const emblemInfo = {
-    gamer: {emoji: '🎮', name: 'Gamer'}, geek: {emoji: '👾', name: 'Geek'},
-    rpg: {emoji: '🐉', name: 'Mestre do RPG'}, anime: {emoji: '🍥', name: 'Anime lover'},
-    artist: {emoji: '🎨', name: 'Criador'}, founder: {emoji: '💎', name: 'Fundador'}
+    gamer: { emoji: '🎮', name: 'Gamer' },
+    geek: { emoji: '👾', name: 'Geek' },
+    rpg: { emoji: '🐉', name: 'Mestre do RPG' },
+    anime: { emoji: '🍥', name: 'Anime lover' },
+    artist: { emoji: '🎨', name: 'Criador' },
+    founder: { emoji: '💎', name: 'Fundador' }
   };
 
-  if (!rawHandle || !window.islySupabase) {
-    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
-    return;
+  function showError(title, message, showHomeLink) {
+    const container = document.getElementById('profileContainer');
+    container.replaceChildren();
+
+    const box = document.createElement('section');
+    box.className = 'error-box';
+
+    const heading = document.createElement('h2');
+    heading.textContent = title;
+
+    const paragraph = document.createElement('p');
+    paragraph.textContent = message;
+
+    box.append(heading, paragraph);
+
+    if (showHomeLink) {
+      const link = document.createElement('a');
+      link.href = '/landing.html';
+      link.textContent = 'Voltar ao ISLY.ME';
+      box.appendChild(link);
+    }
+
+    container.appendChild(box);
   }
 
-  const handle = rawHandle.trim().replace(/^@/, '');
-  const data = await window.islySupabase.getProfileByHandle(handle);
+  function safeWebUrl(value) {
+    if (typeof value !== 'string') return null;
 
-  if (!data) {
-    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
-    return;
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+
+    try {
+      const url = new URL(trimmed);
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+        return null;
+      }
+      return url.href;
+    } catch (_) {
+      return null;
+    }
   }
 
-  document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
-  document.getElementById('name').innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
-  document.getElementById('handle').textContent = '@' + data.handle;
-  
-  const roleBadge = document.getElementById('roleBadge');
-  if (roleBadge) {
-    const r = data.role || 'Membro';
-    if (r === 'Fundador') roleBadge.innerHTML = '💎 Fundador';
-    else if (r === 'Suporte') roleBadge.innerHTML = '🛡️ Suporte';
-    else if (r === 'Apoiador') roleBadge.innerHTML = '⭐ Apoiador';
-    else roleBadge.innerHTML = '👾 Membro';
+  function setAvatar(data) {
+    const avatar = document.getElementById('avatar');
+    const imageUrl = safeWebUrl(data.avatar_url);
+
+    avatar.replaceChildren();
+
+    if (imageUrl) {
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.alt = 'Avatar de ' + (data.name || data.handle || 'usuário');
+      img.loading = 'lazy';
+
+      img.addEventListener('error', function () {
+        avatar.textContent = data.avatar_emoji || '👾';
+      }, { once: true });
+
+      avatar.appendChild(img);
+    } else {
+      avatar.textContent = data.avatar_emoji || '👾';
+    }
   }
 
-  document.getElementById('bio').textContent = data.bio || '';
-  document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
-  document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
+  function renderEmblems(value) {
+    const container = document.getElementById('emblems');
+    container.replaceChildren();
 
-  const avatarEl = document.getElementById('avatar');
-  if (data.avatar_url) {
-    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
-  } else {
-    avatarEl.textContent = data.avatar_emoji || '👾';
-  }
+    let emblems = value;
 
-  const profileCard = document.getElementById('profileCard');
-  if (profileCard) {
-    profileCard.classList.remove('theme-sakura', 'theme-matrix');
-    if (data.theme === 'sakura') profileCard.classList.add('theme-sakura');
-    if (data.theme === 'matrix') profileCard.classList.add('theme-matrix');
-  }
+    if (typeof emblems === 'string') {
+      try {
+        emblems = JSON.parse(emblems);
+      } catch (_) {
+        emblems = [];
+      }
+    }
 
-  const emblemsEl = document.getElementById('emblems');
-  if (emblemsEl) {
-    emblemsEl.innerHTML = (data.emblems || []).map(id => {
+    if (!Array.isArray(emblems)) return;
+
+    emblems.forEach(function (id) {
       const info = emblemInfo[id];
-      return info ? `<span>${info.emoji} ${info.name}</span>` : '';
-    }).join('');
+      if (!info) return;
+
+      const badge = document.createElement('span');
+      badge.textContent = info.emoji + ' ' + info.name;
+      container.appendChild(badge);
+    });
   }
 
-  const linksEl = document.getElementById('links');
-  if (linksEl) {
-    linksEl.innerHTML = (data.links || []).map(link => `
-      <a class="public-link" href="${link.url || '#'}" target="_blank" rel="noopener">
-        <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
-        <span class="arr">↗</span>
-      </a>
-    `).join('');
+  function renderLinks(value) {
+    const container = document.getElementById('links');
+    container.replaceChildren();
+
+    let links = value;
+
+    if (typeof links === 'string') {
+      try {
+        links = JSON.parse(links);
+      } catch (_) {
+        links = [];
+      }
+    }
+
+    if (!Array.isArray(links)) return;
+
+    links.forEach(function (item) {
+      if (!item || typeof item !== 'object') return;
+
+      const url = safeWebUrl(item.url);
+      if (!url) return;
+
+      const anchor = document.createElement('a');
+      anchor.className = 'public-link';
+      anchor.href = url;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+
+      const left = document.createElement('span');
+      left.className = 'left';
+
+      const emoji = document.createElement('span');
+      emoji.textContent = typeof item.emoji === 'string' ? item.emoji : '↗';
+
+      const title = document.createElement('span');
+      title.className = 'link-title';
+      title.textContent = typeof item.title === 'string' && item.title.trim()
+        ? item.title.trim()
+        : 'Link';
+
+      const arrow = document.createElement('span');
+      arrow.className = 'arr';
+      arrow.textContent = '↗';
+
+      left.append(emoji, title);
+      anchor.append(left, arrow);
+      container.appendChild(anchor);
+    });
   }
-});
+
+  function renderProfile(data, requestedHandle) {
+    const name = data.name || requestedHandle || 'Usuário';
+    const handle = data.handle || requestedHandle;
+
+    document.title = name + ' — isly.me';
+
+    const heading = document.getElementById('name');
+    heading.replaceChildren();
+
+    const nameText = document.createElement('span');
+    nameText.textContent = name;
+
+    const verified = document.createElement('span');
+    verified.className = 'verified';
+    verified.textContent = ' ✦';
+
+    heading.append(nameText, verified);
+
+    document.getElementById('handle').textContent = '@' + handle;
+    document.getElementById('bio').textContent = data.bio || '';
+    document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
+
+    const statusParts = [
+      data.status_label || 'Jogando',
+      data.activity || ''
+    ].filter(Boolean);
+
+    document.getElementById('statusText').textContent = statusParts.join(' · ');
+
+    const roleBadge = document.getElementById('roleBadge');
+    const role = String(data.role || 'Membro').toLowerCase();
+
+    const roles = {
+      'fundador': '💎 Fundador',
+      'founder': '💎 Fundador',
+      'suporte': '🛡️ Suporte',
+      'apoiador': '⭐ Apoiador',
+      'membro': '👾 Membro'
+    };
+
+    roleBadge.textContent = roles[role] || '👾 ' + (data.role || 'Membro');
+
+    setAvatar(data);
+    renderEmblems(data.emblems);
+    renderLinks(data.links);
+
+    const card = document.getElementById('profileCard');
+    card.classList.remove('theme-sakura', 'theme-matrix');
+
+    if (data.theme === 'sakura') {
+      card.classList.add('theme-sakura');
+    } else if (data.theme === 'matrix') {
+      card.classList.add('theme-matrix');
+    }
+  }
+
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const rawHandle = params.get('u') || params.get('user');
+
+    if (!rawHandle || !rawHandle.trim()) {
+      showError(
+        'Perfil não especificado',
+        'Abra um link de perfil que inclua o identificador do usuário.',
+        true
+      );
+      return;
+    }
+
+    if (!window.islySupabase ||
+        typeof window.islySupabase.getProfileByHandle !== 'function') {
+      console.error('A integração ISLY.ME não está disponível.');
+
+      showError(
+        'Conexão indisponível',
+        'Não foi possível conectar ao serviço de perfis. Tente novamente mais tarde.',
+        true
+      );
+      return;
+    }
+
+    const handle = rawHandle.trim().replace(/^@/, '');
+
+    try {
+      const data = await window.islySupabase.getProfileByHandle(handle);
+
+      if (!data) {
+        showError(
+          '404 — Universo não encontrado',
+          'O perfil @' + handle + ' não foi encontrado ou ainda não foi publicado.',
+          true
+        );
+        return;
+      }
+
+      renderProfile(data, handle);
+    } catch (error) {
+      console.error('Erro ao carregar perfil:', error);
+
+      showError(
+        'Não foi possível carregar o perfil',
+        'Ocorreu um erro ao consultar os dados. Tente novamente.',
+        true
+      );
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
 </script>
 </body>
 </html>
