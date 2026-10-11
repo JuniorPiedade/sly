@@ -2,7 +2,7 @@
 // MÓDULO DE INTEGRAÇÃO SUPABASE — ISLY.ME
 // ==========================================
 (function() {
-  const SUPABASE_URL = 'https://hmnuafaihsbvzejqsakt.supabase.co'.trim();
+  const SUPABASE_URL = 'https://hmnuafaihsbvjejqsakt.supabase.co'.trim();
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU'.trim();
 
   let client = null;
@@ -30,6 +30,10 @@
       const sb = initSupabase();
       if (!sb) return null;
       try {
+        // Aguarda um momento para garantir que a sessão no hash do URL foi processada
+        const { data: { session }, error: sessionError } = await sb.auth.getSession();
+        if (session && session.user) return session.user;
+
         const { data: { user }, error } = await sb.auth.getUser();
         if (error) throw error;
         return user;
@@ -54,7 +58,6 @@
       if (!sb) return null;
       try {
         const cleanHandle = String(handle).trim().replace(/^@/, '');
-        // Usamos ilike para garantir busca case-insensitive
         const { data, error } = await sb.from('profiles').select('*').ilike('handle', cleanHandle).single();
         return error ? null : data;
       } catch (e) {
@@ -66,7 +69,6 @@
       const sb = initSupabase();
       if (!sb) return 'Cliente Supabase indisponível.';
       try {
-        // Garante que o handle seja salvo limpo sem o @
         if (payload.handle) {
           payload.handle = payload.handle.trim().replace(/^@/, '');
         }
@@ -77,15 +79,40 @@
       }
     },
 
+    async uploadMedia(filePath, file) {
+      const sb = initSupabase();
+      if (!sb) return 'Cliente Supabase indisponível.';
+      try {
+        const { error } = await sb.storage.from('media').upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
+        return error ? error.message : null;
+      } catch (err) {
+        return err.message || 'Erro ao enviar ficheiro.';
+      }
+    },
+
+    getPublicUrl(filePath) {
+      const sb = initSupabase();
+      if (!sb) return '';
+      const { data } = sb.storage.from('media').getPublicUrl(filePath);
+      return data ? data.publicUrl : '';
+    },
+
     async signIn(email) {
       const sb = initSupabase();
       if (!sb) return 'Cliente Supabase não inicializado.';
       
       try {
+        // Descobre dinamicamente a origem atual (funciona tanto em localhost como na Vercel)
+        const currentOrigin = window.location.origin;
+        const redirectUrl = currentOrigin + '/index.html';
+
         const { data, error } = await sb.auth.signInWithOtp({
           email: email.trim(),
           options: {
-            emailRedirectTo: 'https://sly-inky.vercel.app/landing'
+            emailRedirectTo: redirectUrl
           }
         });
 
