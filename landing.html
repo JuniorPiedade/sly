@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -7,7 +8,7 @@
 <meta name="description" content="isly.me — sua identidade digital gamer e geek. Um só link para o seu universo.">
 <title>isly.me — Seu universo, um só link</title>
 
-<!-- Supabase SDK via CDN Principal + Fallback Automático para unpkg -->
+<!-- Supabase SDK: CDN principal -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   if (typeof supabase === 'undefined') {
@@ -15,9 +16,16 @@
   }
 </script>
 
+<!-- Integração própria: carregar depois do SDK -->
+<script src="/js/supabase.js"></script>
+
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;color:inherit}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;color:inherit}
 .app{min-height:100vh;background:radial-gradient(ellipse at 50% -10%,rgba(124,58,237,.28),transparent 45%),var(--bg);display:flex;flex-direction:column;justify-content:space-between}
 .wrap{width:min(1100px,calc(100% - 36px));margin:auto}
 .topbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
@@ -44,6 +52,7 @@
 .field input:focus{border-color:#a855f7;box-shadow:0 0 0 3px #a855f71b}
 .auth-btn{width:100%;padding:13px;border:0;border-radius:11px;background:linear-gradient(105deg,#7c3aed,#9333ea 58%,#2563eb);color:#fff;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 8px 25px #7c3aed38;transition:.2s}
 .auth-btn:hover{transform:translateY(-1px);opacity:.95}
+.auth-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
 
 .info-section{padding:50px 0 80px;border-top:1px solid #a78bfa1f}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -52,7 +61,6 @@
 .info-icon{font-size:26px;margin-bottom:12px;display:block}
 .info-card h4{font-size:15px;margin:0 0 8px;letter-spacing:-.01em}
 .info-card p{color:var(--muted);font-size:12px;margin:0;line-height:1.6}
-
 .footer{border-top:1px solid #24243a;padding:24px 0;color:#8f8da9;font-size:11px;text-align:center}
 
 @media(max-width:850px){.info-grid{grid-template-columns:1fr}.auth-box{padding:20px}}
@@ -61,27 +69,47 @@
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
+
 <body>
 <div class="app">
   <header class="wrap topbar">
-    <a class="brand" href="#" aria-label="isly.me"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
-    <div><a href="index.html" class="btn small">Acessar Editor ↗</a></div>
+    <a class="brand" href="landing.html" aria-label="isly.me">
+      <span class="brand-mark">⌬</span>
+      <span>isly<span class="dot">.me</span></span>
+    </a>
+    <div>
+      <a href="index.html" class="btn">Acessar Editor ↗</a>
+    </div>
   </header>
 
   <main class="wrap hero">
-    <div class="pill-badge"><span class="dot-live"></span> Sua identidade digital na nuvem</div>
+    <div class="pill-badge">
+      <span class="dot-live"></span>
+      Sua identidade digital na nuvem
+    </div>
+
     <h1>Seu universo, <span>um só link.</span></h1>
     <p>O hub de links definitivo para gamers, criadores e geeks. Monte sua identidade, exiba seu status de jogo e conecte sua comunidade.</p>
 
     <div class="auth-box">
       <h3>Entre ou Cadastre-se</h3>
       <p>Digite seu e-mail para receber o link de acesso instantâneo.</p>
+
       <form id="loginForm">
         <div class="field">
           <span>Seu e-mail principal</span>
-          <input type="email" id="emailInput" placeholder="exemplo@gamer.com" required autocomplete="email">
+          <input
+            type="email"
+            id="emailInput"
+            placeholder="exemplo@gamer.com"
+            required
+            autocomplete="email"
+          >
         </div>
-        <button type="submit" class="auth-btn" id="loginBtn">Entrar com Magic Link ⚡</button>
+
+        <button type="submit" class="auth-btn" id="loginBtn">
+          Entrar com Magic Link ⚡
+        </button>
       </form>
     </div>
   </main>
@@ -93,11 +121,13 @@
         <h4>Status Vivo de Jogo</h4>
         <p>Mostre para o seu público exatamente o que você está jogando, assistindo ou criando em tempo real.</p>
       </div>
+
       <div class="info-card">
         <span class="info-icon">✦</span>
-        <h4>Emblemas & Temas</h4>
+        <h4>Emblemas &amp; Temas</h4>
         <p>Personalize seu espaço com temas Cyber Neon, Sakura.exe ou Matrix Core e conquiste emblemas exclusivos.</p>
       </div>
+
       <div class="info-card">
         <span class="info-icon">🚀</span>
         <h4>Sincronizado na Nuvem</h4>
@@ -113,71 +143,102 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-
 <script>
-(function () {
-  const script = document.createElement('script');
-  script.src = '/js/supabase.js';
-  script.onload = function () {
-    console.log('Módulo ISLY carregado:', typeof window.islySupabase);
-  };
-  script.onerror = function () {
-    console.error('Falha ao carregar /js/supabase.js');
-  };
-  document.head.appendChild(script);
-})();
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', async function () {
   const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  function toast(msg) {
-    const el = document.getElementById('toast');
-    if (!el) return;
-    el.textContent = msg;
-    el.classList.add('show');
-    clearTimeout(toast.timer);
-    toast.timer = setTimeout(() => el.classList.remove('show'), 3000);
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
   }
 
-  if (window.islySupabase) {
-    window.islySupabase.getUser().then(user => {
-      if (user) {
-        window.location.href = 'index.html';
-      }
-    });
-  }
-
+  const toastEl = document.getElementById('toast');
   const loginForm = document.getElementById('loginForm');
-  if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('emailInput').value.trim();
-      if (!email || !email.includes('@')) {
-        toast('Por favor, insira um e-mail válido.');
-        return;
-      }
+  const emailInput = document.getElementById('emailInput');
+  const loginBtn = document.getElementById('loginBtn');
 
-      if (!window.islySupabase) {
-        toast('Erro: Módulo Supabase não carregado.');
-        return;
-      }
+  let toastTimer;
 
-      toast('Enviando link de acesso...');
-      const err = await window.islySupabase.signIn(email);
-      if (err) {
-        toast('Erro: ' + err);
-      } else {
-        toast('Link mágico enviado! Verifique seu e-mail.');
-      }
-    });
+  function toast(message) {
+    if (!toastEl) return;
+
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove('show');
+    }, 4000);
   }
+
+  // Confere se a integração foi carregada.
+  if (!window.islySupabase) {
+    console.error(
+      'Módulo ISLY Supabase não carregado. Confira /js/supabase.js.'
+    );
+
+    toast('Não foi possível carregar a conexão. Atualize a página e tente novamente.');
+
+    if (loginBtn) {
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Conexão indisponível';
+    }
+
+    return;
+  }
+
+  console.log('Módulo ISLY Supabase carregado.');
+
+  // Se já houver uma sessão válida, encaminha ao editor atual.
+  try {
+    const user = await window.islySupabase.getUser();
+
+    if (user) {
+      window.location.replace('/index.html');
+      return;
+    }
+  } catch (error) {
+    console.error('Não foi possível verificar a sessão:', error);
+  }
+
+  if (!loginForm) return;
+
+  loginForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const email = emailInput.value.trim();
+
+    if (!email || !emailInput.checkValidity()) {
+      toast('Por favor, informe um e-mail válido.');
+      emailInput.focus();
+      return;
+    }
+
+    if (!window.islySupabase) {
+      toast('A conexão com o Supabase não está disponível.');
+      return;
+    }
+
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Enviando link...';
+
+    try {
+      const errorMessage = await window.islySupabase.signIn(email);
+
+      if (errorMessage) {
+        toast('Não foi possível enviar o link: ' + errorMessage);
+        return;
+      }
+
+      toast('Link de acesso enviado! Confira sua caixa de entrada e o spam.');
+      loginForm.reset();
+    } catch (error) {
+      console.error('Erro ao solicitar acesso:', error);
+      toast('Ocorreu um erro ao solicitar o acesso. Tente novamente.');
+    } finally {
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar com Magic Link ⚡';
+    }
+  });
 });
 </script>
-  
-
-
 </body>
 </html>
