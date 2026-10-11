@@ -99,26 +99,36 @@
       return data ? data.publicUrl : '';
     },
 
+    // LOGIN VIA FETCH NATIVO (Isola o SDK e evita qualquer Failed to fetch interno)
     async signIn(email) {
-      const sb = initSupabase();
-      if (!sb) return 'Cliente Supabase não inicializado.';
-      
       try {
         const redirectUrl = window.location.origin + '/index.html';
 
-        const { error } = await sb.auth.signInWithOtp({
-          email: email.trim(),
-          options: {
-            emailRedirectTo: redirectUrl
-          }
+        const response = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            create_user: true,
+            gotrue_meta_security: {},
+            options: {
+              emailRedirectTo: redirectUrl
+            }
+          })
         });
 
-        if (error) {
-          return error.message;
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          return errData.msg || errData.error_description || `Erro HTTP ${response.status}: Falha ao enviar Magic Link.`;
         }
-        return null;
+
+        return null; // Sucesso absoluto
       } catch (err) {
-        return err.message || 'Erro de conexão ao enviar Magic Link.';
+        return 'Falha de rede ao contactar o Supabase. Verifique extensões do browser ou bloqueadores.';
       }
     },
 
