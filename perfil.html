@@ -5,8 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
 <title id="pageTitle">isly.me — Perfil</title>
-<!-- Supabase SDK -->
+<!-- Supabase SDK via CDN Principal + Fallback Automático para unpkg -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  if (typeof supabase === 'undefined') {
+    document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
+  }
+</script>
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.22),transparent 45%),var(--bg);color:var(--text);font-family:Inter,sans-serif;display:grid;place-items:center;padding:20px}
@@ -45,7 +50,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const handle = urlParams.get('u') || urlParams.get('user');
+  const rawHandle = urlParams.get('u') || urlParams.get('user');
 
   const emblemInfo = {
     gamer: {emoji: '🎮', name: 'Gamer'}, geek: {emoji: '👾', name: 'Geek'},
@@ -53,19 +58,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     artist: {emoji: '🎨', name: 'Criador'}, founder: {emoji: '💎', name: 'Fundador'}
   };
 
-  if (!handle || !window.islySupabase) {
+  if (!rawHandle || !window.islySupabase) {
     document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
     return;
   }
 
+  const handle = rawHandle.trim().replace(/^@/, '');
   const data = await window.islySupabase.getProfileByHandle(handle);
+
   if (!data) {
     document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
     return;
   }
 
-  document.getElementById('pageTitle').textContent = data.name + ' — isly.me';
-  document.getElementById('name').innerHTML = `${data.name} <span class="verified">✦</span>`;
+  document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
+  document.getElementById('name').innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
   document.getElementById('handle').textContent = '@' + data.handle;
   
   const roleBadge = document.getElementById('roleBadge');
@@ -83,27 +90,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const avatarEl = document.getElementById('avatar');
   if (data.avatar_url) {
-    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name}">`;
+    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
   } else {
     avatarEl.textContent = data.avatar_emoji || '👾';
   }
 
-  if (data.theme === 'sakura') document.getElementById('profileCard').classList.add('theme-sakura');
-  if (data.theme === 'matrix') document.getElementById('profileCard').classList.add('theme-matrix');
+  const profileCard = document.getElementById('profileCard');
+  if (profileCard) {
+    profileCard.classList.remove('theme-sakura', 'theme-matrix');
+    if (data.theme === 'sakura') profileCard.classList.add('theme-sakura');
+    if (data.theme === 'matrix') profileCard.classList.add('theme-matrix');
+  }
 
   const emblemsEl = document.getElementById('emblems');
-  emblemsEl.innerHTML = (data.emblems || []).map(id => {
-    const info = emblemInfo[id];
-    return info ? `<span>${info.emoji} ${info.name}</span>` : '';
-  }).join('');
+  if (emblemsEl) {
+    emblemsEl.innerHTML = (data.emblems || []).map(id => {
+      const info = emblemInfo[id];
+      return info ? `<span>${info.emoji} ${info.name}</span>` : '';
+    }).join('');
+  }
 
   const linksEl = document.getElementById('links');
-  linksEl.innerHTML = (data.links || []).map(link => `
-    <a class="public-link" href="${link.url || '#'}" target="_blank" rel="noopener">
-      <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
-      <span class="arr">↗</span>
-    </a>
-  `).join('');
+  if (linksEl) {
+    linksEl.innerHTML = (data.links || []).map(link => `
+      <a class="public-link" href="${link.url || '#'}" target="_blank" rel="noopener">
+        <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
+        <span class="arr">↗</span>
+      </a>
+    `).join('');
+  }
 });
 </script>
 </body>
