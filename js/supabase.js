@@ -100,44 +100,48 @@
     },
 
     // LOGIN VIA FETCH NATIVO (Isola o SDK e evita qualquer Failed to fetch interno)
-    async signIn(email) {
-      try {
-        const redirectUrl = window.location.origin + '/index.html';
+   
+async signIn(email) {
+  const sb = initSupabase();
 
-        const response = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            email: email.trim(),
-            create_user: true,
-            gotrue_meta_security: {},
-            options: {
-              emailRedirectTo: redirectUrl
-            }
-          })
-        });
+  if (!sb) {
+    return 'O módulo Supabase não foi carregado. Atualize a página e tente novamente.';
+  }
 
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          return errData.msg || errData.error_description || `Erro HTTP ${response.status}: Falha ao enviar Magic Link.`;
-        }
+  const cleanEmail = String(email || '').trim();
 
-        return null; // Sucesso absoluto
-      } catch (err) {
-        return 'Falha de rede ao contactar o Supabase. Verifique extensões do browser ou bloqueadores.';
+  if (!cleanEmail) {
+    return 'Informe seu e-mail.';
+  }
+
+  try {
+    const redirectUrl = new URL(
+      '/index.html',
+      window.location.origin
+    ).href;
+
+    const { error } = await sb.auth.signInWithOtp({
+      email: cleanEmail,
+      options: {
+        emailRedirectTo: redirectUrl,
+        shouldCreateUser: true
       }
-    },
+    });
 
-    async signOut() {
-      const sb = initSupabase();
-      if (!sb) return;
-      try { await sb.auth.signOut(); } catch (e) {}
+    if (error) {
+      console.error('Erro no login Supabase:', error);
+      return error.message || 'Não foi possível enviar o link de acesso.';
     }
-  };
+
+    return null;
+
+  } catch (error) {
+    console.error('Erro inesperado no login:', error);
+
+    return 'Falha ao solicitar o login. Confira o console do navegador.';
+  }
+}
+
 
   initSupabase();
 })();
