@@ -1,322 +1,309 @@
+/* ==========================================
+   MÓDULO SUPABASE — ISLY.ME
+   Login, cadastro e recuperação de senha
+========================================== */
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080812">
-<meta name="description" content="isly.me — sua identidade digital gamer e geek. Um só link para o seu universo.">
-<title>isly.me — Seu universo, um só link</title>
+(function () {
+  'use strict';
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-if (typeof supabase === 'undefined') {
-  document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
-}
-</script>
+  const SUPABASE_URL =
+    'https://hmnuafaihsbvzejqsakt.supabase.co';
 
-<style>
-:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;color:inherit}
-.app{min-height:100vh;background:radial-gradient(ellipse at 50% -10%,rgba(124,58,237,.28),transparent 45%),var(--bg);display:flex;flex-direction:column;justify-content:space-between}
-.wrap{width:min(1100px,calc(100% - 36px));margin:auto}
-.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:850;letter-spacing:-1.3px}
-.brand-mark{height:34px;width:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#090914;box-shadow:0 0 25px #9333ea44}
-.dot{color:var(--blue)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:11px 18px;background:#ffffff08;color:var(--text);font-weight:700;font-size:13px;transition:.2s}
-.btn:hover{transform:translateY(-1px);border-color:#8b5cf6}
-.btn.primary{border:0;background:linear-gradient(105deg,#7c3aed,#9333ea 58%,#2563eb);box-shadow:0 8px 30px #7c3aed38}
-.hero{padding:40px 0 70px;text-align:center}
-.pill-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:1px solid #a855f736;background:#a855f70d;color:#d8b4fe;font-size:11px;font-weight:750;margin-bottom:22px}
-.dot-live{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80}
-.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.1;letter-spacing:-.04em;margin:0 auto 16px;max-width:800px}
-.hero h1 span{background:linear-gradient(135deg,#c084fc,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero>p{color:var(--muted);font-size:clamp(14px,2vw,16px);max-width:540px;margin:0 auto 34px;line-height:1.6}
-.auth-box{max-width:440px;margin:0 auto;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#141422,#0d0d18);padding:30px;box-shadow:0 20px 50px #0008;text-align:left}
-.auth-box h3{margin:0 0 6px;font-size:18px;letter-spacing:-.02em}
-.auth-box>p{color:var(--muted);font-size:12px;margin:0 0 20px}
-.field{display:block;margin-bottom:16px}
-.field span{display:block;font-size:11px;color:#c7c4dd;margin-bottom:7px;font-weight:650}
-.field input{width:100%;border:1px solid #35334e;border-radius:11px;padding:12px 14px;background:#0a0a14;color:#fff;outline:none;font-size:13px}
-.field input:focus{border-color:#a855f7;box-shadow:0 0 0 3px #a855f71b}
-.auth-btn{width:100%;padding:13px;border:0;border-radius:11px;background:linear-gradient(105deg,#7c3aed,#9333ea 58%,#2563eb);color:#fff;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 8px 25px #7c3aed38;transition:.2s}
-.auth-btn:hover{transform:translateY(-1px);opacity:.95}
-.auth-btn:disabled{opacity:.65;cursor:wait;transform:none}
-.auth-links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:18px;font-size:12px;color:#c4b5fd}
-.auth-links button{background:none;border:0;padding:0;color:#c4b5fd;font-size:12px;text-decoration:underline;text-underline-offset:3px}
-.auth-links button:hover{color:#fff}
-.password-note{font-size:11px!important;line-height:1.5;color:var(--muted)!important;margin:12px 0 0!important}
-.info-section{padding:50px 0 80px;border-top:1px solid #a78bfa1f}
-.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.info-card{border:1px solid var(--line);border-radius:18px;background:#11111f88;padding:24px;text-align:left;transition:.2s}
-.info-card:hover{border-color:#8b5cf666;transform:translateY(-2px)}
-.info-icon{font-size:26px;margin-bottom:12px;display:block}
-.info-card h4{font-size:15px;margin:0 0 8px;letter-spacing:-.01em}
-.info-card p{color:var(--muted);font-size:12px;margin:0;line-height:1.6}
-.footer{border-top:1px solid #24243a;padding:24px 0;color:#8f8da9;font-size:11px;text-align:center}
-@media(max-width:850px){.info-grid{grid-template-columns:1fr}.auth-box{padding:20px}}
-.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:50;background:#1c1b2d;border:1px solid #514174;color:#f5f3ff;border-radius:12px;padding:11px 15px;font-size:12px;box-shadow:0 10px 40px #0008;transition:.25s;max-width:calc(100% - 28px);text-align:center}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-</style>
-</head>
+  const SUPABASE_ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
 
-<body>
-<div class="app">
-  <header class="wrap topbar">
-    <a class="brand" href="#" aria-label="isly.me">
-      <span class="brand-mark">⌬</span>
-      <span>isly<span class="dot">.me</span></span>
-    </a>
-    <div><a href="index.html" class="btn">Acessar Editor ↗</a></div>
-  </header>
+  let client = null;
 
-  <main class="wrap hero">
-    <div class="pill-badge"><span class="dot-live"></span> Sua identidade digital na nuvem</div>
-    <h1>Seu universo, <span>um só link.</span></h1>
-    <p>O hub de links definitivo para gamers, criadores e geeks. Monte sua identidade, exiba seu status de jogo e conecte sua comunidade.</p>
+  function initSupabase() {
+    if (client) return client;
 
-    <div class="auth-box">
-      <h3 id="formTitle">Entre na sua conta</h3>
-      <p id="formDescription">Acesse seu universo com e-mail e senha.</p>
-
-      <form id="authForm">
-        <div class="field">
-          <span>Seu e-mail</span>
-          <input type="email" id="emailInput" placeholder="voce@exemplo.com" required autocomplete="email">
-        </div>
-
-        <div class="field" id="passwordField">
-          <span>Senha</span>
-          <input type="password" id="passwordInput" placeholder="Sua senha" required autocomplete="current-password" minlength="8">
-        </div>
-
-        <div class="field" id="confirmPasswordField" hidden>
-          <span>Confirme sua senha</span>
-          <input type="password" id="confirmPasswordInput" placeholder="Digite a senha novamente" autocomplete="new-password" minlength="8" disabled>
-        </div>
-
-        <button type="submit" class="auth-btn" id="submitBtn">Entrar</button>
-      </form>
-
-      <p class="password-note" id="passwordNote">Use sua senha cadastrada no ISLY.ME.</p>
-
-      <div class="auth-links">
-        <button type="button" id="forgotBtn">Esqueci minha senha</button>
-        <button type="button" id="signupBtn">Criar conta</button>
-        <button type="button" id="loginBtn" hidden>Já tenho conta</button>
-      </div>
-    </div>
-  </main>
-
-  <section class="wrap info-section">
-    <div class="info-grid">
-      <div class="info-card">
-        <span class="info-icon">🎮</span>
-        <h4>Status Vivo de Jogo</h4>
-        <p>Mostre para o seu público exatamente o que você está jogando, assistindo ou criando em tempo real.</p>
-      </div>
-      <div class="info-card">
-        <span class="info-icon">✦</span>
-        <h4>Emblemas & Temas</h4>
-        <p>Personalize seu espaço com temas Cyber Neon, Sakura.exe ou Matrix Core e conquiste emblemas exclusivos.</p>
-      </div>
-      <div class="info-card">
-        <span class="info-icon">🚀</span>
-        <h4>Sincronizado na Nuvem</h4>
-        <p>Seus links e identidade protegidos no Supabase e publicados com alta performance na Vercel.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <span>⌬ isly.me — Seu universo. Um só link. · © <span id="year"></span></span>
-  </footer>
-</div>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="/js/supabase.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  const form = document.getElementById('authForm');
-  const title = document.getElementById('formTitle');
-  const description = document.getElementById('formDescription');
-  const email = document.getElementById('emailInput');
-  const password = document.getElementById('passwordInput');
-  const confirmPassword = document.getElementById('confirmPasswordInput');
-  const passwordField = document.getElementById('passwordField');
-  const confirmField = document.getElementById('confirmPasswordField');
-  const submit = document.getElementById('submitBtn');
-  const note = document.getElementById('passwordNote');
-  const forgot = document.getElementById('forgotBtn');
-  const signup = document.getElementById('signupBtn');
-  const login = document.getElementById('loginBtn');
-
-  let mode = 'login';
-  let busy = false;
-
-  function toast(message) {
-    const el = document.getElementById('toast');
-    el.textContent = message;
-    el.classList.add('show');
-    clearTimeout(toast.timer);
-    toast.timer = setTimeout(() => el.classList.remove('show'), 4500);
-  }
-
-  function setMode(nextMode) {
-    mode = nextMode;
-    form.reset();
-
-    passwordField.hidden = mode === 'forgot';
-    password.required = mode !== 'forgot';
-    password.disabled = mode === 'forgot';
-
-    confirmField.hidden = mode !== 'signup';
-    confirmPassword.required = mode === 'signup';
-    confirmPassword.disabled = mode !== 'signup';
-
-    forgot.hidden = mode !== 'login';
-    signup.hidden = mode !== 'login';
-    login.hidden = mode === 'login';
-
-    if (mode === 'login') {
-      title.textContent = 'Entre na sua conta';
-      description.textContent = 'Acesse seu universo com e-mail e senha.';
-      submit.textContent = 'Entrar';
-      note.textContent = 'Use sua senha cadastrada no ISLY.ME.';
-      password.autocomplete = 'current-password';
-    } else if (mode === 'signup') {
-      title.textContent = 'Crie sua conta';
-      description.textContent = 'Escolha seu e-mail e crie uma senha segura.';
-      submit.textContent = 'Criar conta';
-      note.textContent = 'A senha deve ter pelo menos 8 caracteres. Use uma combinação difícil de adivinhar.';
-      password.autocomplete = 'new-password';
+    if (
+      window.supabase &&
+      typeof window.supabase.createClient === 'function'
+    ) {
+      client = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        }
+      );
     } else {
-      title.textContent = 'Recuperar senha';
-      description.textContent = 'Informe seu e-mail para receber as instruções de recuperação.';
-      submit.textContent = 'Enviar link de recuperação';
-      note.textContent = 'Por segurança, a mensagem não confirma se o e-mail está cadastrado.';
+      console.error('Biblioteca Supabase não carregada.');
     }
+
+    return client;
   }
 
-  async function waitForModule() {
-    for (let i = 0; i < 30; i++) {
-      if (window.islySupabase) return true;
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    return false;
+  function getRedirectUrl(path) {
+    return new URL(path, window.location.origin).href;
   }
 
-  (async () => {
-    if (!await waitForModule()) {
-      toast('Não foi possível carregar o módulo de acesso. Atualize a página.');
-      return;
-    }
+  window.islySupabase = {
+    async getUser() {
+      const sb = initSupabase();
+      if (!sb) return null;
 
-    try {
-      const user = await window.islySupabase.getUser();
-      if (user) window.location.replace('index.html');
-    } catch (error) {
-      console.error(error);
-    }
-  })();
+      try {
+        const { data, error } = await sb.auth.getUser();
+        if (error) return null;
+        return data.user || null;
+      } catch (error) {
+        console.error('Erro ao consultar usuário:', error);
+        return null;
+      }
+    },
 
-  signup.addEventListener('click', () => setMode('signup'));
-  login.addEventListener('click', () => setMode('login'));
-  forgot.addEventListener('click', () => setMode('forgot'));
+    async getProfileById(userId) {
+      const sb = initSupabase();
+      if (!sb) return null;
 
-  form.addEventListener('submit', async event => {
-    event.preventDefault();
-    if (busy) return;
+      try {
+        const { data, error } = await sb
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
 
-    const emailValue = email.value.trim();
-    const passwordValue = password.value;
+        if (error) throw error;
+        return data;
+      } catch (error) {
+        console.error('Erro ao buscar perfil:', error);
+        return null;
+      }
+    },
 
-    if (!emailValue) {
-      toast('Informe seu e-mail.');
-      return;
-    }
+    async getProfileByHandle(handle) {
+      const sb = initSupabase();
+      if (!sb) return null;
 
-    if (mode !== 'forgot' && passwordValue.length < 8) {
-      toast('A senha deve ter pelo menos 8 caracteres.');
-      return;
-    }
+      try {
+        const cleanHandle = String(handle || '')
+          .trim()
+          .replace(/^@/, '');
 
-    if (mode === 'signup' && passwordValue !== confirmPassword.value) {
-      toast('As senhas não são iguais.');
-      confirmPassword.focus();
-      return;
-    }
+        const { data, error } = await sb
+          .from('profiles')
+          .select('*')
+          .ilike('handle', cleanHandle)
+          .single();
 
-    busy = true;
-    submit.disabled = true;
+        if (error) throw error;
+        return data;
+      } catch (error) {
+        console.error('Erro ao buscar identificador:', error);
+        return null;
+      }
+    },
 
-    try {
-      if (!await waitForModule()) {
-        toast('Módulo de acesso indisponível. Atualize a página.');
-        return;
+    async saveProfile(payload) {
+      const sb = initSupabase();
+      if (!sb) return 'Cliente Supabase indisponível.';
+
+      try {
+        const profile = { ...payload };
+
+        if (profile.handle) {
+          profile.handle = profile.handle
+            .trim()
+            .replace(/^@/, '');
+        }
+
+        const { error } = await sb
+          .from('profiles')
+          .upsert(profile);
+
+        if (error) throw error;
+        return null;
+      } catch (error) {
+        console.error('Erro ao salvar perfil:', error);
+        return error.message || 'Não foi possível salvar o perfil.';
+      }
+    },
+
+    // CADASTRO COM E-MAIL E SENHA
+    async signUp(email, password) {
+      const sb = initSupabase();
+
+      if (!sb) {
+        return { error: 'Cliente Supabase indisponível.' };
       }
 
-      let result;
+      try {
+        const { data, error } = await sb.auth.signUp({
+          email: String(email || '').trim(),
+          password,
+          options: {
+            emailRedirectTo: getRedirectUrl('/index.html')
+          }
+        });
 
-      if (mode === 'login') {
-        result = await window.islySupabase.signInWithPassword(
-          emailValue,
-          passwordValue
+        if (error) return { error: error.message };
+
+        if (data.session) {
+          return {
+            error: null,
+            message: 'Conta criada! Entrando no ISLY.ME...',
+            loggedIn: true
+          };
+        }
+
+        return {
+          error: null,
+          message:
+            'Cadastro iniciado! Confira seu e-mail para confirmar a conta.',
+          loggedIn: false
+        };
+      } catch (error) {
+        console.error('Erro no cadastro:', error);
+        return {
+          error: error.message || 'Não foi possível criar a conta.'
+        };
+      }
+    },
+
+    // LOGIN COM E-MAIL E SENHA
+    async signInWithPassword(email, password) {
+      const sb = initSupabase();
+
+      if (!sb) {
+        return { error: 'Cliente Supabase indisponível.' };
+      }
+
+      try {
+        const { error } = await sb.auth.signInWithPassword({
+          email: String(email || '').trim(),
+          password
+        });
+
+        if (error) {
+          if (error.message === 'Invalid login credentials') {
+            return {
+              error: 'E-mail ou senha incorretos.'
+            };
+          }
+
+          return { error: error.message };
+        }
+
+        return { error: null };
+      } catch (error) {
+        console.error('Erro no login:', error);
+        return {
+          error: error.message || 'Não foi possível entrar.'
+        };
+      }
+    },
+
+    // RECUPERAÇÃO DE SENHA
+    async sendPasswordReset(email) {
+      const sb = initSupabase();
+
+      if (!sb) {
+        return { error: 'Cliente Supabase indisponível.' };
+      }
+
+      try {
+        const { error } = await sb.auth.resetPasswordForEmail(
+          String(email || '').trim(),
+          {
+            redirectTo: getRedirectUrl('/reset-password.html')
+          }
         );
 
-        if (result.error) {
-          toast(result.error);
-          return;
-        }
+        if (error) return { error: error.message };
 
-        toast('Login realizado! Abrindo seu perfil...');
-        window.location.replace('index.html');
-        return;
+        return {
+          error: null,
+          message:
+            'Se o endereço estiver cadastrado, você receberá as instruções de recuperação por e-mail.'
+        };
+      } catch (error) {
+        console.error('Erro ao solicitar recuperação:', error);
+        return {
+          error: error.message || 'Não foi possível solicitar a recuperação.'
+        };
+      }
+    },
+
+    // SALVAR A NOVA SENHA APÓS ABRIR O LINK DE RECUPERAÇÃO
+    async updatePassword(password) {
+      const sb = initSupabase();
+
+      if (!sb) {
+        return { error: 'Cliente Supabase indisponível.' };
       }
 
-      if (mode === 'signup') {
-        result = await window.islySupabase.signUp(
-          emailValue,
-          passwordValue
-        );
+      try {
+        const { data, error: sessionError } =
+          await sb.auth.getSession();
 
-        if (result.error) {
-          toast(result.error);
-          return;
+        if (sessionError) {
+          return { error: sessionError.message };
         }
 
-        toast(result.message);
-
-        if (result.loggedIn) {
-          setTimeout(() => window.location.replace('index.html'), 900);
-        } else {
-          setMode('login');
+        if (!data.session) {
+          return {
+            error:
+              'Sua sessão de recuperação não está ativa. Solicite um novo link.'
+          };
         }
 
-        return;
+        const { error } = await sb.auth.updateUser({
+          password
+        });
+
+        if (error) return { error: error.message };
+
+        return { error: null };
+      } catch (error) {
+        console.error('Erro ao atualizar senha:', error);
+        return {
+          error: error.message || 'Não foi possível atualizar a senha.'
+        };
       }
+    },
 
-      result = await window.islySupabase.sendPasswordReset(emailValue);
+    async uploadMedia(filePath, file) {
+      const sb = initSupabase();
+      if (!sb) return 'Cliente Supabase indisponível.';
 
-      if (result.error) {
-        toast(result.error);
-        return;
+      try {
+        const { error } = await sb.storage
+          .from('media')
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: true
+          });
+
+        if (error) throw error;
+        return null;
+      } catch (error) {
+        console.error('Erro ao enviar mídia:', error);
+        return error.message || 'Erro ao enviar arquivo.';
       }
+    },
 
-      toast(result.message);
-    } catch (error) {
-      console.error('Erro no formulário de acesso:', error);
-      toast('Ocorreu um erro inesperado. Tente novamente.');
-    } finally {
-      busy = false;
-      submit.disabled = false;
+    getPublicUrl(filePath) {
+      const sb = initSupabase();
+      if (!sb) return '';
+
+      try {
+        const { data } = sb.storage
+          .from('media')
+          .getPublicUrl(filePath);
+
+        return data?.publicUrl || '';
+      } catch (error) {
+        console.error('Erro ao obter URL pública:', error);
+        return '';
+      }
     }
-  });
-});
-</script>
-</body>
-</html>
+  };
+
+  initSupabase();
+})();
