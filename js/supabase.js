@@ -44,6 +44,10 @@
   }
 
   window.islySupabase = {
+    get client() {
+      return initSupabase();
+    },
+
     async getUser() {
       const sb = initSupabase();
       if (!sb) return null;
