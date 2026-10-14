@@ -22,7 +22,9 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border-radius:26px;
   box-shadow:0 24px 70px rgba(0,0,0,0.6);
   text-align:center;
-  transition:transform .3s;
+  transform-style:preserve-3d;
+  perspective:1000px;
+  transition:transform 0.1s ease-out;
 }
 
 .cover{height:100px;position:relative;background:radial-gradient(circle at 75% 20%,rgba(34,211,238,0.5),transparent 30%),radial-gradient(circle at 22% 100%,rgba(192,132,252,0.6),transparent 45%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}
@@ -50,6 +52,10 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .public-link:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.4)}
 .public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
 .public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
+
+.text-effect-neon { text-shadow: 0 0 10px rgba(192, 132, 252, 0.8), 0 0 20px rgba(192, 132, 252, 0.5); }
+.text-effect-gradient { background: linear-gradient(135deg, #c084fc, #22d3ee, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.text-effect-glass { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 1px rgba(255,255,255,0.6); }
 
 .views-counter{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;font-size:12px;color:var(--muted)}
 .views-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px);color:#c9c5e2;font-weight:600}
@@ -160,15 +166,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   document.body.style.backgroundColor = data.bg_color || '#080812';
+
+  if (data.custom_cursor) {
+    document.body.style.cursor = `url('${data.custom_cursor}'), auto`;
+  }
   
   const card = document.getElementById('profileCard');
   if (card) {
     card.style.backgroundColor = data.card_bg || '#11111f';
     card.style.border = `1px solid ${data.border_color || '#a855f7'}`;
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xc = rect.width / 2;
+      const yc = rect.height / 2;
+      const dx = (x - xc) / xc;
+      const dy = (y - yc) / yc;
+      card.style.transform = `perspective(1000px) rotateY(${dx * 12}deg) rotateX(${-dy * 12}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+    });
   }
 
   const nameEl = document.getElementById('name');
-  if (nameEl) nameEl.style.color = data.title_color || '#ffffff';
+  if (nameEl) {
+    nameEl.style.color = data.title_color || '#ffffff';
+    if (data.name_effect === 'neon') nameEl.classList.add('text-effect-neon');
+    else if (data.name_effect === 'gradient') nameEl.classList.add('text-effect-gradient');
+    else if (data.name_effect === 'glass') nameEl.classList.add('text-effect-glass');
+  }
 
   const bioEl = document.getElementById('bio');
   if (bioEl) bioEl.style.color = data.text_color || '#f6f4ff';
