@@ -123,36 +123,41 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   align-items:flex-start;gap:14px;min-width:0;padding:3px 0 0;
   overflow:visible!important
 }
-.avatar-container{width:82px;height:82px;margin:0 0 2px;position:relative;display:grid;place-items:center}
-.avatar{
-  width: 72px;
-  height: 72px;
+.avatar-container{
+  position: relative;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.avatar {
+  width: 100% !important;
+  height: 100% !important;
   border-radius: 20px;
-  background: linear-gradient(145deg,#8b5cf6,#4c1d95);
-  font-size: 29px;
-  box-shadow: 0 10px 28px #6d28d933;
-  border: 1px solid #ffffff18;
+  background: linear-gradient(145deg, #8b5cf6, #4c1d95);
   overflow: hidden;
   position: relative;
   z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   padding: 0 !important;
   margin: 0 !important;
 }
 
 .avatar img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
   display: block !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  border-radius: inherit !important;
 }
+
 .avatar-frame {
   position: absolute;
-  inset: -5px;
+  inset: -6px;
   pointer-events: none;
   z-index: 2;
   background-size: contain;
@@ -244,47 +249,17 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     gap:11px 14px;padding:18px 15px;border-radius:19px
   }
   .profile-header-row{gap:11px}
- 
-  .avatar-container {
-  position: relative;
-  width: 76px;
-  height: 76px;
-  flex-shrink: 0;
-  display: block;
 }
-
-.avatar {
-  width: 100% !important;
-  height: 100% !important;
-  border-radius: 20px;
-  background: linear-gradient(145deg, #8b5cf6, #4c1d95);
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  display: block;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.avatar img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  display: block !important;
-  border-radius: inherit !important;
-}
-
-.avatar-frame {
-  position: absolute;
-  inset: -6px; /* Ajusta a moldura para contornar perfeitamente o conjunto */
-  pointer-events: none;
-  z-index: 2;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+@media(max-width:390px){
+  .wrap{width:calc(100% - 18px)}
+  .topbar{flex-wrap:wrap;padding:10px 0}
+  .actions{margin-left:auto}
+  .sync-badge{display:none}
+  .profile-card{grid-template-columns:88px minmax(0,1fr);gap:10px;padding:14px 11px}
+  .avatar-container{width:58px;height:58px}
+  .avatar{width:50px;height:50px;border-radius:14px}
+  .profile-card h3{font-size:16px}
+  .preview-link{gap:6px;padding:9px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -392,6 +367,13 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
  <button type="button" class="navbtn" data-sec="appearance">🎨 Cores & Efeitos</button>
  <button type="button" class="navbtn" data-sec="links">↗ Meus links</button>
  <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
+ 
+ <!-- Botão Painel Admin (visível apenas para admins/fundadores) -->
+ <div id="adminNavContainer" style="display:none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);">
+   <a href="admin.html" class="navbtn" style="background: rgba(168, 85, 247, 0.12); border-color: rgba(168, 85, 247, 0.35); color: #d8b4fe; text-align: center; font-weight: 700;">
+     ⚙️ Painel Admin
+   </a>
+ </div>
 </aside>
 
 <section class="content">
@@ -583,6 +565,18 @@ window.addEventListener('isly-sdk-ready', async () => {
 
  if (user) {
   if (appRoot) appRoot.style.display = 'block';
+  
+  // Verifica se é administrador para exibir o botão do painel admin na barra lateral
+  try {
+    const profile = await window.islySupabase.getProfileById(user.id);
+    if (profile && profile.is_admin) {
+      const adminNav = document.getElementById('adminNavContainer');
+      if (adminNav) adminNav.style.display = 'block';
+    }
+  } catch (err) {
+    console.warn("Erro ao verificar status de admin:", err);
+  }
+
   initEditor(user.id);
  } else {
   window.location.replace('landing.html');
