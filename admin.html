@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080812">
+<title>Admin Dashboard — ISLY.ME</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  if (typeof supabase === 'undefined') {
+    document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
+  }
+</script>
+<style>
+:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--red:#f87171;--green:#4ade80}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1200px,calc(100% - 32px));margin:auto;padding:20px 0 60px}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line);margin-bottom:24px}
+.brand{font-size:22px;font-weight:850;letter-spacing:-1px;display:flex;align-items:center;gap:8px}
+.badge-admin{font-size:11px;background:#a855f722;border:1px solid #a855f755;color:#c084fc;padding:3px 10px;border-radius:99px;font-weight:700}
+
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:30px}
+.card{border:1px solid var(--line);background:#11111f;border-radius:16px;padding:18px 20px}
+.card-val{font-size:28px;font-weight:850;margin-top:4px;color:white}
+.card-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.search-box{width:100%;max-width:340px;position:relative}
+.search-box input{width:100%;background:#0a0a14;border:1px solid #35334e;border-radius:10px;padding:10px 14px;font-size:13px;outline:none}
+.search-box input:focus{border-color:var(--purple)}
+
+.table-container{border:1px solid var(--line);border-radius:16px;background:#11111f;overflow-x:auto}
+table{width:100%;border-collapse:collapse;text-align:left;font-size:13px}
+th{background:#ffffff05;padding:14px 16px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--line)}
+td{padding:14px 16px;border-bottom:1px solid #ffffff08;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+
+.user-cell{display:flex;align-items:center;gap:12px}
+.avatar-small{width:36px;height:36px;border-radius:10px;background:#8b5cf633;display:grid;place-items:center;overflow:hidden;font-weight:700}
+.avatar-small img{width:100%;height:100%;object-fit:cover}
+
+.role-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:#ffffff0a;border:1px solid #ffffff15;display:inline-block}
+.status-banned{background:#f871711a;color:var(--red);border-color:#f8717144}
+
+.btn-sm{border:1px solid var(--line);border-radius:8px;padding:6px 12px;background:#ffffff08;font-size:12px;font-weight:600;cursor:pointer}
+.btn-sm:hover{background:#ffffff15}
+.btn-danger{border-color:#f8717144;background:#f8717112;color:var(--red)}
+.btn-danger:hover{background:#f8717128}
+
+/* Modal de Edição */
+.modal-overlay{position:fixed;inset:0;background:#00000088;backdrop-filter:blur(8px);display:none;place-items:center;z-index:100;padding:20px}
+.modal-overlay.open{display:grid}
+.modal{background:#141424;border:1px solid var(--line);border-radius:20px;width:100%;max-width:560px;padding:24px;box-shadow:0 30px 60px #00000088;max-height:90vh;overflow-y:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-head h2{margin:0;font-size:18px}
+.modal-close{background:none;border:0;font-size:20px;cursor:pointer;color:var(--muted)}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px}
+.field input, .field select, .field textarea{width:100%;background:#0a0a14;border:1px solid #35334e;border-radius:10px;padding:10px;font-size:13px}
+.field textarea{min-height:80px;resize:vertical}
+
+.checkbox-group{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.checkbox-item{display:flex;align-items:center;gap:8px;background:#ffffff04;border:1px solid #ffffff10;padding:8px 12px;border-radius:8px;font-size:12px;cursor:pointer}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f192b;border:1px solid var(--purple);padding:12px 24px;border-radius:12px;color:white;font-weight:600;display:none;z-index:200}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <span>⌬ ISLY.ME</span>
+      <span class="badge-admin">Painel do Administrador</span>
+    </div>
+    <div>
+      <a href="index.html" class="btn-sm">← Voltar ao Painel Principal</a>
+    </div>
+  </header>
+
+  <div class="metrics-grid">
+    <div class="card">
+      <div class="card-lbl">Total de Usuários</div>
+      <div class="card-val" id="metricTotalUsers">0</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Total de Views Acumuladas</div>
+      <div class="card-val" id="metricTotalViews">0</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Total de Cliques nos Links</div>
+      <div class="card-val" id="metricTotalClicks">0</div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2>Gestão de Perfis & Moderação</h2>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar por @handle ou nome...">
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Usuário</th>
+          <th>Handle (@)</th>
+          <th>Cargo</th>
+          <th>Views / Cliques</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody">
+        <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">Carregando usuários...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal de Edição de Usuário -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Gerenciar Usuário</h2>
+      <button class="modal-close" id="closeModalBtn">✕</button>
+    </div>
+    <form id="editForm">
+      <input type="hidden" id="editUserId">
+      
+      <div class="field">
+        <label>Nome de Exibição</label>
+        <input type="text" id="editName">
+      </div>
+
+      <div class="field">
+        <label>Handle (@)</label>
+        <input type="text" id="editHandle">
+      </div>
+
+      <div class="field">
+        <label>Cargo (Role Badge)</label>
+        <select id="editRole">
+          <option value="Membro">👾 Membro</option>
+          <option value="Apoiador">⭐ Apoiador</option>
+          <option value="Suporte">🛡️ Suporte</option>
+          <option value="Fundador">💎 Fundador</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Bio (Moderação)</label>
+        <textarea id="editBio"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Molduras Liberadas para a Conta</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" name="frames" value="cyberpunk"> Cyberpunk Neon</label>
+          <label class="checkbox-item"><input type="checkbox" name="frames" value="neon-gold"> Gold Luxury</label>
+          <label class="checkbox-item"><input type="checkbox" name="frames" value="royal-purple"> Royal Purple</label>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px">
+        <button type="button" class="btn-sm btn-danger" id="banToggleBtn">Banir Usuário</button>
+        <button type="submit" class="btn-sm" style="background:var(--purple);border:0">Salvar Alterações</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/supabase.js"></script>
+<script>
+let allUsers = [];
+let selectedUser = null;
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3000);
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!window.islySupabase) return;
+
+  const currentUser = await window.islySupabase.getUser();
+  if (!currentUser) { window.location.replace('landing.html'); return; }
+
+  // Verifica se o usuário logado é Admin
+  const myProfile = await window.islySupabase.getProfileById(currentUser.id);
+  if (!myProfile || !myProfile.is_admin) {
+    alert("Acesso restrito a Administradores.");
+    window.location.replace('index.html');
+    return;
+  }
+
+  await loadDashboard();
+
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    filterUsers(e.target.value);
+  });
+
+  document.getElementById('closeModalBtn').addEventListener('click', () => {
+    document.getElementById('editModal').classList.remove('open');
+  });
+
+  document.getElementById('editForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await saveUserChanges();
+  });
+
+  document.getElementById('banToggleBtn').addEventListener('click', async () => {
+    if (!selectedUser) return;
+    const newBanStatus = !selectedUser.is_banned;
+    const confirmAction = confirm(`Tem certeza que deseja ${newBanStatus ? 'BANIR' : 'DESBANIR'} o usuário @${selectedUser.handle}?`);
+    if (!confirmAction) return;
+
+    selectedUser.is_banned = newBanStatus;
+    await window.islySupabase.saveProfile({ id: selectedUser.id, is_banned: newBanStatus });
+    showToast(`Usuário ${newBanStatus ? 'banido' : 'desbanido'} com sucesso!`);
+    document.getElementById('editModal').classList.remove('open');
+    await loadDashboard();
+  });
+});
+
+async function loadDashboard() {
+  const { data, error } = await window.islySupabase.client
+    .from('profiles')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error("Erro ao carregar usuários:", error);
+    return;
+  }
+
+  allUsers = data || [];
+  
+  // Calcular métricas globais
+  let totalViews = 0;
+  let totalClicks = 0;
+  allUsers.forEach(u => {
+    totalViews += (u.views_count || 0);
+    totalClicks += (u.clicks_count || 0);
+  });
+
+  document.getElementById('metricTotalUsers').textContent = allUsers.length;
+  document.getElementById('metricTotalViews').textContent = totalViews.toLocaleString('pt-BR');
+  document.getElementById('metricTotalClicks').textContent = totalClicks.toLocaleString('pt-BR');
+
+  renderUsersTable(allUsers);
+}
+
+function renderUsersTable(users) {
+  const tbody = document.getElementById('usersTableBody');
+  if (users.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">Nenhum usuário encontrado.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = users.map(u => {
+    const avatar = u.avatar_url 
+      ? `<img src="${u.avatar_url}">` 
+      : `<span>⌬</span>`;
+    
+    const isBanned = u.is_banned;
+    const statusBadge = isBanned 
+      ? `<span class="role-tag status-banned">🚫 Banido</span>` 
+      : `<span class="role-tag" style="color:var(--green)">✓ Ativo</span>`;
+
+    return `
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="avatar-small">${avatar}</div>
+            <div>
+              <div style="font-weight:700">${u.name || 'Sem nome'}</div>
+              <div style="font-size:11px;color:var(--muted)">ID: ${u.id.slice(0,8)}...</div>
+            </div>
+          </div>
+        </td>
+        <td>@${u.handle || '---'}</td>
+        <td><span class="role-tag">${u.role || 'Membro'}</span></td>
+        <td>👁️ ${u.views_count || 0} / 🖱️ ${u.clicks_count || 0}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <button class="btn-sm" onclick="openEditModal('${u.id}')">Gerenciar</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterUsers(query) {
+  const q = query.toLowerCase().trim();
+  const filtered = allUsers.filter(u => 
+    (u.name && u.name.toLowerCase().includes(q)) ||
+    (u.handle && u.handle.toLowerCase().includes(q))
+  );
+  renderUsersTable(filtered);
+}
+
+function openEditModal(userId) {
+  selectedUser = allUsers.find(u => u.id === userId);
+  if (!selectedUser) return;
+
+  document.getElementById('editUserId').value = selectedUser.id;
+  document.getElementById('editName').value = selectedUser.name || '';
+  document.getElementById('editHandle').value = selectedUser.handle || '';
+  document.getElementById('editRole').value = selectedUser.role || 'Membro';
+  document.getElementById('editBio').value = selectedUser.bio || '';
+
+  const banBtn = document.getElementById('banToggleBtn');
+  banBtn.textContent = selectedUser.is_banned ? 'Desbanir Usuário' : 'Banir Usuário';
+
+  // Molduras
+  const allowed = selectedUser.allowed_frames || [];
+  document.querySelectorAll('input[name="frames"]').forEach(cb => {
+    cb.checked = allowed.includes(cb.value);
+  });
+
+  document.getElementById('editModal').classList.add('open');
+}
+
+async function saveUserChanges() {
+  if (!selectedUser) return;
+
+  const selectedFrames = Array.from(document.querySelectorAll('input[name="frames"]:checked')).map(cb => cb.value);
+
+  const payload = {
+    id: selectedUser.id,
+    name: document.getElementById('editName').value,
+    handle: document.getElementById('editHandle').value.trim().replace(/^@/, ''),
+    role: document.getElementById('editRole').value,
+    bio: document.getElementById('editBio').value,
+    allowed_frames: selectedFrames
+  };
+
+  const err = await window.islySupabase.saveProfile(payload);
+  if (err) {
+    showToast("Erro ao salvar alterações.");
+  } else {
+    showToast("Perfil atualizado com sucesso! ✓");
+    document.getElementById('editModal').classList.remove('open');
+    await loadDashboard();
+  }
+}
+</script>
+</body>
+</html>
