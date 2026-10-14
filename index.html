@@ -46,7 +46,8 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .panel-head p{font-size:11px;color:var(--muted);margin:4px 0 0}
 .field{display:block;margin:13px 0}
 .field>span{display:block;font-size:11px;color:#c7c4dd;margin-bottom:6px;font-weight:650}
-.field input,.field textarea,.field select{width:100%;min-width:0;border:1px solid #35334e;border-radius:10px;padding:11px;background:#0a0a14;color:white;font-size:12px;outline:none}
+.field input, .field textarea, .field select{width:100%;min-width:0;border:1px solid #35334e;border-radius:10px;padding:11px;background:#0a0a14;color:white;font-size:12px;outline:none}
+.field input[type="color"]{height:42px;padding:4px;cursor:pointer}
 .field textarea{min-height:80px;resize:vertical}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}
 .field small,.hint{display:block;color:#8582a5;font-size:10px;line-height:1.7;margin-top:6px}
@@ -62,7 +63,6 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .cyber{background:linear-gradient(135deg,#301050,#071526);color:#c084fc}
 .sakura{background:linear-gradient(135deg,#511d4b,#171126);color:#f9a8d4}
 .matrix{background:linear-gradient(135deg,#10392d,#101923);color:#86efac}
-/* Grid ajustado para incluir botões de mover */
 .link-row{display:grid;grid-template-columns:auto 38px 1fr 1fr auto;gap:6px;margin:8px 0;align-items:center}
 .link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:9px;padding:9px;background:#0a0a14;color:white;font-size:11px}
 .reorder-btns{display:flex;flex-direction:column;gap:2px}
@@ -149,7 +149,7 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
  <button type="button" class="navbtn active" data-sec="identity">◈ Identidade</button>
  <button type="button" class="navbtn" data-sec="status">◉ Status vivo</button>
  <button type="button" class="navbtn" data-sec="emblems">✦ Emblemas</button>
- <button type="button" class="navbtn" data-sec="themes">◐ Temas & Molduras</button>
+ <button type="button" class="navbtn" data-sec="themes">◐ Temas & Cores</button>
  <button type="button" class="navbtn" data-sec="links">↗ Meus links</button>
  <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
 </aside>
@@ -205,12 +205,17 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
    </section>
 
    <section class="panel" id="panel-themes">
-    <div class="panel-head"><div><h2>◐ Temas & Molduras</h2><p>Estilo e moldura VIP.</p></div><span class="muted">04 / 05</span></div>
-    <div class="themes" id="themeGrid">
+    <div class="panel-head"><div><h2>◐ Temas & Cores</h2><p>Estilo base e cor customizada.</p></div><span class="muted">04 / 05</span></div>
+    <div class="themes" id="themeGrid" style="margin-bottom:15px">
      <button type="button" class="theme selected" data-theme="cyber"><div class="theme-art cyber">⌬</div>Cyber</button>
      <button type="button" class="theme" data-theme="sakura"><div class="theme-art sakura">✿</div>Sakura</button>
      <button type="button" class="theme" data-theme="matrix"><div class="theme-art matrix">⌘</div>Matrix</button>
     </div>
+    <label class="field">
+      <span>Cor de destaque personalizada (Accent Color)</span>
+      <input type="color" id="accentColor" value="#c084fc">
+      <small>Deixe sua marca com uma cor de acento exclusiva.</small>
+    </label>
    </section>
 
    <section class="panel" id="panel-links">
@@ -297,6 +302,7 @@ async function initEditor(userId) {
       handle: 'user_' + userId.slice(0, 6),
       role: 'Membro',
       theme: 'cyber',
+      accent_color: '#c084fc',
       avatar_emoji: '👾',
       bio: '',
       activity: '',
@@ -319,6 +325,7 @@ async function initEditor(userId) {
   const avatarEmojiInput = document.getElementById('avatarEmoji');
   const activityInput = document.getElementById('activity');
   const shareUrlInput = document.getElementById('shareUrl');
+  const accentColorInput = document.getElementById('accentColor');
 
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
@@ -330,6 +337,7 @@ async function initEditor(userId) {
   bioCount.textContent = (currentProfile.bio || '').length;
   avatarEmojiInput.value = currentProfile.avatar_emoji || '👾';
   activityInput.value = currentProfile.activity || '';
+  accentColorInput.value = currentProfile.accent_color || '#c084fc';
 
   if (currentProfile.handle) {
     shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentProfile.handle}`;
@@ -353,6 +361,7 @@ async function initEditor(userId) {
         status_emoji: currentProfile.status_emoji,
         status_label: currentProfile.status_label,
         theme: currentProfile.theme,
+        accent_color: accentColorInput.value,
         emblems: currentProfile.emblems,
         links: currentProfile.links,
         avatar_url: currentProfile.avatar_url || null,
@@ -433,6 +442,12 @@ async function initEditor(userId) {
     });
   });
 
+  // Accent Color Picker change
+  accentColorInput.addEventListener('input', () => {
+    updatePreview();
+    triggerAutoSave();
+  });
+
   // --- REORDENAÇÃO DE LINKS ---
   function moveLink(fromIdx, toIdx) {
     if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
@@ -443,7 +458,6 @@ async function initEditor(userId) {
     triggerAutoSave();
   }
 
-  // Renderizar Links com botões Subir/Descer
   function renderLinksEditor() {
     const container = document.getElementById('linksList');
     container.innerHTML = '';
@@ -518,6 +532,9 @@ async function initEditor(userId) {
     if (currentProfile.theme === 'sakura') card.classList.add('theme-sakura');
     if (currentProfile.theme === 'matrix') card.classList.add('theme-matrix');
 
+    // Aplicar cor de acento customizada na prévia via variável CSS inline
+    card.style.setProperty('--accent', accentColorInput.value);
+
     const emPreview = document.getElementById('previewEmblems');
     emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemEmojis[id] || '✦'} ${emblemNames[id] || id}</span>`).join('');
 
@@ -561,6 +578,7 @@ async function initEditor(userId) {
       status_emoji: currentProfile.status_emoji,
       status_label: currentProfile.status_label,
       theme: currentProfile.theme,
+      accent_color: accentColorInput.value,
       emblems: currentProfile.emblems,
       links: currentProfile.links,
       avatar_url: currentProfile.avatar_url || null,
