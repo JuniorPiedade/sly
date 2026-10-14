@@ -62,8 +62,12 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .cyber{background:linear-gradient(135deg,#301050,#071526);color:#c084fc}
 .sakura{background:linear-gradient(135deg,#511d4b,#171126);color:#f9a8d4}
 .matrix{background:linear-gradient(135deg,#10392d,#101923);color:#86efac}
-.link-row{display:grid;grid-template-columns:35px 1fr 1fr auto;gap:6px;margin:8px 0;align-items:center}
+/* Grid ajustado para incluir botões de mover */
+.link-row{display:grid;grid-template-columns:auto 38px 1fr 1fr auto;gap:6px;margin:8px 0;align-items:center}
 .link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:9px;padding:9px;background:#0a0a14;color:white;font-size:11px}
+.reorder-btns{display:flex;flex-direction:column;gap:2px}
+.reorder-btn{border:1px solid #35334e;border-radius:5px;background:#ffffff05;color:#c9c5e2;padding:2px 5px;font-size:9px;line-height:1;cursor:pointer}
+.reorder-btn:disabled{opacity:0.2;cursor:not-allowed}
 .remove{border:1px solid #52313f;border-radius:8px;background:#ffffff05;color:#fda4af;padding:8px 10px;cursor:pointer}
 .add{width:100%;border:1px dashed #514174;border-radius:9px;background:#8b5cf609;color:#d8b4fe;padding:10px;font-size:11px;font-weight:700;cursor:pointer}
 .preview{position:sticky;top:15px}
@@ -94,7 +98,7 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .toast.show{display:block}
 footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 @media(max-width:950px){.editor-grid{grid-template-columns:1fr}.preview{position:static;max-width:430px;width:100%;margin:auto}}
-@media(max-width:650px){.wrap{width:calc(100% - 22px)}.topbar{min-height:64px}.brand{font-size:20px}.layout{display:block;padding-top:16px}.sidebar{display:none}.heading{display:block}.pill{display:inline-block;margin-top:8px}.panel{padding:14px}.two{grid-template-columns:1fr}.link-row{grid-template-columns:30px 1fr 1fr auto;gap:4px}.link-row input{padding:8px 5px;font-size:10px}}
+@media(max-width:650px){.wrap{width:calc(100% - 22px)}.topbar{min-height:64px}.brand{font-size:20px}.layout{display:block;padding-top:16px}.sidebar{display:none}.heading{display:block}.pill{display:inline-block;margin-top:8px}.panel{padding:14px}.two{grid-template-columns:1fr}.link-row{grid-template-columns:auto 30px 1fr 1fr auto;gap:4px}.link-row input{padding:8px 5px;font-size:10px}}
 </style>
 <script>
 (function(){
@@ -210,7 +214,7 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
    </section>
 
    <section class="panel" id="panel-links">
-    <div class="panel-head"><div><h2>↗ Meus links</h2><p>Até 6 links.</p></div><span class="muted">05 / 05</span></div>
+    <div class="panel-head"><div><h2>↗ Meus links</h2><p>Até 6 links. Reordene com as setas.</p></div><span class="muted">05 / 05</span></div>
     <div id="linksList"></div>
     <button type="button" class="add" id="addLinkBtn">＋ Adicionar link</button>
    </section>
@@ -429,7 +433,17 @@ async function initEditor(userId) {
     });
   });
 
-  // Renderizar Links
+  // --- REORDENAÇÃO DE LINKS ---
+  function moveLink(fromIdx, toIdx) {
+    if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
+    const item = currentProfile.links.splice(fromIdx, 1)[0];
+    currentProfile.links.splice(toIdx, 0, item);
+    renderLinksEditor();
+    updatePreview();
+    triggerAutoSave();
+  }
+
+  // Renderizar Links com botões Subir/Descer
   function renderLinksEditor() {
     const container = document.getElementById('linksList');
     container.innerHTML = '';
@@ -437,11 +451,18 @@ async function initEditor(userId) {
       const row = document.createElement('div');
       row.className = 'link-row';
       row.innerHTML = `
+        <div class="reorder-btns">
+          <button type="button" class="reorder-btn move-up" ${idx === 0 ? 'disabled' : ''}>▲</button>
+          <button type="button" class="reorder-btn move-down" ${idx === currentProfile.links.length - 1 ? 'disabled' : ''}>▼</button>
+        </div>
         <input type="text" value="${link.emoji || '↗'}" maxlength="4" placeholder="emoji" class="link-emoji">
         <input type="text" value="${link.title || ''}" placeholder="Título do link" class="link-title">
         <input type="text" value="${link.url || ''}" placeholder="https://..." class="link-url">
         <button type="button" class="remove">✕</button>
       `;
+
+      row.querySelector('.move-up').addEventListener('click', () => moveLink(idx, idx - 1));
+      row.querySelector('.move-down').addEventListener('click', () => moveLink(idx, idx + 1));
 
       row.querySelector('.link-emoji').addEventListener('input', e => { currentProfile.links[idx].emoji = e.target.value; updatePreview(); triggerAutoSave(); });
       row.querySelector('.link-title').addEventListener('input', e => { currentProfile.links[idx].title = e.target.value; updatePreview(); triggerAutoSave(); });
