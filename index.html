@@ -35,7 +35,8 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .heading p,.muted{font-size:12px;color:var(--muted)}
 .pill{font-size:10px;border:1px solid #86efac40;border-radius:30px;padding:7px 10px;color:#bbf7d0;white-space:nowrap}
 .editor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.8fr);gap:17px;align-items:start}
-.panel{padding:18px;margin-bottom:14px;min-width:0}
+.panel{padding:18px;margin-bottom:14px;min-width:0;display:none}
+.panel.active-panel{display:block}
 .panel h2{font-size:14px;margin:0}
 .panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}
 .panel-head p{font-size:11px;color:var(--muted);margin:4px 0 0}
@@ -57,9 +58,9 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .cyber{background:linear-gradient(135deg,#301050,#071526);color:#c084fc}
 .sakura{background:linear-gradient(135deg,#511d4b,#171126);color:#f9a8d4}
 .matrix{background:linear-gradient(135deg,#10392d,#101923);color:#86efac}
-.link-row{display:grid;grid-template-columns:.8fr 1.2fr auto;gap:6px;margin:8px 0}
+.link-row{display:grid;grid-template-columns:35px 1fr 1fr auto;gap:6px;margin:8px 0;align-items:center}
 .link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:9px;padding:9px;background:#0a0a14;color:white;font-size:11px}
-.remove{border:1px solid #52313f;border-radius:8px;background:#ffffff05;color:#fda4af;padding:0 10px;cursor:pointer}
+.remove{border:1px solid #52313f;border-radius:8px;background:#ffffff05;color:#fda4af;padding:8px 10px;cursor:pointer}
 .add{width:100%;border:1px dashed #514174;border-radius:9px;background:#8b5cf609;color:#d8b4fe;padding:10px;font-size:11px;font-weight:700;cursor:pointer}
 .preview{position:sticky;top:15px}
 .preview-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:12px}
@@ -78,8 +79,8 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .live-status{display:inline-block;margin:4px 0 13px;padding:6px 10px;border:1px solid #22d3ee45;border-radius:20px;background:#22d3ee0d;color:#cffafe;font-size:10px;max-width:90%}
 .preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:0 12px 12px}
 .preview-emblems span{padding:4px 7px;border:1px solid #a855f733;border-radius:7px;font-size:9px;color:#ddd6fe}
-.preview-links{padding:0 13px}
-.preview-link{display:flex;justify-content:space-between;gap:8px;margin-top:7px;padding:10px;border:1px solid #39324f;border-radius:9px;background:#ffffff06;font-size:10px;overflow-wrap:anywhere}
+.preview-links{padding:0 13px 15px}
+.preview-link{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:7px;padding:10px;border:1px solid #39324f;border-radius:9px;background:#ffffff06;font-size:10px;text-decoration:none;color:#fff}
 .profile-foot{padding:16px 0;font-size:8px;color:#777391;letter-spacing:1px}
 .share{margin-top:13px;padding:12px;border:1px solid var(--line);border-radius:12px}
 .share label{display:block;font-size:10px;color:var(--muted);margin-bottom:7px}
@@ -89,7 +90,7 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .toast.show{display:block}
 footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 @media(max-width:950px){.editor-grid{grid-template-columns:1fr}.preview{position:static;max-width:430px;width:100%;margin:auto}}
-@media(max-width:650px){.wrap{width:calc(100% - 22px)}.topbar{min-height:64px}.brand{font-size:20px}.layout{display:block;padding-top:16px}.sidebar{display:none}.heading{display:block}.pill{display:inline-block;margin-top:8px}.panel{padding:14px}.two{grid-template-columns:1fr}.link-row{grid-template-columns:.8fr 1.2fr auto;gap:4px}.link-row input{padding:8px 5px;font-size:10px}}
+@media(max-width:650px){.wrap{width:calc(100% - 22px)}.topbar{min-height:64px}.brand{font-size:20px}.layout{display:block;padding-top:16px}.sidebar{display:none}.heading{display:block}.pill{display:inline-block;margin-top:8px}.panel{padding:14px}.two{grid-template-columns:1fr}.link-row{grid-template-columns:30px 1fr 1fr auto;gap:4px}.link-row input{padding:8px 5px;font-size:10px}}
 </style>
 <script>
 (function(){
@@ -153,7 +154,7 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 
  <div class="editor-grid">
   <div>
-   <section class="panel" id="panel-identity">
+   <section class="panel active-panel" id="panel-identity">
     <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio e uploads seguros.</p></div><span class="muted">01 / 05</span></div>
     <div class="two">
      <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
@@ -172,7 +173,7 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
    <section class="panel" id="panel-status">
     <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 05</span></div>
     <div class="options" id="statusOptions">
-     <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando agora">🎮 Jogando</button>
+     <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando">🎮 Jogando</button>
      <button type="button" class="choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button>
      <button type="button" class="choice" data-emoji="🍥" data-label="Anime">🍥 Anime</button>
     </div>
@@ -182,8 +183,8 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
    <section class="panel" id="panel-emblems">
     <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 3 emblemas.</p></div><span class="muted">03 / 05</span></div>
     <div class="emblems" id="emblemGrid">
-     <button type="button" class="emblem selected" data-id="gamer"><span>🎮</span>Gamer</button>
-     <button type="button" class="emblem selected" data-id="geek"><span>👾</span>Geek</button>
+     <button type="button" class="emblem" data-id="gamer"><span>🎮</span>Gamer</button>
+     <button type="button" class="emblem" data-id="geek"><span>👾</span>Geek</button>
      <button type="button" class="emblem" data-id="rpg"><span>🐉</span>RPG</button>
      <button type="button" class="emblem" data-id="anime"><span>🍥</span>Anime</button>
      <button type="button" class="emblem" data-id="artist"><span>🎨</span>Criador</button>
@@ -193,7 +194,7 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 
    <section class="panel" id="panel-themes">
     <div class="panel-head"><div><h2>◐ Temas & Molduras</h2><p>Estilo e moldura VIP.</p></div><span class="muted">04 / 05</span></div>
-    <div class="themes">
+    <div class="themes" id="themeGrid">
      <button type="button" class="theme selected" data-theme="cyber"><div class="theme-art cyber">⌬</div>Cyber</button>
      <button type="button" class="theme" data-theme="sakura"><div class="theme-art sakura">✿</div>Sakura</button>
      <button type="button" class="theme" data-theme="matrix"><div class="theme-art matrix">⌘</div>Matrix</button>
@@ -252,22 +253,13 @@ window.addEventListener('isly-sdk-ready', async () => {
   }
 
   if (user) {
-    // SE ESTIVER LOGADO: Exibe o painel de edição instantaneamente
-    if (appRoot) {
-      appRoot.style.display = 'block';
-    }
-    loadEditor(user.id);
+    if (appRoot) appRoot.style.display = 'block';
+    initEditor(user.id);
   } else {
-    // SE NÃO ESTIVER LOGADO: Redireciona diretamente para a home/landing sem mostrar avisos
     window.location.replace('landing.html');
   }
 
   $('#authBtn')?.addEventListener('click', async () => {
-    // Supabase signout genérico
-    try {
-      const sb = window.islySupabase;
-      // se houver método de signout implícito ou direto
-    } catch(e){}
     window.location.replace('landing.html');
   });
 });
@@ -281,39 +273,266 @@ function toast(msg) {
   setTimeout(() => { t.classList.remove('show'); t.style.display = 'none'; }, 3000);
 }
 
-async function loadEditor(userId) {
+const emblemNames = { gamer: 'Gamer', geek: 'Geek', rpg: 'RPG', anime: 'Anime', artist: 'Criador', founder: 'Fundador' };
+const emblemEmojis = { gamer: '🎮', geek: '👾', rpg: '🐉', anime: '🍥', artist: '🎨', founder: '💎' };
+
+async function initEditor(userId) {
   let profile = await window.islySupabase.getProfileById(userId);
   if (!profile) {
-    profile = { id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0,6), role: 'Membro', theme: 'cyber' };
+    profile = {
+      id: userId,
+      name: 'Novo Usuário',
+      handle: 'user_' + userId.slice(0, 6),
+      role: 'Membro',
+      theme: 'cyber',
+      avatar_emoji: '👾',
+      bio: '',
+      activity: '',
+      status_emoji: '🎮',
+      status_label: 'Jogando',
+      emblems: ['gamer', 'geek'],
+      links: []
+    };
   }
 
-  document.getElementById('name').value = profile.name || '';
-  document.getElementById('handle').value = profile.handle || '';
-  document.getElementById('role').value = profile.role || 'Membro';
-  document.getElementById('bio').value = profile.bio || '';
-  document.getElementById('avatarEmoji').value = profile.avatar_emoji || '👾';
-  document.getElementById('activity').value = profile.activity || '';
+  // Estado local editável
+  let currentProfile = { ...profile };
+  if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
+  if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
 
-  if (profile.handle) {
-    document.getElementById('shareUrl').value = `${window.location.origin}/perfil.html?u=${profile.handle}`;
+  // Elementos do DOM
+  const nameInput = document.getElementById('name');
+  const handleInput = document.getElementById('handle');
+  const roleInput = document.getElementById('role');
+  const bioInput = document.getElementById('bio');
+  const bioCount = document.getElementById('bioCount');
+  const avatarEmojiInput = document.getElementById('avatarEmoji');
+  const activityInput = document.getElementById('activity');
+  const shareUrlInput = document.getElementById('shareUrl');
+
+  // Preenche valores iniciais
+  nameInput.value = currentProfile.name || '';
+  handleInput.value = currentProfile.handle || '';
+  roleInput.value = currentProfile.role || 'Membro';
+  bioInput.value = currentProfile.bio || '';
+  bioCount.textContent = (currentProfile.bio || '').length;
+  avatarEmojiInput.value = currentProfile.avatar_emoji || '👾';
+  activityInput.value = currentProfile.activity || '';
+
+  if (currentProfile.handle) {
+    shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentProfile.handle}`;
   }
 
+  // Navegação lateral por abas
+  document.querySelectorAll('.sidebar .navbtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar .navbtn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.content .panel').forEach(p => p.classList.remove('active-panel'));
+      btn.classList.add('active');
+      const sec = btn.getAttribute('data-sec');
+      document.getElementById('panel-' + sec)?.classList.add('active-panel');
+    });
+  });
+
+  // Status vivo (opções)
+  document.querySelectorAll('#statusOptions .choice').forEach(btn => {
+    if (btn.getAttribute('data-label') === currentProfile.status_label) {
+      document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentProfile.status_emoji = btn.getAttribute('data-emoji');
+      currentProfile.status_label = btn.getAttribute('data-label');
+      updatePreview();
+    });
+  });
+
+  // Emblemas
+  document.querySelectorAll('#emblemGrid .emblem').forEach(el => {
+    const id = el.getAttribute('data-id');
+    if (currentProfile.emblems.includes(id)) el.classList.add('selected');
+    
+    el.addEventListener('click', () => {
+      if (currentProfile.emblems.includes(id)) {
+        currentProfile.emblems = currentProfile.emblems.filter(e => e !== id);
+        el.classList.remove('selected');
+      } else {
+        if (currentProfile.emblems.length >= 3) {
+          toast('Você pode escolher no máximo 3 emblemas.');
+          return;
+        }
+        currentProfile.emblems.push(id);
+        el.classList.add('selected');
+      }
+      updatePreview();
+    });
+  });
+
+  // Temas
+  document.querySelectorAll('#themeGrid .theme').forEach(el => {
+    const th = el.getAttribute('data-theme');
+    if (currentProfile.theme === th) el.classList.add('selected');
+
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#themeGrid .theme').forEach(t => t.classList.remove('selected'));
+      el.classList.add('selected');
+      currentProfile.theme = th;
+      updatePreview();
+    });
+  });
+
+  // Renderizar Links
+  function renderLinksEditor() {
+    const container = document.getElementById('linksList');
+    container.innerHTML = '';
+    currentProfile.links.forEach((link, idx) => {
+      const row = document.createElement('div');
+      row.className = 'link-row';
+      row.innerHTML = `
+        <input type="text" value="${link.emoji || '↗'}" maxlength="4" placeholder="emoji" class="link-emoji">
+        <input type="text" value="${link.title || ''}" placeholder="Título do link" class="link-title">
+        <input type="text" value="${link.url || ''}" placeholder="https://..." class="link-url">
+        <button type="button" class="remove">✕</button>
+      `;
+
+      row.querySelector('.link-emoji').addEventListener('input', e => { currentProfile.links[idx].emoji = e.target.value; updatePreview(); });
+      row.querySelector('.link-title').addEventListener('input', e => { currentProfile.links[idx].title = e.target.value; updatePreview(); });
+      row.querySelector('.link-url').addEventListener('input', e => { currentProfile.links[idx].url = e.target.value; updatePreview(); });
+      row.querySelector('.remove').addEventListener('click', () => {
+        currentProfile.links.splice(idx, 1);
+        renderLinksEditor();
+        updatePreview();
+      });
+
+      container.appendChild(row);
+    });
+  }
+
+  document.getElementById('addLinkBtn').addEventListener('click', () => {
+    if (currentProfile.links.length >= 6) {
+      toast('Máximo de 6 links permitidos.');
+      return;
+    }
+    currentProfile.links.push({ emoji: '↗', title: '', url: '' });
+    renderLinksEditor();
+    updatePreview();
+  });
+
+  renderLinksEditor();
+
+  // Atualização em tempo real na Prévia
+  function updatePreview() {
+    document.getElementById('previewName').textContent = nameInput.value || 'Seu Nome';
+    document.getElementById('previewHandle').textContent = '@' + (handleInput.value || 'nick');
+    document.getElementById('previewBio').value = bioInput.value || '';
+    document.getElementById('previewBio').textContent = bioInput.value || 'Escreva sua bio...';
+    document.getElementById('previewAvatar').textContent = avatarEmojiInput.value || '👾';
+    document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
+    document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
+
+    // Cargo Badge
+    const roleBadge = document.getElementById('previewRole');
+    const r = roleInput.value || 'Membro';
+    if (r === 'Fundador') roleBadge.innerHTML = '💎 Fundador';
+    else if (r === 'Suporte') roleBadge.innerHTML = '🛡️ Suporte';
+    else if (r === 'Apoiador') roleBadge.innerHTML = '⭐ Apoiador';
+    else roleBadge.innerHTML = '👾 Membro';
+
+    // Temas card
+    const card = document.getElementById('profileCard');
+    card.className = 'profile-card';
+    if (currentProfile.theme === 'sakura') card.classList.add('theme-sakura');
+    if (currentProfile.theme === 'matrix') card.classList.add('theme-matrix');
+
+    // Emblemas preview
+    const emPreview = document.getElementById('previewEmblems');
+    emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemEmojis[id] || '✦'} ${emblemNames[id] || id}</span>`).join('');
+
+    // Links preview
+    const lnPreview = document.getElementById('previewLinks');
+    lnPreview.innerHTML = currentProfile.links.map(l => `
+      <a class="preview-link" href="${l.url || '#'}" target="_blank">
+        <span style="display:flex;align-items:center;gap:6px"><span>${l.emoji || '↗'}</span><span>${l.title || 'Link'}</span></span>
+        <span>↗</span>
+      </a>
+    `).join('');
+  }
+
+  // Event Listeners de Digitação
+  nameInput.addEventListener('input', updatePreview);
+  handleInput.addEventListener('input', () => {
+    updatePreview();
+    if (handleInput.value) {
+      shareUrlInput.value = `${window.location.origin}/perfil.html?u=${handleInput.value.trim().replace(/^@/, '')}`;
+    }
+  });
+  bioInput.addEventListener('input', () => {
+    bioCount.textContent = bioInput.value.length;
+    updatePreview();
+  });
+  avatarEmojiInput.addEventListener('input', updatePreview);
+  activityInput.addEventListener('input', updatePreview);
+
+  updatePreview();
+
+  // Upload de arquivos (Avatar, Banner, Wallpaper)
+  async function handleFileUpload(inputEl, fieldName) {
+    const file = inputEl.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast('O arquivo deve ter no máximo 2MB.');
+      return;
+    }
+    const fileExt = file.name.split('.').pop();
+    const filePath = `${userId}/${fieldName}_${Date.now()}.${fileExt}`;
+    
+    toast('Enviando imagem...');
+    const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
+    if (uploadErr) {
+      toast('Erro no upload: ' + uploadErr);
+      return;
+    }
+
+    const publicUrl = window.islySupabase.getPublicUrl(filePath);
+    currentProfile[fieldName] = publicUrl;
+    
+    if (fieldName === 'avatar_url') {
+      document.getElementById('previewAvatar').innerHTML = `<img src="${publicUrl}" alt="Avatar">`;
+    }
+    toast('Imagem enviada com sucesso! ✓');
+  }
+
+  document.getElementById('avatarFile').addEventListener('change', e => handleFileUpload(e.target, 'avatar_url'));
+  document.getElementById('bannerFile').addEventListener('change', e => handleFileUpload(e.target, 'banner_url'));
+  document.getElementById('wallpaperFile').addEventListener('change', e => handleFileUpload(e.target, 'wallpaper_url'));
+
+  // Salvar Alterações no Supabase
   document.getElementById('saveBtn').addEventListener('click', async () => {
     const payload = {
       id: userId,
-      name: document.getElementById('name').value,
-      handle: document.getElementById('handle').value,
-      bio: document.getElementById('bio').value,
-      avatar_emoji: document.getElementById('avatarEmoji').value,
-      activity: document.getElementById('activity').value,
-      role: document.getElementById('role').value
+      name: nameInput.value,
+      handle: handleInput.value,
+      role: roleInput.value,
+      bio: bioInput.value,
+      avatar_emoji: avatarEmojiInput.value,
+      activity: activityInput.value,
+      status_emoji: currentProfile.status_emoji,
+      status_label: currentProfile.status_label,
+      theme: currentProfile.theme,
+      emblems: currentProfile.emblems,
+      links: currentProfile.links,
+      avatar_url: currentProfile.avatar_url || null,
+      banner_url: currentProfile.banner_url || null,
+      wallpaper_url: currentProfile.wallpaper_url || null
     };
 
     const err = await window.islySupabase.saveProfile(payload);
     if (err) {
       toast('Erro ao salvar: ' + err);
     } else {
-      toast('Alterações salvas com sucesso! ✓');
+      toast('Todas as alterações foram salvas com sucesso! ✓');
     }
   });
 }
