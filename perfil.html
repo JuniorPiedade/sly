@@ -56,7 +56,31 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rg
 .public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
 .public-link .arr{color:var(--accent);transition:transform .2s}
 .public-link:hover .arr{transform:translateX(2px)}
-.profile-foot{font-size:9px;color:#777391;letter-spacing:.13em;padding:16px 0;text-align:center}
+
+/* Badge de Visualizações abaixo do card */
+.views-counter{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  margin-top:14px;
+  font-size:11px;
+  color:var(--muted);
+}
+.views-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 12px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  color:#c9c5e2;
+  font-weight:600;
+}
+
+.profile-foot{font-size:9px;color:#777391;letter-spacing:.13em;padding:12px 0 16px;text-align:center}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
 /* Animações em Cascata */
@@ -80,6 +104,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rg
 .delay-5 { animation-delay: 0.30s; }
 .delay-6 { animation-delay: 0.36s; }
 .delay-7 { animation-delay: 0.42s; }
+.delay-8 { animation-delay: 0.48s; }
 </style>
 </head>
 <body>
@@ -95,8 +120,18 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rg
     <div class="preview-emblems animate-item delay-5" id="emblems"></div>
     <div class="social-preview animate-item delay-6"><span>◎</span><span>▶</span><span>⌘</span><span>◈</span></div>
     <div class="public-links animate-item delay-6" id="links"></div>
-    <div class="profile-foot animate-item delay-7"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
   </div>
+
+  <!-- Contabilizador de Visualizações público -->
+  <div class="views-counter animate-item delay-7">
+    <div class="views-badge">
+      <span>👁️</span>
+      <span id="publicViewsCount">0</span>
+      <span>visualizações</span>
+    </div>
+  </div>
+
+  <div class="profile-foot animate-item delay-8"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
 </div>
 
 <script src="js/supabase.js"></script>
@@ -125,8 +160,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // --- ANALYTICS: Contabiliza visualização no Supabase ---
+  let currentViews = (data.views_count || 0) + 1;
+  document.getElementById('publicViewsCount').textContent = currentViews;
+
   try {
-    const currentViews = (data.views_count || 0) + 1;
     await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
   } catch (e) {
     console.warn("Analytics Error (Views):", e);
