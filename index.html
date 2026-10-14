@@ -87,12 +87,6 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .share-row input{min-width:0;width:100%;flex:1;background:#0a0a14;border:1px solid #35334e;border-radius:8px;padding:8px;color:#d8b4fe;font-size:10px}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1c1b2d;border:1px solid #514174;border-radius:10px;padding:12px 16px;font-size:12px;z-index:1001;max-width:90%;display:none}
 .toast.show{display:block}
-#authLockScreen{position:fixed;inset:0;background:var(--bg);z-index:999;display:grid;place-items:center;padding:20px;text-align:center}
-#authLockScreen.hidden{display:none}
-.lock-card{max-width:420px;width:100%;border:1px solid var(--line);background:linear-gradient(145deg,#141422,#0d0d18);border-radius:20px;padding:30px}
-.lock-card h2{margin:0 0 10px}
-.lock-card p{color:var(--muted);font-size:13px;line-height:1.7}
-#loginLink{display:none;width:100%;justify-content:center}
 footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 @media(max-width:950px){.editor-grid{grid-template-columns:1fr}.preview{position:static;max-width:430px;width:100%;margin:auto}}
 @media(max-width:650px){.wrap{width:calc(100% - 22px)}.topbar{min-height:64px}.brand{font-size:20px}.layout{display:block;padding-top:16px}.sidebar{display:none}.heading{display:block}.pill{display:inline-block;margin-top:8px}.panel{padding:14px}.two{grid-template-columns:1fr}.link-row{grid-template-columns:.8fr 1.2fr auto;gap:4px}.link-row input{padding:8px 5px;font-size:10px}}
@@ -126,24 +120,8 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 </script>
 </head>
 <body>
-<div id="authLockScreen">
- <div class="lock-card">
-  <div style="font-size:36px">🔒</div>
-  <h2 id="lockTitle">Verificando acesso</h2>
-  <p id="lockText">Estamos verificando sua sessão segura do ISLY.ME.</p>
-  
-  <div id="emergencyLoginBox" style="margin-top:15px;display:none">
-    <p style="font-size:11px;color:#c084fc;margin-bottom:8px">Insira seu e-mail de Fundador para acessar:</p>
-    <input type="email" id="emergencyEmail" placeholder="seu.email@fundador.com" style="width:100%;border:1px solid #35334e;border-radius:10px;padding:10px;background:#0a0a14;color:white;font-size:12px;margin-bottom:8px;outline:none">
-    <button type="button" class="btn primary" id="emergencyBtn" style="width:100%">Enviar Magic Link ⚡</button>
-  </div>
 
-  <a id="loginLink" class="btn primary" href="landing.html" style="margin-top:12px">Fazer login / Criar conta ⚡</a>
-  <div id="lockMessage" class="lock-message" aria-live="polite"></div>
- </div>
-</div>
-
-<div id="appRoot" aria-hidden="true" style="display:none">
+<div id="appRoot" style="display:none">
 <header class="wrap topbar">
  <a class="brand" href="landing.html"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
  <div class="actions">
@@ -259,13 +237,10 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 <script>
 window.addEventListener('isly-sdk-ready', async () => {
   const $ = (s) => document.querySelector(s);
-  const lock = $('#authLockScreen');
   const appRoot = $('#appRoot');
   
   if (!window.islySupabase) {
-    $('#lockTitle').textContent = "Erro de carregamento";
-    $('#lockText').textContent = "Não foi possível carregar o módulo de segurança.";
-    $('#loginLink').style.display = 'inline-flex';
+    window.location.replace('landing.html');
     return;
   }
 
@@ -277,41 +252,23 @@ window.addEventListener('isly-sdk-ready', async () => {
   }
 
   if (user) {
-    if (lock) lock.classList.add('hidden');
+    // SE ESTIVER LOGADO: Exibe o painel de edição instantaneamente
     if (appRoot) {
       appRoot.style.display = 'block';
-      appRoot.setAttribute('aria-hidden', 'false');
     }
-    
-    // Carrega dados do perfil e ativa editor
     loadEditor(user.id);
   } else {
-    $('#lockTitle').textContent = "Acesso Restrito";
-    $('#lockText').textContent = "Sua sessão expirou ou você não está logado.";
-    $('#emergencyLoginBox').style.display = 'block';
-    $('#loginLink').style.display = 'inline-flex';
+    // SE NÃO ESTIVER LOGADO: Redireciona diretamente para a home/landing sem mostrar avisos
+    window.location.replace('landing.html');
   }
 
-  $('#emergencyBtn')?.addEventListener('click', async () => {
-    const email = $('#emergencyEmail').value;
-    if (!email) { alert('Insira seu e-mail.'); return; }
-    const btn = $('#emergencyBtn');
-    btn.textContent = 'Enviando...';
-    const err = await window.islySupabase.sendPasswordReset(email);
-    if (err.error) {
-      alert('Erro: ' + err.error);
-      btn.textContent = 'Enviar Magic Link ⚡';
-    } else {
-      alert('Link enviado! Verifique seu e-mail.');
-      btn.textContent = 'Enviado ✓';
-    }
-  });
-
   $('#authBtn')?.addEventListener('click', async () => {
-    const sb = window.islySupabase;
-    // logout simples
-    await sb.signUp ? location.href='landing.html' : null;
-    window.location.href = 'landing.html';
+    // Supabase signout genérico
+    try {
+      const sb = window.islySupabase;
+      // se houver método de signout implícito ou direto
+    } catch(e){}
+    window.location.replace('landing.html');
   });
 });
 
@@ -330,7 +287,6 @@ async function loadEditor(userId) {
     profile = { id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0,6), role: 'Membro', theme: 'cyber' };
   }
 
-  // Preenche inputs
   document.getElementById('name').value = profile.name || '';
   document.getElementById('handle').value = profile.handle || '';
   document.getElementById('role').value = profile.role || 'Membro';
@@ -338,12 +294,10 @@ async function loadEditor(userId) {
   document.getElementById('avatarEmoji').value = profile.avatar_emoji || '👾';
   document.getElementById('activity').value = profile.activity || '';
 
-  // Compartilhar URL
   if (profile.handle) {
     document.getElementById('shareUrl').value = `${window.location.origin}/perfil.html?u=${profile.handle}`;
   }
 
-  // Evento de salvamento
   document.getElementById('saveBtn').addEventListener('click', async () => {
     const payload = {
       id: userId,
