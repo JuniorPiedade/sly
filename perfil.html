@@ -15,50 +15,89 @@
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.22),transparent 45%),var(--bg);color:var(--text);font-family:Inter,sans-serif;display:grid;place-items:center;padding:20px}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.28),transparent 50%),var(--bg);color:var(--text);font-family:Inter,sans-serif;display:grid;place-items:center;padding:20px;overflow-x:hidden}
 .container{width:100%;max-width:420px}
-.profile-card{overflow:hidden;border:1px solid #49406c;border-radius:22px;background:linear-gradient(155deg,#19172b,#0e0e1b 75%);box-shadow:0 18px 60px #0006;text-align:center;--accent:#c084fc;transition:border-color .3s}
-.profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}
-.profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}
-.cover{height:88px;position:relative;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}
-.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,#f472b688,transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}
-.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,#4ade8088,transparent 30%),linear-gradient(120deg,#10392d,#101923)}
-.avatar{width:76px;height:76px;margin:-38px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:24px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 0 30px #9333ea55;font-size:30px;overflow:hidden}
+
+/* Glassmorphism & Cartão Principal */
+.profile-card{
+  overflow:hidden;
+  border:1px solid rgba(168,85,247,0.25);
+  border-radius:24px;
+  background:rgba(17,17,31,0.65);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+  text-align:center;
+  --accent:#c084fc;
+  transition:border-color .3s, transform .3s;
+}
+.profile-card.theme-sakura{--accent:#f9a8d4;border-color:rgba(249,168,212,0.3)}
+.profile-card.theme-matrix{--accent:#86efac;border-color:rgba(134,239,172,0.3)}
+
+.cover{height:94px;position:relative;background:radial-gradient(circle at 75% 20%,rgba(34,211,238,0.5),transparent 30%),radial-gradient(circle at 22% 100%,rgba(192,132,252,0.6),transparent 45%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}
+.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,rgba(244,114,182,0.5),transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}
+.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,rgba(74,222,128,0.5),transparent 30%),linear-gradient(120deg,#10392d,#101923)}
+
+.avatar{width:80px;height:80px;margin:-40px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #131221;border-radius:24px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 0 30px rgba(147,51,234,0.45);font-size:32px;overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.profile-card h3{margin:7px 0 1px;font-size:20px}
+
+.profile-card h3{margin:7px 0 1px;font-size:20px;letter-spacing:-0.02em}
 .verified{color:var(--blue);font-size:12px}
-.handle{font-size:11px;color:var(--accent)}
-.role-badge{display:inline-block;margin:6px 0 4px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:#8b5cf620;border:1px solid #8b5cf650;color:#c084fc}
-.bio-preview{font-size:11px;color:#aaa7c7;margin:10px 18px 12px;overflow-wrap:anywhere}
-.live-status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #22d3ee45;background:#22d3ee0d;color:#cffafe;border-radius:999px;font-size:10px;margin:0 auto 14px;max-width:90%}
-.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:0 14px 13px}
-.preview-emblems span{display:inline-flex;align-items:center;gap:4px;padding:4px 7px;border:1px solid #a855f733;background:#a855f70d;border-radius:7px;font-size:9px;color:#ddd6fe}
-.social-preview{display:flex;justify-content:center;gap:7px;margin:0 0 14px}
-.social-preview span{display:grid;place-items:center;width:27px;height:27px;border:1px solid #34314d;border-radius:8px;color:var(--accent);font-size:11px}
+.handle{font-size:11px;color:var(--accent);font-weight:600;letter-spacing:0.02em}
+.role-badge{display:inline-block;margin:6px 0 4px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc}
+.bio-preview{font-size:11px;color:#aaa7c7;margin:10px 18px 12px;overflow-wrap:anywhere;line-height:1.5}
+.live-status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.08);color:#cffafe;border-radius:999px;font-size:10px;margin:0 auto 14px;max-width:90%}
+.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:0 14px 13px}
+.preview-emblems span{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid rgba(168,85,247,0.25);background:rgba(168,85,247,0.08);border-radius:8px;font-size:9px;color:#ddd6fe}
+.social-preview{display:flex;justify-content:center;gap:8px;margin:0 0 14px}
+.social-preview span{display:grid;place-items:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--accent);font-size:11px;background:rgba(255,255,255,0.02)}
 .public-links{padding:0 14px 18px}
-.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:12px 14px;border:1px solid #39324f;border-radius:11px;background:linear-gradient(100deg,#ffffff08,#ffffff03);font-size:11px;font-weight:700;text-align:left;text-decoration:none;color:#fff;transition:.2s}
-.public-link:hover{border-color:var(--accent);transform:translateY(-1px)}
+.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:12px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:linear-gradient(100deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01));font-size:11px;font-weight:700;text-align:left;text-decoration:none;color:#fff;transition:all .25s ease}
+.public-link:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.3), 0 0 12px var(--accent)}
 .public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
 .public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
-.public-link .arr{color:var(--accent)}
+.public-link .arr{color:var(--accent);transition:transform .2s}
+.public-link:hover .arr{transform:translateX(2px)}
 .profile-foot{font-size:9px;color:#777391;letter-spacing:.13em;padding:16px 0;text-align:center}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
+
+/* Animações em Cascata (Cascading Stagger) */
+.animate-item {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cascadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.12s; }
+.delay-3 { animation-delay: 0.18s; }
+.delay-4 { animation-delay: 0.24s; }
+.delay-5 { animation-delay: 0.30s; }
+.delay-6 { animation-delay: 0.36s; }
+.delay-7 { animation-delay: 0.42s; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="profile-card" id="profileCard">
-    <div class="cover"></div>
-    <div class="avatar" id="avatar">👾</div>
-    <h3 id="name">Carregando... <span class="verified">✦</span></h3>
-    <div class="handle" id="handle">@...</div>
-    <div class="role-badge" id="roleBadge">💎 Fundador</div>
-    <p class="bio-preview" id="bio"></p>
-    <div class="live-status" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
-    <div class="preview-emblems" id="emblems"></div>
-    <div class="social-preview"><span>◎</span><span>▶</span><span>⌘</span><span>◈</span></div>
-    <div class="public-links" id="links"></div>
-    <div class="profile-foot"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
+    <div class="cover animate-item delay-1"></div>
+    <div class="avatar animate-item delay-2" id="avatar">👾</div>
+    <h3 class="animate-item delay-3" id="name">Carregando... <span class="verified">✦</span></h3>
+    <div class="handle animate-item delay-3" id="handle">@...</div>
+    <div class="role-badge animate-item delay-4" id="roleBadge">💎 Fundador</div>
+    <p class="bio-preview animate-item delay-4" id="bio"></p>
+    <div class="live-status animate-item delay-5" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
+    <div class="preview-emblems animate-item delay-5" id="emblems"></div>
+    <div class="social-preview animate-item delay-6"><span>◎</span><span>▶</span><span>⌘</span><span>◈</span></div>
+    <div class="public-links animate-item delay-6" id="links"></div>
+    <div class="profile-foot animate-item delay-7"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
   </div>
 </div>
 
@@ -117,7 +156,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (data.theme === 'sakura') profileCard.classList.add('theme-sakura');
     if (data.theme === 'matrix') profileCard.classList.add('theme-matrix');
 
-    // Aplica a cor de acento customizada se definida no perfil
     if (data.accent_color) {
       profileCard.style.setProperty('--accent', data.accent_color);
     }
