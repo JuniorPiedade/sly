@@ -17,7 +17,6 @@
 body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6}
 .container{width:100%;max-width:640px}
 
-/* Estilo do Card Horizontal Único (Inspirado no Zyo.se) */
 .profile-card{
   overflow:hidden;
   border-radius:28px;
@@ -37,12 +36,10 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   gap:20px;
 }
 
-/* Estilo Opaco */
 .card-style-opaque {
   background-color: #11111f;
 }
 
-/* Estilo Vidro 3D (Glassmorphism) */
 .card-style-glass {
   background: rgba(17, 17, 31, 0.65);
   backdrop-filter: blur(16px);
@@ -51,7 +48,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
-/* Cabeçalho Horizontal do Card (Foto ao lado do Nome/Handle) */
 .profile-header-row {
   display: flex;
   align-items: center;
@@ -94,13 +90,12 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .social-icon-btn svg{width:16px;height:16px;fill:currentColor}
 .social-icon-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,0.08)}
 
-/* Container de Embeds */
 .embeds-container{display:flex;flex-direction:column;gap:12px;margin-top:4px}
 .embed-wrapper{width:100%;border-radius:14px;overflow:hidden;background:#00000033;line-height:0}
 .embed-wrapper iframe{width:100%;border:0;display:block}
 
 .public-links{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.public-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-radius:14px;font-size:13px;font-weight:700;text-align:left;text-decoration:none;transition:all .25s ease;cursor:pointer}
+.public-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-radius:14px;font-size:13px;font-weight:700;text-align:left;text-decoration:none;transition:all .25s ease;cursor:pointer;background:rgba(255,255,255,0.06);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12)}
 .public-link:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.4)}
 .public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
 .public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
@@ -268,7 +263,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${data.wallpaper_url}')`;
     }
 
-    card.style.border = `1px solid ${data.border_color || '#a855f7'}`;
+    card.style.border = `1px solid #a855f7`;
 
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
@@ -293,11 +288,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     else if (data.name_effect === 'glass') nameEl.classList.add('text-effect-glass');
   }
 
+  const activeTextColor = data.text_color || '#f6f4ff';
   const bioEl = document.getElementById('bio');
-  if (bioEl) bioEl.style.color = data.text_color || '#f6f4ff';
+  if (bioEl) bioEl.style.color = activeTextColor;
 
   const handleEl = document.getElementById('handle');
-  if (handleEl) handleEl.style.color = data.accent_color || '#c084fc';
+  if (handleEl) handleEl.style.color = activeTextColor;
 
   document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
   nameEl.innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
@@ -336,7 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (val && socialUrls[key]) {
         const url = socialUrls[key](val);
         const svg = socialSvgs[key] || '';
-        sHTML += `<a class="social-icon-btn" href="${url}" target="_blank" rel="noopener" title="${key}" style="color:${data.accent_color || '#c084fc'}">${svg}</a>`;
+        sHTML += `<a class="social-icon-btn" href="${url}" target="_blank" rel="noopener" title="${key}" style="color:${activeTextColor}">${svg}</a>`;
       }
     });
     socialsBar.innerHTML = sHTML;
@@ -353,14 +349,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const linksEl = document.getElementById('links');
   if (linksEl) {
-    const linkBg = data.link_bg || '#1c1b2d';
-    const linkText = data.link_text_color || '#ffffff';
-    const linkBorder = data.border_color || '#39324f';
-
     linksEl.innerHTML = (data.links || []).map(link => `
-      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener" style="background:${linkBg}; color:${linkText}; border:1px solid ${linkBorder}">
+      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px)">
         <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
-        <span class="arr" style="color:${data.accent_color || '#c084fc'}">↗</span>
+        <span class="arr" style="color:${activeTextColor}">↗</span>
       </a>
     `).join('');
 
