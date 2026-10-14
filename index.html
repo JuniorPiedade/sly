@@ -712,19 +712,13 @@ async function initEditor(userId) {
    const fileName = `${userId}-${Date.now()}.${fileExt}`;
    const filePath = `avatars/${fileName}`;
 
-   const { error: uploadError } = await window.islySupabase.client.storage
-    .from('media')
-    .upload(filePath, file, { upsert: true });
+   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
+   if (uploadErr) throw new Error(uploadErr);
 
-   if (uploadError) throw uploadError;
-
-   const { data } = window.islySupabase.client.storage
-    .from('media')
-    .getPublicUrl(filePath);
-
-   if (data && data.publicUrl) {
-    avatarUrlInput.value = data.publicUrl;
-    currentProfile.avatar_url = data.publicUrl;
+   const publicUrl = window.islySupabase.getPublicUrl(filePath);
+   if (publicUrl) {
+    avatarUrlInput.value = publicUrl;
+    currentProfile.avatar_url = publicUrl;
     updatePreview();
     triggerAutoSave();
     toast('Foto de perfil atualizada! ✓');
@@ -748,19 +742,13 @@ async function initEditor(userId) {
    const fileName = `${userId}-${Date.now()}.${fileExt}`;
    const filePath = `wallpapers/${fileName}`;
 
-   const { error: uploadError } = await window.islySupabase.client.storage
-    .from('media')
-    .upload(filePath, file, { upsert: true });
+   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
+   if (uploadErr) throw new Error(uploadErr);
 
-   if (uploadError) throw uploadError;
-
-   const { data } = window.islySupabase.client.storage
-    .from('media')
-    .getPublicUrl(filePath);
-
-   if (data && data.publicUrl) {
-    wallpaperUrlInput.value = data.publicUrl;
-    currentProfile.wallpaper_url = data.publicUrl;
+   const publicUrl = window.islySupabase.getPublicUrl(filePath);
+   if (publicUrl) {
+    wallpaperUrlInput.value = publicUrl;
+    currentProfile.wallpaper_url = publicUrl;
     updatePreview();
     triggerAutoSave();
     toast('Wallpaper atualizado! ✓');
@@ -781,12 +769,12 @@ async function initEditor(userId) {
   try {
    const fileExt = file.name.split('.').pop();
    const filePath = `cursors/${userId}-${Date.now()}.${fileExt}`;
-   const { error: uploadError } = await window.islySupabase.client.storage.from('media').upload(filePath, file, { upsert: true });
-   if (uploadError) throw uploadError;
-   const { data } = window.islySupabase.client.storage.from('media').getPublicUrl(filePath);
-   if (data && data.publicUrl) {
-    customCursorInput.value = data.publicUrl;
-    currentProfile.custom_cursor = data.publicUrl;
+   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
+   if (uploadErr) throw new Error(uploadErr);
+   const publicUrl = window.islySupabase.getPublicUrl(filePath);
+   if (publicUrl) {
+    customCursorInput.value = publicUrl;
+    currentProfile.custom_cursor = publicUrl;
     updatePreview();
     triggerAutoSave();
     toast('Cursor atualizado! ✨');
