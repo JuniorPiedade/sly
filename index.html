@@ -496,6 +496,75 @@ footer{border-top-color:#ffffff12;color:#8e849f}
 .field input[type="color"]{width:100%;min-width:0;display:block}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+/* v3 — Cores & Efeitos: seletores circulares, compactos e alinhados à direita */
+#panel-appearance .two{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  align-items:stretch;
+}
+#panel-appearance .field:has(input[type="color"]){
+  min-width:0;
+  min-height:68px;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  border:1px solid #302a3a;
+  border-radius:14px;
+  background:linear-gradient(145deg,#131019,#0e0c13);
+}
+#panel-appearance .field:has(input[type="color"]) > span{
+  flex:1;
+  min-width:0;
+  line-height:1.35;
+  font-size:12px;
+}
+#panel-appearance .field input[type="color"]{
+  flex:0 0 36px;
+  width:36px!important;
+  min-width:36px;
+  height:36px!important;
+  min-height:36px!important;
+  padding:3px!important;
+  margin:0 0 0 auto;
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid #51465f!important;
+  border-radius:50%!important;
+  background:#17131e!important;
+  box-shadow:0 2px 8px #00000035,inset 0 1px 0 #ffffff0b!important;
+  overflow:hidden;
+  cursor:pointer;
+  display:block;
+  transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+#panel-appearance .field input[type="color"]::-webkit-color-swatch-wrapper{padding:2px}
+#panel-appearance .field input[type="color"]::-webkit-color-swatch{
+  border:1px solid #ffffff24;
+  border-radius:50%;
+}
+#panel-appearance .field input[type="color"]::-moz-color-swatch{
+  border:1px solid #ffffff24;
+  border-radius:50%;
+}
+#panel-appearance .field:has(input[type="color"]):hover{border-color:#574568;background:linear-gradient(145deg,#17121f,#100d16)}
+#panel-appearance .field input[type="color"]:hover{border-color:#b39ad2!important;box-shadow:0 0 0 3px #a78bfa12!important;transform:scale(1.04)}
+#panel-appearance .field input[type="color"]:focus-visible{outline:2px solid #a78bfa;outline-offset:3px}
+@media(max-width:520px){
+  #panel-appearance .two{gap:9px}
+  #panel-appearance .field:has(input[type="color"]){padding:10px;gap:8px;min-height:64px}
+  #panel-appearance .field:has(input[type="color"]) > span{font-size:11px}
+  #panel-appearance .field input[type="color"]{flex-basis:32px;width:32px!important;min-width:32px;height:32px!important;min-height:32px!important}
+}
+@media(max-width:360px){
+  #panel-appearance .two{grid-template-columns:minmax(0,1fr)}
+}
+
 </style>
 <script>
 (function(){
