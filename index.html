@@ -471,7 +471,7 @@ async function initEditor(userId) {
 
   bgColorInput.value = currentProfile.bg_color || '#080812';
   cardBgInput.value = currentProfile.card_bg || '#11111f';
-  borderColorInput.value = currentProfile.border_color || '#a855
+  borderColorInput.value = currentProfile.border_color || '#a855f7';
   accentColorInput.value = currentProfile.accent_color || '#c084fc';
   titleColorInput.value = currentProfile.title_color || '#ffffff';
   textColorInput.value = currentProfile.text_color || '#f6f4ff';
@@ -506,6 +506,30 @@ async function initEditor(userId) {
   });
   previewCard.addEventListener('mouseleave', () => {
     previewCard.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+  });
+
+  // Lógica de Upload do Arquivo de Cursor Customizado
+  document.getElementById('customCursorFile')?.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 1024 * 1024) { 
+      toast('O arquivo de cursor deve ter no máximo 1MB.'); 
+      return; 
+    }
+    
+    toast('Enviando cursor personalizado...');
+    const publicUrl = await window.islySupabase.uploadAsset(userId, file, 'cursor');
+    
+    if (publicUrl) {
+      document.getElementById('customCursor').value = publicUrl;
+      currentProfile.custom_cursor = publicUrl;
+      updatePreview();
+      triggerAutoSave();
+      toast('Cursor atualizado com sucesso! ✨');
+    } else {
+      toast('Erro ao fazer upload do cursor.');
+    }
   });
 
   let saveTimer = null;
