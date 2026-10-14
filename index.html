@@ -80,7 +80,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview{position:sticky;top:20px}
 .preview-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:14px}
 
-/* Card Horizontal Único com Perspectiva Moderada Restaurada */
 .profile-card {
   position:relative;
   isolation:isolate;
@@ -101,6 +100,8 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   background-image:
     radial-gradient(ellipse at 10% 0%,#8b5cf61b,transparent 55%),
     linear-gradient(145deg,#17131f,#0f0c14);
+  background-size: cover;
+  background-position: center;
   box-shadow:0 24px 70px #00000055,0 0 0 1px #ffffff04,inset 0 1px #ffffff0a;
   text-align:left;
   transform-style:preserve-3d;
@@ -152,7 +153,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   text-shadow: 0 0 8px rgba(168, 85, 247, 0.9), 0 0 16px rgba(168, 85, 247, 0.7), 0 0 24px rgba(168, 85, 247, 0.4), 0 0 40px rgba(168, 85, 247, 0.2);
 }
 .handle{font-size:12px;color:#b9a0f7;overflow-wrap:anywhere}
-.role-badge{display:none !important;} /* Oculto pois o cargo foi removido */
 .bio-preview,.live-status,.preview-emblems,.preview-socials,.embeds-container,.preview-links,.profile-foot{
   grid-column:2;min-width:0
 }
@@ -249,7 +249,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
-/* Ajustes de Cores & Efeitos */
 #panel-appearance .two{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -893,8 +892,9 @@ async function initEditor(userId) {
   document.getElementById('previewBio').textContent = bioInput.value || 'Escreva sua bio...';
   
   const avatarEl = document.getElementById('previewAvatar');
-  if (avatarUrlInput.value) {
-   avatarEl.innerHTML = `<img src="${avatarUrlInput.value}" alt="Avatar">`;
+  const avatarVal = avatarUrlInput.value.trim();
+  if (avatarVal) {
+   avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
   } else {
    avatarEl.textContent = '⌬';
   }
@@ -919,10 +919,11 @@ async function initEditor(userId) {
    card.style.backgroundColor = cardBgInput.value;
   }
 
-  if (wallpaperUrlInput.value) {
-   card.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${wallpaperUrlInput.value}')`;
+  const wallpaperVal = wallpaperUrlInput.value.trim();
+  if (wallpaperVal) {
+   card.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${wallpaperVal}')`;
   } else {
-   card.style.backgroundImage = '';
+   card.style.backgroundImage = 'radial-gradient(ellipse at 10% 0%,#8b5cf61b,transparent 55%), linear-gradient(145deg,#17131f,#0f0c14)';
   }
 
   document.body.style.background = bgColorInput.value;
