@@ -1,51 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080812">
-<meta name="description" content="isly.me — sua identidade digital gamer e geek.">
-<title>Painel Editor — isly.me</title>
-<style>
-:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}a{color:inherit;text-decoration:none}button{color:inherit;cursor:pointer}.app{min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.22),transparent 45%),var(--bg)}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #a78bfa1f}.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:850;letter-spacing:-1.3px}.brand-mark{height:34px;width:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#090914;box-shadow:0 0 25px #9333ea44}.dot{color:var(--blue)}.top-actions{display:flex;align-items:center;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:11px 15px;background:#ffffff08;color:var(--text);font-weight:700;font-size:13px;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px);border-color:#8b5cf6}.btn.primary{border:0;background:linear-gradient(105deg,#7c3aed,#9333ea 58%,#2563eb);box-shadow:0 8px 30px #7c3aed38}.btn.small{padding:9px 12px}.layout{display:grid;grid-template-columns:225px minmax(0,1fr);gap:24px;padding:26px 0 60px}.sidebar{align-self:start;position:sticky;top:18px;border:1px solid var(--line);border-radius:18px;background:#10101bcc;padding:13px}.side-label{padding:10px 10px 7px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8582a5;font-weight:800}.side-btn{width:100%;display:flex;align-items:center;gap:11px;text-align:left;padding:11px 12px;border:1px solid transparent;background:transparent;border-radius:11px;color:#b9b6d2;font-size:13px;font-weight:650;cursor:pointer}.side-btn .ico{width:24px;text-align:center;font-size:16px}.side-btn:hover,.side-btn.active{background:#8b5cf619;border-color:#8b5cf63b;color:#fff}.side-bottom{border-top:1px solid var(--line);margin-top:13px;padding-top:13px}.side-note{font-size:11px;line-height:1.6;color:#8582a5;padding:10px}.content{min-width:0}.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px}.eyebrow{color:#c084fc;text-transform:uppercase;letter-spacing:.15em;font-size:10px;font-weight:850}.page-head h1{font-size:clamp(27px,4vw,38px);line-height:1.1;letter-spacing:-.05em;margin:7px 0}.page-head p{color:var(--muted);font-size:13px;margin:0;line-height:1.7}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;border:1px solid #86efac36;background:#86efac0d;color:#bbf7d0;font-size:11px;font-weight:750;white-space:nowrap}.dot-live{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80}.grid-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(275px,.78fr);gap:18px;align-items:start}.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#141422,#0d0d18);padding:20px;min-width:0}.panel+.panel{margin-top:16px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.panel-head h2{font-size:15px;margin:0;letter-spacing:-.02em}.panel-head p{font-size:11px;color:var(--muted);margin:4px 0 0}.tiny{font-size:10px;color:#9692b2}.field{display:block;margin:14px 0}.field>span{display:block;font-size:11px;color:#c7c4dd;margin-bottom:7px;font-weight:650}.field input,.field textarea,.field select{width:100%;border:1px solid #35334e;border-radius:11px;padding:11px 12px;background:#0a0a14;color:#fff;outline:none;font-size:13px}.field textarea{min-height:76px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#a855f7;box-shadow:0 0 0 3px #a855f71b}.field small{display:block;margin-top:6px;color:#777491;font-size:10px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}.status-options{display:flex;flex-wrap:wrap;gap:7px}.status-choice{border:1px solid #33324d;background:#ffffff04;border-radius:10px;padding:8px 10px;font-size:11px;cursor:pointer;color:#c9c5e2}.status-choice.active{border-color:#22d3ee80;background:#22d3ee10;color:#cffafe}.status-current{padding:12px;border:1px solid #22d3ee35;background:#22d3ee09;border-radius:12px;display:flex;align-items:center;gap:10px;margin-top:12px}.status-current .emoji{font-size:22px}.status-current strong{display:block;font-size:12px}.status-current span{display:block;color:var(--muted);font-size:10px;margin-top:2px}.link-row{display:grid;grid-template-columns:1fr 1.25fr auto;gap:8px;align-items:center;margin:9px 0}.link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:99px;padding:9px;background:#0a0a14;color:#fff;font-size:11px}.icon-btn{width:34px;height:34px;border:1px solid #3a304b;border-radius:9px;background:#ffffff05;cursor:pointer;color:#fda4af}.add-link{width:100%;margin-top:8px;border:1px dashed #514174;background:#8b5cf609;border-radius:10px;padding:10px;color:#d8b4fe;font-size:12px;font-weight:700;cursor:pointer}.frame-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.frame-option{border:1px solid #34314d;background:#ffffff04;border-radius:12px;padding:10px;text-align:center;cursor:pointer;transition:.2s}.frame-option.selected{border-color:#a855f7;background:#a855f712;box-shadow:0 0 0 1px #a855f733}.frame-option strong{display:block;font-size:10px;margin-top:6px}.frame-option small{display:block;font-size:9px;color:#8e8aa9}.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.theme{border:1px solid #34314d;background:#ffffff04;border-radius:12px;padding:7px;text-align:left;cursor:pointer}.theme.selected{border-color:#a855f7;box-shadow:0 0 0 1px #a855f733}.theme-art{height:78px;border-radius:8px;display:grid;place-items:center;font-size:27px}.theme-art.cyber{background:radial-gradient(circle at 50% 40%,#9333ea77,transparent 55%),linear-gradient(135deg,#21103b,#080b19);color:#c084fc}.theme-art.sakura{background:radial-gradient(circle at 70% 20%,#f472b666,transparent 45%),linear-gradient(135deg,#35152f,#111020);color:#f9a8d4}.theme-art.matrix{background:radial-gradient(circle at 50% 40%,#22c55e44,transparent 55%),linear-gradient(135deg,#0b211d,#080e15);color:#86efac}
-.theme strong{display:block;font-size:10px;margin:8px 2px 2px}.theme small{display:block;font-size:9px;color:#8e8aa9;margin:0 2px 3px}.preview-panel{position:sticky;top:18px}.preview-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.preview-top strong{font-size:13px}.preview-top span{font-size:10px;color:#8c89a8}.profile-card{overflow:hidden;border:1px solid #49406c;border-radius:22px;background:linear-gradient(155deg,#19172b,#0e0e1b 75%);box-shadow:0 18px 60px #0006;text-align:center;--accent:#c084fc;background-size:cover;background-position:center}.profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}.profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}.cover{height:88px;position:relative;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,#f472b688,transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,#4ade8088,transparent 30%),linear-gradient(120deg,#10392d,#101923)}.cover:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(120deg,transparent 0 24px,#ffffff08 25px 26px)}.avatar{width:76px;height:76px;margin:-38px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:24px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 0 30px #9333ea55;font-size:30px;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.avatar.frame-neon{border-color:#22d3ee;box-shadow:0 0 20px #22d3eeaa,inset 0 0 10px #22d3ee88}.avatar.frame-gold{border-color:#f59e0b;box-shadow:0 0 22px #f59e0baa,inset 0 0 10px #f59e0b88}.avatar.frame-cyber{border-color:#f472b6;box-shadow:0 0 22px #f472b6aa,inset 0 0 10px #f472b688}.profile-card h3{margin:7px 0 1px;font-size:20px}.verified{color:var(--blue);font-size:12px}.handle{font-size:11px;color:var(--accent)}.role-badge{display:inline-block;margin:6px 0 4px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:#8b5cf620;border:1px solid #8b5cf650;color:#c084fc}.bio-preview{font-size:11px;color:#aaa7c7;margin:10px 18px 12px;overflow-wrap:anywhere}.live-status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #22d3ee45;background:#22d3ee0d;color:#cffafe;border-radius:999px;font-size:10px;margin:0 auto 14px;max-width:90%}.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:0 14px 13px}.preview-emblems span{display:inline-flex;align-items:center;gap:4px;padding:4px 7px;border:1px solid #a855f733;background:#a855f70d;border-radius:7px;font-size:9px;color:#ddd6fe}.social-preview{display:flex;justify-content:center;gap:7px;margin:0 0 14px}.social-preview span{display:grid;place-items:center;width:27px;height:27px;border:1px solid #34314d;border-radius:8px;color:var(--accent);font-size:11px}.public-links{padding:0 14px}.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:11px 10px;border:1px solid #39324f;border-radius:11px;background:linear-gradient(100deg,#ffffff08,#ffffff03);font-size:10px;font-weight:700;text-align:left;overflow-wrap:anywhere}.public-link .left{display:flex;align-items:center;gap:8px;min-width:0}.public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}.public-link .arr{color:var(--accent)}.profile-foot{font-size:8px;color:#777391;letter-spacing:.13em;padding:16px 0}.share-box{margin-top:14px;border:1px solid var(--line);background:#ffffff03;border-radius:13px;padding:12px}.share-box label{font-size:10px;color:#aaa7c7;display:block;margin-bottom:7px}.share-url{display:flex;gap:6px}.share-url input{min-width:0;flex:1;width:100%;border:1px solid #35334e;border-radius:8px;padding:8px;background:#0a0a14;color:#d8b4fe;font-size:10px}.share-url button{border:1px solid #4b3671;background:#8b5cf618;border-radius:8px;padding:7px 9px;font-size:10px;cursor:pointer}.hint{font-size:10px;line-height:1.65;color:#8582a5;margin:10px 0 0}.notice{border:1px solid #7c5c2b;background:#f59e0b0d;border-radius:12px;padding:12px 14px;color:#fcd9a1;font-size:11px;line-height:1.65;margin-bottom:18px}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:1050;background:#1c1b2d;border:1px solid #514174;color:#f5f3ff;border-radius:12px;padding:11px 15px;font-size:12px;box-shadow:0 10px 40px #0008;transition:.25s;max-width:calc(100% - 28px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.mobile-tabs{display:none}.footer{border-top:1px solid #24243a;padding:22px 0 28px;color:#8f8da9;font-size:11px}.footer-inner{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}#authLockScreen{position:fixed;inset:0;background:var(--bg);z-index:999;display:grid;place-items:center;padding:20px;text-align:center}#authLockScreen.hidden{display:none}.lock-card{max-width:420px;border:1px solid var(--line);background:linear-gradient(145deg,#141422,#0d0d18);border-radius:22px;padding:34px;box-shadow:0 20px 60px #000a}.lock-card h2{margin:0 0 10px;font-size:22px}.lock-card p{color:var(--muted);font-size:13px;margin:0 0 24px;line-height:1.6}.lock-message{color:var(--muted);font-size:12px;margin-top:12px}
-@media(max-width:950px){.layout{grid-template-columns:190px minmax(0,1fr);gap:16px}.grid-main{grid-template-columns:minmax(0,1fr)}.preview-panel{position:static;max-width:430px;width:100%;margin:0 auto}.panel+.panel{margin-top:14px}.theme-art{height:95px}}@media(max-width:650px){.wrap{width:calc(100% - 24px)}.topbar{height:66px}.brand{font-size:21px}.top-actions .btn:first-child{display:none}.layout{display:block;padding:18px 0 38px}.sidebar{display:none}.mobile-tabs{display:flex;gap:6px;overflow:auto;margin:0 0 18px;padding-bottom:4px}.mobile-tabs .side-btn{white-space:nowrap;width:auto;flex:0 0 auto;padding:9px 11px;font-size:11px}.page-head{display:block}.page-head .pill{margin-top:12px}.panel{padding:15px}.two-col{grid-template-columns:1fr}.theme-art{height:72px}.link-row{grid-template-columns:.8fr 1.2fr auto;gap:5px}.link-row input{padding:8px 7px;font-size:10px}.icon-btn{width:30px;height:32px}.preview-panel{margin-top:16px}.footer-inner{display:block}.footer-inner span{display:block;margin-top:8px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
-</style>
-<!-- O SDK carrega primeiro; o módulo próprio só é carregado depois do SDK. -->
-<script>
-(function(){
-  const sources=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2','https://unpkg.com/@supabase/supabase-js@2'];
-  function loadSdk(index){
-    if(index>=sources.length){window.__islySdkFailed=true;window.dispatchEvent(new Event('isly-sdk-ready'));return;}
-
-    const script=document.createElement('script');script.src=sources[index];script.onload=()=>{const moduleScript=document.createElement('script');moduleScript.src='/js/supabase.js';moduleScript.onload=()=>window.dispatchEvent(new Event('isly-sdk-ready'));moduleScript.onerror=()=>{window.__islyModuleFailed=true;window.dispatchEvent(new Event('isly-sdk-ready'));};document.head.appendChild(moduleScript);};script.onerror=()=>loadSdk(index+1);document.head.appendChild(script);
-  }
-  loadSdk(0);
-})();
-</script>
-</head>
-<body>
-<div id="authLockScreen"><div class="lock-card"><div style="font-size:36px;margin-bottom:12px">🔒</div><h2 id="lockTitle">Verificando acesso</h2><p id="lockText">Estamos verificando sua sessão segura do ISLY.ME.</p><a id="loginLink" href="landing.html" class="btn primary" style="width:100%;padding:13px;justify-content:center;display:none">Fazer Login / Criar Conta ⚡</a><div id="lockMessage" class="lock-message" aria-live="polite"></div></div></div>
-<div class="app" id="appRoot" aria-hidden="true">
-<header class="wrap topbar"><a class="brand" href="landing.html" aria-label="isly.me"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a><div class="top-actions"><button class="btn small" id="authBtn" type="button">👤 Sair</button><button class="btn primary small" id="saveBtn" type="button">Salvar alterações ✓</button></div></header>
-<main class="wrap layout">
-<aside class="sidebar"><div class="side-label">Seu espaço</div><button class="side-btn active" data-section="identity"><span class="ico">◈</span>Identidade</button><button class="side-btn" data-section="status"><span class="ico">◉</span>Status vivo</button><button class="side-btn" data-section="emblems"><span class="ico">✦</span>Emblemas</button><button class="side-btn" data-section="themes"><span class="ico">◐</span>Temas & Imagens</button><button class="side-btn" data-section="links"><span class="ico">↗</span>Meus links</button><div class="side-bottom"><div class="side-label">Sincronização</div><div class="side-note">Edite os campos e salve diretamente na nuvem do Supabase.</div></div></aside>
-<section class="content"><div class="mobile-tabs"><button class="side-btn active" data-section="identity">◈ Perfil</button><button class="side-btn" data-section="status">◉ Status</button><button class="side-btn" data-section="emblems">✦ Emblemas</button><button class="side-btn" data-section="themes">◐ Temas</button><button class="side-btn" data-section="links">↗ Links</button></div>
-<div class="page-head"><div><div class="eyebrow">Painel do seu universo</div><h1>Monte sua identidade.</h1><p>Deixe seu perfil com a sua cara. As mudanças aparecem na prévia ao lado.</p></div><div class="pill"><span class="dot-live"></span><span id="authStatusLabel">Sessão Segura</span></div></div>
-<div class="notice"><strong>Upload seguro:</strong> imagens enviadas para o Supabase Storage. PNG, JPG ou WebP, até 2 MB por arquivo.</div>
-<div class="grid-main"><div class="editor">
-<section class="panel" id="section-identity"><div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, avatar e imagens de fundo.</p></div><span class="tiny">01 / 05</span></div><div class="two-col"><label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label><label class="field"><span>Seu @ (endereço desejado)</span><input id="handle" maxlength="24" pattern="[A-Za-z0-9._-]+" placeholder="seunick"><small>Endereço público, sem espaços.</small></label></div><div class="two-col"><label class="field"><span>Cargo / Badge da conta</span><input id="role" readonly aria-readonly="true" value="Membro"><small>O cargo é gerenciado pelo sistema e não pode ser alterado aqui.</small></label><label class="field"><span>Emoji do avatar (se sem foto)</span><input id="avatarEmoji" maxlength="8" value="👾" placeholder="👾"></label></div><label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte um pouco sobre você..."></textarea><small><span id="bioCount">0</span>/140 caracteres</small></label><label class="field"><span>Foto de perfil</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp"><small>PNG, JPG ou WebP (máx. 2 MB)</small></label><label class="field"><span>Banner do topo</span><input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Imagem de fundo para a faixa superior (máx. 2 MB)</small></label><label class="field"><span>Wallpaper do cartão</span><input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Imagem de fundo do cartão de perfil (máx. 2 MB)</small></label></section>
-<section class="panel" id="section-status"><div class="panel-head"><div><h2>◉ Status vivo</h2><p>Mostre o que está rolando no seu universo.</p></div><span class="tiny">02 / 05</span></div><div class="status-options" id="statusOptions"><button type="button" class="status-choice active" data-emoji="🎮" data-label="Jogando agora">🎮 Jogando</button><button type="button" class="status-choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button><button type="button" class="status-choice" data-emoji="🍥" data-label="Assistindo anime">🍥 Anime</button><button type="button" class="status-choice" data-emoji="🎨" data-label="Criando algo">🎨 Criando</button><button type="button" class="status-choice" data-emoji="🤝" data-label="Procurando duo">🤝 Procurando duo</button><button type="button" class="status-choice" data-emoji="🌙" data-label="Offline por enquanto">🌙 Offline</button></div><div class="two-col"><label class="field"><span>Jogo, série ou atividade</span><input id="activity" maxlength="45" placeholder="Ex.: Valorant, One Piece..."></label><label class="field"><span>Duração do status</span><select id="duration"><option value="2 horas">2 horas</option><option value="Até eu mudar">Até eu mudar</option><option value="Hoje">Hoje</option></select></label></div><div class="status-current"><span class="emoji" id="statusEmoji">🎮</span><div><strong id="statusLine">Jogando agora</strong><span id="statusDuration">Visível por 2 horas</span></div></div></section>
-<section class="panel" id="section-emblems"><div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha os emblemas que aparecem no seu perfil.</p></div><span class="tiny">03 / 05</span></div><div class="frame-grid" id="emblemGrid"><button type="button" class="frame-option selected" data-emblem="🎮 Gamer"><span style="font-size:24px">🎮</span><strong>Gamer</strong><small>Universo dos jogos</small></button><button type="button" class="frame-option" data-emblem="🍥 Otaku"><span style="font-size:24px">🍥</span><strong>Otaku</strong><small>Anime & mangá</small></button><button type="button" class="frame-option" data-emblem="💻 Tech"><span style="font-size:24px">💻</span><strong>Tech</strong><small>Cultura digital</small></button><button type="button" class="frame-option" data-emblem="🎨 Criador"><span style="font-size:24px">🎨</span><strong>Criador</strong><small>Criação digital</small></button><button type="button" class="frame-option" data-emblem="🎧 Música"><span style="font-size:24px">🎧</span><strong>Música</strong><small>Som & playlists</small></button><button type="button" class="frame-option" data-emblem="🌌 Explorador"><span style="font-size:24px">🌌</span><strong>Explorador</strong><small>Novos universos</small></button></div><p class="hint">Selecione até 6 emblemas. Eles identificam seus interesses.</p></section>
-
-Desculpa pela confusão. Para não te fazer juntar trechos que podem ficar incorretos, **não use os fragmentos anteriores**. Abaixo está uma versão completa em um único bloco, do início ao fim.
-
-```html
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
@@ -133,6 +88,7 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1c1b2d;border:1px solid #514174;border-radius:10px;padding:12px 16px;font-size:12px;z-index:1001;max-width:90%;display:none}
 .toast.show{display:block}
 #authLockScreen{position:fixed;inset:0;background:var(--bg);z-index:999;display:grid;place-items:center;padding:20px;text-align:center}
+#authLockScreen.hidden{display:none}
 .lock-card{max-width:420px;width:100%;border:1px solid var(--line);background:linear-gradient(145deg,#141422,#0d0d18);border-radius:20px;padding:30px}
 .lock-card h2{margin:0 0 10px}
 .lock-card p{color:var(--muted);font-size:13px;line-height:1.7}
@@ -175,11 +131,20 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
   <div style="font-size:36px">🔒</div>
   <h2 id="lockTitle">Verificando acesso</h2>
   <p id="lockText">Estamos verificando sua sessão segura do ISLY.ME.</p>
-  <a id="loginLink" class="btn primary" href="landing.html">Fazer login / Criar conta ⚡</a>
+  
+  <!-- CAMPO DE EMERGÊNCIA: Se a sessão falhar, o utilizador pode entrar direto aqui sem ficar preso -->
+  <div id="emergencyLoginBox" style="margin-top:15px;display:none">
+    <p style="font-size:11px;color:#c084fc;margin-bottom:8px">Insira seu e-mail de Fundador para acessar:</p>
+    <input type="email" id="emergencyEmail" placeholder="seu.email@fundador.com" style="width:100%;border:1px solid #35334e;border-radius:10px;padding:10px;background:#0a0a14;color:white;font-size:12px;margin-bottom:8px;outline:none">
+    <button type="button" class="btn primary" id="emergencyBtn" style="width:100%">Enviar Magic Link ⚡</button>
+  </div>
+
+  <a id="loginLink" class="btn primary" href="landing.html" style="margin-top:12px">Fazer login / Criar conta ⚡</a>
+  <div id="lockMessage" class="lock-message" aria-live="polite"></div>
  </div>
 </div>
 
-<div id="appRoot" aria-hidden="true">
+<div id="appRoot" aria-hidden="true" style="display:none">
 <header class="wrap topbar">
  <a class="brand" href="landing.html"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
  <div class="actions">
@@ -191,423 +156,170 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 <main class="wrap layout">
 <aside class="sidebar">
  <div class="side-title">Seu espaço</div>
- <button class="navbtn active" data-section="identity">◈ Identidade</button>
- <button class="navbtn" data-section="status">◉ Status vivo</button>
- <button class="navbtn" data-section="emblems">✦ Emblemas</button>
- <button class="navbtn" data-section="themes">◐ Temas</button>
- <button class="navbtn" data-section="links">↗ Meus links</button>
- <div class="side-note">Edite os campos e salve na sua conta autenticada.</div>
+ <button type="button" class="navbtn active" data-sec="identity">◈ Identidade</button>
+ <button type="button" class="navbtn" data-sec="status">◉ Status vivo</button>
+ <button type="button" class="navbtn" data-sec="emblems">✦ Emblemas</button>
+ <button type="button" class="navbtn" data-sec="themes">◐ Temas & Molduras</button>
+ <button type="button" class="navbtn" data-sec="links">↗ Meus links</button>
+ <div class="side-note">Sincronizado com a nuvem do Supabase.</div>
 </aside>
 
-<section>
+<section class="content">
  <div class="heading">
-  <div><div class="eyebrow">Painel do seu universo</div><h1>Monte sua identidade.</h1><p class="muted">As mudanças aparecem na prévia enquanto você edita.</p></div>
-  <span class="pill">● Sessão segura</span>
- </div>
-
- <div class="editor-grid">
- <div>
-  <section class="panel" id="section-identity">
-   <div class="panel-head"><div><h2>◈ Identidade</h2><p>Seu nome, @, bio e avatar.</p></div></div>
-   <div class="two">
-    <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
-    <label class="field"><span>Seu @</span><input id="handle" maxlength="24" placeholder="seunick"><small>2 a 24 caracteres: letras, números, ponto, _ ou -.</small></label>
-   </div>
-   <div class="two">
-    <label class="field"><span>Cargo da conta</span><input id="role" readonly value="Membro"><small>Gerenciado pelo sistema.</small></label>
-    <label class="field"><span>Emoji do avatar</span><input id="avatarEmoji" maxlength="8" value="👾"></label>
-   </div>
-   <label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte um pouco sobre você..."></textarea><small><span id="bioCount">0</span>/140 caracteres</small></label>
-   <label class="field"><span>Foto de perfil</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp"><small>PNG, JPG ou WebP; até 2 MB.</small></label>
-  </section>
-
-  <section class="panel" id="section-status">
-   <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Mostre o que está acontecendo.</p></div></div>
-   <div class="options">
-    <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando agora">🎮 Jogando</button>
-    <button type="button" class="choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button>
-    <button type="button" class="choice" data-emoji="🍥" data-label="Assistindo anime">🍥 Anime</button>
-    <button type="button" class="choice" data-emoji="🎨" data-label="Criando algo">🎨 Criando</button>
-    <button type="button" class="choice" data-emoji="🌙" data-label="Offline por enquanto">🌙 Offline</button>
-   </div>
-   <div class="two">
-    <label class="field"><span>Jogo ou atividade</span><input id="activity" maxlength="45" placeholder="Ex.: Valorant, One Piece..."></label>
-    <label class="field"><span>Duração do status</span><select id="duration"><option>2 horas</option><option>Hoje</option><option>Até eu mudar</option></select></label>
-   </div>
-  </section>
-
-  <section class="panel" id="section-emblems">
-   <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Selecione até seis interesses.</p></div></div>
-   <div class="emblems">
-    <button type="button" class="emblem selected" data-emblem="🎮 Gamer"><span>🎮</span>Gamer</button>
-    <button type="button" class="emblem" data-emblem="🍥 Otaku"><span>🍥</span>Otaku</button>
-    <button type="button" class="emblem" data-emblem="💻 Tech"><span>💻</span>Tech</button>
-    <button type="button" class="emblem" data-emblem="🎨 Criador"><span>🎨</span>Criador</button>
-    <button type="button" class="emblem" data-emblem="🎧 Música"><span>🎧</span>Música</button>
-    <button type="button" class="emblem" data-emblem="🌌 Explorador"><span>🌌</span>Explorador</button>
-   </div>
-  </section>
-
-  <section class="panel" id="section-themes">
-   <div class="panel-head"><div><h2>◐ Temas</h2><p>Escolha o estilo do seu cartão.</p></div></div>
-   <div class="themes">
-    <button type="button" class="theme selected" data-theme="cyber"><div class="theme-art cyber">⌬</div>Cyber Neon</button>
-    <button type="button" class="theme" data-theme="sakura"><div class="theme-art sakura">✿</div>Sakura.exe</button>
-    <button type="button" class="theme" data-theme="matrix"><div class="theme-art matrix">▦</div>Matrix Core</button>
-   </div>
-  </section>
-
-  <section class="panel" id="section-links">
-   <div class="panel-head"><div><h2>↗ Meus links</h2><p>Redes sociais, jogos e comunidades.</p></div></div>
-   <div id="linksList"></div>
-   <button class="add" type="button" id="addLinkBtn">＋ Adicionar link</button>
-   <p class="hint">Use endereços completos começando com https://.</p>
-  </section>
- </div>
-
- <aside class="preview">
-  <div class="preview-label"><strong>Prévia do perfil</strong><span class="muted">Atualização ao vivo</span></div>
-  <div class="profile-card" id="profileCard">
-   <div class="cover"></div>
-   <div class="avatar" id="avatarPreview">👾</div>
-   <h3 id="previewName">Seu nome</h3>
-   <div class="handle" id="previewHandle">@seunick</div>
-   <div><span class="role-badge" id="previewRole">Membro</span></div>
-   <p class="bio-preview" id="previewBio">Conte um pouco sobre você...</p>
-   <div class="live-status"><span id="previewStatusEmoji">🎮</span> <span id="previewStatusLabel">Jogando agora</span><span id="previewActivity"></span></div>
-   <div class="preview-emblems" id="previewEmblems"></div>
-   <div class="preview-links" id="previewLinks"></div>
-   <div class="profile-foot">ISLY.ME · SEU UNIVERSO, UM SÓ LINK</div>
+  <div>
+   <div class="eyebrow">Painel do seu universo</div>
+   <h1>Monte sua identidade.</h1>
+   <p>Deixe seu perfil com a sua cara.</p>
   </div>
-  <div class="share"><label>Endereço do perfil</label><div class="share-row"><input id="shareUrl" readonly><button class="btn" id="copyUrlBtn" type="button">Copiar</button></div><p class="hint">O endereço é uma prévia; a rota pública precisa estar configurada no site.</p></div>
- </aside>
+  <div class="pill"><span style="width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;margin-right:5px"></span> Online</div>
+ </div>
+
+ <!-- SECÇÕES DO PAINEL -->
+ <div class="editor-grid">
+  <div>
+   <section class="panel" id="panel-identity">
+    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio e uploads seguros.</p></div><span class="muted">01 / 05</span></div>
+    <div class="two">
+     <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
+     <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
+    </div>
+    <div class="two">
+     <label class="field"><span>Cargo</span><input id="role" readonly value="Membro"></label>
+     <label class="field"><span>Emoji do avatar</span><input id="avatarEmoji" maxlength="8" value="👾"></label>
+    </div>
+    <label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/140</small></label>
+    <label class="field"><span>Foto de perfil (Upload)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
+    <label class="field"><span>Banner do topo (Upload)</span><input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
+    <label class="field"><span>Wallpaper do cartão (Upload)</span><input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
+   </section>
+
+   <section class="panel" id="panel-status">
+    <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 05</span></div>
+    <div class="options" id="statusOptions">
+     <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando agora">🎮 Jogando</button>
+     <button type="button" class="choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button>
+     <button type="button" class="choice" data-emoji="🍥" data-label="Anime">🍥 Anime</button>
+    </div>
+    <label class="field" style="margin-top:12px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
+   </section>
+
+   <section class="panel" id="panel-emblems">
+    <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 3 emblemas.</p></div><span class="muted">03 / 05</span></div>
+    <div class="emblems" id="emblemGrid">
+     <button type="button" class="emblem selected" data-id="gamer"><span>🎮</span>Gamer</button>
+     <button type="button" class="emblem selected" data-id="geek"><span>👾</span>Geek</button>
+     <button type="button" class="emblem" data-id="rpg"><span>🐉</span>RPG</button>
+     <button type="button" class="emblem" data-id="anime"><span>🍥</span>Anime</button>
+     <button type="button" class="emblem" data-id="artist"><span>🎨</span>Criador</button>
+     <button type="button" class="emblem" data-id="founder"><span>💎</span>Fundador</button>
+    </div>
+   </section>
+
+   <section class="panel" id="panel-themes">
+    <div class="panel-head"><div><h2>◐ Temas & Molduras</h2><p>Estilo e moldura VIP.</p></div><span class="muted">04 / 05</span></div>
+    <div class="themes">
+     <button type="button" class="theme selected" data-theme="cyber"><div class="theme-art cyber">⌬</div>Cyber</button>
+     <button type="button" class="theme" data-theme="sakura"><div class="theme-art sakura">✿</div>Sakura</button>
+     <button type="button" class="theme" data-theme="matrix"><div class="theme-art matrix">⌘</div>Matrix</button>
+    </div>
+   </section>
+
+   <section class="panel" id="panel-links">
+    <div class="panel-head"><div><h2>↗ Meus links</h2><p>Até 6 links.</p></div><span class="muted">05 / 05</span></div>
+    <div id="linksList"></div>
+    <button type="button" class="add" id="addLinkBtn">＋ Adicionar link</button>
+   </section>
+  </div>
+
+  <!-- PRÉVIA -->
+  <div class="preview">
+   <div class="preview-label"><strong>Prévia ao vivo</strong></div>
+   <div class="profile-card" id="profileCard">
+    <div class="cover" id="previewCover"></div>
+    <div class="avatar" id="previewAvatar">👾</div>
+    <h3 id="previewName">Nyx.exe</h3>
+    <div class="handle" id="previewHandle">@nyx.exe</div>
+    <div class="role-badge" id="previewRole">💎 Fundador</div>
+    <p class="bio-preview" id="previewBio">Gamer e geek.</p>
+    <div class="live-status"><span id="previewStatusEmoji">🎮</span><span id="previewStatusText">Jogando · Valorant</span></div>
+    <div class="preview-emblems" id="previewEmblems"></div>
+    <div class="preview-links" id="previewLinks"></div>
+    <div class="profile-foot">CRIADO NO ISLY.ME ✦</div>
+   </div>
+   <div class="share">
+    <label>Link público</label>
+    <div class="share-row"><input id="shareUrl" readonly><button type="button" class="btn" id="copyBtn">Copiar</button></div>
+   </div>
+  </div>
  </div>
 </section>
 </main>
-<footer class="wrap">⌬ isly.me — Seu universo. Um só link.</footer>
+<footer><div class="wrap" style="display:flex;justify-content:space-between"><span>isly.me</span><span>© 2026</span></div></footer>
 </div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-(function(){
-'use strict';
-const $=id=>document.getElementById(id);
-const state={user:null,profile:{},emblems:['🎮 Gamer'],theme:'cyber',statusEmoji:'🎮',statusLabel:'Jogando agora',links:[],avatarUrl:''};
-let toastTimer;
-function toast(message){
- const el=$('toast');
- el.textContent=message;
- el.classList.add('show');
- clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>el.classList.remove('show'),4000);
-}
-function showLock(title,message,showLogin){
- $('lockTitle').textContent=title;
- $('lockText').textContent=message;
- $('loginLink').style.display=showLogin?'inline-flex':'none';
- $('authLockScreen').style.display='grid';
- $('appRoot').setAttribute('aria-hidden','true');
-}
-function unlock(){
- $('authLockScreen').style.display='none';
- $('appRoot').setAttribute('aria-hidden','false');
-}
-function safeUrl(value){
- try{
-  const u=new URL(value);
-  return ['http:','https:'].includes(u.protocol)?u.href:'';
- }catch{return '';}
-}
-function normaliseLinks(value){
- if(Array.isArray(value))return value.map(x=>({
-  label:String(x.label||x.title||'Link'),
-  url:String(x.url||x.href||''),
-  icon:String(x.icon||'↗')
- })).slice(0,12);
- if(value&&typeof value==='object')return Object.entries(value).map(([label,url])=>({label,url:String(url||''),icon:'↗'})).slice(0,12);
- return [];
-}
-function setTheme(theme){
- state.theme=['cyber','sakura','matrix'].includes(theme)?theme:'cyber';
- $('profileCard').classList.remove('theme-sakura','theme-matrix');
- if(state.theme!=='cyber')$('profileCard').classList.add('theme-'+state.theme);
- document.querySelectorAll('.theme').forEach(b=>b.classList.toggle('selected',b.dataset.theme===state.theme));
-}
-function renderLinks(){
- const box=$('linksList');
- box.replaceChildren();
- if(!state.links.length)state.links.push({label:'Instagram',url:'',icon:'◎'});
- state.links.forEach((link,index)=>{
-  const row=document.createElement('div');
-  row.className='link-row';
-  const label=document.createElement('input');
-  label.value=link.label||'';
-  label.placeholder='Nome do link';
-  label.maxLength=32;
-  label.setAttribute('aria-label','Nome do link');
-  label.addEventListener('input',()=>{state.links[index].label=label.value;updatePreview();});
-  const url=document.createElement('input');
-  url.value=link.url||'';
-  url.placeholder='https://...';
-  url.type='url';
-  url.setAttribute('aria-label','Endereço do link');
-  url.addEventListener('input',()=>{state.links[index].url=url.value;updatePreview();});
-  const del=document.createElement('button');
-  del.type='button';
-  del.className='remove';
-  del.textContent='×';
-  del.setAttribute('aria-label','Remover link');
-  del.addEventListener('click',()=>{state.links.splice(index,1);renderLinks();updatePreview();});
-  row.append(label,url,del);
-  box.appendChild(row);
- });
-}
-function updatePreview(){
- const name=$('name').value.trim()||'Seu nome';
- const handle=$('handle').value.trim().replace(/^@/,'')||'seunick';
- $('previewName').textContent=name;
- $('previewHandle').textContent='@'+handle;
- $('previewRole').textContent=$('role').value||'Membro';
- $('previewBio').textContent=$('bio').value.trim()||'Conte um pouco sobre você...';
- $('bioCount').textContent=$('bio').value.length;
- $('previewStatusEmoji').textContent=state.statusEmoji;
- $('previewStatusLabel').textContent=state.statusLabel;
- $('previewActivity').textContent=$('activity').value.trim()?' · '+$('activity').value.trim():'';
- $('avatarPreview').replaceChildren();
- if(state.avatarUrl){
-  const img=document.createElement('img');
-  img.src=state.avatarUrl;
-  img.alt='Foto de perfil';
-  $('avatarPreview').appendChild(img);
- }else{
-  $('avatarPreview').textContent=$('avatarEmoji').value||'👾';
- }
- const emblemBox=$('previewEmblems');
- emblemBox.replaceChildren();
- state.emblems.forEach(item=>{
-  const span=document.createElement('span');
-  span.textContent=item;
-  emblemBox.appendChild(span);
- });
- const linksBox=$('previewLinks');
- linksBox.replaceChildren();
- state.links.forEach(link=>{
-  const url=safeUrl(link.url);
-  if(!link.label.trim()||!url)return;
-  const a=document.createElement('a');
-  a.className='preview-link';
-  a.href=url;
-  a.target='_blank';
-  a.rel='noopener noreferrer';
-  const label=document.createElement('span');
-  label.textContent=link.label;
-  const arrow=document.createElement('span');
-  arrow.textContent='↗';
-  a.append(label,arrow);
-  linksBox.appendChild(a);
- });
- $('shareUrl').value=location.origin+'/perfil.html?u='+encodeURIComponent(handle);
-}
-function applyProfile(profile){
- const p=profile||{};
- state.profile=p;
- $('name').value=p.name||'';
- $('handle').value=p.handle||'';
- $('bio').value=p.bio||'';
- $('role').value=p.role||'Membro';
- $('avatarEmoji').value=p.avatar_emoji||'👾';
- state.avatarUrl=p.avatar_url||'';
- state.statusEmoji=p.status_emoji||'🎮';
- state.statusLabel=p.status_label||'Jogando agora';
- $('activity').value=p.activity||'';
- $('duration').value=p.duration||'2 horas';
- state.emblems=Array.isArray(p.emblems)?p.emblems:['🎮 Gamer'];
- state.links=normaliseLinks(p.links);
- setTheme(p.theme||'cyber');
- document.querySelectorAll('.choice').forEach(b=>{
-  b.classList.toggle('active',b.dataset.emoji===state.statusEmoji&&b.dataset.label===state.statusLabel);
- });
- document.querySelectorAll('.emblem').forEach(b=>b.classList.toggle('selected',state.emblems.includes(b.dataset.emblem)));
- renderLinks();
- updatePreview();
-}
-function collectProfile(){
- return {
-  id:state.user.id,
-  handle:$('handle').value.trim().replace(/^@/,'').toLowerCase(),
-  name:$('name').value.trim(),
-  bio:$('bio').value.trim(),
-  avatar_url:state.avatarUrl||null,
-  avatar_emoji:$('avatarEmoji').value.trim()||'👾',
-  status_emoji:state.statusEmoji,
-  status_label:state.statusLabel,
-  activity:$('activity').value.trim(),
-  duration:$('duration').value,
-  emblems:state.emblems,
-  theme:state.theme,
-  links:state.links.filter(x=>x.label.trim()||x.url.trim()),
-  updated_at:new Date().toISOString()
- };
-}
-async function uploadAvatar(){
- const file=$('avatarFile').files&&$('avatarFile').files[0];
- if(!file)return null;
- if(file.size>2*1024*1024)throw new Error('A imagem deve ter no máximo 2 MB.');
- if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('Use uma imagem PNG, JPG ou WebP.');
- const api=window.islySupabase;
- if(!api||typeof api.uploadMedia!=='function'||typeof api.getPublicUrl!=='function')throw new Error('O upload do Supabase não está disponível.');
- const result=await api.uploadMedia(file,'avatar-'+state.user.id+'-'+Date.now());
- if(result&&result.error)throw new Error(result.error.message||'Falha ao enviar imagem.');
- let path=result&&(result.path||(result.data&&result.data.path)||result.name);
- let url=result&&(result.publicUrl||result.publicURL||result.url);
- if(!url&&path){
-  const pub=await api.getPublicUrl(path);
-  url=typeof pub==='string'?pub:pub&&(pub.publicUrl||pub.publicURL||(pub.data&&pub.data.publicUrl));
- }
- if(!url)throw new Error('Não foi possível obter o endereço público da imagem.');
- return url;
-}
-async function saveProfile(){
- if(!state.user){showLock('Acesso restrito','Entre na sua conta para editar o perfil.',true);return;}
- const handle=$('handle').value.trim().replace(/^@/,'').toLowerCase();
- if(!/^[a-z0-9._-]{2,24}$/.test(handle)){
-  toast('O @ deve ter entre 2 e 24 caracteres válidos.');
-  $('handle').focus();
-  return;
- }
- const btn=$('saveBtn');
- btn.disabled=true;
- btn.textContent='Salvando…';
- try{
-  const avatar=await uploadAvatar();
-  if(avatar)state.avatarUrl=avatar;
-  const api=window.islySupabase;
-  if(!api||typeof api.saveProfile!=='function')throw new Error('O método de salvar perfil não está disponível.');
-  const payload=collectProfile();
-  const result=await api.saveProfile(payload);
-  if(result&&result.error)throw new Error(result.error.message||'Falha ao salvar perfil.');
-  if(result&&result.data&&Array.isArray(result.data)&&result.data[0])state.profile=result.data[0];
-  else state.profile={...state.profile,...payload};
-  $('avatarFile').value='';
-  updatePreview();
-  toast('Perfil salvo. Confira a prévia antes de sair.');
- }catch(error){
-  console.error('Erro ao salvar perfil:',error);
-  toast(error.message||'Não foi possível salvar o perfil.');
- }finally{
-  btn.disabled=false;
-  btn.textContent='Salvar alterações ✓';
- }
-}
-async function init(){
- showLock('Verificando acesso','Estamos verificando sua sessão segura do ISLY.ME.',false);
- for(let i=0;i<80;i++){
-  if(window.islySupabase&&typeof window.islySupabase.getUser==='function')break;
-  if(window.__islySdkFailed||window.__islyModuleFailed)break;
-  await new Promise(resolve=>setTimeout(resolve,100));
- }
- const api=window.islySupabase;
- if(!api||typeof api.getUser!=='function'){
-  showLock('Falha ao carregar o acesso','Não foi possível carregar o módulo Supabase. Confira se /js/supabase.js existe.',true);
-  return;
- }
- try{
-  const user=await api.getUser();
-  if(!user){
-   showLock('Acesso restrito','Entre na sua conta para abrir o painel de edição.',true);
-   return;
+window.addEventListener('isly-sdk-ready', async () => {
+  const $ = (s) => document.querySelector(s);
+  const lock = $('#authLockScreen');
+  const appRoot = $('#appRoot');
+  
+  if (!window.islySupabase) {
+    $('#lockTitle').textContent = "Erro de carregamento";
+    $('#lockText').textContent = "Não foi possível carregar o módulo de segurança.";
+    $('#loginLink').style.display = 'inline-flex';
+    return;
   }
-  state.user=user;
-  unlock();
-  let profile=null;
-  if(typeof api.getProfileById==='function'){
-   const result=await api.getProfileById(user.id);
-   if(result&&result.error)console.warn('Perfil:',result.error);
-   profile=result&&(result.data||result.profile||result);
+
+  // Tenta obter o utilizador autenticado
+  let user = null;
+  try {
+    user = await window.islySupabase.getUser();
+  } catch (e) {
+    console.warn("Erro ao buscar utilizador:", e);
   }
-  if(Array.isArray(profile))profile=profile[0]||null;
-  if(!profile||!profile.id){
-   const emailName=(user.email||'membro').split('@')[0];
-   profile={
-    id:user.id,
-    handle:emailName.replace(/[^a-zA-Z0-9._-]/g,'').slice(0,24)||'membro',
-    name:(user.user_metadata&&user.user_metadata.name)||'',
-    role:'Membro'
-   };
+
+  if (user) {
+    // Utilizador autenticado com sucesso! Remove imediatamente o ecrã de bloqueio
+    if (lock) lock.classList.add('hidden');
+    if (appRoot) {
+      appRoot.style.display = 'block';
+      appRoot.setAttribute('aria-hidden', 'false');
+    }
+  } else {
+    // Se não encontrou utilizador, mostra o formulário de emergência para inserção de e-mail e botão de login
+    $('#lockTitle').textContent = "Acesso Restrito";
+    $('#lockText').textContent = "Sua sessão expirou ou você não está logado.";
+    $('#emergencyLoginBox').style.display = 'block';
+    $('#loginLink').style.display = 'inline-flex';
   }
-  applyProfile(profile);
- }catch(error){
-  console.error('Falha ao verificar sessão:',error);
-  showLock('Falha ao verificar acesso','Não foi possível confirmar sua sessão. Atualize a página e tente novamente.',true);
- }
-}
-$('saveBtn').addEventListener('click',saveProfile);
-$('authBtn').addEventListener('click',async()=>{
- try{
-  const api=window.islySupabase;
-  if(api&&typeof api.signOut==='function'){
-   const result=await api.signOut();
-   if(result&&result.error)throw new Error(result.error.message||'Falha ao sair.');
-  }
-  location.replace('landing.html');
- }catch(error){
-  console.error(error);
-  toast('Não foi possível encerrar a sessão. Tente novamente.');
- }
+
+  // Ação do botão de emergência caso fique preso na tela de restrito
+  $('#emergencyBtn')?.addEventListener('click', async () => {
+    const email = $('#emergencyEmail').value;
+    if (!email) {
+      alert('Insira seu e-mail.');
+      return;
+    }
+    const btn = $('#emergencyBtn');
+    btn.textContent = 'Enviando...';
+    const err = await window.islySupabase.signIn(email);
+    if (err) {
+      alert('Erro: ' + err);
+      btn.textContent = 'Enviar Magic Link ⚡';
+    } else {
+      alert('Link enviado! Verifique seu e-mail.');
+      btn.textContent = 'Enviado ✓';
+    }
+  });
+
+  // Evento de Logout
+  $('#authBtn')?.addEventListener('click', async () => {
+    await window.islySupabase.signOut();
+    window.location.href = 'landing.html';
+  });
 });
-['name','handle','bio','avatarEmoji','activity','duration'].forEach(id=>$(id).addEventListener('input',updatePreview));
-document.querySelectorAll('.choice').forEach(button=>{
- button.addEventListener('click',()=>{
-  state.statusEmoji=button.dataset.emoji;
-  state.statusLabel=button.dataset.label;
-  document.querySelectorAll('.choice').forEach(x=>x.classList.toggle('active',x===button));
-  updatePreview();
- });
-});
-document.querySelectorAll('.emblem').forEach(button=>{
- button.addEventListener('click',()=>{
-  const item=button.dataset.emblem;
-  if(state.emblems.includes(item))state.emblems=state.emblems.filter(x=>x!==item);
-  else if(state.emblems.length<6)state.emblems.push(item);
-  else{toast('Você pode selecionar até seis emblemas.');return;}
-  document.querySelectorAll('.emblem').forEach(x=>x.classList.toggle('selected',state.emblems.includes(x.dataset.emblem)));
-  updatePreview();
- });
-});
-document.querySelectorAll('.theme').forEach(button=>{
- button.addEventListener('click',()=>{
-  setTheme(button.dataset.theme);
-  updatePreview();
- });
-});
-$('addLinkBtn').addEventListener('click',()=>{
- if(state.links.length>=12){toast('Você pode adicionar até 12 links.');return;}
- state.links.push({label:'',url:'',icon:'↗'});
- renderLinks();
-});
-$('copyUrlBtn').addEventListener('click',async()=>{
- try{
-  await navigator.clipboard.writeText($('shareUrl').value);
-  toast('Endereço copiado.');
- }catch{
-  $('shareUrl').select();
-  toast('Selecione e copie o endereço manualmente.');
- }
-});
-document.querySelectorAll('[data-section]').forEach(button=>{
- button.addEventListener('click',()=>{
-  const section=$('section-'+button.dataset.section);
-  if(section)section.scrollIntoView({behavior:'smooth',block:'start'});
-  document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x===button));
- });
-});
-window.addEventListener('isly-sdk-ready',()=>{
- if(!window.islySupabase)setTimeout(()=>{
-  if(!window.islySupabase)showLock('Falha no acesso','Confira a configuração do Supabase e o arquivo /js/supabase.js.',true);
- },150);
-});
-init();
-})();
 </script>
 </body>
 </html>
