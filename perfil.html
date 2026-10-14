@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
 <title id="pageTitle">isly.me — Perfil</title>
-<!-- Supabase SDK via CDN Principal + Fallback Automático para unpkg -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   if (typeof supabase === 'undefined') {
@@ -18,7 +17,6 @@
 body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.28),transparent 50%),var(--bg);color:var(--text);font-family:Inter,sans-serif;display:grid;place-items:center;padding:20px;overflow-x:hidden}
 .container{width:100%;max-width:420px}
 
-/* Glassmorphism & Cartão Principal */
 .profile-card{
   overflow:hidden;
   border:1px solid rgba(168,85,247,0.25);
@@ -52,7 +50,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rg
 .social-preview{display:flex;justify-content:center;gap:8px;margin:0 0 14px}
 .social-preview span{display:grid;place-items:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--accent);font-size:11px;background:rgba(255,255,255,0.02)}
 .public-links{padding:0 14px 18px}
-.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:12px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:linear-gradient(100deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01));font-size:11px;font-weight:700;text-align:left;text-decoration:none;color:#fff;transition:all .25s ease}
+.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:12px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:linear-gradient(100deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01));font-size:11px;font-weight:700;text-align:left;text-decoration:none;color:#fff;transition:all .25s ease;cursor:pointer}
 .public-link:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.3), 0 0 12px var(--accent)}
 .public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
 .public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
@@ -61,7 +59,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rg
 .profile-foot{font-size:9px;color:#777391;letter-spacing:.13em;padding:16px 0;text-align:center}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
-/* Animações em Cascata (Cascading Stagger) */
+/* Animações em Cascata */
 .animate-item {
   opacity: 0;
   transform: translateY(16px);
@@ -126,6 +124,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // --- ANALYTICS: Contabiliza visualização no Supabase ---
+  try {
+    const currentViews = (data.views_count || 0) + 1;
+    await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
+  } catch (e) {
+    console.warn("Analytics Error (Views):", e);
+  }
+
   document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
   document.getElementById('name').innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
   document.getElementById('handle').textContent = '@' + data.handle;
@@ -171,12 +177,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const linksEl = document.getElementById('links');
   if (linksEl) {
-    linksEl.innerHTML = (data.links || []).map(link => `
-      <a class="public-link" href="${link.url || '#'}" target="_blank" rel="noopener">
+    linksEl.innerHTML = (data.links || []).map((link, idx) => `
+      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener">
         <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
         <span class="arr">↗</span>
       </a>
     `).join('');
+
+    // --- ANALYTICS: Contabiliza clique nos links ---
+    document.querySelectorAll('.public-link').forEach(linkBtn => {
+      linkBtn.addEventListener('click', async (evt) => {
+        evt.preventDefault();
+        const targetUrl = linkBtn.getAttribute('data-url');
+        
+        try {
+          const currentClicks = (data.clicks_count || 0) + 1;
+          await window.islySupabase.saveProfile({ id: data.id, clicks_count: currentClicks });
+        } catch (e) {
+          console.warn("Analytics Error (Clicks):", e);
+        }
+
+        if (targetUrl && targetUrl !== '#') {
+          window.open(targetUrl, '_blank');
+        }
+      });
+    });
   }
 });
 </script>
