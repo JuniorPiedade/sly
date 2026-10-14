@@ -12,91 +12,51 @@
   }
 </script>
 <style>
-:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
+:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rgba(124,58,237,.28),transparent 50%),var(--bg);color:var(--text);font-family:Inter,sans-serif;display:grid;place-items:center;padding:20px;overflow-x:hidden}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;overflow-x:hidden;font-family:Inter,sans-serif}
 .container{width:100%;max-width:420px}
 
 .profile-card{
   overflow:hidden;
-  border:1px solid rgba(168,85,247,0.25);
   border-radius:24px;
-  background:rgba(17,17,31,0.65);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  box-shadow:0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
   text-align:center;
-  --accent:#c084fc;
-  transition:border-color .3s, transform .3s;
+  transition:transform .3s;
 }
-.profile-card.theme-sakura{--accent:#f9a8d4;border-color:rgba(249,168,212,0.3)}
-.profile-card.theme-matrix{--accent:#86efac;border-color:rgba(134,239,172,0.3)}
 
 .cover{height:94px;position:relative;background:radial-gradient(circle at 75% 20%,rgba(34,211,238,0.5),transparent 30%),radial-gradient(circle at 22% 100%,rgba(192,132,252,0.6),transparent 45%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}
-.theme-sakura .cover{background:radial-gradient(circle at 75% 20%,rgba(244,114,182,0.5),transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}
-.theme-matrix .cover{background:radial-gradient(circle at 75% 20%,rgba(74,222,128,0.5),transparent 30%),linear-gradient(120deg,#10392d,#101923)}
 
 .avatar{width:80px;height:80px;margin:-40px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #131221;border-radius:24px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 0 30px rgba(147,51,234,0.45);font-size:32px;overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover}
 
 .profile-card h3{margin:7px 0 1px;font-size:20px;letter-spacing:-0.02em}
 .verified{color:var(--blue);font-size:12px}
-.handle{font-size:11px;color:var(--accent);font-weight:600;letter-spacing:0.02em}
+.handle{font-size:11px;font-weight:600;letter-spacing:0.02em}
 .role-badge{display:inline-block;margin:6px 0 4px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc}
-.bio-preview{font-size:11px;color:#aaa7c7;margin:10px 18px 12px;overflow-wrap:anywhere;line-height:1.5}
+.bio-preview{font-size:11px;margin:10px 18px 12px;overflow-wrap:anywhere;line-height:1.5}
 .live-status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.08);color:#cffafe;border-radius:999px;font-size:10px;margin:0 auto 14px;max-width:90%}
 .preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:0 14px 13px}
 .preview-emblems span{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid rgba(168,85,247,0.25);background:rgba(168,85,247,0.08);border-radius:8px;font-size:9px;color:#ddd6fe}
-.social-preview{display:flex;justify-content:center;gap:8px;margin:0 0 14px}
-.social-preview span{display:grid;place-items:center;width:28px;height:28px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--accent);font-size:11px;background:rgba(255,255,255,0.02)}
+
 .public-links{padding:0 14px 18px}
-.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:12px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:linear-gradient(100deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01));font-size:11px;font-weight:700;text-align:left;text-decoration:none;color:#fff;transition:all .25s ease;cursor:pointer}
-.public-link:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.3), 0 0 12px var(--accent)}
+.public-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:12px 14px;border-radius:12px;font-size:11px;font-weight:700;text-align:left;text-decoration:none;transition:all .25s ease;cursor:pointer}
+.public-link:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.3)}
 .public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
 .public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
-.public-link .arr{color:var(--accent);transition:transform .2s}
-.public-link:hover .arr{transform:translateX(2px)}
 
-/* Badge de Visualizações abaixo do card */
-.views-counter{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:6px;
-  margin-top:14px;
-  font-size:11px;
-  color:var(--muted);
-}
-.views-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:5px 12px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.08);
-  backdrop-filter:blur(10px);
-  color:#c9c5e2;
-  font-weight:600;
-}
+.views-counter{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:14px;font-size:11px;color:var(--muted)}
+.views-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px);color:#c9c5e2;font-weight:600}
 
 .profile-foot{font-size:9px;color:#777391;letter-spacing:.13em;padding:12px 0 16px;text-align:center}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
-/* Animações em Cascata */
 .animate-item {
   opacity: 0;
   transform: translateY(16px);
   animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-
-@keyframes cascadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+@keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
 .delay-1 { animation-delay: 0.05s; }
 .delay-2 { animation-delay: 0.12s; }
 .delay-3 { animation-delay: 0.18s; }
@@ -118,11 +78,9 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,rg
     <p class="bio-preview animate-item delay-4" id="bio"></p>
     <div class="live-status animate-item delay-5" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
     <div class="preview-emblems animate-item delay-5" id="emblems"></div>
-    <div class="social-preview animate-item delay-6"><span>◎</span><span>▶</span><span>⌘</span><span>◈</span></div>
     <div class="public-links animate-item delay-6" id="links"></div>
   </div>
 
-  <!-- Contabilizador de Visualizações público -->
   <div class="views-counter animate-item delay-7">
     <div class="views-badge">
       <span>👁️</span>
@@ -159,19 +117,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // --- ANALYTICS: Contabiliza visualização no Supabase ---
+  // Contabiliza visualização
   let currentViews = (data.views_count || 0) + 1;
   document.getElementById('publicViewsCount').textContent = currentViews;
-
   try {
     await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
   } catch (e) {
     console.warn("Analytics Error (Views):", e);
   }
 
+  // Aplicação dinâmica das cores customizadas salvas pelo usuário
+  document.body.style.backgroundColor = data.bg_color || '#080812';
+  
+  const card = document.getElementById('profileCard');
+  if (card) {
+    card.style.backgroundColor = data.card_bg || '#11111f';
+    card.style.border = `1px solid ${data.border_color || '#a855f7'};`;
+  }
+
+  const nameEl = document.getElementById('name');
+  if (nameEl) nameEl.style.color = data.title_color || '#ffffff';
+
+  const bioEl = document.getElementById('bio');
+  if (bioEl) bioEl.style.color = data.text_color || '#f6f4ff';
+
+  const handleEl = document.getElementById('handle');
+  if (handleEl) handleEl.style.color = data.accent_color || '#c084fc';
+
   document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
-  document.getElementById('name').innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
-  document.getElementById('handle').textContent = '@' + data.handle;
+  nameEl.innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
+  handleEl.textContent = '@' + data.handle;
   
   const roleBadge = document.getElementById('roleBadge');
   if (roleBadge) {
@@ -182,7 +157,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     else roleBadge.innerHTML = '👾 Membro';
   }
 
-  document.getElementById('bio').textContent = data.bio || '';
+  bioEl.textContent = data.bio || '';
   document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
   document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
 
@@ -191,17 +166,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
   } else {
     avatarEl.textContent = data.avatar_emoji || '👾';
-  }
-
-  const profileCard = document.getElementById('profileCard');
-  if (profileCard) {
-    profileCard.classList.remove('theme-sakura', 'theme-matrix');
-    if (data.theme === 'sakura') profileCard.classList.add('theme-sakura');
-    if (data.theme === 'matrix') profileCard.classList.add('theme-matrix');
-
-    if (data.accent_color) {
-      profileCard.style.setProperty('--accent', data.accent_color);
-    }
   }
 
   const emblemsEl = document.getElementById('emblems');
@@ -214,14 +178,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const linksEl = document.getElementById('links');
   if (linksEl) {
+    const linkBg = data.link_bg || '#1c1b2d';
+    const linkText = data.link_text_color || '#ffffff';
+    const linkBorder = data.border_color || '#39324f';
+
     linksEl.innerHTML = (data.links || []).map((link, idx) => `
-      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener">
+      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener" style="background:${linkBg}; color:${linkText}; border:1px solid ${linkBorder}">
         <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
-        <span class="arr">↗</span>
+        <span class="arr" style="color:${data.accent_color || '#c084fc'}">↗</span>
       </a>
     `).join('');
 
-    // --- ANALYTICS: Contabiliza clique nos links ---
     document.querySelectorAll('.public-link').forEach(linkBtn => {
       linkBtn.addEventListener('click', async (evt) => {
         evt.preventDefault();
