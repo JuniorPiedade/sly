@@ -281,7 +281,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
     return;
   }
-
+// Dentro da função de carregamento do perfil.html:
+if (data.is_banned) {
+  document.querySelector('.container').innerHTML = `
+    <div class="error-box" style="border: 1px solid #f8717144; background: #f8717112; border-radius: 18px; padding: 40px;">
+      <h2>⚠️ Conta Suspensa</h2>
+      <p>Este perfil foi suspenso por violação dos termos de uso da comunidade.</p>
+    </div>
+  `;
+  return;
+}
   let currentViews = (data.views_count || 0) + 1;
   document.getElementById('publicViewsCount').textContent = currentViews;
   try {
