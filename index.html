@@ -291,8 +291,12 @@ footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
      </select>
     </label>
     <label class="field">
-     <span>🖱️ URL do Cursor Personalizado (.cur ou .png)</span>
-     <input id="customCursor" placeholder="https://exemplo.com/cursor.png">
+ <label class="field">
+  <span>🖱️ Cursor Personalizado (.cur ou .png)</span>
+  <input id="customCursorFile" type="file" accept=".cur,.png,.gif,.webp">
+  <small>Selecione um arquivo de cursor do seu computador. Máx. 1MB.</small>
+</label>
+<input type="hidden" id="customCursor" value="">
     </label>
    </section>
 
