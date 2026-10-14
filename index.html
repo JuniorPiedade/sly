@@ -80,9 +80,9 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview{position:sticky;top:20px}
 .preview-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:14px}
 
-/* Card Horizontal Único com Borda Crua (Sem linha visível) */
+/* Card Horizontal Único (Overflow visível para permitir brilho livre sem cortes) */
 .profile-card {
-  overflow: hidden;
+  overflow: visible !important;
   border-radius: 28px;
   width: 100%;
   max-width: 640px;
@@ -91,7 +91,7 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   padding: 36px;
   text-align: left;
   transform-style: preserve-3d;
-  perspective: 1000px;
+  perspective: 1200px;
   transition: transform 0.15s ease-out;
   background-size: cover;
   background-position: center;
@@ -112,9 +112,9 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   display: flex;
   align-items: center;
   gap: 18px;
+  overflow: visible !important;
 }
 
-/* Container do Avatar com suporte a Molduras VIP */
 .avatar-container {
   position: relative;
   width: 82px;
@@ -138,7 +138,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Molduras VIP */
 .avatar-frame {
   position: absolute;
   inset: -5px;
@@ -157,8 +156,26 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   flex-direction: column;
   justify-content: center;
   min-width: 0;
+  overflow: visible !important;
 }
-.profile-card h3 { font-size: 24px; font-weight: 800; margin: 0 0 2px; color: #fff; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Título e Efeito de Brilho Sem Caixas Cortadas */
+.profile-card h3 { 
+  font-size: 24px; 
+  font-weight: 800; 
+  margin: 0 0 2px; 
+  color: #fff; 
+  letter-spacing: -0.01em; 
+  white-space: nowrap; 
+  overflow: visible !important; 
+  text-overflow: clip; 
+}
+
+.text-effect-glow {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.9), 0 0 16px rgba(168, 85, 247, 0.7), 0 0 24px rgba(168, 85, 247, 0.4), 0 0 40px rgba(168, 85, 247, 0.2);
+}
+
 .handle { font-size: 13px; font-weight: 600; color: #c084fc; margin-bottom: 4px; }
 .role-badge { display: inline-block; padding: 3px 10px; border-radius: 99px; background: #8b5cf620; border: 1px solid #8b5cf650; color: #c084fc; font-size: 10px; font-weight: 700; width: fit-content; }
 
@@ -179,13 +196,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview-link{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;border-radius:14px;font-size:13px;font-weight:700;text-decoration:none;transition:transform 0.2s;background:rgba(255,255,255,0.06);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12)}
 .preview-link:hover{transform:translateY(-2px)}
 .profile-foot{text-align:center;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px;font-size:9px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase}
-
-/* Efeito de Brilho Interno na Letra (Fig Brilhoso) */
-/* Efeito de Brilho Avançado (Estilo Zyo.se) */
-.text-effect-glow {
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(168, 85, 247, 0.5), 0 0 40px rgba(168, 85, 247, 0.3), 0 0 80px rgba(168, 85, 247, 0.15);
-}
 
 .share{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:14px}
 .share label{display:block;font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:700}
@@ -273,7 +283,7 @@ footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
  <div class="editor-grid">
   <div>
    <section class="panel active-panel" id="panel-identity">
-    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, moldura VIP e uploads de foto (inclusive GIF) e wallpaper.</p></div><span class="muted">01 / 07</span></div>
+    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, moldura VIP e uploads de foto e wallpaper.</p></div><span class="muted">01 / 07</span></div>
     <div class="two">
      <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
      <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
@@ -371,7 +381,7 @@ footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
      <span>✨ Efeito Especial no Nome</span>
      <select id="nameEffect">
       <option value="none">Nenhum (Normal)</option>
-      <option value="glow">Brilho Suave (Fig Brilhoso nas Letras)</option>
+      <option value="glow">Brilho Suave (Estilo Glow nas Letras)</option>
      </select>
     </label>
     <label class="field">
@@ -510,7 +520,7 @@ async function initEditor(userId) {
  if (!profile) {
   profile = {
    id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6), role: 'Membro',
-   bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', border_color: 'transparent', accent_color: '#c084fc',
+   bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', accent_color: '#c084fc',
    title_color: '#ffffff', text_color: '#f6f4ff',
    name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', avatar_frame: 'none', avatar_emoji: '👾', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
@@ -594,7 +604,6 @@ async function initEditor(userId) {
   const yc = rect.height / 2;
   const dx = (x - xc) / xc;
   const dy = (y - yc) / yc;
-  // Persistência moderada e suave
   previewCard.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
  });
  previewCard.addEventListener('mouseleave', () => {
@@ -669,9 +678,8 @@ async function initEditor(userId) {
     bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
     status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
     card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-    border_color: 'transparent', accent_color: textColorInput.value,
+    accent_color: textColorInput.value,
     title_color: titleColorInput.value, text_color: textColorInput.value,
-    link_bg: 'rgba(255,255,255,0.06)', link_text_color: textColorInput.value,
     name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
     avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value,
     embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
@@ -799,7 +807,6 @@ async function initEditor(userId) {
    avatarEl.textContent = avatarEmojiInput.value || '👾';
   }
 
-  // Atualiza Moldura
   const frameEl = document.getElementById('previewFrame');
   const frameType = avatarFrameSelect.value;
   frameEl.className = 'avatar-frame';
@@ -830,7 +837,6 @@ async function initEditor(userId) {
    card.style.backgroundImage = '';
   }
 
-  card.style.border = 'none';
   document.body.style.background = bgColorInput.value;
 
   if (fx === 'none') nameEl.style.color = titleColorInput.value;
@@ -897,9 +903,8 @@ async function initEditor(userId) {
    bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
    card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-   border_color: 'transparent', accent_color: textColorInput.value,
+   accent_color: textColorInput.value,
    title_color: titleColorInput.value, text_color: textColorInput.value,
-   link_bg: 'rgba(255,255,255,0.06)', link_text_color: textColorInput.value,
    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value,
    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
