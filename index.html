@@ -707,24 +707,43 @@ async function initEditor(userId) {
   if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
   toast('Enviando foto de perfil...');
   
-  let publicUrl = await window.islySupabase.uploadAsset(userId, file, 'avatar');
-  if (publicUrl && !publicUrl.startsWith('http')) {
-   try {
-    const { data } = window.islySupabase.client.storage.from('avatars').getPublicUrl(publicUrl);
-    if (data && data.publicUrl) publicUrl = data.publicUrl;
-   } catch (err) { console.warn("Erro URL avatar:", err); }
-  }
+ document.getElementById('avatarFile')?.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
+  toast('Enviando foto de perfil...');
 
-  if (publicUrl) {
-   avatarUrlInput.value = publicUrl;
-   currentProfile.avatar_url = publicUrl;
-   updatePreview();
-   triggerAutoSave();
-   toast('Foto de perfil atualizada! ✓');
-  } else {
-   toast('Erro ao enviar foto.');
+  try {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}-${Math.random()}.${fileExt}`;
+    const filePath = `avatars/${fileName}`;
+
+    // Faz o upload direto para o bucket 'avatars' (certifique-se de que o bucket se chama 'avatars' no Supabase)
+    const { error: uploadError } = await window.islySupabase.client.storage
+      .from('avatars')
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) throw uploadError;
+
+    // Pega a URL pública gerada pelo Supabase
+    const { data } = window.islySupabase.client.storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+
+    if (data && data.publicUrl) {
+      avatarUrlInput.value = data.publicUrl;
+      currentProfile.avatar_url = data.publicUrl;
+      updatePreview();
+      triggerAutoSave();
+      toast('Foto de perfil atualizada! ✓');
+    } else {
+      throw new Error('Não foi possível obter a URL pública.');
+    }
+  } catch (err) {
+    console.error("Erro no upload do avatar:", err);
+    toast('Erro ao enviar foto: ' + (err.message || 'Erro desconhecido'));
   }
- });
+});
 
  document.getElementById('wallpaperFile')?.addEventListener('change', async (e) => {
   const file = e.target.files[0];
