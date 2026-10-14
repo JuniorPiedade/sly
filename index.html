@@ -80,7 +80,7 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview{position:sticky;top:20px}
 .preview-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:14px}
 
-/* Estilo do Card Horizontal Único */
+/* Card Horizontal Único com Borda Crua (Sem linha visível) */
 .profile-card {
   overflow: hidden;
   border-radius: 28px;
@@ -92,19 +92,19 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   text-align: left;
   transform-style: preserve-3d;
   perspective: 1000px;
-  transition: transform 0.1s ease-out;
+  transition: transform 0.15s ease-out;
   background-size: cover;
   background-position: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  border: none !important;
 }
 .card-style-opaque { background-color: #11111f; }
 .card-style-glass {
   background: rgba(17, 17, 31, 0.65);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
@@ -113,20 +113,44 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   align-items: center;
   gap: 18px;
 }
-.avatar {
-  width: 76px;
-  height: 76px;
+
+/* Container do Avatar com suporte a Molduras VIP */
+.avatar-container {
+  position: relative;
+  width: 82px;
+  height: 82px;
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  border: 3px solid rgba(255,255,255,0.15);
-  border-radius: 22px;
+}
+.avatar {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
   background: linear-gradient(135deg,#9333ea,#2563eb);
-  font-size: 32px;
+  font-size: 30px;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(147,51,234,0.4);
+  position: relative;
+  z-index: 1;
 }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Molduras VIP */
+.avatar-frame {
+  position: absolute;
+  inset: -5px;
+  pointer-events: none;
+  z-index: 2;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.frame-cyberpunk { border: 2px solid var(--blue); border-radius: 22px; box-shadow: 0 0 12px var(--blue); }
+.frame-neon-gold { border: 2px solid #facc15; border-radius: 22px; box-shadow: 0 0 12px #facc15; }
+.frame-royal-purple { border: 2px solid #c084fc; border-radius: 22px; box-shadow: 0 0 12px #c084fc; }
 
 .profile-info {
   display: flex;
@@ -156,9 +180,11 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview-link:hover{transform:translateY(-2px)}
 .profile-foot{text-align:center;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px;font-size:9px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase}
 
-.text-effect-neon { text-shadow: 0 0 5px #c084fc, 0 0 10px #c084fc, 0 0 20px #a855f7, 0 0 40px #a855f7; }
-.text-effect-gradient { background: linear-gradient(135deg, #c084fc, #22d3ee, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.text-effect-glass { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 1px rgba(255,255,255,0.6); }
+/* Efeito de Brilho Interno na Letra (Fig Brilhoso) */
+.text-effect-glow {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 16px var(--purple, #a855f7), 0 0 24px var(--purple, #a855f7);
+}
 
 .share{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:14px}
 .share label{display:block;font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:700}
@@ -246,7 +272,7 @@ footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
  <div class="editor-grid">
   <div>
    <section class="panel active-panel" id="panel-identity">
-    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio e uploads de foto e wallpaper.</p></div><span class="muted">01 / 07</span></div>
+    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, moldura VIP e uploads de foto (inclusive GIF) e wallpaper.</p></div><span class="muted">01 / 07</span></div>
     <div class="two">
      <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
      <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
@@ -255,8 +281,17 @@ footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
      <label class="field"><span>Cargo</span><input id="role" readonly value="Membro"></label>
      <label class="field"><span>Emoji do avatar</span><input id="avatarEmoji" maxlength="8" value="👾"></label>
     </div>
+    <label class="field">
+     <span>🖼️ Moldura VIP do Avatar</span>
+     <select id="avatarFrameSelect">
+      <option value="none">Nenhuma (Padrão)</option>
+      <option value="cyberpunk">Cyberpunk Neon (Azul)</option>
+      <option value="neon-gold">Gold Luxury (Dourado)</option>
+      <option value="royal-purple">Royal Purple (Roxo VIP)</option>
+     </select>
+    </label>
     <label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/140</small></label>
-    <label class="field"><span>Foto de perfil (Upload)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
+    <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
     <label class="field"><span>Wallpaper do cartão (Upload)</span><input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
    </section>
 
@@ -334,10 +369,8 @@ footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
     <label class="field">
      <span>✨ Efeito Especial no Nome</span>
      <select id="nameEffect">
-      <option value="none">Nenhum (Padrão)</option>
-      <option value="neon">Neon Glow (Brilho)</option>
-      <option value="gradient">Gradiente Gamer</option>
-      <option value="glass">Vidro / Chrome 3D</option>
+      <option value="none">Nenhum (Normal)</option>
+      <option value="glow">Brilho Suave (Fig Brilhoso nas Letras)</option>
      </select>
     </label>
     <label class="field">
@@ -361,7 +394,10 @@ footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
    <div class="preview-label"><strong>Prévia ao vivo (Mova o mouse sobre o cartão)</strong></div>
    <div class="profile-card card-style-opaque" id="profileCard">
     <div class="profile-header-row">
-     <div class="avatar" id="previewAvatar">👾</div>
+     <div class="avatar-container">
+      <div class="avatar" id="previewAvatar">👾</div>
+      <div id="previewFrame" class="avatar-frame"></div>
+     </div>
      <div class="profile-info">
       <h3 id="previewName">Nyx.exe</h3>
       <div class="handle" id="previewHandle">@nyx.exe</div>
@@ -473,9 +509,9 @@ async function initEditor(userId) {
  if (!profile) {
   profile = {
    id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6), role: 'Membro',
-   bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', border_color: '#a855f7', accent_color: '#c084fc',
+   bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', border_color: 'transparent', accent_color: '#c084fc',
    title_color: '#ffffff', text_color: '#f6f4ff',
-   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', avatar_emoji: '👾', bio: '', activity: '',
+   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', avatar_frame: 'none', avatar_emoji: '👾', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0
   };
@@ -495,6 +531,7 @@ async function initEditor(userId) {
  const bioInput = document.getElementById('bio');
  const bioCount = document.getElementById('bioCount');
  const avatarEmojiInput = document.getElementById('avatarEmoji');
+ const avatarFrameSelect = document.getElementById('avatarFrameSelect');
  const activityInput = document.getElementById('activity');
  const shareUrlInput = document.getElementById('shareUrl');
 
@@ -521,6 +558,7 @@ async function initEditor(userId) {
  bioInput.value = currentProfile.bio || '';
  bioCount.textContent = (currentProfile.bio || '').length;
  avatarEmojiInput.value = currentProfile.avatar_emoji || '👾';
+ avatarFrameSelect.value = currentProfile.avatar_frame || 'none';
  activityInput.value = currentProfile.activity || '';
 
  cardStyleSelect.value = currentProfile.card_style || 'opaque';
@@ -555,16 +593,17 @@ async function initEditor(userId) {
   const yc = rect.height / 2;
   const dx = (x - xc) / xc;
   const dy = (y - yc) / yc;
-  previewCard.style.transform = `perspective(1000px) rotateY(${dx * 10}deg) rotateX(${-dy * 10}deg) translateY(-4px)`;
+  // Persistência moderada e suave
+  previewCard.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
  });
  previewCard.addEventListener('mouseleave', () => {
-  previewCard.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+  previewCard.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
  });
 
  document.getElementById('avatarFile')?.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-  if (file.size > 2 * 1024 * 1024) { toast('A imagem do avatar deve ter no máximo 2MB.'); return; }
+  if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
   toast('Enviando foto de perfil...');
   const publicUrl = await window.islySupabase.uploadAsset(userId, file, 'avatar');
   if (publicUrl) {
@@ -626,10 +665,10 @@ async function initEditor(userId) {
 
    const payload = {
     id: userId, name: nameInput.value, handle: handleInput.value, role: roleInput.value,
-    bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, activity: activityInput.value,
+    bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
     status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
     card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-    border_color: '#a855f7', accent_color: textColorInput.value,
+    border_color: 'transparent', accent_color: textColorInput.value,
     title_color: titleColorInput.value, text_color: textColorInput.value,
     link_bg: 'rgba(255,255,255,0.06)', link_text_color: textColorInput.value,
     name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
@@ -686,9 +725,11 @@ async function initEditor(userId) {
   document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
 
- [cardStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+ [cardStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
   input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
+
+ avatarFrameSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
 
  function moveLink(fromIdx, toIdx) {
   if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
@@ -743,9 +784,9 @@ async function initEditor(userId) {
   nameEl.textContent = nameInput.value || 'Seu Nome';
   nameEl.className = '';
   const fx = nameEffectSelect.value;
-  if (fx === 'neon') nameEl.classList.add('text-effect-neon');
-  else if (fx === 'gradient') nameEl.classList.add('text-effect-gradient');
-  else if (fx === 'glass') nameEl.classList.add('text-effect-glass');
+  if (fx === 'glow') {
+   nameEl.classList.add('text-effect-glow');
+  }
 
   document.getElementById('previewHandle').textContent = '@' + (handleInput.value || 'nick');
   document.getElementById('previewBio').textContent = bioInput.value || 'Escreva sua bio...';
@@ -756,6 +797,14 @@ async function initEditor(userId) {
   } else {
    avatarEl.textContent = avatarEmojiInput.value || '👾';
   }
+
+  // Atualiza Moldura
+  const frameEl = document.getElementById('previewFrame');
+  const frameType = avatarFrameSelect.value;
+  frameEl.className = 'avatar-frame';
+  if (frameType === 'cyberpunk') frameEl.classList.add('frame-cyberpunk');
+  else if (frameType === 'neon-gold') frameEl.classList.add('frame-neon-gold');
+  else if (frameType === 'royal-purple') frameEl.classList.add('frame-royal-purple');
 
   document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
   document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
@@ -780,10 +829,10 @@ async function initEditor(userId) {
    card.style.backgroundImage = '';
   }
 
-  card.style.borderColor = '#a855f7';
+  card.style.border = 'none';
   document.body.style.background = bgColorInput.value;
 
-  if (fx === 'none' || fx === 'neon') nameEl.style.color = titleColorInput.value;
+  if (fx === 'none') nameEl.style.color = titleColorInput.value;
   else nameEl.style.color = '';
 
   const activeTextColor = textColorInput.value;
@@ -812,7 +861,7 @@ async function initEditor(userId) {
 
   const lnPreview = document.getElementById('previewLinks');
   lnPreview.innerHTML = currentProfile.links.map(l => `
-   <a class="preview-link" href="${l.url || '#'}" target="_blank" style="background: rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12)">
+   <a class="preview-link" href="${l.url || '#'}" target="_blank" style="background: rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px)">
     <span style="display:flex;align-items:center;gap:10px"><span>${l.emoji || '↗'}</span><span>${l.title || 'Link'}</span></span>
     <span style="color:${activeTextColor}">↗</span>
    </a>
@@ -844,10 +893,10 @@ async function initEditor(userId) {
 
   const payload = {
    id: userId, name: nameInput.value, handle: handleInput.value, role: roleInput.value,
-   bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, activity: activityInput.value,
+   bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
    card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-   border_color: '#a855f7', accent_color: textColorInput.value,
+   border_color: 'transparent', accent_color: textColorInput.value,
    title_color: titleColorInput.value, text_color: textColorInput.value,
    link_bg: 'rgba(255,255,255,0.06)', link_text_color: textColorInput.value,
    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
