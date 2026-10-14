@@ -706,7 +706,15 @@ async function initEditor(userId) {
   if (!file) return;
   if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
   toast('Enviando foto de perfil...');
-  const publicUrl = await window.islySupabase.uploadAsset(userId, file, 'avatar');
+  
+  let publicUrl = await window.islySupabase.uploadAsset(userId, file, 'avatar');
+  if (publicUrl && !publicUrl.startsWith('http')) {
+   try {
+    const { data } = window.islySupabase.client.storage.from('avatars').getPublicUrl(publicUrl);
+    if (data && data.publicUrl) publicUrl = data.publicUrl;
+   } catch (err) { console.warn("Erro URL avatar:", err); }
+  }
+
   if (publicUrl) {
    avatarUrlInput.value = publicUrl;
    currentProfile.avatar_url = publicUrl;
@@ -723,7 +731,15 @@ async function initEditor(userId) {
   if (!file) return;
   if (file.size > 2 * 1024 * 1024) { toast('O wallpaper deve ter no máximo 2MB.'); return; }
   toast('Enviando wallpaper do cartão...');
-  const publicUrl = await window.islySupabase.uploadAsset(userId, file, 'wallpaper');
+  
+  let publicUrl = await window.islySupabase.uploadAsset(userId, file, 'wallpaper');
+  if (publicUrl && !publicUrl.startsWith('http')) {
+   try {
+    const { data } = window.islySupabase.client.storage.from('wallpapers').getPublicUrl(publicUrl);
+    if (data && data.publicUrl) publicUrl = data.publicUrl;
+   } catch (err) { console.warn("Erro URL wallpaper:", err); }
+  }
+
   if (publicUrl) {
    wallpaperUrlInput.value = publicUrl;
    currentProfile.wallpaper_url = publicUrl;
