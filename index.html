@@ -80,7 +80,7 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview{position:sticky;top:20px}
 .preview-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:14px}
 
-/* Estilo do Card Horizontal Único (Inspirado no Zyo.se) */
+/* Estilo do Card Horizontal Único */
 .profile-card {
   overflow: hidden;
   border-radius: 28px;
@@ -108,7 +108,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
-/* Cabeçalho Horizontal do Card (Foto ao lado do Nome/Handle) */
 .profile-header-row {
   display: flex;
   align-items: center;
@@ -148,13 +147,12 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview-social-icon { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: #ffffff08; font-size: 15px; text-decoration: none; }
 .preview-social-icon svg { width: 16px; height: 16px; fill: currentColor; }
 
-/* Container de Embeds e Links */
 .embeds-container{display:flex;flex-direction:column;gap:12px;margin-top:4px}
 .embed-wrapper{width:100%;border-radius:14px;overflow:hidden;background:#00000033;line-height:0}
 .embed-wrapper iframe{width:100%;border:0;display:block}
 
 .preview-links{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.preview-link{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;border-radius:14px;font-size:13px;font-weight:700;text-decoration:none;transition:transform 0.2s}
+.preview-link{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;border-radius:14px;font-size:13px;font-weight:700;text-decoration:none;transition:transform 0.2s;background:rgba(255,255,255,0.06);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12)}
 .preview-link:hover{transform:translateY(-2px)}
 .profile-foot{text-align:center;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px;font-size:9px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase}
 
@@ -326,20 +324,12 @@ footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
      </select>
     </label>
     <div class="two">
-     <label class="field"><span>Cor de Fundo da Tela</span><input type="color" id="bgColor" value="#080812"></label>
-     <label class="field"><span>Cor do Cartão Central</span><input type="color" id="cardBg" value="#11111f"></label>
+     <label class="field"><span>Cor de Fundo</span><input type="color" id="bgColor" value="#080812"></label>
+     <label class="field"><span>Cor Cartão Central</span><input type="color" id="cardBg" value="#11111f"></label>
     </div>
     <div class="two">
-     <label class="field"><span>Cor das Bordas</span><input type="color" id="borderColor" value="#a855f7"></label>
-     <label class="field"><span>Cor de Destaque (Accent)</span><input type="color" id="accentColor" value="#c084fc"></label>
-    </div>
-    <div class="two">
-     <label class="field"><span>Cor do Título / Nome</span><input type="color" id="titleColor" value="#ffffff"></label>
-     <label class="field"><span>Cor dos Demais Textos</span><input type="color" id="textColor" value="#f6f4ff"></label>
-    </div>
-    <div class="two">
-     <label class="field"><span>Cor de Fundo dos Links</span><input type="color" id="linkBg" value="#1c1b2d"></label>
-     <label class="field"><span>Cor do Texto dos Links</span><input type="color" id="linkTextColor" value="#ffffff"></label>
+     <label class="field"><span>Cor do Título do Nome</span><input type="color" id="titleColor" value="#ffffff"></label>
+     <label class="field"><span>Cor dos Demais Textos (Afeta Destaque e Texto dos Links)</span><input type="color" id="textColor" value="#f6f4ff"></label>
     </div>
     <label class="field">
      <span>✨ Efeito Especial no Nome</span>
@@ -484,7 +474,7 @@ async function initEditor(userId) {
   profile = {
    id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6), role: 'Membro',
    bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', border_color: '#a855f7', accent_color: '#c084fc',
-   title_color: '#ffffff', text_color: '#f6f4ff', link_bg: '#1c1b2d', link_text_color: '#ffffff',
+   title_color: '#ffffff', text_color: '#f6f4ff',
    name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', avatar_emoji: '👾', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0
@@ -511,12 +501,8 @@ async function initEditor(userId) {
  const cardStyleSelect = document.getElementById('cardStyle');
  const bgColorInput = document.getElementById('bgColor');
  const cardBgInput = document.getElementById('cardBg');
- const borderColorInput = document.getElementById('borderColor');
- const accentColorInput = document.getElementById('accentColor');
  const titleColorInput = document.getElementById('titleColor');
  const textColorInput = document.getElementById('textColor');
- const linkBgInput = document.getElementById('linkBg');
- const linkTextColorInput = document.getElementById('linkTextColor');
  const nameEffectSelect = document.getElementById('nameEffect');
  const customCursorInput = document.getElementById('customCursor');
  const avatarUrlInput = document.getElementById('avatarUrl');
@@ -540,12 +526,8 @@ async function initEditor(userId) {
  cardStyleSelect.value = currentProfile.card_style || 'opaque';
  bgColorInput.value = currentProfile.bg_color || '#080812';
  cardBgInput.value = currentProfile.card_bg || '#11111f';
- borderColorInput.value = currentProfile.border_color || '#a855f7';
- accentColorInput.value = currentProfile.accent_color || '#c084fc';
  titleColorInput.value = currentProfile.title_color || '#ffffff';
  textColorInput.value = currentProfile.text_color || '#f6f4ff';
- linkBgInput.value = currentProfile.link_bg || '#1c1b2d';
- linkTextColorInput.value = currentProfile.link_text_color || '#ffffff';
  nameEffectSelect.value = currentProfile.name_effect || 'none';
  customCursorInput.value = currentProfile.custom_cursor || '';
  avatarUrlInput.value = currentProfile.avatar_url || '';
@@ -647,9 +629,9 @@ async function initEditor(userId) {
     bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, activity: activityInput.value,
     status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
     card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-    border_color: borderColorInput.value, accent_color: accentColorInput.value,
+    border_color: '#a855f7', accent_color: textColorInput.value,
     title_color: titleColorInput.value, text_color: textColorInput.value,
-    link_bg: linkBgInput.value, link_text_color: linkTextColorInput.value,
+    link_bg: 'rgba(255,255,255,0.06)', link_text_color: textColorInput.value,
     name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
     avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value,
     embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
@@ -704,7 +686,7 @@ async function initEditor(userId) {
   document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
 
- [cardStyleSelect, bgColorInput, cardBgInput, borderColorInput, accentColorInput, titleColorInput, textColorInput, linkBgInput, linkTextColorInput, nameEffectSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+ [cardStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
   input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
 
@@ -798,14 +780,15 @@ async function initEditor(userId) {
    card.style.backgroundImage = '';
   }
 
-  card.style.borderColor = borderColorInput.value;
+  card.style.borderColor = '#a855f7';
   document.body.style.background = bgColorInput.value;
 
   if (fx === 'none' || fx === 'neon') nameEl.style.color = titleColorInput.value;
   else nameEl.style.color = '';
 
-  document.getElementById('previewBio').style.color = textColorInput.value;
-  document.getElementById('previewHandle').style.color = accentColorInput.value;
+  const activeTextColor = textColorInput.value;
+  document.getElementById('previewBio').style.color = activeTextColor;
+  document.getElementById('previewHandle').style.color = activeTextColor;
 
   const emPreview = document.getElementById('previewEmblems');
   emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemSvgs[id] || ''} ${emblemNames[id] || id}</span>`).join('');
@@ -815,7 +798,7 @@ async function initEditor(userId) {
   Object.keys(socialSvgs).forEach(key => {
    const val = document.getElementById('soc_' + key)?.value.trim();
    if (val) {
-    socHTML += `<a class="preview-social-icon" title="${key}" href="#" onclick="return false;" style="color:${accentColorInput.value}">${socialSvgs[key]}</a>`;
+    socHTML += `<a class="preview-social-icon" title="${key}" href="#" onclick="return false;" style="color:${activeTextColor}">${socialSvgs[key]}</a>`;
    }
   });
   socPreview.innerHTML = socHTML;
@@ -829,9 +812,9 @@ async function initEditor(userId) {
 
   const lnPreview = document.getElementById('previewLinks');
   lnPreview.innerHTML = currentProfile.links.map(l => `
-   <a class="preview-link" href="${l.url || '#'}" target="_blank" style="background:${linkBgInput.value}; color:${linkTextColorInput.value}; border:1px solid ${borderColorInput.value}">
+   <a class="preview-link" href="${l.url || '#'}" target="_blank" style="background: rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12)">
     <span style="display:flex;align-items:center;gap:10px"><span>${l.emoji || '↗'}</span><span>${l.title || 'Link'}</span></span>
-    <span>↗</span>
+    <span style="color:${activeTextColor}">↗</span>
    </a>
   `).join('');
  }
@@ -864,9 +847,9 @@ async function initEditor(userId) {
    bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, activity: activityInput.value,
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
    card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-   border_color: borderColorInput.value, accent_color: accentColorInput.value,
+   border_color: '#a855f7', accent_color: textColorInput.value,
    title_color: titleColorInput.value, text_color: textColorInput.value,
-   link_bg: linkBgInput.value, link_text_color: linkTextColorInput.value,
+   link_bg: 'rgba(255,255,255,0.06)', link_text_color: textColorInput.value,
    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value,
    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
