@@ -152,7 +152,7 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   text-shadow: 0 0 8px rgba(168, 85, 247, 0.9), 0 0 16px rgba(168, 85, 247, 0.7), 0 0 24px rgba(168, 85, 247, 0.4), 0 0 40px rgba(168, 85, 247, 0.2);
 }
 .handle{font-size:12px;color:#b9a0f7;overflow-wrap:anywhere}
-.role-badge{background:#8b5cf615;border-color:#a78bfa35;color:#d4c1ff;display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;width:fit-content}
+.role-badge{display:none !important;} /* Oculto pois o cargo foi removido */
 .bio-preview,.live-status,.preview-emblems,.preview-socials,.embeds-container,.preview-links,.profile-foot{
   grid-column:2;min-width:0
 }
@@ -227,7 +227,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
   .avatar{width:56px;height:56px;border-radius:16px;font-size:24px}
   .profile-card h3{font-size:clamp(16px,4.5vw,21px)}
   .handle{font-size:11px}
-  .role-badge{font-size:9px;padding:3px 7px}
   .bio-preview{font-size:12px}
   .live-status{font-size:10px;padding:5px 8px}
   .preview-emblems span{font-size:10px;padding:4px 7px}
@@ -244,7 +243,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
   .avatar-container{width:58px;height:58px}
   .avatar{width:50px;height:50px;border-radius:14px}
   .profile-card h3{font-size:16px}
-  .role-badge{white-space:normal}
   .preview-link{gap:6px;padding:9px}
 }
 @media(prefers-reduced-motion:reduce){
@@ -391,10 +389,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
      <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
      <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
     </div>
-    <div class="two">
-     <label class="field"><span>Cargo</span><input id="role" readonly value="Membro"></label>
-     <label class="field"><span>Emoji do avatar</span><input id="avatarEmoji" maxlength="8" value="👾"></label>
-    </div>
     <label class="field">
      <span>🖼️ Moldura VIP do Avatar</span>
      <select id="avatarFrameSelect">
@@ -509,13 +503,12 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    <div class="profile-card card-style-opaque" id="profileCard">
     <div class="profile-header-row">
      <div class="avatar-container">
-      <div class="avatar" id="previewAvatar">👾</div>
+      <div class="avatar" id="previewAvatar">⌬</div>
       <div id="previewFrame" class="avatar-frame"></div>
      </div>
      <div class="profile-info">
       <h3 id="previewName">Nyx.exe</h3>
       <div class="handle" id="previewHandle">@nyx.exe</div>
-      <div class="role-badge" id="previewRole">💎 Fundador</div>
      </div>
     </div>
     <p class="bio-preview" id="previewBio">Gamer e geek.</p>
@@ -622,10 +615,10 @@ async function initEditor(userId) {
  let profile = await window.islySupabase.getProfileById(userId);
  if (!profile) {
   profile = {
-   id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6), role: 'Membro',
+   id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6),
    bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', accent_color: '#c084fc',
    title_color: '#ffffff', text_color: '#f6f4ff',
-   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', avatar_frame: 'none', avatar_emoji: '👾', bio: '', activity: '',
+   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', avatar_frame: 'none', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0
   };
@@ -641,10 +634,8 @@ async function initEditor(userId) {
 
  const nameInput = document.getElementById('name');
  const handleInput = document.getElementById('handle');
- const roleInput = document.getElementById('role');
  const bioInput = document.getElementById('bio');
  const bioCount = document.getElementById('bioCount');
- const avatarEmojiInput = document.getElementById('avatarEmoji');
  const avatarFrameSelect = document.getElementById('avatarFrameSelect');
  const activityInput = document.getElementById('activity');
  const shareUrlInput = document.getElementById('shareUrl');
@@ -668,10 +659,8 @@ async function initEditor(userId) {
 
  nameInput.value = currentProfile.name || '';
  handleInput.value = currentProfile.handle || '';
- roleInput.value = currentProfile.role || 'Membro';
  bioInput.value = currentProfile.bio || '';
  bioCount.textContent = (currentProfile.bio || '').length;
- avatarEmojiInput.value = currentProfile.avatar_emoji || '👾';
  avatarFrameSelect.value = currentProfile.avatar_frame || 'none';
  activityInput.value = currentProfile.activity || '';
 
@@ -777,8 +766,8 @@ async function initEditor(userId) {
    });
 
    const payload = {
-    id: userId, name: nameInput.value, handle: handleInput.value, role: roleInput.value,
-    bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
+    id: userId, name: nameInput.value, handle: handleInput.value,
+    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
     status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
     card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
     accent_color: textColorInput.value,
@@ -907,7 +896,7 @@ async function initEditor(userId) {
   if (avatarUrlInput.value) {
    avatarEl.innerHTML = `<img src="${avatarUrlInput.value}" alt="Avatar">`;
   } else {
-   avatarEl.textContent = avatarEmojiInput.value || '👾';
+   avatarEl.textContent = '⌬';
   }
 
   const frameEl = document.getElementById('previewFrame');
@@ -919,10 +908,6 @@ async function initEditor(userId) {
 
   document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
   document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
-
-  const roleBadge = document.getElementById('previewRole');
-  const r = roleInput.value || 'Membro';
-  roleBadge.innerHTML = r === 'Fundador' ? '💎 Fundador' : r === 'Suporte' ? '🛡️ Suporte' : r === 'Apoiador' ? '⭐ Apoiador' : '👾 Membro';
 
   const card = document.getElementById('profileCard');
   card.className = 'profile-card';
@@ -978,7 +963,7 @@ async function initEditor(userId) {
   `).join('');
  }
 
- [nameInput, handleInput, bioInput, avatarEmojiInput, activityInput].forEach(el => {
+ [nameInput, handleInput, bioInput, activityInput].forEach(el => {
   el.addEventListener('input', () => {
    if (el === bioInput) bioCount.textContent = bioInput.value.length;
    if (el === handleInput && handleInput.value) {
@@ -1002,8 +987,8 @@ async function initEditor(userId) {
   });
 
   const payload = {
-   id: userId, name: nameInput.value, handle: handleInput.value, role: roleInput.value,
-   bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
+   id: userId, name: nameInput.value, handle: handleInput.value,
+   bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
    card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
    accent_color: textColorInput.value,
