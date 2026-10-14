@@ -54,7 +54,7 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .field{display:block;margin:15px 0}
 .field>span{display:block;font-size:12px;color:#c7c4dd;margin-bottom:7px;font-weight:700}
 .field input, .field textarea, .field select{width:100%;min-width:0;border:1px solid #35334e;border-radius:11px;padding:12px 14px;background:#0a0a14;color:white;font-size:13px;outline:none}
-.field input[type="color"]{height:46px;padding:4px;cursor:pointer}
+.field input[type="color"]{height:48px;padding:5px;cursor:pointer;appearance:none;-webkit-appearance:none;border:1px solid #35313f;border-radius:12px;background:#100e15;box-shadow:none;overflow:hidden}
 .field textarea{min-height:90px;resize:vertical}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}
 .field small,.hint{display:block;color:#8582a5;font-size:11px;line-height:1.7;margin-top:7px}
@@ -306,7 +306,12 @@ h1{font-weight:780;letter-spacing:-1.8px}
 .field textarea{min-height:104px;line-height:1.65}
 .field small,.hint{color:#91859f}
 .field input[readonly],.field input:disabled{color:#a79bb6;background:#15111b}
-.field input[type="color"]{border-radius:12px;min-height:48px;background:#0c0a11}
+.field input[type="color"]{border-radius:12px;min-height:48px;background:#100e15;transition:border-color .18s,background .18s,box-shadow .18s}
+.field input[type="color"]::-webkit-color-swatch-wrapper{padding:4px}
+.field input[type="color"]::-webkit-color-swatch{border:1px solid #ffffff22;border-radius:7px}
+.field input[type="color"]::-moz-color-swatch{border:1px solid #ffffff22;border-radius:7px}
+.field input[type="color"]:hover{border-color:#76628d;background:#15111c}
+.field input[type="color"]:focus{outline:none;border-color:#a78bfa;box-shadow:0 0 0 3px #8b5cf61a}
 .field input[type="file"]{
   padding:9px;background:#0d0b13;border:1px dashed #514164;border-radius:13px;
   color:#b9afc7;cursor:pointer
@@ -476,6 +481,21 @@ footer{border-top-color:#ffffff12;color:#8e849f}
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+
+/* Refinamento visual v2: controles discretos e ícones com acabamento uniforme */
+.profile-card{transform:none!important;transition:box-shadow .2s ease,border-color .2s ease!important;perspective:none!important;transform-style:flat!important}
+.preview-label{display:none!important}
+.emblem{min-height:86px;border-radius:15px;background:linear-gradient(145deg,#17131f,#0e0c13);box-shadow:inset 0 1px 0 #ffffff08;}
+.emblem svg{width:28px;height:28px;margin:0 auto 8px;display:block;fill:currentColor;filter:drop-shadow(0 2px 5px #a78bfa20)}
+.emblem.selected{background:linear-gradient(145deg,#241833,#15101d);border-color:#9270b7;box-shadow:inset 0 0 0 1px #a78bfa18,0 5px 18px #00000020}
+.preview-emblems span{background:linear-gradient(135deg,#20162b,#121019);border-color:#a78bfa2b;box-shadow:inset 0 1px 0 #ffffff08}
+.preview-emblems svg{filter:drop-shadow(0 1px 3px #a78bfa30)}
+.preview-social-icon{border:1px solid #ffffff10;background:linear-gradient(145deg,#201a29,#100e15);box-shadow:inset 0 1px 0 #ffffff0a;transition:background .18s,border-color .18s,box-shadow .18s}
+.preview-social-icon svg{filter:drop-shadow(0 1px 3px #ffffff18)}
+.preview-social-icon:hover{transform:none!important;border-color:#a78bfa66;background:#21172e;box-shadow:0 5px 14px #00000025}
+.field input[type="color"]{width:100%;min-width:0;display:block}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
 </style>
 <script>
 (function(){
@@ -599,7 +619,7 @@ footer{border-top-color:#ffffff12;color:#8e849f}
    </section>
 
    <section class="panel" id="panel-socials">
-    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com ícones SVG 3D.</p></div><span class="muted">04 / 07</span></div>
+    <div class="panel-head"><div><h2>🌐 Redes sociais</h2><p>Adicione seus perfis e identifique cada rede com ícones minimalistas.</p></div><span class="muted">04 / 07</span></div>
     <div class="social-grid">
      <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
      <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
@@ -672,7 +692,6 @@ footer{border-top-color:#ffffff12;color:#8e849f}
   </div>
 
   <div class="preview">
-   <div class="preview-label"><strong>Prévia ao vivo (Mova o mouse sobre o cartão)</strong></div>
    <div class="profile-card card-style-opaque" id="profileCard">
     <div class="profile-header-row">
      <div class="avatar-container">
@@ -865,20 +884,6 @@ async function initEditor(userId) {
   shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentProfile.handle}`;
  }
 
- const previewCard = document.getElementById('profileCard');
- previewCard.addEventListener('mousemove', (e) => {
-  const rect = previewCard.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const xc = rect.width / 2;
-  const yc = rect.height / 2;
-  const dx = (x - xc) / xc;
-  const dy = (y - yc) / yc;
-  previewCard.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
- });
- previewCard.addEventListener('mouseleave', () => {
-  previewCard.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
- });
 
  document.getElementById('avatarFile')?.addEventListener('change', async (e) => {
   const file = e.target.files[0];
