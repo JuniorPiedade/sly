@@ -750,25 +750,38 @@ async function initEditor(userId) {
   if (!file) return;
   if (file.size > 2 * 1024 * 1024) { toast('O wallpaper deve ter no máximo 2MB.'); return; }
   toast('Enviando wallpaper do cartão...');
-  
-  let publicUrl = await window.islySupabase.uploadAsset(userId, file, 'wallpaper');
-  if (publicUrl && !publicUrl.startsWith('http')) {
-   try {
-    const { data } = window.islySupabase.client.storage.from('wallpapers').getPublicUrl(publicUrl);
-    if (data && data.publicUrl) publicUrl = data.publicUrl;
-   } catch (err) { console.warn("Erro URL wallpaper:", err); }
-  }
 
-  if (publicUrl) {
-   wallpaperUrlInput.value = publicUrl;
-   currentProfile.wallpaper_url = publicUrl;
-   updatePreview();
-   triggerAutoSave();
-   toast('Wallpaper atualizado! ✓');
-  } else {
-   toast('Erro ao enviar wallpaper.');
+  try {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}-${Math.random()}.${fileExt}`;
+    const filePath = `wallpapers/${fileName}`;
+
+    // Faz o upload direto para o bucket 'wallpapers' (certifique-se de que o bucket se chama 'wallpapers' no Supabase)
+    const { error: uploadError } = await window.islySupabase.client.storage
+      .from('wallpapers')
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) throw uploadError;
+
+    // Pega a URL pública gerada pelo Supabase
+    const { data } = window.islySupabase.client.storage
+      .from('wallpapers')
+      .getPublicUrl(filePath);
+
+    if (data && data.publicUrl) {
+      wallpaperUrlInput.value = data.publicUrl;
+      currentProfile.wallpaper_url = data.publicUrl;
+      updatePreview();
+      triggerAutoSave();
+      toast('Wallpaper atualizado! ✓');
+    } else {
+      throw new Error('Não foi possível obter a URL pública.');
+    }
+  } catch (err) {
+    console.error("Erro no upload do wallpaper:", err);
+    toast('Erro ao enviar wallpaper: ' + (err.message || 'Erro desconhecido'));
   }
- });
+});
 
  document.getElementById('customCursorFile')?.addEventListener('change', async (e) => {
   const file = e.target.files[0];
