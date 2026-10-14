@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -210,15 +209,22 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   }
 
+  // Verificação inteligente de sessão: se já estiver logado, exibe um atalho amigável sem redirecionar à força
   (async () => {
-    if (!await waitForModule()) {
-      toast('Não foi possível carregar o módulo de acesso. Atualize a página.');
-      return;
-    }
+    if (!await waitForModule()) return;
 
     try {
       const user = await window.islySupabase.getUser();
-      if (user) window.location.replace('index.html');
+      if (user) {
+        const authBox = document.querySelector('.auth-box');
+        if (authBox) {
+          authBox.innerHTML = `
+            <h3>Sessão Ativa ⚡</h3>
+            <p>Você já está conectado no ISLY.ME.</p>
+            <a href="index.html" class="auth-btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box;">Ir para o meu Painel 🚀</a>
+          `;
+        }
+      }
     } catch (error) {
       console.error(error);
     }
