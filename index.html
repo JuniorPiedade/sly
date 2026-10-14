@@ -22,6 +22,10 @@ button{color:inherit;cursor:pointer}
 .actions{display:flex;gap:8px;align-items:center}
 .btn{border:1px solid var(--line);border-radius:11px;padding:10px 14px;background:#ffffff08;color:var(--text);font-size:12px;font-weight:750}
 .btn.primary{border:0;background:linear-gradient(110deg,#7c3aed,#9333ea 55%,#2563eb)}
+.sync-badge{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#ffffff05;border:1px solid #292944}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;transition:background 0.3s}
+.sync-dot.saving{background:#facc15;animation:pulse 1s infinite}
+@keyframes pulse{0%{opacity:0.4}50%{opacity:1}100%{opacity:0.4}}
 .layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:22px;padding:25px 0 55px}
 .sidebar,.panel{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#141422,#0d0d18)}
 .sidebar{align-self:start;padding:12px;position:sticky;top:15px}
@@ -126,8 +130,12 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
 <header class="wrap topbar">
  <a class="brand" href="landing.html"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
  <div class="actions">
+  <div class="sync-badge" id="syncBadge">
+    <span class="sync-dot" id="syncDot"></span>
+    <span id="syncText">Sincronizado</span>
+  </div>
   <button class="btn" id="authBtn" type="button">Sair</button>
-  <button class="btn primary" id="saveBtn" type="button">Salvar alterações ✓</button>
+  <button class="btn primary" id="saveBtn" type="button">Salvar agora ✓</button>
  </div>
 </header>
 
@@ -139,7 +147,7 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
  <button type="button" class="navbtn" data-sec="emblems">✦ Emblemas</button>
  <button type="button" class="navbtn" data-sec="themes">◐ Temas & Molduras</button>
  <button type="button" class="navbtn" data-sec="links">↗ Meus links</button>
- <div class="side-note">Sincronizado com a nuvem do Supabase.</div>
+ <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
 </aside>
 
 <section class="content">
@@ -295,12 +303,10 @@ async function initEditor(userId) {
     };
   }
 
-  // Estado local editável
   let currentProfile = { ...profile };
   if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
   if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
 
-  // Elementos do DOM
   const nameInput = document.getElementById('name');
   const handleInput = document.getElementById('handle');
   const roleInput = document.getElementById('role');
@@ -310,7 +316,9 @@ async function initEditor(userId) {
   const activityInput = document.getElementById('activity');
   const shareUrlInput = document.getElementById('shareUrl');
 
-  // Preenche valores iniciais
+  const syncDot = document.getElementById('syncDot');
+  const syncText = document.getElementById('syncText');
+
   nameInput.value = currentProfile.name || '';
   handleInput.value = currentProfile.handle || '';
   roleInput.value = currentProfile.role || 'Membro';
@@ -323,7 +331,42 @@ async function initEditor(userId) {
     shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentProfile.handle}`;
   }
 
-  // Navegação lateral por abas
+  // --- AUTO-SAVE COM DEBOUNCE ---
+  let saveTimer = null;
+  function triggerAutoSave() {
+    syncDot.classList.add('saving');
+    syncText.textContent = 'Salvando...';
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      const payload = {
+        id: userId,
+        name: nameInput.value,
+        handle: handleInput.value,
+        role: roleInput.value,
+        bio: bioInput.value,
+        avatar_emoji: avatarEmojiInput.value,
+        activity: activityInput.value,
+        status_emoji: currentProfile.status_emoji,
+        status_label: currentProfile.status_label,
+        theme: currentProfile.theme,
+        emblems: currentProfile.emblems,
+        links: currentProfile.links,
+        avatar_url: currentProfile.avatar_url || null,
+        banner_url: currentProfile.banner_url || null,
+        wallpaper_url: currentProfile.wallpaper_url || null
+      };
+
+      const err = await window.islySupabase.saveProfile(payload);
+      syncDot.classList.remove('saving');
+      if (err) {
+        syncText.textContent = 'Erro ao salvar';
+      } else {
+        syncText.textContent = 'Sincronizado';
+      }
+    }, 1200);
+  }
+
+  // Navegação lateral
   document.querySelectorAll('.sidebar .navbtn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sidebar .navbtn').forEach(b => b.classList.remove('active'));
@@ -334,7 +377,7 @@ async function initEditor(userId) {
     });
   });
 
-  // Status vivo (opções)
+  // Status vivo
   document.querySelectorAll('#statusOptions .choice').forEach(btn => {
     if (btn.getAttribute('data-label') === currentProfile.status_label) {
       document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
@@ -346,6 +389,7 @@ async function initEditor(userId) {
       currentProfile.status_emoji = btn.getAttribute('data-emoji');
       currentProfile.status_label = btn.getAttribute('data-label');
       updatePreview();
+      triggerAutoSave();
     });
   });
 
@@ -367,6 +411,7 @@ async function initEditor(userId) {
         el.classList.add('selected');
       }
       updatePreview();
+      triggerAutoSave();
     });
   });
 
@@ -380,6 +425,7 @@ async function initEditor(userId) {
       el.classList.add('selected');
       currentProfile.theme = th;
       updatePreview();
+      triggerAutoSave();
     });
   });
 
@@ -397,13 +443,14 @@ async function initEditor(userId) {
         <button type="button" class="remove">✕</button>
       `;
 
-      row.querySelector('.link-emoji').addEventListener('input', e => { currentProfile.links[idx].emoji = e.target.value; updatePreview(); });
-      row.querySelector('.link-title').addEventListener('input', e => { currentProfile.links[idx].title = e.target.value; updatePreview(); });
-      row.querySelector('.link-url').addEventListener('input', e => { currentProfile.links[idx].url = e.target.value; updatePreview(); });
+      row.querySelector('.link-emoji').addEventListener('input', e => { currentProfile.links[idx].emoji = e.target.value; updatePreview(); triggerAutoSave(); });
+      row.querySelector('.link-title').addEventListener('input', e => { currentProfile.links[idx].title = e.target.value; updatePreview(); triggerAutoSave(); });
+      row.querySelector('.link-url').addEventListener('input', e => { currentProfile.links[idx].url = e.target.value; updatePreview(); triggerAutoSave(); });
       row.querySelector('.remove').addEventListener('click', () => {
         currentProfile.links.splice(idx, 1);
         renderLinksEditor();
         updatePreview();
+        triggerAutoSave();
       });
 
       container.appendChild(row);
@@ -418,21 +465,26 @@ async function initEditor(userId) {
     currentProfile.links.push({ emoji: '↗', title: '', url: '' });
     renderLinksEditor();
     updatePreview();
+    triggerAutoSave();
   });
 
   renderLinksEditor();
 
-  // Atualização em tempo real na Prévia
+  // Copiar link público
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText(shareUrlInput.value);
+    toast('Link copiado para a área de transferência! 📋');
+  });
+
+  // Atualização da Prévia
   function updatePreview() {
     document.getElementById('previewName').textContent = nameInput.value || 'Seu Nome';
     document.getElementById('previewHandle').textContent = '@' + (handleInput.value || 'nick');
-    document.getElementById('previewBio').value = bioInput.value || '';
     document.getElementById('previewBio').textContent = bioInput.value || 'Escreva sua bio...';
     document.getElementById('previewAvatar').textContent = avatarEmojiInput.value || '👾';
     document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
     document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
 
-    // Cargo Badge
     const roleBadge = document.getElementById('previewRole');
     const r = roleInput.value || 'Membro';
     if (r === 'Fundador') roleBadge.innerHTML = '💎 Fundador';
@@ -440,17 +492,14 @@ async function initEditor(userId) {
     else if (r === 'Apoiador') roleBadge.innerHTML = '⭐ Apoiador';
     else roleBadge.innerHTML = '👾 Membro';
 
-    // Temas card
     const card = document.getElementById('profileCard');
     card.className = 'profile-card';
     if (currentProfile.theme === 'sakura') card.classList.add('theme-sakura');
     if (currentProfile.theme === 'matrix') card.classList.add('theme-matrix');
 
-    // Emblemas preview
     const emPreview = document.getElementById('previewEmblems');
     emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemEmojis[id] || '✦'} ${emblemNames[id] || id}</span>`).join('');
 
-    // Links preview
     const lnPreview = document.getElementById('previewLinks');
     lnPreview.innerHTML = currentProfile.links.map(l => `
       <a class="preview-link" href="${l.url || '#'}" target="_blank">
@@ -460,56 +509,26 @@ async function initEditor(userId) {
     `).join('');
   }
 
-  // Event Listeners de Digitação
-  nameInput.addEventListener('input', updatePreview);
-  handleInput.addEventListener('input', () => {
-    updatePreview();
-    if (handleInput.value) {
-      shareUrlInput.value = `${window.location.origin}/perfil.html?u=${handleInput.value.trim().replace(/^@/, '')}`;
-    }
+  // Event Listeners para Inputs
+  [nameInput, handleInput, bioInput, avatarEmojiInput, activityInput].forEach(el => {
+    el.addEventListener('input', () => {
+      if (el === bioInput) bioCount.textContent = bioInput.value.length;
+      if (el === handleInput && handleInput.value) {
+        shareUrlInput.value = `${window.location.origin}/perfil.html?u=${handleInput.value.trim().replace(/^@/, '')}`;
+      }
+      updatePreview();
+      triggerAutoSave();
+    });
   });
-  bioInput.addEventListener('input', () => {
-    bioCount.textContent = bioInput.value.length;
-    updatePreview();
-  });
-  avatarEmojiInput.addEventListener('input', updatePreview);
-  activityInput.addEventListener('input', updatePreview);
 
   updatePreview();
 
-  // Upload de arquivos (Avatar, Banner, Wallpaper)
-  async function handleFileUpload(inputEl, fieldName) {
-    const file = inputEl.files[0];
-    if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      toast('O arquivo deve ter no máximo 2MB.');
-      return;
-    }
-    const fileExt = file.name.split('.').pop();
-    const filePath = `${userId}/${fieldName}_${Date.now()}.${fileExt}`;
-    
-    toast('Enviando imagem...');
-    const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-    if (uploadErr) {
-      toast('Erro no upload: ' + uploadErr);
-      return;
-    }
-
-    const publicUrl = window.islySupabase.getPublicUrl(filePath);
-    currentProfile[fieldName] = publicUrl;
-    
-    if (fieldName === 'avatar_url') {
-      document.getElementById('previewAvatar').innerHTML = `<img src="${publicUrl}" alt="Avatar">`;
-    }
-    toast('Imagem enviada com sucesso! ✓');
-  }
-
-  document.getElementById('avatarFile').addEventListener('change', e => handleFileUpload(e.target, 'avatar_url'));
-  document.getElementById('bannerFile').addEventListener('change', e => handleFileUpload(e.target, 'banner_url'));
-  document.getElementById('wallpaperFile').addEventListener('change', e => handleFileUpload(e.target, 'wallpaper_url'));
-
-  // Salvar Alterações no Supabase
+  // Botão "Salvar agora" manual
   document.getElementById('saveBtn').addEventListener('click', async () => {
+    clearTimeout(saveTimer);
+    syncDot.classList.add('saving');
+    syncText.textContent = 'Salvando...';
+
     const payload = {
       id: userId,
       name: nameInput.value,
@@ -529,10 +548,13 @@ async function initEditor(userId) {
     };
 
     const err = await window.islySupabase.saveProfile(payload);
+    syncDot.classList.remove('saving');
     if (err) {
+      syncText.textContent = 'Erro ao salvar';
       toast('Erro ao salvar: ' + err);
     } else {
-      toast('Todas as alterações foram salvas com sucesso! ✓');
+      syncText.textContent = 'Sincronizado';
+      toast('Todas as alterações foram salvas na nuvem! ✓');
     }
   });
 }
