@@ -706,92 +706,92 @@ async function initEditor(userId) {
   if (!file) return;
   if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
   toast('Enviando foto de perfil...');
-  
- document.getElementById('avatarFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
-  toast('Enviando foto de perfil...');
 
   try {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${userId}-${Date.now()}.${fileExt}`;
-    const filePath = `avatars/${fileName}`; // Salva dentro da pasta avatars no bucket media
+   const fileExt = file.name.split('.').pop();
+   const fileName = `${userId}-${Date.now()}.${fileExt}`;
+   const filePath = `avatars/${fileName}`;
 
-    const { error: uploadError } = await window.islySupabase.client.storage
-      .from('media') // Usando o seu bucket único 'media'
-      .upload(filePath, file, { upsert: true });
+   const { error: uploadError } = await window.islySupabase.client.storage
+    .from('media')
+    .upload(filePath, file, { upsert: true });
 
-    if (uploadError) throw uploadError;
+   if (uploadError) throw uploadError;
 
-    const { data } = window.islySupabase.client.storage
-      .from('media')
-      .getPublicUrl(filePath);
+   const { data } = window.islySupabase.client.storage
+    .from('media')
+    .getPublicUrl(filePath);
 
-    if (data && data.publicUrl) {
-      avatarUrlInput.value = data.publicUrl;
-      currentProfile.avatar_url = data.publicUrl;
-      updatePreview();
-      triggerAutoSave();
-      toast('Foto de perfil atualizada! ✓');
-    } else {
-      throw new Error('Não foi possível obter a URL pública.');
-    }
+   if (data && data.publicUrl) {
+    avatarUrlInput.value = data.publicUrl;
+    currentProfile.avatar_url = data.publicUrl;
+    updatePreview();
+    triggerAutoSave();
+    toast('Foto de perfil atualizada! ✓');
+   } else {
+    throw new Error('Não foi possível obter a URL pública.');
+   }
   } catch (err) {
-    console.error("Erro no upload do avatar:", err);
-    toast('Erro ao enviar foto: ' + (err.message || 'Erro desconhecido'));
+   console.error("Erro no upload do avatar:", err);
+   toast('Erro ao enviar foto: ' + (err.message || 'Erro desconhecido'));
   }
-});
+ });
 
-document.getElementById('wallpaperFile')?.addEventListener('change', async (e) => {
+ document.getElementById('wallpaperFile')?.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > 2 * 1024 * 1024) { toast('O wallpaper deve ter no máximo 2MB.'); return; }
   toast('Enviando wallpaper do cartão...');
 
   try {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${userId}-${Date.now()}.${fileExt}`;
-    const filePath = `wallpapers/${fileName}`; // Salva dentro da pasta wallpapers no bucket media
+   const fileExt = file.name.split('.').pop();
+   const fileName = `${userId}-${Date.now()}.${fileExt}`;
+   const filePath = `wallpapers/${fileName}`;
 
-    const { error: uploadError } = await window.islySupabase.client.storage
-      .from('media') // Usando o seu bucket único 'media'
-      .upload(filePath, file, { upsert: true });
+   const { error: uploadError } = await window.islySupabase.client.storage
+    .from('media')
+    .upload(filePath, file, { upsert: true });
 
-    if (uploadError) throw uploadError;
+   if (uploadError) throw uploadError;
 
-    const { data } = window.islySupabase.client.storage
-      .from('media')
-      .getPublicUrl(filePath);
+   const { data } = window.islySupabase.client.storage
+    .from('media')
+    .getPublicUrl(filePath);
 
-    if (data && data.publicUrl) {
-      wallpaperUrlInput.value = data.publicUrl;
-      currentProfile.wallpaper_url = data.publicUrl;
-      updatePreview();
-      triggerAutoSave();
-      toast('Wallpaper atualizado! ✓');
-    } else {
-      throw new Error('Não foi possível obter a URL pública.');
-    }
+   if (data && data.publicUrl) {
+    wallpaperUrlInput.value = data.publicUrl;
+    currentProfile.wallpaper_url = data.publicUrl;
+    updatePreview();
+    triggerAutoSave();
+    toast('Wallpaper atualizado! ✓');
+   } else {
+    throw new Error('Não foi possível obter a URL pública.');
+   }
   } catch (err) {
-    console.error("Erro no upload do wallpaper:", err);
-    toast('Erro ao enviar wallpaper: ' + (err.message || 'Erro desconhecido'));
+   console.error("Erro no upload do wallpaper:", err);
+   toast('Erro ao enviar wallpaper: ' + (err.message || 'Erro desconhecido'));
   }
-});
+ });
 
  document.getElementById('customCursorFile')?.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > 1024 * 1024) { toast('O cursor deve ter no máximo 1MB.'); return; }
   toast('Enviando cursor...');
-  const publicUrl = await window.islySupabase.uploadAsset(userId, file, 'cursor');
-  if (publicUrl) {
-   customCursorInput.value = publicUrl;
-   currentProfile.custom_cursor = publicUrl;
-   updatePreview();
-   triggerAutoSave();
-   toast('Cursor atualizado! ✨');
-  } else {
+  try {
+   const fileExt = file.name.split('.').pop();
+   const filePath = `cursors/${userId}-${Date.now()}.${fileExt}`;
+   const { error: uploadError } = await window.islySupabase.client.storage.from('media').upload(filePath, file, { upsert: true });
+   if (uploadError) throw uploadError;
+   const { data } = window.islySupabase.client.storage.from('media').getPublicUrl(filePath);
+   if (data && data.publicUrl) {
+    customCursorInput.value = data.publicUrl;
+    currentProfile.custom_cursor = data.publicUrl;
+    updatePreview();
+    triggerAutoSave();
+    toast('Cursor atualizado! ✨');
+   }
+  } catch (err) {
    toast('Erro ao enviar cursor.');
   }
  });
