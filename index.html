@@ -9,101 +9,104 @@
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.6}
 button,input,textarea,select{font:inherit}
 button,a{-webkit-tap-highlight-color:transparent}
 a{color:inherit;text-decoration:none}
 button{color:inherit;cursor:pointer}
 .wrap{width:min(1180px,calc(100% - 32px));margin:auto}
-.topbar{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #a78bfa22}
-.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:850;letter-spacing:-1px}
-.brand-mark{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#080812}
+.topbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #a78bfa22}
+.brand{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:850;letter-spacing:-1px}
+.brand-mark{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#080812;font-size:18px}
 .dot{color:var(--blue)}
-.actions{display:flex;gap:8px;align-items:center}
-.btn{border:1px solid var(--line);border-radius:11px;padding:10px 14px;background:#ffffff08;color:var(--text);font-size:12px;font-weight:750}
+.actions{display:flex;gap:10px;align-items:center}
+.btn{border:1px solid var(--line);border-radius:12px;padding:11px 16px;background:#ffffff08;color:var(--text);font-size:13px;font-weight:750}
 .btn.primary{border:0;background:linear-gradient(110deg,#7c3aed,#9333ea 55%,#2563eb)}
-.sync-badge{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#ffffff05;border:1px solid #292944}
-.sync-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;transition:background 0.3s}
+.sync-badge{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:20px;background:#ffffff05;border:1px solid #292944}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;display:inline-block;transition:background 0.3s}
 .sync-dot.saving{background:#facc15;animation:pulse 1s infinite}
 @keyframes pulse{0%{opacity:0.4}50%{opacity:1}100%{opacity:0.4}}
-.layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:22px;padding:25px 0 55px}
-.sidebar,.panel{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#141422,#0d0d18)}
-.sidebar{align-self:start;padding:12px;position:sticky;top:15px}
-.side-title{padding:10px;font-size:10px;letter-spacing:2px;color:#8582a5;text-transform:uppercase}
-.navbtn{display:block;width:100%;text-align:left;border:1px solid transparent;background:transparent;border-radius:10px;padding:11px;color:#c9c5e2;font-size:12px;margin-bottom:4px}
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;padding:30px 0 60px}
+.sidebar,.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#141422,#0d0d18)}
+.sidebar{align-self:start;padding:14px;position:sticky;top:20px}
+.side-title{padding:10px;font-size:11px;letter-spacing:2px;color:#8582a5;text-transform:uppercase;font-weight:700}
+.navbtn{display:block;width:100%;text-align:left;border:1px solid transparent;background:transparent;border-radius:11px;padding:12px 14px;color:#c9c5e2;font-size:13px;font-weight:600;margin-bottom:6px}
 .navbtn:hover,.navbtn.active{background:#8b5cf619;border-color:#8b5cf63b;color:white}
-.side-note{border-top:1px solid var(--line);padding:13px 9px 5px;color:#8582a5;font-size:10px;line-height:1.7}
-.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
-.eyebrow{font-size:10px;letter-spacing:2px;color:#c084fc;text-transform:uppercase;font-weight:800}
-h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:7px 0}
-.heading p,.muted{font-size:12px;color:var(--muted)}
-.pill{font-size:10px;border:1px solid #86efac40;border-radius:30px;padding:7px 10px;color:#bbf7d0;white-space:nowrap}
+.side-note{border-top:1px solid var(--line);padding:14px 10px 6px;color:#8582a5;font-size:11px;line-height:1.7}
+.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+.eyebrow{font-size:11px;letter-spacing:2px;color:#c084fc;text-transform:uppercase;font-weight:800}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8px 0}
+.heading p,.muted{font-size:13px;color:var(--muted)}
+.pill{font-size:11px;border:1px solid #86efac40;border-radius:30px;padding:8px 12px;color:#bbf7d0;white-space:nowrap;font-weight:600}
 
-.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-.stat-card{border:1px solid var(--line);border-radius:14px;background:linear-gradient(135deg,#16162a,#0f0f1c);padding:14px 16px;display:flex;align-items:center;gap:12px}
-.stat-icon{width:38px;height:38px;border-radius:10px;background:#8b5cf618;border:1px solid #8b5cf633;display:grid;place-items:center;font-size:18px;color:#c084fc}
-.stat-val{font-size:20px;font-weight:850;line-height:1;margin-bottom:3px}
-.stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.stat-card{border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,#16162a,#0f0f1c);padding:16px 18px;display:flex;align-items:center;gap:14px}
+.stat-icon{width:42px;height:42px;border-radius:12px;background:#8b5cf618;border:1px solid #8b5cf633;display:grid;place-items:center;font-size:20px;color:#c084fc}
+.stat-val{font-size:22px;font-weight:850;line-height:1;margin-bottom:4px}
+.stat-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700}
 
-.editor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.8fr);gap:17px;align-items:start}
-.panel{padding:18px;margin-bottom:14px;min-width:0;display:none}
+.editor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:20px;align-items:start}
+.panel{padding:20px;margin-bottom:16px;min-width:0;display:none}
 .panel.active-panel{display:block}
-.panel h2{font-size:14px;margin:0}
-.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}
-.panel-head p{font-size:11px;color:var(--muted);margin:4px 0 0}
-.field{display:block;margin:13px 0}
-.field>span{display:block;font-size:11px;color:#c7c4dd;margin-bottom:6px;font-weight:650}
-.field input, .field textarea, .field select{width:100%;min-width:0;border:1px solid #35334e;border-radius:10px;padding:11px;background:#0a0a14;color:white;font-size:12px;outline:none}
-.field input[type="color"]{height:42px;padding:4px;cursor:pointer}
-.field textarea{min-height:80px;resize:vertical}
+.panel h2{font-size:16px;margin:0;font-weight:750}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.panel-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.field{display:block;margin:15px 0}
+.field>span{display:block;font-size:12px;color:#c7c4dd;margin-bottom:7px;font-weight:700}
+.field input, .field textarea, .field select{width:100%;min-width:0;border:1px solid #35334e;border-radius:11px;padding:12px 14px;background:#0a0a14;color:white;font-size:13px;outline:none}
+.field input[type="color"]{height:46px;padding:4px;cursor:pointer}
+.field textarea{min-height:90px;resize:vertical}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}
-.field small,.hint{display:block;color:#8582a5;font-size:10px;line-height:1.7;margin-top:6px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.options{display:flex;flex-wrap:wrap;gap:7px}
-.choice{border:1px solid #35334e;background:#ffffff05;border-radius:9px;padding:8px 10px;font-size:11px;cursor:pointer}
+.field small,.hint{display:block;color:#8582a5;font-size:11px;line-height:1.7;margin-top:7px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.options{display:flex;flex-wrap:wrap;gap:8px}
+.choice{border:1px solid #35334e;background:#ffffff05;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;cursor:pointer}
 .choice.active{border-color:var(--blue);background:#22d3ee13;color:#cffafe}
-.emblems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.emblem{border:1px solid #35334e;border-radius:11px;background:#ffffff04;padding:10px 5px;text-align:center;font-size:11px;cursor:pointer}
+.emblems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.emblem{border:1px solid #35334e;border-radius:12px;background:#ffffff04;padding:12px 8px;text-align:center;font-size:12px;font-weight:600;cursor:pointer}
 .emblem.selected{border-color:var(--purple);background:#a855f712}
-.emblem span{display:block;font-size:22px;margin-bottom:5px}
+.emblem svg{width:26px;height:26px;margin:0 auto 6px;display:block;fill:currentColor}
 
-.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-.link-row{display:grid;grid-template-columns:auto 38px 1fr 1fr auto;gap:6px;margin:8px 0;align-items:center}
-.link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:9px;padding:9px;background:#0a0a14;color:white;font-size:11px}
-.reorder-btns{display:flex;flex-direction:column;gap:2px}
-.reorder-btn{border:1px solid #35334e;border-radius:5px;background:#ffffff05;color:#c9c5e2;padding:2px 5px;font-size:9px;line-height:1;cursor:pointer}
+.link-row{display:grid;grid-template-columns:auto 42px 1fr 1fr auto;gap:8px;margin:10px 0;align-items:center}
+.link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:10px;padding:10px 12px;background:#0a0a14;color:white;font-size:12px}
+.reorder-btns{display:flex;flex-direction:column;gap:3px}
+.reorder-btn{border:1px solid #35334e;border-radius:6px;background:#ffffff05;color:#c9c5e2;padding:3px 6px;font-size:10px;cursor:pointer}
 .reorder-btn:disabled{opacity:0.2;cursor:not-allowed}
-.remove{border:1px solid #52313f;border-radius:8px;background:#ffffff05;color:#fda4af;padding:8px 10px;cursor:pointer}
-.add{width:100%;border:1px dashed #514174;border-radius:9px;background:#8b5cf609;color:#d8b4fe;padding:10px;font-size:11px;font-weight:700;cursor:pointer}
+.remove{border:1px solid #52313f;border-radius:9px;background:#ffffff05;color:#fda4af;padding:9px 12px;cursor:pointer}
+.add{width:100%;border:1px dashed #514174;border-radius:11px;background:#8b5cf609;color:#d8b4fe;padding:12px;font-size:12px;font-weight:750;cursor:pointer}
 
-.preview{position:sticky;top:15px}
-.preview-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:12px}
-.profile-card{overflow:hidden;text-align:center;border-radius:20px;background:#11111f;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
-.cover{height:90px;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 30%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}
-.avatar{width:78px;height:78px;margin:-37px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:23px;background:linear-gradient(135deg,#9333ea,#2563eb);font-size:30px;overflow:hidden}
+.preview{position:sticky;top:20px}
+.preview-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:14px}
+.profile-card{overflow:hidden;text-align:center;border-radius:26px;background:#11111f;box-shadow:0 24px 70px rgba(0,0,0,0.6);padding-bottom:10px}
+.cover{height:100px;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 30%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}
+.avatar{width:86px;height:86px;margin:-43px auto 12px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:26px;background:linear-gradient(135deg,#9333ea,#2563eb);font-size:34px;overflow:hidden;box-shadow:0 10px 25px rgba(147,51,234,0.4)}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.profile-card h3{font-size:20px;margin:6px 0 0;color:#fff}
-.handle{font-size:11px;color:#c084fc}
-.role-badge{display:inline-block;margin:7px;padding:3px 10px;border-radius:20px;background:#8b5cf620;border:1px solid #8b5cf650;color:#c084fc;font-size:10px}
-.bio-preview{font-size:11px;color:#aaa7c7;margin:9px 16px;overflow-wrap:anywhere}
-.live-status{display:inline-block;margin:4px 0 13px;padding:6px 10px;border:1px solid #22d3ee45;border-radius:20px;background:#22d3ee0d;color:#cffafe;font-size:10px;max-width:90%}
-.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:0 12px 12px}
-.preview-emblems span{padding:4px 7px;border:1px solid #a855f733;border-radius:7px;font-size:9px;color:#ddd6fe}
-.preview-socials{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:0 12px 12px}
-.preview-social-icon{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:#ffffff08;font-size:13px;text-decoration:none}
-.preview-links{padding:0 13px 15px}
-.preview-link{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:7px;padding:10px;border-radius:9px;font-size:10px;text-decoration:none}
-.profile-foot{padding:16px 0;font-size:8px;color:#777391;letter-spacing:1px}
-.share{margin-top:13px;padding:12px;border:1px solid var(--line);border-radius:12px}
-.share label{display:block;font-size:10px;color:var(--muted);margin-bottom:7px}
-.share-row{display:flex;gap:5px}
-.share-row input{min-width:0;width:100%;flex:1;background:#0a0a14;border:1px solid #35334e;border-radius:8px;padding:8px;color:#d8b4fe;font-size:10px}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1c1b2d;border:1px solid #514174;border-radius:10px;padding:12px 16px;font-size:12px;z-index:1001;max-width:90%;display:none}
+.profile-card h3{font-size:22px;font-weight:800;margin:8px 0 2px;color:#fff;letter-spacing:-0.01em}
+.handle{font-size:13px;font-weight:600;color:#c084fc}
+.role-badge{display:inline-block;margin:8px 0 6px;padding:4px 12px;border-radius:99px;background:#8b5cf620;border:1px solid #8b5cf650;color:#c084fc;font-size:11px;font-weight:700}
+.bio-preview{font-size:13px;color:#aaa7c7;margin:10px 20px 14px;overflow-wrap:anywhere;line-height:1.5}
+.live-status{display:inline-flex;align-items:center;gap:7px;margin:4px 0 14px;padding:7px 14px;border:1px solid #22d3ee45;border-radius:99px;background:#22d3ee0d;color:#cffafe;font-size:11px;font-weight:600;max-width:90%}
+.live-status svg{width:14px;height:14px;fill:currentColor}
+.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:0 14px 14px}
+.preview-emblems span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid #a855f733;border-radius:9px;font-size:11px;font-weight:600;color:#ddd6fe;background:#a855f70d}
+.preview-emblems svg{width:14px;height:14px;fill:currentColor}
+.preview-socials{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;padding:0 14px 14px}
+.preview-social-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#ffffff08;font-size:15px;text-decoration:none}
+.preview-social-icon svg{width:16px;height:16px;fill:currentColor}
+.preview-links{padding:0 16px 18px}
+.preview-link{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px;padding:13px 15px;border-radius:12px;font-size:12px;font-weight:700;text-decoration:none}
+.profile-foot{padding:18px 0;font-size:9px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase}
+.share{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:14px}
+.share label{display:block;font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:700}
+.share-row{display:flex;gap:6px}
+.share-row input{min-width:0;width:100%;flex:1;background:#0a0a14;border:1px solid #35334e;border-radius:10px;padding:10px;color:#d8b4fe;font-size:11px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1c1b2d;border:1px solid #514174;border-radius:12px;padding:14px 20px;font-size:13px;font-weight:600;z-index:1001;max-width:90%;display:none}
 .toast.show{display:block}
-footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
-@media(max-width:950px){.editor-grid{grid-template-columns:1fr}.preview{position:static;max-width:430px;width:100%;margin:auto}}
-@media(max-width:650px){.wrap{width:calc(100% - 22px)}.topbar{min-height:64px}.brand{font-size:20px}.layout{display:block;padding-top:16px}.sidebar{display:none}.heading{display:block}.pill{display:inline-block;margin-top:8px}.panel{padding:14px}.two,.social-grid{grid-template-columns:1fr}.link-row{grid-template-columns:auto 30px 1fr 1fr auto;gap:4px}.link-row input{padding:8px 5px;font-size:10px}.analytics-grid{grid-template-columns:1fr}}
+footer{border-top:1px solid #24243a;padding:26px 0;color:#8f8da9;font-size:11px}
+@media(max-width:950px){.editor-grid{grid-template-columns:1fr}.preview{position:static;max-width:440px;width:100%;margin:auto}}
+@media(max-width:650px){.wrap{width:calc(100% - 24px)}.topbar{min-height:68px}.brand{font-size:22px}.layout{display:block;padding-top:18px}.sidebar{display:none}.heading{display:block}.pill{display:inline-block;margin-top:10px}.panel{padding:16px}.two,.social-grid{grid-template-columns:1fr}.link-row{grid-template-columns:auto 32px 1fr 1fr auto;gap:5px}.link-row input{padding:9px 6px;font-size:11px}.analytics-grid{grid-template-columns:1fr}}
 </style>
 <script>
 (function(){
@@ -155,9 +158,9 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
   <div>
    <div class="eyebrow">Painel do seu universo</div>
    <h1>Monte sua identidade.</h1>
-   <p>Insira seus identificadores e redes sociais estilo Zyo.</p>
+   <p>Personalize cada detalhe com tipografia refinada e ícones 3D.</p>
   </div>
-  <div class="pill"><span style="width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;margin-right:5px"></span> Online</div>
+  <div class="pill"><span style="width:8px;height:8px;background:#4ade80;border-radius:50%;display:inline-block;margin-right:6px"></span> Online</div>
  </div>
 
  <div class="analytics-grid">
@@ -202,40 +205,40 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
      <button type="button" class="choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button>
      <button type="button" class="choice" data-emoji="🍥" data-label="Anime">🍥 Anime</button>
     </div>
-    <label class="field" style="margin-top:12px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
+    <label class="field" style="margin-top:14px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
    </section>
 
    <section class="panel" id="panel-emblems">
     <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 3 emblemas.</p></div><span class="muted">03 / 06</span></div>
     <div class="emblems" id="emblemGrid">
-     <button type="button" class="emblem" data-id="gamer"><span>🎮</span>Gamer</button>
-     <button type="button" class="emblem" data-id="geek"><span>👾</span>Geek</button>
-     <button type="button" class="emblem" data-id="rpg"><span>🐉</span>RPG</button>
-     <button type="button" class="emblem" data-id="anime"><span>🍥</span>Anime</button>
-     <button type="button" class="emblem" data-id="artist"><span>🎨</span>Criador</button>
-     <button type="button" class="emblem" data-id="founder"><span>💎</span>Fundador</button>
+     <button type="button" class="emblem" data-id="gamer"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>Gamer</button>
+     <button type="button" class="emblem" data-id="geek"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>Geek</button>
+     <button type="button" class="emblem" data-id="rpg"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>RPG</button>
+     <button type="button" class="emblem" data-id="anime"><svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>Anime</button>
+     <button type="button" class="emblem" data-id="artist"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>Criador</button>
+     <button type="button" class="emblem" data-id="founder"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Fundador</button>
     </div>
    </section>
 
    <section class="panel" id="panel-socials">
-    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Informe apenas o seu usuário (handle) ou ID.</p></div><span class="muted">04 / 06</span></div>
+    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com ícones SVG 3D.</p></div><span class="muted">04 / 06</span></div>
     <div class="social-grid">
-     <label class="field"><span>🎮 Steam (ID ou URL)</span><input id="soc_steam" placeholder="ex: seu_id"></label>
-     <label class="field"><span>🎵 Spotify (Username)</span><input id="soc_spotify" placeholder="ex: usuario"></label>
-     <label class="field"><span>▶ YouTube (Handle)</span><input id="soc_youtube" placeholder="ex: @canal"></label>
-     <label class="field"><span>💬 Discord (Tag ou ID)</span><input id="soc_discord" placeholder="ex: user#0001"></label>
-     <label class="field"><span>📸 Instagram (@)</span><input id="soc_instagram" placeholder="ex: usuario"></label>
-     <label class="field"><span>✖ X / Twitter (@)</span><input id="soc_twitter" placeholder="ex: usuario"></label>
-     <label class="field"><span>letter Letterboxd (@)</span><input id="soc_letterboxd" placeholder="ex: usuario"></label>
-     <label class="field"><span>💎 OnlyFans (@)</span><input id="soc_onlyfans" placeholder="ex: usuario"></label>
-     <label class="field"><span>🎨 Behance (Username)</span><input id="soc_behance" placeholder="ex: usuario"></label>
-     <label class="field"><span>📌 Pinterest (Username)</span><input id="soc_pinterest" placeholder="ex: usuario"></label>
-     <label class="field"><span>🇹 Tumblr (Blog name)</span><input id="soc_tumblr" placeholder="ex: blog"></label>
+     <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
+     <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
+     <label class="field"><span>▶ YouTube</span><input id="soc_youtube" placeholder="ex: @canal"></label>
+     <label class="field"><span>💬 Discord</span><input id="soc_discord" placeholder="ex: user#0001"></label>
+     <label class="field"><span>📸 Instagram</span><input id="soc_instagram" placeholder="ex: usuario"></label>
+     <label class="field"><span>✖ X / Twitter</span><input id="soc_twitter" placeholder="ex: usuario"></label>
+     <label class="field"><span>🎬 Letterboxd</span><input id="soc_letterboxd" placeholder="ex: usuario"></label>
+     <label class="field"><span>💎 OnlyFans</span><input id="soc_onlyfans" placeholder="ex: usuario"></label>
+     <label class="field"><span>🎨 Behance</span><input id="soc_behance" placeholder="ex: usuario"></label>
+     <label class="field"><span>📌 Pinterest</span><input id="soc_pinterest" placeholder="ex: usuario"></label>
+     <label class="field"><span>🇹 Tumblr</span><input id="soc_tumblr" placeholder="ex: blog"></label>
     </div>
    </section>
 
    <section class="panel" id="panel-appearance">
-    <div class="panel-head"><div><h2>🎨 Cores & Estilo Zyo</h2><p>Personalize fundo, cartão, textos e links.</p></div><span class="muted">05 / 06</span></div>
+    <div class="panel-head"><div><h2>🎨 Cores & Estilo Zyo</h2><p>Personalize fundo, cartão e textos.</p></div><span class="muted">05 / 06</span></div>
     <div class="two">
      <label class="field"><span>Cor de Fundo da Tela</span><input type="color" id="bgColor" value="#080812"></label>
      <label class="field"><span>Cor do Cartão Central</span><input type="color" id="cardBg" value="#11111f"></label>
@@ -316,20 +319,27 @@ function toast(msg) {
 }
 
 const emblemNames = { gamer: 'Gamer', geek: 'Geek', rpg: 'RPG', anime: 'Anime', artist: 'Criador', founder: 'Fundador' };
-const emblemEmojis = { gamer: '🎮', geek: '👾', rpg: '🐉', anime: '🍥', artist: '🎨', founder: '💎' };
+const emblemSvgs = {
+  gamer: '<svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
+  geek: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>',
+  rpg: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
+  anime: '<svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>',
+  artist: '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>',
+  founder: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
+};
 
-const socialMeta = {
-  steam: { name: 'Steam', icon: '🎮', prefix: 'https://steamcommunity.com/id/' },
-  spotify: { name: 'Spotify', icon: '🎵', prefix: 'https://open.spotify.com/user/' },
-  youtube: { name: 'YouTube', icon: '▶', prefix: 'https://youtube.com/' },
-  discord: { name: 'Discord', icon: '💬', prefix: 'https://discord.com/users/' },
-  instagram: { name: 'Instagram', icon: '📸', prefix: 'https://instagram.com/' },
-  twitter: { name: 'X / Twitter', icon: '✖', prefix: 'https://twitter.com/' },
-  letterboxd: { name: 'Letterboxd', icon: '🎬', prefix: 'https://letterboxd.com/' },
-  onlyfans: { name: 'OnlyFans', icon: '💎', prefix: 'https://onlyfans.com/' },
-  behance: { name: 'Behance', icon: '🎨', prefix: 'https://behance.net/' },
-  pinterest: { name: 'Pinterest', icon: '📌', prefix: 'https://pinterest.com/' },
-  tumblr: { name: 'Tumblr', icon: '🇹', prefix: 'https://'.concat('.tumblr.com') } // custom handled
+const socialSvgs = {
+  steam: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-9.9 8.6l4.4 1.9a3.5 3.5 0 0 1 4.7 2.3l2.8 1.2a4 4 0 1 0 .2-2.3l-2.8-1.2a3.5 3.5 0 0 0-2.1-1.7L4.5 9.7A8 8 0 1 1 12 2z"/></svg>',
+  spotify: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.6 14.4a.6.6 0 0 1-.8.2c-2.2-1.3-5-1.6-8.3-.9a.6.6 0 1 1-.3-1.2c3.6-.8 6.7-.5 9.2 1a.6.6 0 0 1 .2.9zm1.2-2.7a.8.8 0 0 1-1 .3c-2.6-1.6-6.5-2-9.5-1.1a.8.8 0 1 1-.5-1.5c3.4-1 7.7-.6 10.7 1.3a.8.8 0 0 1 .3 1zm.1-2.8C14.3 9.4 9 9.2 5.9 10.2a1 1 0 1 1-.6-1.9c3.5-1.1 9.4-.9 13.1 1.3a1 1 0 0 1-.5 1.7z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>',
+  discord: '<svg viewBox="0 0 24 24"><path d="M20.3 4.4a17.4 17.4 0 0 0-4.3-1.3.1.1 0 0 0-.1.1c-.2.4-.4.8-.6 1.2a16 16 0 0 0-5.6 0c-.2-.4-.4-.8-.6-1.2a.1.1 0 0 0-.1-.1 17.4 17.4 0 0 0-4.3 1.3.1.1 0 0 0 0 .1C2 9.2 1.3 13.9 2.5 18.5a.2.2 0 0 0 .1.1 17.7 17.7 0 0 0 5.4 2.7.1.1 0 0 0 .1 0c.4-.6.8-1.2 1.1-1.9a.1.1 0 0 0 0-.1 11.5 11.5 0 0 1-1.7-.8.1.1 0 0 1 0-.2c.1-.1.2-.2.3-.3a12.3 12.3 0 0 0 10.6 0c.1.1.2.2.3.3a.1.1 0 0 1 0 .2 11.5 11.5 0 0 1-1.7.8.1.1 0 0 0 0 .1c.4.7.8 1.3 1.1 1.9a.1.1 0 0 0 .1 0 17.7 17.7 0 0 0 5.4-2.7.2.2 0 0 0 .1-.1c1.3-4.8-.2-9.5-2.7-14.1a.1.1 0 0 0-.1-.1zM8.5 14.5c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2zm7 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.2.1 4.7 1.7 4.8 4.8.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.6 4.7-4.8 4.8-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.2-.1-4.7-1.6-4.8-4.8-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-3.2 1.6-4.7 4.8-4.8 1.2 0 1.6 0 4.8 0zm0 2.2c-3.1 0-3.5 0-4.7.1-2 .1-2.9 1-3 3-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 2 1 2.9 3 3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c2-.1 2.9-1 3-3 .1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-2-1-2.9-3-3-1.2-.1-1.6-.1-4.7-.1zm0 3.6a5.8 5.8 0 1 1 0 11.6 5.8 5.8 0 0 1 0-11.6zm0 9.4a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2zm6.2-10.4a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>',
+  twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
+  letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
+  onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
+  behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1z"/></svg>',
+  pinterest: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.7 19.3c-.1-.8-.2-2 .03-2.9l.7-3.1s-.2-.4-.2-1c0-1 .6-1.7 1.3-1.7.6 0 .9.5.9 1.1 0 .7-.4 1.7-.6 2.6-.2.8.4 1.5 1.2 1.5 1.4 0 2.5-1.5 2.5-3.6 0-1.9-1.4-3.2-3.4-3.2-2.3 0-3.7 1.7-3.7 3.5 0 .7.3 1.4.6 1.8l-.2.8c-.1 0-.3-.1-.4-.2-1.5-.7-2.4-2.8-2.4-4.5 0-3.7 2.7-7.1 7.8-7.1 4.1 0 7.3 2.9 7.3 6.8 0 4.1-2.6 7.4-6.2 7.4-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-1.1 2.5-1.6 3.4A10 10 0 1 0 12 2z"/></svg>',
+  tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
 };
 
 async function initEditor(userId) {
@@ -390,12 +400,9 @@ async function initEditor(userId) {
   linkBgInput.value = currentProfile.link_bg || '#1c1b2d';
   linkTextColorInput.value = currentProfile.link_text_color || '#ffffff';
 
-  // Popular inputs de redes sociais
-  Object.keys(socialMeta).forEach(key => {
+  Object.keys(socialSvgs).forEach(key => {
     const field = document.getElementById('soc_' + key);
-    if (field && currentProfile.socials[key]) {
-      field.value = currentProfile.socials[key];
-    }
+    if (field && currentProfile.socials[key]) field.value = currentProfile.socials[key];
   });
 
   if (currentProfile.handle) {
@@ -409,14 +416,13 @@ async function initEditor(userId) {
     clearTimeout(saveTimer);
     saveTimer = setTimeout(async () => {
       const socialsData = {};
-      Object.keys(socialMeta).forEach(key => {
+      Object.keys(socialSvgs).forEach(key => {
         const val = document.getElementById('soc_' + key)?.value.trim();
         if (val) socialsData[key] = val;
       });
 
       const payload = {
-        id: userId,
-        name: nameInput.value, handle: handleInput.value, role: roleInput.value,
+        id: userId, name: nameInput.value, handle: handleInput.value, role: roleInput.value,
         bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, activity: activityInput.value,
         status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
         bg_color: bgColorInput.value, card_bg: cardBgInput.value, border_color: borderColorInput.value,
@@ -469,11 +475,8 @@ async function initEditor(userId) {
     });
   });
 
-  // Inputs de Redes Sociais
-  Object.keys(socialMeta).forEach(key => {
-    document.getElementById('soc_' + key)?.addEventListener('input', () => {
-      updatePreview(); triggerAutoSave();
-    });
+  Object.keys(socialSvgs).forEach(key => {
+    document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
   });
 
   [bgColorInput, cardBgInput, borderColorInput, accentColorInput, titleColorInput, textColorInput, linkBgInput, linkTextColorInput].forEach(input => {
@@ -550,15 +553,14 @@ async function initEditor(userId) {
     document.getElementById('previewHandle').style.color = accentColorInput.value;
 
     const emPreview = document.getElementById('previewEmblems');
-    emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemEmojis[id] || '✦'} ${emblemNames[id] || id}</span>`).join('');
+    emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemSvgs[id] || ''} ${emblemNames[id] || id}</span>`).join('');
 
-    // Prévia dos ícones sociais
     const socPreview = document.getElementById('previewSocials');
     let socHTML = '';
-    Object.keys(socialMeta).forEach(key => {
+    Object.keys(socialSvgs).forEach(key => {
       const val = document.getElementById('soc_' + key)?.value.trim();
       if (val) {
-        socHTML += `<a class="preview-social-icon" title="${socialMeta[key].name}" href="#" onclick="return false;">${socialMeta[key].icon}</a>`;
+        socHTML += `<a class="preview-social-icon" title="${key}" href="#" onclick="return false;">${socialSvgs[key]}</a>`;
       }
     });
     socPreview.innerHTML = socHTML;
@@ -566,7 +568,7 @@ async function initEditor(userId) {
     const lnPreview = document.getElementById('previewLinks');
     lnPreview.innerHTML = currentProfile.links.map(l => `
       <a class="preview-link" href="${l.url || '#'}" target="_blank" style="background:${linkBgInput.value}; color:${linkTextColorInput.value}; border:1px solid ${borderColorInput.value}">
-        <span style="display:flex;align-items:center;gap:6px"><span>${l.emoji || '↗'}</span><span>${l.title || 'Link'}</span></span>
+        <span style="display:flex;align-items:center;gap:8px"><span>${l.emoji || '↗'}</span><span>${l.title || 'Link'}</span></span>
         <span>↗</span>
       </a>
     `).join('');
@@ -590,14 +592,13 @@ async function initEditor(userId) {
     syncText.textContent = 'Salvando...';
 
     const socialsData = {};
-    Object.keys(socialMeta).forEach(key => {
+    Object.keys(socialSvgs).forEach(key => {
       const val = document.getElementById('soc_' + key)?.value.trim();
       if (val) socialsData[key] = val;
     });
 
     const payload = {
-      id: userId,
-      name: nameInput.value, handle: handleInput.value, role: roleInput.value,
+      id: userId, name: nameInput.value, handle: handleInput.value, role: roleInput.value,
       bio: bioInput.value, avatar_emoji: avatarEmojiInput.value, activity: activityInput.value,
       status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
       bg_color: bgColorInput.value, card_bg: cardBgInput.value, border_color: borderColorInput.value,
@@ -609,7 +610,7 @@ async function initEditor(userId) {
     const err = await window.islySupabase.saveProfile(payload);
     syncDot.classList.remove('saving');
     syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
-    toast(err ? 'Erro ao salvar.' : 'Redes sociais e alterações salvas! ✓');
+    toast(err ? 'Erro ao salvar.' : 'Configurações salvas com sucesso! ✓');
   });
 }
 </script>
