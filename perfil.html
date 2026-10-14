@@ -202,10 +202,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.body.style.backgroundColor = data.bg_color || '#080812';
 
+  // CORREÇÃO DO CURSOR CUSTOMIZADO NA TELA PÚBLICA
   if (data.custom_cursor) {
-    document.body.style.cursor = `url('${data.custom_cursor}'), auto`;
+    document.documentElement.style.cursor = `url('${data.custom_cursor}') 0 0, auto`;
+    document.body.style.cursor = `url('${data.custom_cursor}') 0 0, auto`;
   }
-  
+
   const card = document.getElementById('profileCard');
   if (card) {
     card.style.backgroundColor = data.card_bg || '#11111f';
@@ -243,7 +245,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
   nameEl.innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
   handleEl.textContent = '@' + data.handle;
-  
+
   const roleBadge = document.getElementById('roleBadge');
   if (roleBadge) {
     const r = data.role || 'Membro';
@@ -283,7 +285,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     socialsBar.innerHTML = sHTML;
   }
 
-  // Renderizar Mídias Embed no Perfil
   const embedsBar = document.getElementById('embedsBar');
   if (embedsBar) {
     let eHTML = '';
