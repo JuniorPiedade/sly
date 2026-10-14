@@ -32,7 +32,8 @@ if (typeof supabase === 'undefined') {
 .hero h1{font-size:clamp(32px,5vw,52px);line-height:1.1;letter-spacing:-.04em;margin:0 auto 16px;max-width:800px}
 .hero h1 span{background:linear-gradient(135deg,#c084fc,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero>p{color:var(--muted);font-size:clamp(14px,2vw,16px);max-width:540px;margin:0 auto 34px;line-height:1.6}
-.auth-box{max-width:440px;margin:0 auto;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#141422,#0d0d18);padding:30px;box-shadow:0 20px 50px #0008;text-align:left}
+.auth-box{max-width:440px;margin:0 auto;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#141422,#0d0d18);padding:30px;box-shadow:0 20px 50px #0008;text-align:left;opacity:0;transition:opacity .2s ease} /* Começa invisível para evitar piscar */
+.auth-box.visible{opacity:1}
 .auth-box h3{margin:0 0 6px;font-size:18px;letter-spacing:-.02em}
 .auth-box>p{color:var(--muted);font-size:12px;margin:0 0 20px}
 .field{display:block;margin-bottom:16px}
@@ -75,7 +76,7 @@ if (typeof supabase === 'undefined') {
     <h1>Seu universo, <span>um só link.</span></h1>
     <p>O hub de links definitivo para gamers, criadores e geeks. Monte sua identidade, exiba seu status de jogo e conecte sua comunidade.</p>
 
-    <div class="auth-box">
+    <div class="auth-box" id="authBoxContainer">
       <h3 id="formTitle">Entre na sua conta</h3>
       <p id="formDescription">Acesse seu universo com e-mail e senha.</p>
 
@@ -137,9 +138,10 @@ if (typeof supabase === 'undefined') {
 
 <script src="/js/supabase.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  const authBox = document.getElementById('authBoxContainer');
   const form = document.getElementById('authForm');
   const title = document.getElementById('formTitle');
   const description = document.getElementById('formDescription');
@@ -209,26 +211,24 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   }
 
-  // Verificação inteligente de sessão: se já estiver logado, exibe um atalho amigável sem redirecionar à força
-  (async () => {
-    if (!await waitForModule()) return;
-
+  // Validação imediata de sessão antes de exibir a caixa para evitar qualquer "piscar"
+  if (await waitForModule()) {
     try {
       const user = await window.islySupabase.getUser();
       if (user) {
-        const authBox = document.querySelector('.auth-box');
-        if (authBox) {
-          authBox.innerHTML = `
-            <h3>Sessão Ativa ⚡</h3>
-            <p>Você já está conectado no ISLY.ME.</p>
-            <a href="index.html" class="auth-btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box;">Ir para o meu Painel 🚀</a>
-          `;
-        }
+        authBox.innerHTML = `
+          <h3>Sessão Ativa ⚡</h3>
+          <p>Você já está conectado no ISLY.ME.</p>
+          <a href="index.html" class="auth-btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box;">Ir para o meu Painel 🚀</a>
+        `;
       }
     } catch (error) {
       console.error(error);
     }
-  })();
+  }
+
+  // Revela a caixa de autenticação limpa e sem transições feias
+  authBox.classList.add('visible');
 
   signup.addEventListener('click', () => setMode('signup'));
   login.addEventListener('click', () => setMode('login'));
