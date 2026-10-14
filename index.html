@@ -126,9 +126,16 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .avatar-container{width:82px;height:82px;margin:0 0 2px;position:relative;display:grid;place-items:center}
 .avatar{
   width:72px;height:72px;border-radius:20px;background:linear-gradient(145deg,#8b5cf6,#4c1d95);
-  font-size:29px;box-shadow:0 10px 28px #6d28d933;border:1px solid #ffffff18;overflow:hidden;position:relative;z-index:1;display:grid;place-items:center
+  font-size:29px;box-shadow:0 10px 28px #6d28d933;border:1px solid #ffffff18;overflow:hidden;position:relative;z-index:1;display:grid;place-items:center;
+  padding: 0 !important;
+  margin: 0 !important;
 }
-.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar img { 
+  width: 100% !important; 
+  height: 100% !important; 
+  object-fit: cover !important; 
+  display: block !important;
+}
 .avatar-frame {
   position: absolute;
   inset: -5px;
