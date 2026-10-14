@@ -39,7 +39,6 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .heading p,.muted{font-size:12px;color:var(--muted)}
 .pill{font-size:10px;border:1px solid #86efac40;border-radius:30px;padding:7px 10px;color:#bbf7d0;white-space:nowrap}
 
-/* Analytics Stats Bar */
 .analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
 .stat-card{border:1px solid var(--line);border-radius:14px;background:linear-gradient(135deg,#16162a,#0f0f1c);padding:14px 16px;display:flex;align-items:center;gap:12px}
 .stat-icon{width:38px;height:38px;border-radius:10px;background:#8b5cf618;border:1px solid #8b5cf633;display:grid;place-items:center;font-size:18px;color:#c084fc}
@@ -63,14 +62,11 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .options{display:flex;flex-wrap:wrap;gap:7px}
 .choice{border:1px solid #35334e;background:#ffffff05;border-radius:9px;padding:8px 10px;font-size:11px;cursor:pointer}
 .choice.active{border-color:var(--blue);background:#22d3ee13;color:#cffafe}
-.emblems,.themes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.emblem,.theme{border:1px solid #35334e;border-radius:11px;background:#ffffff04;padding:10px 5px;text-align:center;font-size:11px;cursor:pointer}
-.emblem.selected,.theme.selected{border-color:var(--purple);background:#a855f712}
+.emblems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.emblem{border:1px solid #35334e;border-radius:11px;background:#ffffff04;padding:10px 5px;text-align:center;font-size:11px;cursor:pointer}
+.emblem.selected{border-color:var(--purple);background:#a855f712}
 .emblem span{display:block;font-size:22px;margin-bottom:5px}
-.theme-art{height:58px;border-radius:8px;display:grid;place-items:center;font-size:25px;margin-bottom:7px}
-.cyber{background:linear-gradient(135deg,#301050,#071526);color:#c084fc}
-.sakura{background:linear-gradient(135deg,#511d4b,#171126);color:#f9a8d4}
-.matrix{background:linear-gradient(135deg,#10392d,#101923);color:#86efac}
+
 .link-row{display:grid;grid-template-columns:auto 38px 1fr 1fr auto;gap:6px;margin:8px 0;align-items:center}
 .link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:9px;padding:9px;background:#0a0a14;color:white;font-size:11px}
 .reorder-btns{display:flex;flex-direction:column;gap:2px}
@@ -78,17 +74,14 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .reorder-btn:disabled{opacity:0.2;cursor:not-allowed}
 .remove{border:1px solid #52313f;border-radius:8px;background:#ffffff05;color:#fda4af;padding:8px 10px;cursor:pointer}
 .add{width:100%;border:1px dashed #514174;border-radius:9px;background:#8b5cf609;color:#d8b4fe;padding:10px;font-size:11px;font-weight:700;cursor:pointer}
+
 .preview{position:sticky;top:15px}
 .preview-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:12px}
 .profile-card{overflow:hidden;text-align:center;border:1px solid #49406c;border-radius:20px;background:linear-gradient(155deg,#19172b,#0e0e1b 75%);--accent:#c084fc}
-.profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}
-.profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}
 .cover{height:90px;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 30%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}
-.theme-sakura .cover{background:linear-gradient(120deg,#461b43,#1c1631)}
-.theme-matrix .cover{background:linear-gradient(120deg,#10392d,#101923)}
 .avatar{width:78px;height:78px;margin:-37px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:23px;background:linear-gradient(135deg,#9333ea,#2563eb);font-size:30px;overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.profile-card h3{font-size:20px;margin:6px 0 0}
+.profile-card h3{font-size:20px;margin:6px 0 0;color:#fff}
 .handle{font-size:11px;color:var(--accent)}
 .role-badge{display:inline-block;margin:7px;padding:3px 10px;border-radius:20px;background:#8b5cf620;border:1px solid #8b5cf650;color:#c084fc;font-size:10px}
 .bio-preview{font-size:11px;color:#aaa7c7;margin:9px 16px;overflow-wrap:anywhere}
@@ -157,7 +150,7 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
  <button type="button" class="navbtn active" data-sec="identity">◈ Identidade</button>
  <button type="button" class="navbtn" data-sec="status">◉ Status vivo</button>
  <button type="button" class="navbtn" data-sec="emblems">✦ Emblemas</button>
- <button type="button" class="navbtn" data-sec="themes">◐ Temas & Cores</button>
+ <button type="button" class="navbtn" data-sec="appearance">🎨 Cores & Estilo</button>
  <button type="button" class="navbtn" data-sec="links">↗ Meus links</button>
  <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
 </aside>
@@ -167,12 +160,11 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
   <div>
    <div class="eyebrow">Painel do seu universo</div>
    <h1>Monte sua identidade.</h1>
-   <p>Deixe seu perfil com a sua cara.</p>
+   <p>Personalize cada detalhe do seu perfil estilo Zyo.</p>
   </div>
   <div class="pill"><span style="width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;margin-right:5px"></span> Online</div>
  </div>
 
- <!-- CARDS DE ANALYTICS (MÉTRICAS) -->
  <div class="analytics-grid">
   <div class="stat-card">
    <div class="stat-icon">👁️</div>
@@ -230,18 +222,24 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
     </div>
    </section>
 
-   <section class="panel" id="panel-themes">
-    <div class="panel-head"><div><h2>◐ Temas & Cores</h2><p>Estilo base e cor customizada.</p></div><span class="muted">04 / 05</span></div>
-    <div class="themes" id="themeGrid" style="margin-bottom:15px">
-     <button type="button" class="theme selected" data-theme="cyber"><div class="theme-art cyber">⌬</div>Cyber</button>
-     <button type="button" class="theme" data-theme="sakura"><div class="theme-art sakura">✿</div>Sakura</button>
-     <button type="button" class="theme" data-theme="matrix"><div class="theme-art matrix">⌘</div>Matrix</button>
+   <section class="panel" id="panel-appearance">
+    <div class="panel-head"><div><h2>🎨 Cores & Estilo Zyo</h2><p>Personalize fundo, cartão, textos e links.</p></div><span class="muted">04 / 05</span></div>
+    <div class="two">
+     <label class="field"><span>Cor de Fundo da Tela</span><input type="color" id="bgColor" value="#080812"></label>
+     <label class="field"><span>Cor do Cartão Central</span><input type="color" id="cardBg" value="#11111f"></label>
     </div>
-    <label class="field">
-      <span>Cor de destaque personalizada (Accent Color)</span>
-      <input type="color" id="accentColor" value="#c084fc">
-      <small>Deixe sua marca com uma cor de acento exclusiva.</small>
-    </label>
+    <div class="two">
+     <label class="field"><span>Cor das Bordas</span><input type="color" id="borderColor" value="#a855f7"></label>
+     <label class="field"><span>Cor de Destaque (Accent)</span><input type="color" id="accentColor" value="#c084fc"></label>
+    </div>
+    <div class="two">
+     <label class="field"><span>Cor do Título / Nome</span><input type="color" id="titleColor" value="#ffffff"></label>
+     <label class="field"><span>Cor dos Demais Textos</span><input type="color" id="textColor" value="#f6f4ff"></label>
+    </div>
+    <div class="two">
+     <label class="field"><span>Cor de Fundo dos Links</span><input type="color" id="linkBg" value="#1c1b2d"></label>
+     <label class="field"><span>Cor do Texto dos Links</span><input type="color" id="linkTextColor" value="#ffffff"></label>
+    </div>
    </section>
 
    <section class="panel" id="panel-links">
@@ -327,8 +325,14 @@ async function initEditor(userId) {
       name: 'Novo Usuário',
       handle: 'user_' + userId.slice(0, 6),
       role: 'Membro',
-      theme: 'cyber',
+      bg_color: '#080812',
+      card_bg: '#11111f',
+      border_color: '#a855f7',
       accent_color: '#c084fc',
+      title_color: '#ffffff',
+      text_color: '#f6f4ff',
+      link_bg: '#1c1b2d',
+      link_text_color: '#ffffff',
       avatar_emoji: '👾',
       bio: '',
       activity: '',
@@ -345,7 +349,6 @@ async function initEditor(userId) {
   if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
   if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
 
-  // Exibe valores de Analytics
   document.getElementById('statViews').textContent = currentProfile.views_count || 0;
   document.getElementById('statClicks').textContent = currentProfile.clicks_count || 0;
 
@@ -357,7 +360,15 @@ async function initEditor(userId) {
   const avatarEmojiInput = document.getElementById('avatarEmoji');
   const activityInput = document.getElementById('activity');
   const shareUrlInput = document.getElementById('shareUrl');
+
+  const bgColorInput = document.getElementById('bgColor');
+  const cardBgInput = document.getElementById('cardBg');
+  const borderColorInput = document.getElementById('borderColor');
   const accentColorInput = document.getElementById('accentColor');
+  const titleColorInput = document.getElementById('titleColor');
+  const textColorInput = document.getElementById('textColor');
+  const linkBgInput = document.getElementById('linkBg');
+  const linkTextColorInput = document.getElementById('linkTextColor');
 
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
@@ -369,13 +380,20 @@ async function initEditor(userId) {
   bioCount.textContent = (currentProfile.bio || '').length;
   avatarEmojiInput.value = currentProfile.avatar_emoji || '👾';
   activityInput.value = currentProfile.activity || '';
+
+  bgColorInput.value = currentProfile.bg_color || '#080812';
+  cardBgInput.value = currentProfile.card_bg || '#11111f';
+  borderColorInput.value = currentProfile.border_color || '#a855f7';
   accentColorInput.value = currentProfile.accent_color || '#c084fc';
+  titleColorInput.value = currentProfile.title_color || '#ffffff';
+  textColorInput.value = currentProfile.text_color || '#f6f4ff';
+  linkBgInput.value = currentProfile.link_bg || '#1c1b2d';
+  linkTextColorInput.value = currentProfile.link_text_color || '#ffffff';
 
   if (currentProfile.handle) {
     shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentProfile.handle}`;
   }
 
-  // --- AUTO-SAVE COM DEBOUNCE ---
   let saveTimer = null;
   function triggerAutoSave() {
     syncDot.classList.add('saving');
@@ -392,13 +410,16 @@ async function initEditor(userId) {
         activity: activityInput.value,
         status_emoji: currentProfile.status_emoji,
         status_label: currentProfile.status_label,
-        theme: currentProfile.theme,
+        bg_color: bgColorInput.value,
+        card_bg: cardBgInput.value,
+        border_color: borderColorInput.value,
         accent_color: accentColorInput.value,
+        title_color: titleColorInput.value,
+        text_color: textColorInput.value,
+        link_bg: linkBgInput.value,
+        link_text_color: linkTextColorInput.value,
         emblems: currentProfile.emblems,
-        links: currentProfile.links,
-        avatar_url: currentProfile.avatar_url || null,
-        banner_url: currentProfile.banner_url || null,
-        wallpaper_url: currentProfile.wallpaper_url || null
+        links: currentProfile.links
       };
 
       const err = await window.islySupabase.saveProfile(payload);
@@ -411,7 +432,6 @@ async function initEditor(userId) {
     }, 1200);
   }
 
-  // Navegação lateral
   document.querySelectorAll('.sidebar .navbtn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sidebar .navbtn').forEach(b => b.classList.remove('active'));
@@ -422,7 +442,6 @@ async function initEditor(userId) {
     });
   });
 
-  // Status vivo
   document.querySelectorAll('#statusOptions .choice').forEach(btn => {
     if (btn.getAttribute('data-label') === currentProfile.status_label) {
       document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
@@ -438,7 +457,6 @@ async function initEditor(userId) {
     });
   });
 
-  // Emblemas
   document.querySelectorAll('#emblemGrid .emblem').forEach(el => {
     const id = el.getAttribute('data-id');
     if (currentProfile.emblems.includes(id)) el.classList.add('selected');
@@ -460,26 +478,13 @@ async function initEditor(userId) {
     });
   });
 
-  // Temas
-  document.querySelectorAll('#themeGrid .theme').forEach(el => {
-    const th = el.getAttribute('data-theme');
-    if (currentProfile.theme === th) el.classList.add('selected');
-
-    el.addEventListener('click', () => {
-      document.querySelectorAll('#themeGrid .theme').forEach(t => t.classList.remove('selected'));
-      el.classList.add('selected');
-      currentProfile.theme = th;
+  [bgColorInput, cardBgInput, borderColorInput, accentColorInput, titleColorInput, textColorInput, linkBgInput, linkTextColorInput].forEach(input => {
+    input.addEventListener('input', () => {
       updatePreview();
       triggerAutoSave();
     });
   });
 
-  accentColorInput.addEventListener('input', () => {
-    updatePreview();
-    triggerAutoSave();
-  });
-
-  // Reordenação de Links
   function moveLink(fromIdx, toIdx) {
     if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
     const item = currentProfile.links.splice(fromIdx, 1)[0];
@@ -557,18 +562,20 @@ async function initEditor(userId) {
     else roleBadge.innerHTML = '👾 Membro';
 
     const card = document.getElementById('profileCard');
-    card.className = 'profile-card';
-    if (currentProfile.theme === 'sakura') card.classList.add('theme-sakura');
-    if (currentProfile.theme === 'matrix') card.classList.add('theme-matrix');
+    card.style.background = cardBgInput.value;
+    card.style.borderColor = borderColorInput.value;
+    document.body.style.background = bgColorInput.value;
 
-    card.style.setProperty('--accent', accentColorInput.value);
+    document.getElementById('previewName').style.color = titleColorInput.value;
+    document.getElementById('previewBio').style.color = textColorInput.value;
+    document.getElementById('previewHandle').style.color = accentColorInput.value;
 
     const emPreview = document.getElementById('previewEmblems');
     emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemEmojis[id] || '✦'} ${emblemNames[id] || id}</span>`).join('');
 
     const lnPreview = document.getElementById('previewLinks');
     lnPreview.innerHTML = currentProfile.links.map(l => `
-      <a class="preview-link" href="${l.url || '#'}" target="_blank">
+      <a class="preview-link" href="${l.url || '#'}" target="_blank" style="background:${linkBgInput.value}; color:${linkTextColorInput.value}; border-color:${borderColorInput.value}">
         <span style="display:flex;align-items:center;gap:6px"><span>${l.emoji || '↗'}</span><span>${l.title || 'Link'}</span></span>
         <span>↗</span>
       </a>
@@ -603,13 +610,16 @@ async function initEditor(userId) {
       activity: activityInput.value,
       status_emoji: currentProfile.status_emoji,
       status_label: currentProfile.status_label,
-      theme: currentProfile.theme,
+      bg_color: bgColorInput.value,
+      card_bg: cardBgInput.value,
+      border_color: borderColorInput.value,
       accent_color: accentColorInput.value,
+      title_color: titleColorInput.value,
+      text_color: textColorInput.value,
+      link_bg: linkBgInput.value,
+      link_text_color: linkTextColorInput.value,
       emblems: currentProfile.emblems,
-      links: currentProfile.links,
-      avatar_url: currentProfile.avatar_url || null,
-      banner_url: currentProfile.banner_url || null,
-      wallpaper_url: currentProfile.wallpaper_url || null
+      links: currentProfile.links
     };
 
     const err = await window.islySupabase.saveProfile(payload);
@@ -619,7 +629,7 @@ async function initEditor(userId) {
       toast('Erro ao salvar: ' + err);
     } else {
       syncText.textContent = 'Sincronizado';
-      toast('Todas as alterações foram salvas na nuvem! ✓');
+      toast('Cores e perfil salvos na nuvem! ✓');
     }
   });
 }
