@@ -15,22 +15,26 @@
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6}
-.container{width:100%;max-width:440px}
+.container{width:100%;max-width:640px}
 
+/* Estilo do Card Horizontal Único (Inspirado no Zyo.se) */
 .profile-card{
   overflow:hidden;
-  border-radius:24px;
-  width: 100%;
-  max-width: 580px; /* Alargado para o formato horizontal retangular */
-  margin: 0 auto;
+  border-radius:28px;
+  width:100%;
+  max-width:640px;
+  margin:0 auto;
   box-shadow:0 24px 70px rgba(0,0,0,0.6);
-  text-align:center;
+  padding:36px;
+  text-align:left;
   transform-style:preserve-3d;
   perspective:1000px;
   transition:transform 0.1s ease-out;
-  padding:32px 36px 28px;
   background-size:cover;
   background-position:center;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
 }
 
 /* Estilo Opaco */
@@ -47,31 +51,56 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
-.avatar{width:88px;height:88px;margin:0 auto 14px;position:relative;display:grid;place-items:center;border:3px solid rgba(255,255,255,0.15);border-radius:22px;background:linear-gradient(135deg,#9333ea,#2563eb);box-shadow:0 10px 25px rgba(147,51,234,0.45);font-size:36px;overflow:hidden}
+/* Cabeçalho Horizontal do Card (Foto ao lado do Nome/Handle) */
+.profile-header-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.avatar{
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 3px solid rgba(255,255,255,0.15);
+  border-radius: 22px;
+  background: linear-gradient(135deg,#9333ea,#2563eb);
+  font-size: 32px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(147,51,234,0.4);
+}
 .avatar img{width:100%;height:100%;object-fit:cover}
 
-.profile-card h3{margin:8px 0 2px;font-size:22px;font-weight:800;letter-spacing:-0.01em}
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+.profile-card h3{margin:0 0 2px;font-size:24px;font-weight:800;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .verified{color:var(--blue);font-size:13px}
-.handle{font-size:13px;font-weight:600;letter-spacing:0.02em}
-.role-badge{display:inline-block;margin:8px 0 6px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc}
-.bio-preview{font-size:13px;margin:10px 0 14px;overflow-wrap:anywhere;line-height:1.5}
-.live-status{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.08);color:#cffafe;border-radius:999px;font-size:11px;font-weight:600;margin:0 auto 14px;max-width:90%}
-.preview-emblems{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:0 0 14px}
+.handle{font-size:13px;font-weight:600;letter-spacing:0.02em;margin-bottom:4px}
+.role-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc;width:fit-content}
+
+.bio-preview{font-size:13px;margin:4px 0 0;overflow-wrap:anywhere;line-height:1.5}
+.live-status{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.08);color:#cffafe;border-radius:999px;font-size:11px;font-weight:600;margin:4px 0 0;width:fit-content}
+.preview-emblems{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .preview-emblems span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid rgba(168,85,247,0.25);background:rgba(168,85,247,0.08);border-radius:99px;font-size:11px;font-weight:600;color:#ddd6fe}
 .preview-emblems svg{width:14px;height:14px;fill:currentColor}
 
-.public-socials{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;padding:0 0 14px}
-.social-icon-btn{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);text-decoration:none;transition:.2s}
-.social-icon-btn svg{width:18px;height:18px;fill:currentColor}
+.public-socials{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.social-icon-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);text-decoration:none;transition:.2s}
+.social-icon-btn svg{width:16px;height:16px;fill:currentColor}
 .social-icon-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,0.08)}
 
 /* Container de Embeds */
-.embeds-container{padding:0 0 14px;display:flex;flex-direction:column;gap:12px}
+.embeds-container{display:flex;flex-direction:column;gap:12px;margin-top:4px}
 .embed-wrapper{width:100%;border-radius:14px;overflow:hidden;background:#00000033;line-height:0}
 .embed-wrapper iframe{width:100%;border:0;display:block}
 
-.public-links{padding:0 0 4px}
-.public-link{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;padding:13px 15px;border-radius:12px;font-size:12px;font-weight:700;text-align:left;text-decoration:none;transition:all .25s ease;cursor:pointer}
+.public-links{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.public-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-radius:14px;font-size:13px;font-weight:700;text-align:left;text-decoration:none;transition:all .25s ease;cursor:pointer}
 .public-link:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.4)}
 .public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
 .public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
@@ -83,7 +112,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .views-counter{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;font-size:12px;color:var(--muted)}
 .views-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px);color:#c9c5e2;font-weight:600}
 
-.profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center}
+.profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
 .animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -101,16 +130,21 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 <body>
 <div class="container">
   <div class="profile-card card-style-opaque" id="profileCard">
-    <div class="avatar animate-item delay-1" id="avatar">👾</div>
-    <h3 class="animate-item delay-2" id="name">Carregando... <span class="verified">✦</span></h3>
-    <div class="handle animate-item delay-2" id="handle">@...</div>
-    <div class="role-badge animate-item delay-3" id="roleBadge">💎 Fundador</div>
-    <p class="bio-preview animate-item delay-3" id="bio"></p>
-    <div class="live-status animate-item delay-4" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
-    <div class="preview-emblems animate-item delay-4" id="emblems"></div>
-    <div class="public-socials animate-item delay-4" id="socialsBar"></div>
-    <div class="embeds-container animate-item delay-5" id="embedsBar"></div>
-    <div class="public-links animate-item delay-5" id="links"></div>
+    <div class="profile-header-row animate-item delay-1">
+      <div class="avatar" id="avatar">👾</div>
+      <div class="profile-info">
+        <h3 id="name">Carregando... <span class="verified">✦</span></h3>
+        <div class="handle" id="handle">@...</div>
+        <div class="role-badge" id="roleBadge">💎 Fundador</div>
+      </div>
+    </div>
+    <p class="bio-preview animate-item delay-2" id="bio"></p>
+    <div class="live-status animate-item delay-3" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
+    <div class="preview-emblems animate-item delay-3" id="emblems"></div>
+    <div class="public-socials animate-item delay-3" id="socialsBar"></div>
+    <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
+    <div class="public-links animate-item delay-4" id="links"></div>
+    <div class="profile-foot animate-item delay-5"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
   </div>
 
   <div class="views-counter animate-item delay-6">
@@ -120,8 +154,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
       <span>visualizações</span>
     </div>
   </div>
-
-  <div class="profile-foot animate-item delay-7"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
 </div>
 
 <script src="js/supabase.js"></script>
@@ -145,7 +177,7 @@ const socialSvgs = {
   spotify: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.6 14.4a.6.6 0 0 1-.8.2c-2.2-1.3-5-1.6-8.3-.9a.6.6 0 1 1-.3-1.2c3.6-.8 6.7-.5 9.2 1a.6.6 0 0 1 .2.9zm1.2-2.7a.8.8 0 0 1-1 .3c-2.6-1.6-6.5-2-9.5-1.1a.8.8 0 1 1-.5-1.5c3.4-1 7.7-.6 10.7 1.3a.8.8 0 0 1 .3 1zm.1-2.8C14.3 9.4 9 9.2 5.9 10.2a1 1 0 1 1-.6-1.9c3.5-1.1 9.4-.9 13.1 1.3a1 1 0 0 1-.5 1.7z"/></svg>',
   youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>',
   discord: '<svg viewBox="0 0 24 24"><path d="M20.3 4.4a17.4 17.4 0 0 0-4.3-1.3.1.1 0 0 0-.1.1c-.2.4-.4.8-.6 1.2a16 16 0 0 0-5.6 0c-.2-.4-.4-.8-.6-1.2a.1.1 0 0 0-.1-.1 17.4 17.4 0 0 0-4.3 1.3.1.1 0 0 0 0 .1C2 9.2 1.3 13.9 2.5 18.5a.2.2 0 0 0 .1.1 17.7 17.7 0 0 0 5.4 2.7.1.1 0 0 0 .1 0c.4-.6.8-1.2 1.1-1.9a.1.1 0 0 0 0-.1 11.5 11.5 0 0 1-1.7-.8.1.1 0 0 1 0-.2c.1-.1.2-.2.3-.3a12.3 12.3 0 0 0 10.6 0c.1.1.2.2.3.3a.1.1 0 0 1 0 .2 11.5 11.5 0 0 1-1.7.8.1.1 0 0 0 0 .1c.4.7.8 1.3 1.1 1.9a.1.1 0 0 0 .1 0 17.7 17.7 0 0 0 5.4-2.7.2.2 0 0 0 .1-.1c1.3-4.8-.2-9.5-2.7-14.1a.1.1 0 0 0-.1-.1zM8.5 14.5c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2zm7 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2z"/></svg>',
-  instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.2.1 4.7 1.7 4.8 4.8.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.6 4.7-4.8 4.8-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.2-.1-4.7-1.6-4.8-4.8-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-3.2 1.6-4.7 4.8-4.8 1.2 0 1.6 0 4.8 0zm0 2.2c-3.1 0-3.5 0-4.7.1-2 .1-2.9 1-3 3-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 2 1 2.9 3 3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c2-.1 2.9-1 3-3 .1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-2-1-2.9-3-3-1.2-.1-1.6-.1-4.7-.1zm0 3.6a5.8 5.8 0 1 1 0 11.6 5.8 5.8 0 0 1 0-11.6zm0 9.4a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2zm6.2-10.4a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.2.1 4.7 1.7 4.8 4.8.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.6 4.7-4.8 4.8-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.2-.1-4.7-1.6-4.8-4.8-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-3.2 1.6-4.7 4.8-4.8 1.2 0 1.6 0 4.8 0zm0 2.2c-3.1 0-3.5 0-4.7.1-2 .1-2.9 1-3 3-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 2 1 2.9 3 3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c2-.1 2.9-1 3-3 .1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-2-1-2.9-3-3-1.2-.1-1.6-.1-4.7-.1zm0 3.6a5.8 5.8 0 1 1 0 11.6 5.8 5.8 0 0 1 0-11.6zm0 9.4a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2zm6.2-10.4a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0 z"/></svg>',
   twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
   letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
   onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
@@ -221,7 +253,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const card = document.getElementById('profileCard');
   if (card) {
-    // Configura o estilo do Card (Opaco ou Vidro 3D)
     const cardStyleType = data.card_style || 'opaque';
     card.classList.remove('card-style-opaque', 'card-style-glass');
     
@@ -233,7 +264,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.style.backgroundColor = data.card_bg || '#11111f';
     }
 
-    // Se houver wallpaper enviado pelo usuário, aplica na imagem de fundo do card
     if (data.wallpaper_url) {
       card.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${data.wallpaper_url}')`;
     }
@@ -248,7 +278,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const yc = rect.height / 2;
       const dx = (x - xc) / xc;
       const dy = (y - yc) / yc;
-      card.style.transform = `perspective(1000px) rotateY(${dx * 12}deg) rotateX(${-dy * 12}deg) translateY(-4px)`;
+      card.style.transform = `perspective(1000px) rotateY(${dx * 10}deg) rotateX(${-dy * 10}deg) translateY(-4px)`;
     });
     card.addEventListener('mouseleave', () => {
       card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
