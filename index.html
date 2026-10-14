@@ -47,10 +47,10 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .field small,.hint{display:block;color:#8582a5;font-size:10px;line-height:1.7;margin-top:6px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .options{display:flex;flex-wrap:wrap;gap:7px}
-.choice{border:1px solid #35334e;background:#ffffff05;border-radius:9px;padding:8px 10px;font-size:11px}
+.choice{border:1px solid #35334e;background:#ffffff05;border-radius:9px;padding:8px 10px;font-size:11px;cursor:pointer}
 .choice.active{border-color:var(--blue);background:#22d3ee13;color:#cffafe}
 .emblems,.themes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.emblem,.theme{border:1px solid #35334e;border-radius:11px;background:#ffffff04;padding:10px 5px;text-align:center;font-size:11px}
+.emblem,.theme{border:1px solid #35334e;border-radius:11px;background:#ffffff04;padding:10px 5px;text-align:center;font-size:11px;cursor:pointer}
 .emblem.selected,.theme.selected{border-color:var(--purple);background:#a855f712}
 .emblem span{display:block;font-size:22px;margin-bottom:5px}
 .theme-art{height:58px;border-radius:8px;display:grid;place-items:center;font-size:25px;margin-bottom:7px}
@@ -59,14 +59,14 @@ h1{font-size:clamp(27px,4vw,38px);line-height:1.12;letter-spacing:-1.5px;margin:
 .matrix{background:linear-gradient(135deg,#10392d,#101923);color:#86efac}
 .link-row{display:grid;grid-template-columns:.8fr 1.2fr auto;gap:6px;margin:8px 0}
 .link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:9px;padding:9px;background:#0a0a14;color:white;font-size:11px}
-.remove{border:1px solid #52313f;border-radius:8px;background:#ffffff05;color:#fda4af;padding:0 10px}
-.add{width:100%;border:1px dashed #514174;border-radius:9px;background:#8b5cf609;color:#d8b4fe;padding:10px;font-size:11px;font-weight:700}
+.remove{border:1px solid #52313f;border-radius:8px;background:#ffffff05;color:#fda4af;padding:0 10px;cursor:pointer}
+.add{width:100%;border:1px dashed #514174;border-radius:9px;background:#8b5cf609;color:#d8b4fe;padding:10px;font-size:11px;font-weight:700;cursor:pointer}
 .preview{position:sticky;top:15px}
 .preview-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:12px}
 .profile-card{overflow:hidden;text-align:center;border:1px solid #49406c;border-radius:20px;background:linear-gradient(155deg,#19172b,#0e0e1b 75%);--accent:#c084fc}
 .profile-card.theme-sakura{--accent:#f9a8d4;border-color:#734467}
 .profile-card.theme-matrix{--accent:#86efac;border-color:#356b55}
-.cover{height:90px;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 30%),linear-gradient(120deg,#25104a,#13152d)}
+.cover{height:90px;background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 30%),linear-gradient(120deg,#25104a,#13152d);background-size:cover;background-position:center}
 .theme-sakura .cover{background:linear-gradient(120deg,#461b43,#1c1631)}
 .theme-matrix .cover{background:linear-gradient(120deg,#10392d,#101923)}
 .avatar{width:78px;height:78px;margin:-37px auto 10px;position:relative;display:grid;place-items:center;border:3px solid #151426;border-radius:23px;background:linear-gradient(135deg,#9333ea,#2563eb);font-size:30px;overflow:hidden}
@@ -132,7 +132,6 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
   <h2 id="lockTitle">Verificando acesso</h2>
   <p id="lockText">Estamos verificando sua sessão segura do ISLY.ME.</p>
   
-  <!-- CAMPO DE EMERGÊNCIA: Se a sessão falhar, o utilizador pode entrar direto aqui sem ficar preso -->
   <div id="emergencyLoginBox" style="margin-top:15px;display:none">
     <p style="font-size:11px;color:#c084fc;margin-bottom:8px">Insira seu e-mail de Fundador para acessar:</p>
     <input type="email" id="emergencyEmail" placeholder="seu.email@fundador.com" style="width:100%;border:1px solid #35334e;border-radius:10px;padding:10px;background:#0a0a14;color:white;font-size:12px;margin-bottom:8px;outline:none">
@@ -174,7 +173,6 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
   <div class="pill"><span style="width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;margin-right:5px"></span> Online</div>
  </div>
 
- <!-- SECÇÕES DO PAINEL -->
  <div class="editor-grid">
   <div>
    <section class="panel" id="panel-identity">
@@ -231,7 +229,6 @@ footer{border-top:1px solid #24243a;padding:22px 0;color:#8f8da9;font-size:10px}
    </section>
   </div>
 
-  <!-- PRÉVIA -->
   <div class="preview">
    <div class="preview-label"><strong>Prévia ao vivo</strong></div>
    <div class="profile-card" id="profileCard">
@@ -272,7 +269,6 @@ window.addEventListener('isly-sdk-ready', async () => {
     return;
   }
 
-  // Tenta obter o utilizador autenticado
   let user = null;
   try {
     user = await window.islySupabase.getUser();
@@ -281,32 +277,29 @@ window.addEventListener('isly-sdk-ready', async () => {
   }
 
   if (user) {
-    // Utilizador autenticado com sucesso! Remove imediatamente o ecrã de bloqueio
     if (lock) lock.classList.add('hidden');
     if (appRoot) {
       appRoot.style.display = 'block';
       appRoot.setAttribute('aria-hidden', 'false');
     }
+    
+    // Carrega dados do perfil e ativa editor
+    loadEditor(user.id);
   } else {
-    // Se não encontrou utilizador, mostra o formulário de emergência para inserção de e-mail e botão de login
     $('#lockTitle').textContent = "Acesso Restrito";
     $('#lockText').textContent = "Sua sessão expirou ou você não está logado.";
     $('#emergencyLoginBox').style.display = 'block';
     $('#loginLink').style.display = 'inline-flex';
   }
 
-  // Ação do botão de emergência caso fique preso na tela de restrito
   $('#emergencyBtn')?.addEventListener('click', async () => {
     const email = $('#emergencyEmail').value;
-    if (!email) {
-      alert('Insira seu e-mail.');
-      return;
-    }
+    if (!email) { alert('Insira seu e-mail.'); return; }
     const btn = $('#emergencyBtn');
     btn.textContent = 'Enviando...';
-    const err = await window.islySupabase.signIn(email);
-    if (err) {
-      alert('Erro: ' + err);
+    const err = await window.islySupabase.sendPasswordReset(email);
+    if (err.error) {
+      alert('Erro: ' + err.error);
       btn.textContent = 'Enviar Magic Link ⚡';
     } else {
       alert('Link enviado! Verifique seu e-mail.');
@@ -314,12 +307,62 @@ window.addEventListener('isly-sdk-ready', async () => {
     }
   });
 
-  // Evento de Logout
   $('#authBtn')?.addEventListener('click', async () => {
-    await window.islySupabase.signOut();
+    const sb = window.islySupabase;
+    // logout simples
+    await sb.signUp ? location.href='landing.html' : null;
     window.location.href = 'landing.html';
   });
 });
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = msg;
+  t.style.display = 'block';
+  t.classList.add('show');
+  setTimeout(() => { t.classList.remove('show'); t.style.display = 'none'; }, 3000);
+}
+
+async function loadEditor(userId) {
+  let profile = await window.islySupabase.getProfileById(userId);
+  if (!profile) {
+    profile = { id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0,6), role: 'Membro', theme: 'cyber' };
+  }
+
+  // Preenche inputs
+  document.getElementById('name').value = profile.name || '';
+  document.getElementById('handle').value = profile.handle || '';
+  document.getElementById('role').value = profile.role || 'Membro';
+  document.getElementById('bio').value = profile.bio || '';
+  document.getElementById('avatarEmoji').value = profile.avatar_emoji || '👾';
+  document.getElementById('activity').value = profile.activity || '';
+
+  // Compartilhar URL
+  if (profile.handle) {
+    document.getElementById('shareUrl').value = `${window.location.origin}/perfil.html?u=${profile.handle}`;
+  }
+
+  // Evento de salvamento
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    const payload = {
+      id: userId,
+      name: document.getElementById('name').value,
+      handle: document.getElementById('handle').value,
+      bio: document.getElementById('bio').value,
+      avatar_emoji: document.getElementById('avatarEmoji').value,
+      activity: document.getElementById('activity').value,
+      role: document.getElementById('role').value
+    };
+
+    const err = await window.islySupabase.saveProfile(payload);
+    if (err) {
+      toast('Erro ao salvar: ' + err);
+    } else {
+      toast('Alterações salvas com sucesso! ✓');
+    }
+  });
+}
 </script>
 </body>
 </html>
