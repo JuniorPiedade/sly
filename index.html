@@ -510,10 +510,8 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
      <button type="button" class="choice" data-emoji="🎵" data-label="Escutando música">🎵 Escutando música</button>
     </div>
 
-    <!-- Container para status customizados adicionados pelo user -->
     <div id="customStatusContainer" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;"></div>
 
-    <!-- Adicionar Novo Status -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid #35334e; padding:12px; border-radius:12px; margin-bottom:14px;">
      <span style="font-size:12px; color:#c7c4dd; margin-bottom:6px; display:block; font-weight:700;">＋ Criar novo status personalizado</span>
      <div style="display:flex; gap:8px;">
@@ -858,19 +856,24 @@ async function initEditor(userId) {
  nameInput.value = currentProfile.name || '';
  handleInput.value = currentProfile.handle || '';
 
+ // Aviso sobre a alteração do handle
+ const parentField = handleInput.closest('.field');
+ if (parentField && !document.getElementById('handleWarning')) {
+  const warning = document.createElement('small');
+  warning.id = 'handleWarning';
+  warning.style.color = '#fcd9a1';
+  warning.style.marginTop = '6px';
+  warning.innerHTML = '⚠️ O identificador (@) só pode ser alterado uma única vez. Escolha com cuidado.';
+  parentField.appendChild(warning);
+ }
+
  if (currentProfile.handle_changed) {
   handleInput.disabled = true;
   handleInput.style.opacity = '0.6';
   handleInput.style.cursor = 'not-allowed';
-  
-  const parentField = handleInput.closest('.field');
-  if (parentField && !document.getElementById('handleWarning')) {
-   const warning = document.createElement('small');
-   warning.id = 'handleWarning';
-   warning.style.color = '#f43f5e';
-   warning.style.marginTop = '6px';
-   warning.innerHTML = '⚠️ O seu @ já foi alterado uma vez. Para trocar novamente, abra um ticket no nosso canal do <a href="https://discord.gg/SEU_LINK" target="_blank" style="color:var(--purple); text-decoration:underline;">Discord</a>.';
-   parentField.appendChild(warning);
+  if (document.getElementById('handleWarning')) {
+   document.getElementById('handleWarning').style.color = '#f43f5e';
+   document.getElementById('handleWarning').innerHTML = '⚠️ O seu @ já foi alterado uma vez e está bloqueado.';
   }
  }
 
@@ -1042,6 +1045,12 @@ async function initEditor(userId) {
     if (val) socialsData[key] = val;
    });
 
+   // Validação de segurança da tag Fundador para contas de teste/comuns
+   let finalEmblems = [...currentProfile.emblems];
+   if (finalEmblems.includes('fundador') && user.email !== 'SEU_EMAIL_DE_ADMIN_AQUI@gmail.com') {
+     finalEmblems = finalEmblems.filter(e => e !== 'fundador');
+   }
+
    const payload = {
     id: userId, name: nameInput.value, handle: handleInput.value,
     bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
@@ -1053,7 +1062,7 @@ async function initEditor(userId) {
     name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
     avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
     embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
-    emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
+    emblems: finalEmblems, socials: socialsData, links: currentProfile.links,
     friendships: currentProfile.friendships,
     custom_statuses: currentProfile.custom_statuses,
     handle_changed: currentProfile.handle_changed
@@ -1137,6 +1146,12 @@ async function initEditor(userId) {
   const id = el.getAttribute('data-id');
   if (currentProfile.emblems.includes(id)) el.classList.add('selected');
   el.addEventListener('click', () => {
+   // Restrição da tag Fundador: apenas permitido se for o dono oficial (ajuste o email se necessário)
+   if (id === 'fundador' && user.email !== 'SEU_EMAIL_DE_ADMIN_AQUI@gmail.com') {
+     toast('Este emblema é exclusivo do fundador do isly.me.');
+     return;
+   }
+
    if (currentProfile.emblems.includes(id)) {
     currentProfile.emblems = currentProfile.emblems.filter(e => e !== id);
     el.classList.remove('selected');
@@ -1255,7 +1270,12 @@ async function initEditor(userId) {
    nameEl.classList.add('text-effect-glow');
   }
 
-  document.getElementById('previewHandle').textContent = '@' + (handleInput.value || 'nick');
+  const currentH = handleInput.value.trim().replace(/^@/, '') || 'nick';
+  document.getElementById('previewHandle').textContent = '@' + currentH;
+  if (shareUrlInput) {
+    shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentH}`;
+  }
+
   document.getElementById('previewBio').textContent = bioInput.value || 'Escreva sua bio...';
   
   const avatarEl = document.getElementById('previewAvatar');
@@ -1363,10 +1383,15 @@ async function initEditor(userId) {
   
   currentProfile.handle_changed = true;
   toast('💡 Aviso: O @ só pode ser alterado uma única vez!');
-
-  if (handleInput.value) {
-   shareUrlInput.value = `${window.location.origin}/perfil.html?u=${handleInput.value.trim().replace(/^@/, '')}`;
+  
+  handleInput.disabled = true;
+  handleInput.style.opacity = '0.6';
+  handleInput.style.cursor = 'not-allowed';
+  if (document.getElementById('handleWarning')) {
+   document.getElementById('handleWarning').style.color = '#f43f5e';
+   document.getElementById('handleWarning').innerHTML = '⚠️ O seu @ já foi alterado uma vez e está bloqueado.';
   }
+
   updatePreview(); 
   triggerAutoSave();
  });
@@ -1384,6 +1409,11 @@ async function initEditor(userId) {
    if (val) socialsData[key] = val;
   });
 
+  let finalEmblems = [...currentProfile.emblems];
+  if (finalEmblems.includes('fundador') && user.email !== 'SEU_EMAIL_DE_ADMIN_AQUI@gmail.com') {
+    finalEmblems = finalEmblems.filter(e => e !== 'fundador');
+  }
+
   const payload = {
    id: userId, name: nameInput.value, handle: handleInput.value,
    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
@@ -1395,7 +1425,7 @@ async function initEditor(userId) {
    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
-   emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
+   emblems: finalEmblems, socials: socialsData, links: currentProfile.links,
    friendships: currentProfile.friendships,
    custom_statuses: currentProfile.custom_statuses,
    handle_changed: currentProfile.handle_changed
