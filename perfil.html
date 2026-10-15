@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -190,7 +189,7 @@ a{color:inherit;text-decoration:none}
 <body>
 <main class="container" id="profileContainer">
   <div class="profile-card" id="profileCard">
-    <div class="cover"></div>
+    <div class="cover" id="previewCover"></div>
     <div class="avatar" id="avatar" aria-label="Avatar do perfil">👾</div>
     <h3 id="name">Carregando...</h3>
     <div class="handle" id="handle">@...</div>
@@ -205,6 +204,8 @@ a{color:inherit;text-decoration:none}
       <span>◎</span><span>▶</span><span>⌘</span><span>◈</span>
     </div>
     <div class="public-links" id="links"></div>
+    <!-- Seção de Recados Dinâmica (Controlada pelo allow_guestbook) -->
+    <div id="guestbookSection" style="display:none; padding:0 14px 14px;"></div>
     <div class="profile-foot">
       <a href="/landing.html">CRIADO NO ISLY.ME ✦</a>
     </div>
@@ -410,6 +411,14 @@ a{color:inherit;text-decoration:none}
     renderEmblems(data.emblems);
     renderLinks(data.links);
 
+    // Banner e Wallpaper personalizados
+    const cover = document.getElementById('previewCover');
+    if (data.banner_url) {
+      cover.style.backgroundImage = `url('${data.banner_url}')`;
+      cover.style.backgroundSize = 'cover';
+      cover.style.backgroundPosition = 'center';
+    }
+
     const card = document.getElementById('profileCard');
     card.classList.remove('theme-sakura', 'theme-matrix');
 
@@ -417,6 +426,23 @@ a{color:inherit;text-decoration:none}
       card.classList.add('theme-sakura');
     } else if (data.theme === 'matrix') {
       card.classList.add('theme-matrix');
+    }
+
+    if (data.wallpaper_url) {
+      card.style.backgroundImage = `url('${data.wallpaper_url}')`;
+      card.style.backgroundSize = 'cover';
+      card.style.backgroundPosition = 'center';
+    }
+
+    // Gerenciamento da preferência de recados (Guestbook Clean)
+    const guestbookSection = document.getElementById('guestbookSection');
+    const allowGuestbook = data.allow_guestbook !== false; // Padrão verdadeiro
+
+    if (!allowGuestbook || !guestbookSection) {
+      if (guestbookSection) guestbookSection.style.display = 'none';
+    } else {
+      // Se ativado, mas sem recados, mantém vazio sem exibir avisos indesejados
+      guestbookSection.style.display = 'none'; 
     }
   }
 
