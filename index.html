@@ -994,13 +994,15 @@ async function initEditor(userId) {
 
  const wallpaperVal = wallpaperUrlInput.value.trim();
   if (wallpaperVal) {
-   // Aplica o wallpaper limpo ou com uma camada translúcida leve para destacar o texto
-   card.style.backgroundImage = `linear-gradient(rgba(13, 11, 20, 0.4), rgba(13, 11, 20, 0.4)), url('${wallpaperVal}')`;
-   card.style.backgroundSize = 'cover';
-   card.style.backgroundPosition = 'center';
-   card.style.backgroundRepeat = 'no-repeat';
+   // Aplica o wallpaper no fundo geral da página de prévia ou do corpo
+   document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.8), rgba(8, 8, 18, 0.8)), url('${wallpaperVal}')`;
+   document.body.style.backgroundSize = 'cover';
+   document.body.style.backgroundPosition = 'center';
+   document.body.style.backgroundRepeat = 'no-repeat';
+   document.body.style.backgroundAttachment = 'fixed';
   } else {
-   card.style.backgroundImage = 'radial-gradient(ellipse at 10% 0%,#8b5cf61b,transparent 55%), linear-gradient(145deg,#17131f,#0f0c14)';
+   document.body.style.backgroundImage = '';
+   document.body.style.background = bgColorInput.value;
   }
 
   document.body.style.background = bgColorInput.value;
