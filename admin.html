@@ -98,6 +98,30 @@ tr:last-child td{border-bottom:0}
     </div>
   </div>
 
+  <!-- Nova Seção: Gestão Rápida de @ (Exclusiva Fundador) -->
+  <section class="card" style="margin-bottom: 30px; background: linear-gradient(145deg,#16162a,#0f0f1c);">
+    <div class="section-head" style="margin-bottom: 12px;">
+      <h2 style="font-size: 16px; margin: 0; color: #d8b4fe;">⚙️ Gestão Direta de @ (Handle)</h2>
+    </div>
+    <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Busque pelo handle atual do usuário para alterar o seu endereço diretamente.</p>
+    
+    <div style="display: flex; gap: 10px; margin-bottom: 16px; max-width: 500px;">
+      <input type="text" id="adminSearchHandle" placeholder="Digite o @ atual (ex: nyx)" style="flex: 1; background: #0a0a14; border: 1px solid #35334e; border-radius: 10px; padding: 10px 14px; font-size: 13px; outline: none;">
+      <button type="button" id="adminSearchBtn" class="btn-sm" style="background: var(--purple); border: 0; padding: 0 20px; font-weight: 700;">Buscar</button>
+    </div>
+
+    <div id="adminUserResult" style="display: none; border-top: 1px solid var(--line); padding-top: 16px; margin-top: 16px; max-width: 500px;">
+      <div style="font-size: 13px; margin-bottom: 12px; color: #f6f4ff;">
+        <strong>Encontrado:</strong> <span id="resUserName"></span> (<span id="resUserHandleCurrent" style="color: var(--blue);"></span>)
+      </div>
+      <div class="field" style="margin-bottom: 12px;">
+        <label>Novo @ para este usuário</label>
+        <input type="text" id="adminNewHandleInput" placeholder="novo_handle">
+      </div>
+      <button type="button" id="adminSaveNewHandleBtn" class="btn-sm" style="background: #e11d48; border: 0; font-weight: 700;">Forçar Alteração de @</button>
+    </div>
+  </section>
+
   <div class="section-head">
     <h2>Gestão de Perfis & Moderação</h2>
     <div class="search-box">
@@ -182,6 +206,7 @@ tr:last-child td{border-bottom:0}
 <script>
 let allUsers = [];
 let selectedUser = null;
+let selectedFoundUserId = null;
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -230,6 +255,57 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('editModal').classList.remove('open');
     await loadDashboard();
   });
+
+  // Lógica da Busca e Alteração de @ por Admin/Fundador
+  document.getElementById('adminSearchBtn')?.addEventListener('click', async () => {
+    const query = document.getElementById('adminSearchHandle').value.trim().replace(/^@/, '');
+    if (!query) {
+      showToast('Digite um @ para buscar.');
+      return;
+    }
+
+    const profile = allUsers.find(u => u.handle && u.handle.toLowerCase() === query.toLowerCase());
+    if (!profile) {
+      showToast('Nenhum usuário encontrado com este @.');
+      document.getElementById('adminUserResult').style.display = 'none';
+      return;
+    }
+
+    selectedFoundUserId = profile.id;
+    document.getElementById('resUserName').textContent = profile.name || 'Sem nome';
+    document.getElementById('resUserHandleCurrent').textContent = '@' + profile.handle;
+    document.getElementById('adminNewHandleInput').value = profile.handle || '';
+    document.getElementById('adminUserResult').style.display = 'block';
+    showToast('Usuário localizado com sucesso! ✓');
+  });
+
+  document.getElementById('adminSaveNewHandleBtn')?.addEventListener('click', async () => {
+    if (!selectedFoundUserId) return;
+    const newHandle = document.getElementById('adminNewHandleInput').value.trim().replace(/^@/, '');
+    
+    if (!newHandle) {
+      showToast('O @ não pode estar vazio.');
+      return;
+    }
+
+    if (!confirm(`Tem certeza que deseja forçar a alteração do @ para "@${newHandle}"?`)) return;
+
+    const payload = {
+      id: selectedFoundUserId,
+      handle: newHandle,
+      handle_changed: true
+    };
+
+    const err = await window.islySupabase.saveProfile(payload);
+    if (err) {
+      showToast('Erro ao alterar o @.');
+    } else {
+      showToast('Handle (@) alterado com sucesso! ✓');
+      document.getElementById('adminUserResult').style.display = 'none';
+      document.getElementById('adminSearchHandle').value = '';
+      await loadDashboard();
+    }
+  });
 });
 
 async function loadDashboard() {
@@ -245,7 +321,6 @@ async function loadDashboard() {
 
   allUsers = data || [];
   
-  // Calcular métricas globais
   let totalViews = 0;
   let totalClicks = 0;
   allUsers.forEach(u => {
@@ -322,7 +397,6 @@ function openEditModal(userId) {
   const banBtn = document.getElementById('banToggleBtn');
   banBtn.textContent = selectedUser.is_banned ? 'Desbanir Usuário' : 'Banir Usuário';
 
-  // Molduras
   const allowed = selectedUser.allowed_frames || [];
   document.querySelectorAll('input[name="frames"]').forEach(cb => {
     cb.checked = allowed.includes(cb.value);
