@@ -550,5 +550,50 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 </script>
+  <!-- Widget Flutuante de Trilha Sonora (Minimalista & Transparente) -->
+<div id="soundtrackWidget" style="display:none; position:fixed; bottom:24px; right:24px; z-index:9999; background:rgba(13, 11, 20, 0.4); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.08); border-radius:99px; padding:6px 14px 6px 6px; align-items:center; gap:10px; box-shadow:0 10px 30px rgba(0,0,0,0.4); transition:all 0.25s ease;">
+  <button id="stPlayBtn" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#f6f4ff; cursor:pointer; font-size:10px; padding:0; line-height:1; flex-shrink:0; transition:background 0.2s, transform 0.2s;" aria-label="Tocar Trilha Sonora">▶</button>
+  <div style="display:flex; flex-direction:column; text-align:left;">
+    <span style="font-size:11px; color:#f6f4ff; font-weight:600; letter-spacing:0.3px;">Trilha Sonora</span>
+    <span id="stStatus" style="font-size:9px; color:#a6a4c4; letter-spacing:0.3px;">Pausado</span>
+  </div>
+  <audio id="stAudio" preload="none" loop></audio>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    // Usa a variável 'data' que carrega o perfil na página pública
+    if (typeof data !== 'undefined' && data && data.soundtrack_url) {
+      const widget = document.getElementById('soundtrackWidget');
+      const audio = document.getElementById('stAudio');
+      const playBtn = document.getElementById('stPlayBtn');
+      const statusTxt = document.getElementById('stStatus');
+      
+      if (widget && audio) {
+        audio.src = data.soundtrack_url;
+        widget.style.display = 'flex';
+
+        const togglePlay = () => {
+          if (audio.paused) {
+            audio.play().then(() => {
+              playBtn.textContent = '❚❚';
+              statusTxt.textContent = 'A tocar';
+            }).catch(err => {
+              console.warn("Erro ao reproduzir áudio:", err);
+            });
+          } else {
+            audio.pause();
+            playBtn.textContent = '▶';
+            statusTxt.textContent = 'Pausado';
+          }
+        };
+
+        playBtn.addEventListener('click', togglePlay);
+      }
+    }
+  }, 500);
+});
+</script>
 </body>
 </html>
