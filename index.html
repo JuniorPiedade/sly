@@ -1053,7 +1053,7 @@ async function initEditor(userId) {
     currentProfile.emblems = currentProfile.emblems.filter(e => e !== id);
     el.classList.remove('selected');
    } else {
-    if (currentProfile.emblems.length >= 3) { toast('Máximo de 3 emblemas.'); return; }
+   if (currentProfile.emblems.length >= 20) { toast('Máximo de 20 emblemas.'); return; }
     currentProfile.emblems.push(id); el.classList.add('selected');
    }
    updatePreview(); triggerAutoSave();
