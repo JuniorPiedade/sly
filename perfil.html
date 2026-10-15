@@ -156,7 +156,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
 /* =========================================================
-   PLAYER DE TRILHA SONORA (GLASSMORPHISM + NEON SUAVE + PERFEITAMENTE CENTRALIZADO)
+   PLAYER DE TRILHA SONORA (MINIMALISTA, TRANSLÚCIDO E DISCRETO)
    ========================================================= */
 #soundtrackWidget {
   display: none;
@@ -164,51 +164,51 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   bottom: 24px;
   right: 24px;
   z-index: 9999;
-  background: rgba(17, 17, 31, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(168, 85, 247, 0.35);
+  background: rgba(13, 11, 20, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 99px;
-  padding: 8px 18px 8px 10px;
+  padding: 6px 14px 6px 6px;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.15);
-  transition: all 0.3s ease;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
 }
 #soundtrackWidget:hover {
-  border-color: rgba(168, 85, 247, 0.6);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(168, 85, 247, 0.3);
+  background: rgba(13, 11, 20, 0.65);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 #stPlayBtn {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
-  border: 0;
-  width: 36px;
-  height: 36px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #f6f4ff;
   cursor: pointer;
-  font-size: 11px;
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+  font-size: 10px;
   padding: 0;
   line-height: 1;
   flex-shrink: 0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background 0.2s, transform 0.2s, border-color 0.2s;
 }
 #stPlayBtn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.8);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
 }
 .st-info { display: flex; flex-direction: column; text-align: left; }
 .st-title {
-  font-size: 12px;
+  font-size: 11px;
   color: #f6f4ff;
-  font-weight: 700;
-  text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
-.st-status { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; }
+.st-status { font-size: 9px; color: var(--muted); letter-spacing: 0.3px; }
 
 .animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 @keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
@@ -254,14 +254,14 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   </div>
 </div>
 
-<!-- Widget Flutuante de Trilha Sonora (Glassmorphism + Centralizado) -->
+<!-- Widget Flutuante de Trilha Sonora (Minimalista & Transparente) -->
 <div id="soundtrackWidget">
   <button id="stPlayBtn" aria-label="Tocar Trilha Sonora">▶</button>
   <div class="st-info">
     <span class="st-title">🎵 Trilha Sonora</span>
     <span class="st-status" id="stStatus">Pausado</span>
   </div>
-  <audio id="stAudio" preload="auto" loop></audio>
+  <audio id="stAudio" preload="none" loop></audio>
 </div>
 
 <script src="js/supabase.js"></script>
@@ -510,7 +510,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // ATIVAÇÃO DA TRILHA SONORA COM AUTOPLAY E BOTÃO CENTRALIZADO
+  // ATIVAÇÃO DA TRILHA SONORA (MINIMALISTA, APENAS SOB CLIQUE)
   if (data.soundtrack_url) {
     const widget = document.getElementById('soundtrackWidget');
     const audio = document.getElementById('stAudio');
@@ -521,78 +521,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       audio.src = data.soundtrack_url;
       widget.style.display = 'flex';
 
-      const togglePlay = () => {
+      playBtn.addEventListener('click', () => {
         if (audio.paused) {
           audio.play().then(() => {
             playBtn.textContent = '❚❚';
             statusTxt.textContent = 'A tocar...';
           }).catch(err => {
-            console.log("Autoplay impedido pelo navegador:", err);
-            statusTxt.textContent = 'Clique para ouvir';
+            console.warn("Erro ao reproduzir áudio:", err);
           });
         } else {
           audio.pause();
           playBtn.textContent = '▶';
           statusTxt.textContent = 'Pausado';
         }
-      };
-
-      playBtn.addEventListener('click', togglePlay);
-
-      // Tenta disparar o autoplay logo na entrada
-      audio.play().then(() => {
-        playBtn.textContent = '❚❚';
-        statusTxt.textContent = 'A tocar...';
-      }).catch(() => {
-        statusTxt.textContent = 'Clique para ouvir';
       });
     }
   }
-});
-</script>
-  <!-- Widget Flutuante de Trilha Sonora (Minimalista & Transparente) -->
-<div id="soundtrackWidget" style="display:none; position:fixed; bottom:24px; right:24px; z-index:9999; background:rgba(13, 11, 20, 0.4); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.08); border-radius:99px; padding:6px 14px 6px 6px; align-items:center; gap:10px; box-shadow:0 10px 30px rgba(0,0,0,0.4); transition:all 0.25s ease;">
-  <button id="stPlayBtn" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#f6f4ff; cursor:pointer; font-size:10px; padding:0; line-height:1; flex-shrink:0; transition:background 0.2s, transform 0.2s;" aria-label="Tocar Trilha Sonora">▶</button>
-  <div style="display:flex; flex-direction:column; text-align:left;">
-    <span style="font-size:11px; color:#f6f4ff; font-weight:600; letter-spacing:0.3px;">Trilha Sonora</span>
-    <span id="stStatus" style="font-size:9px; color:#a6a4c4; letter-spacing:0.3px;">Pausado</span>
-  </div>
-  <audio id="stAudio" preload="none" loop></audio>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    // Usa a variável 'data' que carrega o perfil na página pública
-    if (typeof data !== 'undefined' && data && data.soundtrack_url) {
-      const widget = document.getElementById('soundtrackWidget');
-      const audio = document.getElementById('stAudio');
-      const playBtn = document.getElementById('stPlayBtn');
-      const statusTxt = document.getElementById('stStatus');
-      
-      if (widget && audio) {
-        audio.src = data.soundtrack_url;
-        widget.style.display = 'flex';
-
-        const togglePlay = () => {
-          if (audio.paused) {
-            audio.play().then(() => {
-              playBtn.textContent = '❚❚';
-              statusTxt.textContent = 'A tocar';
-            }).catch(err => {
-              console.warn("Erro ao reproduzir áudio:", err);
-            });
-          } else {
-            audio.pause();
-            playBtn.textContent = '▶';
-            statusTxt.textContent = 'Pausado';
-          }
-        };
-
-        playBtn.addEventListener('click', togglePlay);
-      }
-    }
-  }, 500);
 });
 </script>
 </body>
