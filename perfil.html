@@ -517,13 +517,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (frameType === 'neon-white') frameEl.classList.add('frame-neon-white');
   else if (frameType === 'vip') frameEl.classList.add('frame-vip');
 
-  const emblemsEl = document.getElementById('emblems');
-  if (emblemsEl) {
-    emblemsEl.innerHTML = (data.emblems || []).map(id => {
-      const svg = emblemSvgs[id] || '';
-      return `<span>${svg} ${emblemNames[id] || id}</span>`;
-    }).join('');
-  }
+ const emblemsEl = document.getElementById('emblems');
+if (emblemsEl) {
+  emblemsEl.innerHTML = (data.emblems || []).map(id => {
+    const emoji = emblemEmojis[id] || '✨';
+    return `<span><span style="font-size: 14px;">${emoji}</span> ${emblemNames[id] || id}</span>`;
+  }).join('');
+}
 
   const socialsBar = document.getElementById('socialsBar');
   if (socialsBar && data.socials) {
