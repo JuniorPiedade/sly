@@ -601,7 +601,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
       <option value="glass">Vidro 3D (Glassmorphism)</option>
      </select>
     </label>
-    <label class="field">
+   <label class="field">
      <span>🗂️ Estilo do Mural de Recados (Guestbook)</span>
      <select id="guestbookStyleSelect">
       <option value="vintage">Vintage (Pedaço de Papel Envelhecido)</option>
@@ -838,7 +838,6 @@ async function initEditor(userId) {
  const shareUrlInput = document.getElementById('shareUrl');
 
  const cardStyleSelect = document.getElementById('cardStyle');
- const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
  const bgColorInput = document.getElementById('bgColor');
  const cardBgInput = document.getElementById('cardBg');
  const titleColorInput = document.getElementById('titleColor');
@@ -881,7 +880,6 @@ async function initEditor(userId) {
  activityInput.value = currentProfile.activity || '';
 
  cardStyleSelect.value = currentProfile.card_style || 'opaque';
- guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
  bgColorInput.value = currentProfile.bg_color || '#080812';
  cardBgInput.value = currentProfile.card_bg || '#11111f';
  titleColorInput.value = currentProfile.title_color || '#ffffff';
@@ -1159,7 +1157,6 @@ async function initEditor(userId) {
  });
 
  avatarFrameSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
- guestbookStyleSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
 
  function moveLink(fromIdx, toIdx) {
   if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
@@ -1391,7 +1388,7 @@ async function initEditor(userId) {
    id: userId, name: nameInput.value, handle: handleInput.value,
    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-   card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
+   card_style: cardStyleSelect.value,
    bg_color: bgColorInput.value, card_bg: cardBgInput.value,
    accent_color: textColorInput.value,
    title_color: titleColorInput.value, text_color: textColorInput.value,
