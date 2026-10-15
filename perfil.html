@@ -15,7 +15,7 @@
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text)}
-.container{width:100%;max-width:640px}
+.container{width:100%;max-width:640px;position:relative}
 
 .profile-card{
   overflow: visible !important;
@@ -239,6 +239,103 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
+/* --- ESTÉTICA VINTAGE DE PAPEL RASGADO (GUESTBOOK LATERAL DIREITO) --- */
+.guestbook-sidebar {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 250px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 998;
+}
+.guestbook-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #a39cb8;
+  font-weight: 800;
+  text-align: right;
+  margin-bottom: 2px;
+}
+.scrap-paper {
+  position: relative;
+  background: #f4ebd0;
+  color: #2c251d;
+  padding: 13px 15px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  box-shadow: 2px 5px 15px rgba(0,0,0,0.4), inset 0 0 15px rgba(139,107,67,0.15);
+  border: 1px dashed #d1c29e;
+  clip-path: polygon(0% 4%, 3% 0%, 97% 2%, 100% 6%, 98% 95%, 100% 100%, 2% 97%, 0% 94%);
+  transition: transform 0.2s ease, z-index 0.2s;
+}
+.scrap-paper:hover {
+  transform: scale(1.03) rotate(0deg) !important;
+  z-index: 10;
+  box-shadow: 4px 8px 22px rgba(0,0,0,0.5);
+}
+.scrap-author {
+  font-size: 10px;
+  font-weight: bold;
+  color: #6b5b45;
+  margin-top: 6px;
+  display: block;
+  text-align: right;
+  border-top: 1px dotted #c9b999;
+  padding-top: 4px;
+}
+.scrap-form-box {
+  background: #14111c;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 12px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.scrap-form-box textarea {
+  width: 100%;
+  background: #0a0812;
+  border: 1px solid #2d263f;
+  border-radius: 8px;
+  color: #f6f4ff;
+  padding: 8px 10px;
+  font-size: 11px;
+  resize: none;
+  height: 54px;
+  outline: none;
+}
+.scrap-form-box textarea:focus { border-color: var(--purple); }
+.scrap-btn {
+  width: 100%;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.scrap-btn:hover { opacity: 0.9; }
+
+@media(max-width: 1100px) {
+  .guestbook-sidebar {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-top: 24px;
+    max-height: none;
+  }
+  .guestbook-title { text-align: left; }
+}
+
 /* PLAYER DE TRILHA SONORA */
 #soundtrackWidget {
   display: none;
@@ -340,6 +437,19 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
       <span id="publicViewsCount">0</span>
       <span>visualizações</span>
     </div>
+  </div>
+</div>
+
+<!-- MURAL DE RECADOS VINTAGE LATERAL DIREITO -->
+<div class="guestbook-sidebar">
+  <div class="guestbook-title">✍️ Mural de Recados</div>
+  <div id="scrapsContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
+  
+  <!-- Formulário visível apenas para usuários logados -->
+  <div class="scrap-form-box" id="scrapFormWrapper" style="display: none;">
+    <span style="font-size:10px; color:var(--muted); font-weight:700; display:block; margin-bottom:4px;">Deixar um recado:</span>
+    <textarea id="scrapMsgInput" maxlength="140" placeholder="Escreva seu recado (máx 140 carac)..."></textarea>
+    <button type="button" class="scrap-btn" id="sendScrapBtn">Fixar no Mural 📌</button>
   </div>
 </div>
 
@@ -633,6 +743,81 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
   }
+
+  // --- GUESTBOOK (MURAL DE RECADOS VINTAGE) ---
+  const scrapsContainer = document.getElementById('scrapsContainer');
+  const scrapFormWrapper = document.getElementById('scrapFormWrapper');
+  const scrapMsgInput = document.getElementById('scrapMsgInput');
+  const sendScrapBtn = document.getElementById('sendScrapBtn');
+
+  let loggedUser = null;
+  try {
+    loggedUser = await window.islySupabase.getUser();
+  } catch(e) {}
+
+  if (loggedUser) {
+    if (scrapFormWrapper) scrapFormWrapper.style.display = 'block';
+  }
+
+  async function loadScraps() {
+    if (!scrapsContainer) return;
+    const { data: scrapsList, error } = await window.islySupabase.client
+      .from('guestbook')
+      .select('*')
+      .eq('profile_id', data.id)
+      .order('created_at', { ascending: false })
+      .limit(5); // Limite de até 5 recados
+
+    if (!error && scrapsList && scrapsList.length > 0) {
+      const rotations = [-2.5, 1.5, -1, 2, -1.8];
+      scrapsContainer.innerHTML = scrapsList.map((scrap, idx) => {
+        const rot = rotations[idx % rotations.length];
+        return `
+          <div class="scrap-paper" style="transform: rotate(${rot}deg);">
+            <div style="word-break: break-word;">${escapeHtml(scrap.message)}</div>
+            <span class="scrap-author">— @${escapeHtml(scrap.author_handle || 'anônimo')}</span>
+          </div>
+        `;
+      }).join('');
+    } else {
+      scrapsContainer.innerHTML = `<div style="font-size:11px; color:var(--muted); font-style:italic; padding:6px; text-align:right;">Nenhum recado ainda.</div>`;
+    }
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+  }
+
+  if (sendScrapBtn) {
+    sendScrapBtn.addEventListener('click', async () => {
+      const msg = scrapMsgInput.value.trim();
+      if (!msg) return;
+
+      let authorHandle = 'membro';
+      try {
+        const authorProfile = await window.islySupabase.getProfileById(loggedUser.id);
+        if (authorProfile && authorProfile.handle) authorHandle = authorProfile.handle;
+      } catch(e) {}
+
+      const { error } = await window.islySupabase.client
+        .from('guestbook')
+        .insert([{
+          profile_id: data.id,
+          author_id: loggedUser.id,
+          author_handle: authorHandle,
+          message: msg
+        }]);
+
+      if (error) {
+        alert('Erro ao enviar recado. Verifique se a tabela guestbook existe no Supabase.');
+      } else {
+        scrapMsgInput.value = '';
+        loadScraps();
+      }
+    });
+  }
+
+  loadScraps();
 
   if (data.soundtrack_url) {
     const widget = document.getElementById('soundtrackWidget');
