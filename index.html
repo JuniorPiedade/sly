@@ -1,118 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
-<meta name="description" content="ISLY.ME — sua identidade digital gamer e geek">
-<title>Painel de edição — ISLY.ME</title>
+<title id="pageTitle">isly.me — Perfil</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  if (typeof supabase === 'undefined') {
+    document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
+  }
+</script>
 <style>
-:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
+:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.6}
-button,input,textarea,select{font:inherit}
-button,a{-webkit-tap-highlight-color:transparent}
-a{color:inherit;text-decoration:none}
-button{color:inherit;cursor:pointer}
-.wrap{width:min(1180px,calc(100% - 32px));margin:auto}
-.topbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #a78bfa22}
-.brand{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:850;letter-spacing:-1px}
-.brand-mark{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#080812;font-size:18px}
-.dot{color:var(--blue)}
-.actions{display:flex;gap:10px;align-items:center}
-.btn{border:1px solid var(--line);border-radius:12px;padding:11px 16px;background:#ffffff08;color:var(--text);font-size:13px;font-weight:750}
-.btn.primary{border:0;background:linear-gradient(110deg,#7c3aed,#9333ea 55%,#2563eb)}
-.sync-badge{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:20px;background:#ffffff05;border:1px solid #292944}
-.sync-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;display:inline-block;transition:background 0.3s}
-.sync-dot.saving{background:#facc15;animation:pulse 1s infinite}
-@keyframes pulse{0%{opacity:0.4}50%{opacity:1}100%{opacity:0.4}}
-.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;padding:30px 0 60px}
-.sidebar,.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#141422,#0d0d18)}
-.sidebar{align-self:start;padding:14px;position:sticky;top:20px}
-.side-title{padding:10px;font-size:11px;letter-spacing:2px;color:#8582a5;text-transform:uppercase;font-weight:700}
-.navbtn{display:block;width:100%;text-align:left;border:1px solid transparent;background:transparent;border-radius:11px;padding:12px 14px;color:#c9c5e2;font-size:13px;font-weight:600;margin-bottom:6px}
-.navbtn:hover,.navbtn.active{background:#8b5cf619;border-color:#8b5cf63b;color:white}
-.side-note{border-top:1px solid var(--line);padding:14px 10px 6px;color:#8582a5;font-size:11px;line-height:1.7}
-.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
-.eyebrow{font-size:11px;letter-spacing:2px;color:#c084fc;text-transform:uppercase;font-weight:800}
-h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8px 0}
-.heading p,.muted{font-size:13px;color:var(--muted)}
-.pill{font-size:11px;border:1px solid #86efac40;border-radius:30px;padding:8px 12px;color:#bbf7d0;white-space:nowrap;font-weight:600}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text)}
+.container{width:100%;max-width:640px}
 
-.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
-.stat-card{border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,#16162a,#0f0f1c);padding:16px 18px;display:flex;align-items:center;gap:14px}
-.stat-icon{width:42px;height:42px;border-radius:12px;background:#8b5cf618;border:1px solid #8b5cf633;display:grid;place-items:center;font-size:20px;color:#c084fc}
-.stat-val{font-size:22px;font-weight:850;line-height:1;margin-bottom:4px}
-.stat-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700}
-
-.editor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:20px;align-items:start}
-.panel{padding:20px;margin-bottom:16px;min-width:0;display:none}
-.panel.active-panel{display:block}
-.panel h2{font-size:16px;margin:0;font-weight:750}
-.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
-.panel-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
-.field{display:block;margin:15px 0}
-.field>span{display:block;font-size:12px;color:#c7c4dd;margin-bottom:7px;font-weight:700}
-.field input, .field textarea, .field select{width:100%;min-width:0;border:1px solid #35334e;border-radius:11px;padding:12px 14px;background:#0a0a14;color:white;font-size:13px;outline:none}
-.field input[type="color"]{height:48px;padding:5px;cursor:pointer;appearance:none;-webkit-appearance:none;border:1px solid #35313f;border-radius:12px;background:#100e15;box-shadow:none;overflow:hidden}
-.field textarea{min-height:90px;resize:vertical}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}
-.field small,.hint{display:block;color:#8582a5;font-size:11px;line-height:1.7;margin-top:7px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.options{display:flex;flex-wrap:wrap;gap:8px}
-.choice{border:1px solid #35334e;background:#ffffff05;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;cursor:pointer}
-.choice.active{border-color:var(--blue);background:#22d3ee13;color:#cffafe}
-.emblems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.emblem{border:1px solid #35334e;border-radius:12px;background:#ffffff04;padding:12px 8px;text-align:center;font-size:12px;font-weight:600;cursor:pointer}
-.emblem.selected{border-color:var(--purple);background:#a855f712}
-.emblem svg{width:26px;height:26px;margin:0 auto 6px;display:block;fill:currentColor}
-
-.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-.link-row{display:grid;grid-template-columns:auto 42px 1fr 1fr auto;gap:8px;margin:10px 0;align-items:center}
-.link-row input{min-width:0;width:100%;border:1px solid #35334e;border-radius:10px;padding:10px 12px;background:#0a0a14;color:white;font-size:12px}
-.reorder-btns{display:flex;flex-direction:column;gap:3px}
-.reorder-btn{border:1px solid #35334e;border-radius:6px;background:#ffffff05;color:#c9c5e2;padding:3px 6px;font-size:10px;cursor:pointer}
-.reorder-btn:disabled{opacity:0.2;cursor:not-allowed}
-.remove{border:1px solid #52313f;border-radius:9px;background:#ffffff05;color:#fda4af;padding:9px 12px;cursor:pointer}
-.add{width:100%;border:1px dashed #514174;border-radius:11px;background:#8b5cf609;color:#d8b4fe;padding:12px;font-size:12px;font-weight:750;cursor:pointer}
-
-.preview{position:sticky;top:20px}
-.preview-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:14px}
-
-.profile-card {
-  position:relative;
-  isolation:isolate;
-  overflow:visible!important;
+.profile-card{
+  overflow: visible !important;
+  border-radius:28px;
   width:100%;
-  max-width:680px;
-  min-width:0;
+  max-width:640px;
   margin:0 auto;
-  display:grid;
-  grid-template-columns:minmax(132px,.72fr) minmax(0,1.28fr);
-  grid-template-rows:auto;
-  align-items:start;
-  gap:12px 22px;
-  padding:27px;
-  border:1px solid #a78bfa2b!important;
-  border-radius:23px;
-  background-color:#13101a;
-  background-image:
-    radial-gradient(ellipse at 10% 0%,#8b5cf61b,transparent 55%),
-    linear-gradient(145deg,#17131f,#0f0c14);
-  background-size: cover;
-  background-position: center;
-  box-shadow:0 24px 70px #00000055,0 0 0 1px #ffffff04,inset 0 1px #ffffff0a;
+  box-shadow:0 24px 70px rgba(0,0,0,0.6);
+  padding:36px;
   text-align:left;
   transform-style:preserve-3d;
   perspective:1200px;
-  transition:transform 0.15s ease-out, border-color .2s, box-shadow .2s;
+  transition:transform 0.15s ease-out;
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  border: none !important;
 }
-.profile-card:before{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
-  background:linear-gradient(125deg,#ffffff06,transparent 35%,#8b5cf608);
-}
-.card-style-opaque{background-color:#13101a}
+
+.card-style-opaque { background-color: #11111f; }
 .card-style-glass {
   background: rgba(13, 11, 20, 0.25) !important;
   backdrop-filter: blur(16px) !important;
@@ -120,12 +45,14 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
 }
-.profile-header-row{
-  grid-column:1;grid-row:1 / span 7;display:flex;flex-direction:column;
-  align-items:flex-start;gap:14px;min-width:0;padding:3px 0 0;
-  overflow:visible!important
+.profile-header-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  overflow: visible !important;
 }
-.avatar-container{
+
+.avatar-container {
   position: relative;
   width: 76px;
   height: 76px;
@@ -166,16 +93,28 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   background-repeat: no-repeat;
   background-position: center;
 }
-.frame-cyberpunk{border:2px solid var(--blue);border-radius:22px;box-shadow:0 0 12px var(--blue)}
-.frame-neon-gold{border:2px solid #c4a46b;border-radius:22px;box-shadow:0 0 12px #c4a46b55}
-.frame-royal-purple{border:2px solid #b99aff;border-radius:22px;box-shadow:0 0 12px #8b5cf655}
+.frame-cyberpunk { border: 2px solid var(--blue); border-radius: 22px; box-shadow: 0 0 12px var(--blue); }
+.frame-neon-gold { border: 2px solid #facc15; border-radius: 22px; box-shadow: 0 0 12px #facc15; }
+.frame-royal-purple { border: 2px solid #c084fc; border-radius: 22px; box-shadow: 0 0 12px #c084fc; }
 
-.profile-info{width:100%;min-width:0;overflow:visible!important}
-.profile-card h3{
-  font-size:clamp(19px,2vw,25px);font-weight:800;line-height:1.2;
-  letter-spacing:-.7px;white-space:normal;overflow-wrap:anywhere;
-  text-overflow:clip;margin:0 0 5px;overflow:visible!important
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  overflow: visible !important;
 }
+
+.profile-card h3{
+  margin:0 0 2px;
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:-0.01em;
+  white-space:nowrap;
+  overflow: visible !important;
+  text-overflow: clip;
+}
+
 .text-effect-glow {
   color: #ffffff !important;
   text-shadow: 
@@ -184,1002 +123,494 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
     0 0 20px rgba(255, 255, 255, 0.5),
     0 0 35px rgba(255, 255, 255, 0.3);
 }
-.handle{font-size:12px;color:#b9a0f7;overflow-wrap:anywhere}
-.bio-preview,.live-status,.preview-emblems,.preview-socials,.embeds-container,.preview-links,.profile-foot{
-  grid-column:2;min-width:0
-}
-.bio-preview{grid-row:1;font-size:13px;color:#c0b6cd;line-height:1.65;margin:2px 0 0}
-.live-status{
-  grid-row:2;margin:0;padding:6px 10px;width:fit-content;max-width:100%;
-  border-color:#8b5cf638;background:#8b5cf60d;color:#e0d4fa;border-radius:99px;display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600
-}
-.preview-emblems{grid-row:3;margin-top:0;display:flex;flex-wrap:wrap;gap:6px}
-.preview-emblems span{border-color:#a78bfa28;background:#a78bfa0b;color:#ded0f8;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:99px;font-size:11px;font-weight:600}
+
+.handle{font-size:13px;font-weight:600;letter-spacing:0.02em;margin-bottom:4px}
+.role-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc;width:fit-content}
+
+.bio-preview{font-size:13px;margin:4px 0 0;overflow-wrap:anywhere;line-height:1.5}
+.live-status{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.08);color:#cffafe;border-radius:999px;font-size:11px;font-weight:600;margin:4px 0 0;width:fit-content}
+.preview-emblems{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.preview-emblems span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid rgba(168,85,247,0.25);background:rgba(168,85,247,0.08);border-radius:99px;font-size:11px;font-weight:600;color:#ddd6fe}
 .preview-emblems svg{width:14px;height:14px;fill:currentColor}
-.preview-socials{grid-row:4;margin-top:0;display:flex;flex-wrap:wrap;gap:7px}
-.preview-social-icon{
-  width:34px;height:34px;border:1px solid #ffffff10;border-radius:11px;
-  background:#ffffff06;color:#ded3eb;transition:transform .18s,border-color .18s,background .18s;display:grid;place-items:center
-}
-.preview-social-icon svg{width:16px;height:16px;fill:currentColor}
-.preview-social-icon:hover{transform:translateY(-2px);border-color:#a78bfa55;background:#8b5cf61a}
-.embeds-container{grid-row:5;margin-top:0;display:flex;flex-direction:column;gap:12px}
-.embed-wrapper{border:1px solid #ffffff12;border-radius:12px;background:#08070b;overflow:hidden;line-height:0}
+
+.public-socials{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.social-icon-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);text-decoration:none;transition:.2s}
+.social-icon-btn svg{width:16px;height:16px;fill:currentColor}
+.social-icon-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,0.08)}
+
+.embeds-container{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.embed-wrapper{width:100%;border-radius:14px;overflow:hidden;background:#00000033;line-height:0}
 .embed-wrapper iframe{width:100%;border:0;display:block}
-.preview-links{grid-row:6;display:flex;flex-direction:column;gap:8px;margin-top:0}
-.preview-link{
-  padding:12px 14px;border-radius:12px;font-size:12px;font-weight:700;
-  background:#ffffff04!important;border:1px solid #ffffff13!important;
-  box-shadow:inset 0 1px #ffffff04;backdrop-filter:blur(12px);
-  overflow-wrap:anywhere;display:flex;justify-content:space-between;align-items:center;gap:10px;text-decoration:none
-}
-.preview-link:hover{transform:translateY(-2px);border-color:#a78bfa55!important;background:#8b5cf60c!important}
-.profile-foot{
-  grid-row:7;text-align:left;padding-top:11px;margin-top:1px;border-top-color:#ffffff12;
-  color:#887c99;font-size:9px;letter-spacing:1.4px;font-weight:700;text-transform:uppercase
-}
-.share{border-color:#30283d;border-radius:14px;background:#ffffff02;padding:13px;margin-top:14px}
-.share label{color:#a99fb8;display:block;font-size:11px;margin-bottom:8px;font-weight:700}
-.share-row{gap:8px;display:flex}
-.share-row input{color:#d7c4ff;width:100%;flex:1;background:#0a0a14;border:1px solid #35334e;border-radius:10px;padding:10px;font-size:11px}
-.toast{
-  position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1a1423;border:1px solid #5d4776;border-radius:12px;padding:14px 20px;font-size:13px;font-weight:600;z-index:1001;max-width:90%;color:#f5efff;
-  box-shadow:0 14px 40px #00000055;backdrop-filter:blur(12px);display:none
-}
-.toast.show{display:block}
-footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11px}
 
-@media(max-width:950px){
-  .editor-grid{grid-template-columns:1fr}
-  .preview{position:static;max-width:680px;width:100%;margin:0 auto}
+.public-links{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.public-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-radius:14px;font-size:13px;font-weight:700;text-align:left;text-decoration:none;transition:all .25s ease;cursor:pointer;background:rgba(255,255,255,0.06);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12)}
+.public-link:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.4)}
+.public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
+.public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
+
+/* FRIENDSHIPS - AVATARES CIRCULARES MINIMALISTAS */
+.friendships-footer-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
-@media(max-width:650px){
-  .wrap{width:calc(100% - 24px)}
-  .topbar{min-height:68px;gap:8px}
-  .brand{font-size:21px}
-  .brand-mark{width:35px;height:35px}
-  .actions{gap:6px}
-  .btn{padding:10px 11px;font-size:12px}
-  .sync-badge{padding:7px 9px;font-size:10px}
-  .layout{display:block;padding-top:18px}
-  .sidebar{display:none}
-  .heading{display:block}
-  .pill{display:inline-block;margin-top:10px}
-  .panel{padding:16px}
-  .two,.social-grid{grid-template-columns:1fr}
-  .link-row{grid-template-columns:auto 30px minmax(0,1fr) minmax(0,1fr) auto;gap:5px}
-  .link-row input{padding:9px 6px;font-size:11px}
-  .analytics-grid{grid-template-columns:1fr}
-  .profile-card{
-    grid-template-columns:minmax(100px,.68fr) minmax(0,1.32fr);
-    gap:11px 14px;padding:18px 15px;border-radius:19px
-  }
-  .profile-header-row{gap:11px}
+.friendship-bubble {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  display: block;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
 }
-@media(max-width:390px){
-  .wrap{width:calc(100% - 18px)}
-  .topbar{flex-wrap:wrap;padding:10px 0}
-  .actions{margin-left:auto}
-  .sync-badge{display:none}
-  .profile-card{grid-template-columns:88px minmax(0,1fr);gap:10px;padding:14px 11px}
-  .avatar-container{width:58px;height:58px}
-  .avatar{width:50px;height:50px;border-radius:14px}
-  .profile-card h3{font-size:16px}
-  .preview-link{gap:6px;padding:9px}
+.friendship-bubble:hover {
+  transform: scale(1.15);
+  border-color: var(--purple);
+  z-index: 10;
 }
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+.friendship-bubble img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.friendship-bubble-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text);
 }
 
-#panel-appearance .two{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-  align-items:stretch;
+.views-counter{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;font-size:12px;color:var(--muted)}
+.views-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px);color:#c9c5e2;font-weight:600}
+
+.profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
+.error-box{text-align:center;padding:30px;color:#fcd9a1}
+
+/* =========================================================
+   PLAYER DE TRILHA SONORA (MINIMALISTA, TRANSLÚCIDO E DISCRETO)
+   ========================================================= */
+#soundtrackWidget {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  background: rgba(13, 11, 20, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  padding: 6px 14px 6px 6px;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
 }
-#panel-appearance .field:has(input[type="color"]){
-  min-width:0;
-  min-height:68px;
-  box-sizing:border-box;
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:12px 14px;
-  border:1px solid #302a3a;
-  border-radius:14px;
-  background:linear-gradient(145deg,#131019,#0e0c13);
+#soundtrackWidget:hover {
+  background: rgba(13, 11, 20, 0.65);
+  border-color: rgba(255, 255, 255, 0.15);
 }
-#panel-appearance .field:has(input[type="color"]) > span{
-  flex:1;
-  min-width:0;
-  line-height:1.35;
-  font-size:12px;
+#stPlayBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f6f4ff;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s, border-color 0.2s;
 }
-#panel-appearance .field input[type="color"]{
-  flex:0 0 36px;
-  width:36px!important;
-  min-width:36px;
-  height:36px!important;
-  min-height:36px!important;
-  padding:3px!important;
-  margin:0 0 0 auto;
-  appearance:none;
-  -webkit-appearance:none;
-  border:1px solid #51465f!important;
-  border-radius:50%!important;
-  background:#17131e!important;
-  box-shadow:0 2px 8px #00000035,inset 0 1px 0 #ffffff0b!important;
-  overflow:hidden;
-  cursor:pointer;
-  display:block;
-  transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+#stPlayBtn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
 }
-#panel-appearance .field input[type="color"]::-webkit-color-swatch-wrapper{padding:2px}
-#panel-appearance .field input[type="color"]::-webkit-color-swatch{
-  border:1px solid #ffffff24;
-  border-radius:50%;
+.st-info { display: flex; flex-direction: column; text-align: left; }
+.st-title {
+  font-size: 11px;
+  color: #f6f4ff;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
-#panel-appearance .field input[type="color"]::-moz-color-swatch{
-  border:1px solid #ffffff24;
-  border-radius:50%;
-}
-#panel-appearance .field:has(input[type="color"]):hover{border-color:#574568;background:linear-gradient(145deg,#17121f,#100d16)}
-#panel-appearance .field input[type="color"]:hover{border-color:#b39ad2!important;box-shadow:0 0 0 3px #a78bfa12!important;transform:scale(1.04)}
-#panel-appearance .field input[type="color"]:focus-visible{outline:2px solid #a78bfa;outline-offset:3px}
+.st-status { font-size: 9px; color: var(--muted); letter-spacing: 0.3px; }
+
+.animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.12s; }
+.delay-3 { animation-delay: 0.18s; }
+.delay-4 { animation-delay: 0.24s; }
+.delay-5 { animation-delay: 0.30s; }
+.delay-6 { animation-delay: 0.36s; }
+.delay-7 { animation-delay: 0.42s; }
+.delay-8 { animation-delay: 0.48s; }
 </style>
-<script>
-(function(){
- const sources=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2','https://unpkg.com/@supabase/supabase-js@2'];
- function loadSdk(i){
-  if(i>=sources.length){window.__islySdkFailed=true;window.__islySdkReadyFired=true;window.dispatchEvent(new Event('isly-sdk-ready'));return;}
-  const s=document.createElement('script');s.src=sources[i];
-  s.onload=function(){
-   const m=document.createElement('script');m.src='/js/supabase.js';
-   m.onload=function(){window.__islySdkReadyFired=true;window.dispatchEvent(new Event('isly-sdk-ready'));};
-   m.onerror=function(){window.__islyModuleFailed=true;window.__islySdkReadyFired=true;window.dispatchEvent(new Event('isly-sdk-ready'));};
-   document.head.appendChild(m);
-  };
-  s.onerror=function(){loadSdk(i+1);};document.head.appendChild(s);
- }
- loadSdk(0);
-})();
-</script>
 </head>
 <body>
-
-<div id="appRoot" style="display:none">
-<header class="wrap topbar">
- <a class="brand" href="landing.html"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
- <div class="actions">
-  <div class="sync-badge" id="syncBadge">
-    <span class="sync-dot" id="syncDot"></span>
-    <span id="syncText">Sincronizado</span>
-  </div>
-  <button class="btn" id="authBtn" type="button">Sair</button>
-  <button class="btn primary" id="saveBtn" type="button">Salvar agora ✓</button>
- </div>
-</header>
-
-<main class="wrap layout">
-<aside class="sidebar">
- <div class="side-title">Seu espaço</div>
- <button type="button" class="navbtn active" data-sec="identity">◈ Identidade</button>
- <button type="button" class="navbtn" data-sec="status">◉ Status vivo</button>
- <button type="button" class="navbtn" data-sec="emblems">✦ Emblemas</button>
- <button type="button" class="navbtn" data-sec="socials">🌐 Redes Sociais</button>
- <button type="button" class="navbtn" data-sec="embeds">🎬 Mídias Embed</button>
- <button type="button" class="navbtn" data-sec="soundtrack">🎵 Trilha Sonora</button>
- <button type="button" class="navbtn" data-sec="appearance">🎨 Cores & Efeitos</button>
- <button type="button" class="navbtn" data-sec="links">↗ Meus links</button>
- <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
- 
- <!-- Botão Painel Admin (visível apenas para admins/fundadores) -->
- <div id="adminNavContainer" style="display:none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);">
-   <a href="admin.html" class="navbtn" style="background: rgba(168, 85, 247, 0.12); border-color: rgba(168, 85, 247, 0.35); color: #d8b4fe; text-align: center; font-weight: 700;">
-     ⚙️ Painel Admin
-   </a>
- </div>
-</aside>
-
-<section class="content">
- <div class="heading">
-  <div>
-   <div class="eyebrow">Painel do seu universo</div>
-   <h1>Monte sua identidade.</h1>
-   <p>Incorpore players do Spotify, vídeos do YouTube e posts do Instagram.</p>
-  </div>
-  <div class="pill"><span style="width:8px;height:8px;background:#4ade80;border-radius:50%;display:inline-block;margin-right:6px"></span> Online</div>
- </div>
-
- <div class="analytics-grid">
-  <div class="stat-card">
-   <div class="stat-icon">👁️</div>
-   <div>
-    <div class="stat-val" id="statViews">0</div>
-    <div class="stat-lbl">Visualizações</div>
-   </div>
-  </div>
-  <div class="stat-card">
-   <div class="stat-icon">🖱️</div>
-   <div>
-    <div class="stat-val" id="statClicks">0</div>
-    <div class="stat-lbl">Cliques nos links</div>
-   </div>
-  </div>
- </div>
-
- <div class="editor-grid">
-  <div>
-   <section class="panel active-panel" id="panel-identity">
-    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, moldura VIP e uploads de foto e wallpaper.</p></div><span class="muted">01 / 08</span></div>
-    <div class="two">
-     <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
-     <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
+<div class="container">
+  <div class="profile-card card-style-opaque" id="profileCard">
+    <div class="profile-header-row animate-item delay-1">
+      <div class="avatar-container">
+        <div class="avatar" id="avatar">⌬</div>
+        <div id="avatarFrame" class="avatar-frame"></div>
+      </div>
+      <div class="profile-info">
+        <h3 id="name">Carregando...</h3>
+        <div class="handle" id="handle">@...</div>
+        <div class="role-badge" id="roleBadge">👾 Membro</div>
+      </div>
     </div>
-    <label class="field">
-     <span>🖼️ Moldura VIP do Avatar</span>
-     <select id="avatarFrameSelect">
-      <option value="none">Nenhuma (Padrão)</option>
-      <option value="cyberpunk">Cyberpunk Neon (Azul)</option>
-      <option value="neon-gold">Gold Luxury (Dourado)</option>
-      <option value="royal-purple">Royal Purple (Roxo VIP)</option>
-     </select>
-    </label>
-    <label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/140</small></label>
-    <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
-    <label class="field"><span>Wallpaper do cartão (Upload)</span><input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
-   </section>
+    <p class="bio-preview animate-item delay-2" id="bio"></p>
+    <div class="live-status animate-item delay-3" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
+    <div class="preview-emblems animate-item delay-3" id="emblems"></div>
+    <div class="public-socials animate-item delay-3" id="socialsBar"></div>
+    <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
+    <div class="public-links animate-item delay-4" id="links"></div>
+    
+    <!-- Amigos em destaque (Friendships) -->
+    <div id="friendshipsFooter" class="friendships-footer-container animate-item delay-4" style="display: none;"></div>
 
-   <section class="panel" id="panel-status">
-    <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 08</span></div>
-    <div class="options" id="statusOptions">
-     <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando">🎮 Jogando</button>
-     <button type="button" class="choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button>
-     <button type="button" class="choice" data-emoji="🍥" data-label="Anime">🍥 Anime</button>
-    </div>
-    <label class="field" style="margin-top:14px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
-   </section>
-
-   <section class="panel" id="panel-emblems">
-    <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 3 emblemas.</p></div><span class="muted">03 / 08</span></div>
-    <div class="emblems" id="emblemGrid">
-     <button type="button" class="emblem" data-id="gamer"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>Gamer</button>
-     <button type="button" class="emblem" data-id="geek"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>Geek</button>
-     <button type="button" class="emblem" data-id="rpg"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>RPG</button>
-     <button type="button" class="emblem" data-id="anime"><svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>Anime</button>
-     <button type="button" class="emblem" data-id="artist"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>Criador</button>
-     <button type="button" class="emblem" data-id="founder"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Fundador</button>
-    </div>
-   </section>
-
-   <section class="panel" id="panel-socials">
-    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com ícones SVG 3D.</p></div><span class="muted">04 / 08</span></div>
-    <div class="social-grid">
-     <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
-     <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
-     <label class="field"><span>▶ YouTube</span><input id="soc_youtube" placeholder="ex: @canal"></label>
-     <label class="field"><span>💬 Discord</span><input id="soc_discord" placeholder="ex: user#0001"></label>
-     <label class="field"><span>📸 Instagram</span><input id="soc_instagram" placeholder="ex: usuario"></label>
-     <label class="field"><span>✖ X / Twitter</span><input id="soc_twitter" placeholder="ex: usuario"></label>
-     <label class="field"><span>🎬 Letterboxd</span><input id="soc_letterboxd" placeholder="ex: usuario"></label>
-     <label class="field"><span>💎 OnlyFans</span><input id="soc_onlyfans" placeholder="ex: usuario"></label>
-     <label class="field"><span>🎨 Behance</span><input id="soc_behance" placeholder="ex: usuario"></label>
-     <label class="field"><span>📌 Pinterest</span><input id="soc_pinterest" placeholder="ex: usuario"></label>
-     <label class="field"><span>🇹 Tumblr</span><input id="soc_tumblr" placeholder="ex: blog"></label>
-    </div>
-   </section>
-
-   <section class="panel" id="panel-embeds">
-    <div class="panel-head"><div><h2>🎬 Mídias Embed</h2><p>Cole o link completo da música, vídeo ou post.</p></div><span class="muted">05 / 08</span></div>
-    <label class="field">
-     <span>🎵 Link de Player do Spotify (Música, Álbum ou Playlist)</span>
-     <input id="embedSpotify" placeholder="https://open.spotify.com/track/...">
-     <small>Ex: https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT</small>
-    </label>
-    <label class="field">
-     <span>▶ Link do Vídeo do YouTube</span>
-     <input id="embedYoutube" placeholder="https://www.youtube.com/watch?v=...">
-     <small>Ex: https://www.youtube.com/watch?v=dQw4w9WgXcQ</small>
-    </label>
-    <label class="field"><span>📸 Link do Post do Instagram</span><input id="embedInstagram" placeholder="https://www.instagram.com/p/..."></label>
-   </section>
-
-   <section class="panel" id="panel-soundtrack">
-    <div class="panel-head"><div><h2>🎵 Trilha Sonora</h2><p>Adicione uma música de fundo para o perfil.</p></div><span class="muted">06 / 08</span></div>
-    <label class="field">
-     <span>Arquivo de Trilha Sonora (.mp3, .wav)</span>
-     <input id="soundtrackFile" type="file" accept="audio/mp3,audio/wav,audio/mpeg">
-     <small>Máximo de 8 minutos / 15MB. O áudio tocará de forma opcional para os visitantes.</small>
-    </label>
-    <input type="hidden" id="soundtrackUrl" value="">
-   </section>
-
-   <section class="panel" id="panel-appearance">
-    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos, Cursor e Mural de Recados.</p></div><span class="muted">07 / 08</span></div>
-    <label class="field">
-     <span>🪞 Estilo Visual do Card</span>
-     <select id="cardStyle">
-      <option value="opaque">Opaco Sólido</option>
-      <option value="glass">Vidro 3D (Glassmorphism)</option>
-     </select>
-    </label>
-    <label class="field">
-     <span>🗂️ Estilo do Mural de Recados (Guestbook)</span>
-     <select id="guestbookStyleSelect">
-      <option value="vintage">Vintage (Pedaço de Papel Envelhecido)</option>
-      <option value="chalk">Chalk (Giz Escrito sobre Fundo Escuro)</option>
-      <option value="dev">Dev Notes (Minimalista Serifado Branco)</option>
-     </select>
-    </label>
-    <div class="two">
-     <label class="field"><span>Cor de Fundo</span><input type="color" id="bgColor" value="#080812"></label>
-     <label class="field"><span>Cor Cartão Central</span><input type="color" id="cardBg" value="#11111f"></label>
-    </div>
-    <div class="two">
-     <label class="field"><span>Cor do Título do Nome</span><input type="color" id="titleColor" value="#ffffff"></label>
-     <label class="field"><span>Cor dos Demais Textos (Afeta Destaque e Texto dos Links)</span><input type="color" id="textColor" value="#f6f4ff"></label>
-    </div>
-    <label class="field">
-     <span>✨ Efeito Especial no Nome</span>
-     <select id="nameEffect">
-      <option value="none">Nenhum (Normal)</option>
-      <option value="glow">Brilho Suave (Estilo Glow nas Letras)</option>
-     </select>
-    </label>
-    <label class="field">
-     <span>🖱️ Cursor Personalizado (.cur ou .png)</span>
-     <input id="customCursorFile" type="file" accept=".cur,.png,.gif,.webp">
-     <small>Selecione um arquivo de cursor do seu computador. Máx. 1MB.</small>
-    </label>
-    <input type="hidden" id="customCursor" value="">
-    <input type="hidden" id="avatarUrl" value="">
-    <input type="hidden" id="wallpaperUrl" value="">
-   </section>
-
-   <section class="panel" id="panel-links">
-    <div class="panel-head"><div><h2>↗ Meus links extras</h2><p>Até 6 links personalizados.</p></div><span class="muted">08 / 08</span></div>
-    <div id="linksList"></div>
-    <button type="button" class="add" id="addLinkBtn">＋ Adicionar link</button>
-   </section>
+    <div class="profile-foot animate-item delay-5"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
   </div>
 
-  <div class="preview">
-   <div class="preview-label"><strong>Prévia ao vivo (Mova o mouse sobre o cartão)</strong></div>
-   <div class="profile-card card-style-opaque" id="profileCard">
-    <div class="profile-header-row">
-     <div class="avatar-container">
-      <div class="avatar" id="previewAvatar">⌬</div>
-      <div id="previewFrame" class="avatar-frame"></div>
-     </div>
-     <div class="profile-info">
-      <h3 id="previewName">Nyx.exe</h3>
-      <div class="handle" id="previewHandle">@nyx.exe</div>
-     </div>
+  <div class="views-counter animate-item delay-6">
+    <div class="views-badge">
+      <span>👁️</span>
+      <span id="publicViewsCount">0</span>
+      <span>visualizações</span>
     </div>
-    <p class="bio-preview" id="previewBio">Gamer e geek.</p>
-    <div class="live-status"><span id="previewStatusEmoji">🎮</span><span id="previewStatusText">Jogando · Valorant</span></div>
-    <div class="preview-emblems" id="previewEmblems"></div>
-    <div class="preview-socials" id="previewSocials"></div>
-    <div class="embeds-container" id="previewEmbeds"></div>
-    <div class="preview-links" id="previewLinks"></div>
-    <div class="profile-foot">CRIADO NO ISLY.ME ✦</div>
-   </div>
-   <div class="share">
-    <label>Link público</label>
-    <div class="share-row"><input id="shareUrl" readonly><button type="button" class="btn" id="copyBtn">Copiar</button></div>
-   </div>
   </div>
- </div>
-</section>
-</main>
-<footer><div class="wrap" style="display:flex;justify-content:space-between"><span>isly.me</span><span>© 2026</span></div></footer>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- Widget Flutuante de Trilha Sonora (Minimalista & Transparente) -->
+<div id="soundtrackWidget">
+  <button id="stPlayBtn" aria-label="Tocar Trilha Sonora">▶</button>
+  <div class="st-info">
+    <span class="st-title">🎵 Trilha Sonora</span>
+    <span class="st-status" id="stStatus">Pausado</span>
+  </div>
+  <audio id="stAudio" preload="none" loop></audio>
+</div>
 
+<script src="js/supabase.js"></script>
 <script>
-async function runAppInitializer() {
- const $ = (s) => document.querySelector(s);
- const appRoot = $('#appRoot');
- if (!window.islySupabase) { window.location.replace('landing.html'); return; }
-
- let user = null;
- try { user = await window.islySupabase.getUser(); } catch (e) { console.warn(e); }
-
- if (user) {
-  if (appRoot) appRoot.style.display = 'block';
-  
-  // Verifica se é administrador para exibir o botão do painel admin na barra lateral
-  try {
-    const profile = await window.islySupabase.getProfileById(user.id);
-    if (profile && profile.is_admin) {
-      const adminNav = document.getElementById('adminNavContainer');
-      if (adminNav) adminNav.style.display = 'block';
-    }
-  } catch (err) {
-    console.warn("Erro ao verificar status de admin:", err);
-  }
-
-  initEditor(user.id);
- } else {
-  window.location.replace('landing.html');
- }
-
- $('#authBtn')?.addEventListener('click', async () => { window.location.replace('landing.html'); });
-}
-
-if (window.__islySdkReadyFired) {
- runAppInitializer();
-} else {
- window.addEventListener('isly-sdk-ready', runAppInitializer);
-}
-
-function toast(msg) {
- const t = document.getElementById('toast');
- if(!t) return;
- t.textContent = msg; t.style.display = 'block'; t.classList.add('show');
- setTimeout(() => { t.classList.remove('show'); t.style.display = 'none'; }, 3000);
-}
-
 const emblemNames = { gamer: 'Gamer', geek: 'Geek', rpg: 'RPG', anime: 'Anime', artist: 'Criador', founder: 'Fundador' };
-const emblemSvgs = {
- gamer: '<svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
- geek: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>',
- rpg: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
- anime: '<svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>',
- artist: '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>',
- founder: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
+
+const socialUrls = {
+  steam: val => `https://steamcommunity.com/id/${val}`,
+  spotify: val => `https://open.spotify.com/user/${val}`,
+  youtube: val => `https://youtube.com/${val.startsWith('@') ? val : '@' + val}`,
+  discord: val => `https://discord.com/users/${val}`,
+  instagram: val => `https://instagram.com/${val.replace(/^@/, '')}`,
+  twitter: val => `https://twitter.com/${val.replace(/^@/, '')}`,
+  letterboxd: val => `https://letterboxd.com/${val}`,
+  onlyfans: val => `https://onlyfans.com/${val.replace(/^@/, '')}`,
+  behance: val => `https://behance.net/${val}`,
+  pinterest: val => `https://pinterest.com/${val}`,
+  tumblr: val => `https://${val}.tumblr.com`
 };
 
 const socialSvgs = {
- steam: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-9.9 8.6l4.4 1.9a3.5 3.5 0 0 1 4.7 2.3l2.8 1.2a4 4 0 1 0 .2-2.3l-2.8-1.2a3.5 3.5 0 0 0-2.1-1.7L4.5 9.7A8 8 0 1 1 12 2z"/></svg>',
- spotify: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.6 14.4a.6.6 0 0 1-.8.2c-2.2-1.3-5-1.6-8.3-.9a.6.6 0 1 1-.3-1.2c3.6-.8 6.7-.5 9.2 1a.6.6 0 0 1 .2.9zm1.2-2.7a.8.8 0 0 1-1 .3c-2.6-1.6-6.5-2-9.5-1.1a.8.8 0 1 1-.5-1.5c3.4-1 7.7-.6 10.7 1.3a.8.8 0 0 1 .3 1zm.1-2.8C14.3 9.4 9 9.2 5.9 10.2a1 1 0 1 1-.6-1.9c3.5-1.1 9.4-.9 13.1 1.3a1 1 0 0 1-.5 1.7z"/></svg>',
- youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>',
- discord: '<svg viewBox="0 0 24 24"><path d="M20.3 4.4a17.4 17.4 0 0 0-4.3-1.3.1.1 0 0 0-.1.1c-.2.4-.4.8-.6 1.2a16 16 0 0 0-5.6 0c-.2-.4-.4-.8-.6-1.2a.1.1 0 0 0-.1-.1 17.4 17.4 0 0 0-4.3 1.3.1.1 0 0 0 0 .1C2 9.2 1.3 13.9 2.5 18.5a.2.2 0 0 0 .1.1 17.7 17.7 0 0 0 5.4 2.7.1.1 0 0 0 .1 0c.4-.6.8-1.2 1.1-1.9a.1.1 0 0 0 0-.1 11.5 11.5 0 0 1-1.7-.8.1.1 0 0 1 0-.2c.1-.1.2-.2.3-.3a12.3 12.3 0 0 0 10.6 0c.1.1.2.2.3.3a.1.1 0 0 1 0 .2 11.5 11.5 0 0 1-1.7.8.1.1 0 0 0 0 .1c.4.7.8 1.3 1.1 1.9a.1.1 0 0 0 .1 0 17.7 17.7 0 0 0 5.4-2.7.2.2 0 0 0 .1-.1c1.3-4.8-.2-9.5-2.7-14.1a.1.1 0 0 0-.1-.1zM8.5 14.5c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2zm7 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2z"/></svg>',
- instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.2.1 4.7 1.7 4.8 4.8.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.6 4.7-4.8 4.8-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.2-.1-4.7-1.6-4.8-4.8-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-3.2 1.6-4.7 4.8-4.8 1.2 0 1.6 0 4.8 0zm0 2.2c-3.1 0-3.5 0-4.7.1-2 .1-2.9 1-3 3-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 2 1 2.9 3 3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c2-.1 2.9-1 3-3 .1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-2-1-2.9-3-3-1.2-.1-1.6-.1-4.7-.1zm0 3.6a5.8 5.8 0 1 1 0 11.6 5.8 5.8 0 0 1 0-11.6zm0 9.4a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2zm6.2-10.4a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0 z"/></svg>',
- twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
- letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
- onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
- behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1z"/></svg>',
- pinterest: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.7 19.3c-.1-.8-.2-2 .03-2.9l.7-3.1s-.2-.4-.2-1c0-1 .6-1.7 1.3-1.7.6 0 .9.5.9 1.1 0 .7-.4 1.7-.6 2.6-.2.8.4 1.5 1.2 1.5 1.4 0 2.5-1.5 2.5-3.6 0-1.9-1.4-3.2-3.4-3.2-2.3 0-3.7 1.7-3.7 3.5 0 .7.3 1.4.6 1.8l-.2.8c-.1 0-.3-.1-.4-.2-1.5-.7-2.4-2.8-2.4-4.5 0-3.7 2.7-7.1 7.8-7.1 4.1 0 7.3 2.9 7.3 6.8 0 4.1-2.6 7.4-6.2 7.4-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-1.1 2.5-1.6 3.4A10 10 0 1 0 12 2z"/></svg>',
- tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
+  steam: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-9.9 8.6l4.4 1.9a3.5 3.5 0 0 1 4.7 2.3l2.8 1.2a4 4 0 1 0 .2-2.3l-2.8-1.2a3.5 3.5 0 0 0-2.1-1.7L4.5 9.7A8 8 0 1 1 12 2z"/></svg>',
+  spotify: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.6 14.4a.6.6 0 0 1-.8.2c-2.2-1.3-5-1.6-8.3-.9a.6.6 0 1 1-.3-1.2c3.6-.8 6.7-.5 9.2 1a.6.6 0 0 1 .2.9zm1.2-2.7a.8.8 0 0 1-1 .3c-2.6-1.6-6.5-2-9.5-1.1a.8.8 0 1 1-.5-1.5c3.4-1 7.7-.6 10.7 1.3a.8.8 0 0 1 .3 1zm.1-2.8C14.3 9.4 9 9.2 5.9 10.2a1 1 0 1 1-.6-1.9c3.5-1.1 9.4-.9 13.1 1.3a1 1 0 0 1-.5 1.7z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>',
+  discord: '<svg viewBox="0 0 24 24"><path d="M20.3 4.4a17.4 17.4 0 0 0-4.3-1.3.1.1 0 0 0-.1.1c-.2.4-.4.8-.6 1.2a16 16 0 0 0-5.6 0c-.2-.4-.4-.8-.6-1.2a.1.1 0 0 0-.1-.1 17.4 17.4 0 0 0-4.3 1.3.1.1 0 0 0 0 .1C2 9.2 1.3 13.9 2.5 18.5a.2.2 0 0 0 .1.1 17.7 17.7 0 0 0 5.4 2.7.1.1 0 0 0 .1 0c.4-.6.8-1.2 1.1-1.9a.1.1 0 0 0 0-.1 11.5 11.5 0 0 1-1.7-.8.1.1 0 0 1 0-.2c.1-.1.2-.2.3-.3a12.3 12.3 0 0 0 10.6 0c.1.1.2.2.3.3a.1.1 0 0 1 0 .2 11.5 11.5 0 0 1-1.7.8.1.1 0 0 0 0 .1c.4.7.8 1.3 1.1 1.9a.1.1 0 0 0 .1 0 17.7 17.7 0 0 0 5.4-2.7.2.2 0 0 0 .1-.1c1.3-4.8-.2-9.5-2.7-14.1a.1.1 0 0 0-.1-.1zM8.5 14.5c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2zm7 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.2.1 4.7 1.7 4.8 4.8.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.6 4.7-4.8 4.8-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.2-.1-4.7-1.6-4.8-4.8-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-3.2 1.6-4.7 4.8-4.8 1.2 0 1.6 0 4.8 0zm0 2.2c-3.1 0-3.5 0-4.7.1-2 .1-2.9 1-3 3-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 2 1 2.9 3 3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c2-.1 2.9-1 3-3 .1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-2-1-2.9-3-3-1.2-.1-1.6-.1-4.7-.1zm0 3.6a5.8 5.8 0 1 1 0 11.6 5.8 5.8 0 0 1 0-11.6zm0 9.4a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2zm6.2-10.4a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0 z"/></svg>',
+  twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
+  letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
+  onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
+  behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1z"/></svg>',
+  pinterest: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.7 19.3c-.1-.8-.2-2 .03-2.9l.7-3.1s-.2-.4-.2-1c0-1 .6-1.7 1.3-1.7.6 0 .9.5.9 1.1 0 .7-.4 1.7-.6 2.6-.2.8.4 1.5 1.2 1.5 1.4 0 2.5-1.5 2.5-3.6 0-1.9-1.4-3.2-3.4-3.2-2.3 0-3.7 1.7-3.7 3.5 0 .7.3 1.4.6 1.8l-.2.8c-.1 0-.3-.1-.4-.2-1.5-.7-2.4-2.8-2.4-4.5 0-3.7 2.7-7.1 7.8-7.1 4.1 0 7.3 2.9 7.3 6.8 0 4.1-2.6 7.4-6.2 7.4-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-1.1 2.5-1.6 3.4A10 10 0 1 0 12 2z"/></svg>',
+  tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
+};
+
+const emblemSvgs = {
+  gamer: '<svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
+  geek: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>',
+  rpg: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
+  anime: '<svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>',
+  artist: '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>',
+  founder: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
 };
 
 function getSpotifyEmbed(url) {
- if (!url) return '';
- const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
- if (match) {
-  return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
- }
- return '';
+  if (!url) return '';
+  const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
+  if (match) {
+    return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
+  }
+  return '';
 }
 
 function getYoutubeEmbed(url) {
- if (!url) return '';
- let id = '';
- if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
- else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
- if (id) {
-  return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
- }
- return '';
+  if (!url) return '';
+  let id = '';
+  if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
+  else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
+  if (id) {
+    return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+  }
+  return '';
 }
 
 function getInstagramEmbed(url) {
- if (!url) return '';
- const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
- if (match) {
-  return `<div class="embed-wrapper"><iframe src="https://www.instagram.com/${match[1]}/${match[2]}/embed" height="360" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
- }
- return '';
+  if (!url) return '';
+  const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    return `<div class="embed-wrapper"><iframe src="https://www.instagram.com/${match[1]}/${match[2]}/embed" height="360" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
+  }
+  return '';
 }
 
-async function initEditor(userId) {
- let profile = null;
- try {
-  profile = await window.islySupabase.getProfileById(userId);
- } catch (e) {
-  console.warn("Erro ao buscar perfil:", e);
- }
+document.addEventListener("DOMContentLoaded", async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const rawHandle = urlParams.get('u') || urlParams.get('user');
 
- if (!profile) {
-  profile = {
-   id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6),
-   bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', accent_color: '#c084fc',
-   title_color: '#ffffff', text_color: '#f6f4ff',
-   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack_url: '', avatar_frame: 'none', bio: '', activity: '',
-   status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
-   embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
-   guestbook_style: 'vintage'
-  };
- }
-
- let currentProfile = { ...profile };
- if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
- if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
- if (!currentProfile.socials || typeof currentProfile.socials !== 'object') currentProfile.socials = {};
-
- document.getElementById('statViews').textContent = currentProfile.views_count || 0;
- document.getElementById('statClicks').textContent = currentProfile.clicks_count || 0;
-
- const nameInput = document.getElementById('name');
- const handleInput = document.getElementById('handle');
- const bioInput = document.getElementById('bio');
- const bioCount = document.getElementById('bioCount');
- const avatarFrameSelect = document.getElementById('avatarFrameSelect');
- const activityInput = document.getElementById('activity');
- const shareUrlInput = document.getElementById('shareUrl');
-
- const cardStyleSelect = document.getElementById('cardStyle');
- const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
- const bgColorInput = document.getElementById('bgColor');
- const cardBgInput = document.getElementById('cardBg');
- const titleColorInput = document.getElementById('titleColor');
- const textColorInput = document.getElementById('textColor');
- const nameEffectSelect = document.getElementById('nameEffect');
- const customCursorInput = document.getElementById('customCursor');
- const avatarUrlInput = document.getElementById('avatarUrl');
- const wallpaperUrlInput = document.getElementById('wallpaperUrl');
- const soundtrackUrlInput = document.getElementById('soundtrackUrl');
-
- const embedSpotifyInput = document.getElementById('embedSpotify');
- const embedYoutubeInput = document.getElementById('embedYoutube');
- const embedInstagramInput = document.getElementById('embedInstagram');
-
- const syncDot = document.getElementById('syncDot');
- const syncText = document.getElementById('syncText');
-
- nameInput.value = currentProfile.name || '';
- handleInput.value = currentProfile.handle || '';
-
- // REGRA DO @: Se o usuário já alterou o handle uma vez, bloqueia o campo e avisa
- if (currentProfile.handle_changed) {
-  handleInput.disabled = true;
-  handleInput.style.opacity = '0.6';
-  handleInput.style.cursor = 'not-allowed';
-  
-  const parentField = handleInput.closest('.field');
-  if (parentField && !document.getElementById('handleWarning')) {
-   const warning = document.createElement('small');
-   warning.id = 'handleWarning';
-   warning.style.color = '#f43f5e';
-   warning.style.marginTop = '6px';
-   warning.innerHTML = '⚠️ O seu @ já foi alterado uma vez. Para trocar novamente, abra um ticket no nosso canal do <a href="https://discord.gg/SEU_LINK" target="_blank" style="color:var(--purple); text-decoration:underline;">Discord</a>.';
-   parentField.appendChild(warning);
+  if (!rawHandle || !window.islySupabase) {
+    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+    return;
   }
- }
 
- bioInput.value = currentProfile.bio || '';
- bioCount.textContent = (currentProfile.bio || '').length;
- avatarFrameSelect.value = currentProfile.avatar_frame || 'none';
- activityInput.value = currentProfile.activity || '';
+  const handle = rawHandle.trim().replace(/^@/, '');
+  const data = await window.islySupabase.getProfileByHandle(handle);
 
- cardStyleSelect.value = currentProfile.card_style || 'opaque';
- guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
- bgColorInput.value = currentProfile.bg_color || '#080812';
- cardBgInput.value = currentProfile.card_bg || '#11111f';
- titleColorInput.value = currentProfile.title_color || '#ffffff';
- textColorInput.value = currentProfile.text_color || '#f6f4ff';
- nameEffectSelect.value = currentProfile.name_effect || 'none';
- customCursorInput.value = currentProfile.custom_cursor || '';
- avatarUrlInput.value = currentProfile.avatar_url || '';
- wallpaperUrlInput.value = currentProfile.wallpaper_url || '';
- soundtrackUrlInput.value = currentProfile.soundtrack_url || '';
+  if (!data) {
+    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
+    return;
+  }
 
- embedSpotifyInput.value = currentProfile.embed_spotify || '';
- embedYoutubeInput.value = currentProfile.embed_youtube || '';
- embedInstagramInput.value = currentProfile.embed_instagram || '';
+  if (data.is_banned) {
+    document.querySelector('.container').innerHTML = `
+      <div class="error-box" style="border: 1px solid #f8717144; background: #f8717112; border-radius: 18px; padding: 40px;">
+        <h2>⚠️ Conta Suspensa</h2>
+        <p>Este perfil foi suspenso por violação dos termos de uso da comunidade.</p>
+      </div>
+    `;
+    return;
+  }
 
- Object.keys(socialSvgs).forEach(key => {
-  const field = document.getElementById('soc_' + key);
-  if (field && currentProfile.socials[key]) field.value = currentProfile.socials[key];
- });
-
- if (currentProfile.handle) {
-  shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentProfile.handle}`;
- }
-
- const previewCard = document.getElementById('profileCard');
- previewCard.addEventListener('mousemove', (e) => {
-  const rect = previewCard.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const xc = rect.width / 2;
-  const yc = rect.height / 2;
-  const dx = (x - xc) / xc;
-  const dy = (y - yc) / yc;
-  previewCard.style.transform = `perspective(1200px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) translateY(-2px)`;
- });
- previewCard.addEventListener('mouseleave', () => {
-  previewCard.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
- });
-
- document.getElementById('avatarFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
-  toast('Enviando foto de perfil...');
-
+  let currentViews = (data.views_count || 0) + 1;
+  document.getElementById('publicViewsCount').textContent = currentViews;
   try {
-   const fileExt = file.name.split('.').pop();
-   const fileName = `${userId}-${Date.now()}.${fileExt}`;
-   const filePath = `avatars/${fileName}`;
-
-   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-   if (uploadErr) throw new Error(uploadErr);
-
-   const publicUrl = window.islySupabase.getPublicUrl(filePath);
-   if (publicUrl) {
-    avatarUrlInput.value = publicUrl;
-    currentProfile.avatar_url = publicUrl;
-    updatePreview();
-    triggerAutoSave();
-    toast('Foto de perfil atualizada! ✓');
-   } else {
-    throw new Error('Não foi possível obter a URL pública.');
-   }
-  } catch (err) {
-   console.error("Erro no upload do avatar:", err);
-   toast('Erro ao enviar foto: ' + (err.message || 'Erro desconhecido'));
-  }
- });
-
- document.getElementById('wallpaperFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 2 * 1024 * 1024) { toast('O wallpaper deve ter no máximo 2MB.'); return; }
-  toast('Enviando wallpaper do cartão...');
-
-  try {
-   const fileExt = file.name.split('.').pop();
-   const fileName = `${userId}-${Date.now()}.${fileExt}`;
-   const filePath = `wallpapers/${fileName}`;
-
-   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-   if (uploadErr) throw new Error(uploadErr);
-
-   const publicUrl = window.islySupabase.getPublicUrl(filePath);
-   if (publicUrl) {
-    wallpaperUrlInput.value = publicUrl;
-    currentProfile.wallpaper_url = publicUrl;
-    updatePreview();
-    triggerAutoSave();
-    toast('Wallpaper atualizado! ✓');
-   } else {
-    throw new Error('Não foi possível obter a URL pública.');
-   }
-  } catch (err) {
-   console.error("Erro no upload do wallpaper:", err);
-   toast('Erro ao enviar wallpaper: ' + (err.message || 'Erro desconhecido'));
-  }
- });
-
- document.getElementById('soundtrackFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 15 * 1024 * 1024) { toast('A trilha sonora deve ter no máximo 15MB.'); return; }
-  toast('Enviando trilha sonora...');
-
-  try {
-   const fileExt = file.name.split('.').pop();
-   const fileName = `${userId}-${Date.now()}.${fileExt}`;
-   const filePath = `soundtracks/${fileName}`;
-
-   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-   if (uploadErr) throw new Error(uploadErr);
-
-   const publicUrl = window.islySupabase.getPublicUrl(filePath);
-   if (publicUrl) {
-    soundtrackUrlInput.value = publicUrl;
-    currentProfile.soundtrack_url = publicUrl;
-    triggerAutoSave();
-    toast('Trilha sonora adicionada! 🎵');
-   } else {
-    throw new Error('Não foi possível obter a URL pública.');
-   }
-  } catch (err) {
-   console.error("Erro no upload da trilha sonora:", err);
-   toast('Erro ao enviar áudio: ' + (err.message || 'Erro desconhecido'));
-  }
- });
-
- document.getElementById('customCursorFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 1024 * 1024) { toast('O cursor deve ter no máximo 1MB.'); return; }
-  toast('Enviando cursor...');
-  try {
-   const fileExt = file.name.split('.').pop();
-   const filePath = `cursors/${userId}-${Date.now()}.${fileExt}`;
-   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-   if (uploadErr) throw new Error(uploadErr);
-   const publicUrl = window.islySupabase.getPublicUrl(filePath);
-   if (publicUrl) {
-    customCursorInput.value = publicUrl;
-    currentProfile.custom_cursor = publicUrl;
-    updatePreview();
-    triggerAutoSave();
-    toast('Cursor atualizado! ✨');
-   }
-  } catch (err) {
-   toast('Erro ao enviar cursor.');
-  }
- });
-
- let saveTimer = null;
- function triggerAutoSave() {
-  syncDot.classList.add('saving');
-  syncText.textContent = 'Salvando...';
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => {
-   const socialsData = {};
-   Object.keys(socialSvgs).forEach(key => {
-    const val = document.getElementById('soc_' + key)?.value.trim();
-    if (val) socialsData[key] = val;
-   });
-
-   const payload = {
-    id: userId, name: nameInput.value, handle: handleInput.value,
-    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
-    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-    card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
-    bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-    accent_color: textColorInput.value,
-    title_color: titleColorInput.value, text_color: textColorInput.value,
-    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
-    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
-    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
-    emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
-    handle_changed: currentProfile.handle_changed
-   };
-
-   const err = await window.islySupabase.saveProfile(payload);
-   syncDot.classList.remove('saving');
-   syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
-  }, 1200);
- }
-
- document.querySelectorAll('.sidebar .navbtn').forEach(btn => {
-  btn.addEventListener('click', () => {
-   document.querySelectorAll('.sidebar .navbtn').forEach(b => b.classList.remove('active'));
-   document.querySelectorAll('.content .panel').forEach(p => p.classList.remove('active-panel'));
-   btn.classList.add('active');
-   document.getElementById('panel-' + btn.getAttribute('data-sec'))?.classList.add('active-panel');
-  });
- });
-
- document.querySelectorAll('#statusOptions .choice').forEach(btn => {
-  if (btn.getAttribute('data-label') === currentProfile.status_label) {
-   document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
-   btn.classList.add('active');
-  }
-  btn.addEventListener('click', () => {
-   document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
-   btn.classList.add('active');
-   currentProfile.status_emoji = btn.getAttribute('data-emoji');
-   currentProfile.status_label = btn.getAttribute('data-label');
-   updatePreview(); triggerAutoSave();
-  });
- });
-
- document.querySelectorAll('#emblemGrid .emblem').forEach(el => {
-  const id = el.getAttribute('data-id');
-  if (currentProfile.emblems.includes(id)) el.classList.add('selected');
-  el.addEventListener('click', () => {
-   if (currentProfile.emblems.includes(id)) {
-    currentProfile.emblems = currentProfile.emblems.filter(e => e !== id);
-    el.classList.remove('selected');
-   } else {
-    if (currentProfile.emblems.length >= 3) { toast('Máximo de 3 emblemas.'); return; }
-    currentProfile.emblems.push(id); el.classList.add('selected');
-   }
-   updatePreview(); triggerAutoSave();
-  });
- });
-
- Object.keys(socialSvgs).forEach(key => {
-  document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
- });
-
- [cardStyleSelect, guestbookStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
-  input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
- });
-
- avatarFrameSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
- guestbookStyleSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
-
- function moveLink(fromIdx, toIdx) {
-  if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
-  const item = currentProfile.links.splice(fromIdx, 1)[0];
-  currentProfile.links.splice(toIdx, 0, item);
-  renderLinksEditor(); updatePreview(); triggerAutoSave();
- }
-
- function renderLinksEditor() {
-  const container = document.getElementById('linksList');
-  container.innerHTML = '';
-  currentProfile.links.forEach((link, idx) => {
-   const row = document.createElement('div');
-   row.className = 'link-row';
-   row.innerHTML = `
-    <div class="reorder-btns">
-     <button type="button" class="reorder-btn move-up" ${idx === 0 ? 'disabled' : ''}>▲</button>
-     <button type="button" class="reorder-btn move-down" ${idx === currentProfile.links.length - 1 ? 'disabled' : ''}>▼</button>
-    </div>
-    <input type="text" value="${link.emoji || '↗'}" maxlength="4" placeholder="emoji" class="link-emoji">
-    <input type="text" value="${link.title || ''}" placeholder="Título do link" class="link-title">
-    <input type="text" value="${link.url || ''}" placeholder="https://..." class="link-url">
-    <button type="button" class="remove">✕</button>
-   `;
-   row.querySelector('.move-up').addEventListener('click', () => moveLink(idx, idx - 1));
-   row.querySelector('.move-down').addEventListener('click', () => moveLink(idx, idx + 1));
-   row.querySelector('.link-emoji').addEventListener('input', e => { currentProfile.links[idx].emoji = e.target.value; updatePreview(); triggerAutoSave(); });
-   row.querySelector('.link-title').addEventListener('input', e => { currentProfile.links[idx].title = e.target.value; updatePreview(); triggerAutoSave(); });
-   row.querySelector('.link-url').addEventListener('input', e => { currentProfile.links[idx].url = e.target.value; updatePreview(); triggerAutoSave(); });
-   row.querySelector('.remove').addEventListener('click', () => {
-    currentProfile.links.splice(idx, 1); renderLinksEditor(); updatePreview(); triggerAutoSave();
-   });
-   container.appendChild(row);
-  });
- }
-
- document.getElementById('addLinkBtn').addEventListener('click', () => {
-  if (currentProfile.links.length >= 6) { toast('Máximo de 6 links permitidos.'); return; }
-  currentProfile.links.push({ emoji: '↗', title: '', url: '' });
-  renderLinksEditor(); updatePreview(); triggerAutoSave();
- });
-
- renderLinksEditor();
-
- document.getElementById('copyBtn').addEventListener('click', () => {
-  navigator.clipboard.writeText(shareUrlInput.value);
-  toast('Link copiado para a área de transferência! 📋');
- });
-
- function updatePreview() {
-  const nameEl = document.getElementById('previewName');
-  nameEl.textContent = nameInput.value || 'Seu Nome';
-  nameEl.className = '';
-  const fx = nameEffectSelect.value;
-  if (fx === 'glow') {
-   nameEl.classList.add('text-effect-glow');
+    await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
+  } catch (e) {
+    console.warn("Analytics Error:", e);
   }
 
-  document.getElementById('previewHandle').textContent = '@' + (handleInput.value || 'nick');
-  document.getElementById('previewBio').textContent = bioInput.value || 'Escreva sua bio...';
-  
-  const avatarEl = document.getElementById('previewAvatar');
-  const avatarVal = avatarUrlInput.value.trim();
-  if (avatarVal) {
-   avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
+  document.body.style.backgroundColor = data.bg_color || '#080812';
+  if (data.custom_cursor) {
+    document.body.style.cursor = `url('${data.custom_cursor}'), auto`;
+  }
+
+  const card = document.getElementById('profileCard');
+  if (card) {
+    const cardStyleType = data.card_style || 'opaque';
+    card.classList.remove('card-style-opaque', 'card-style-glass');
+    
+    if (cardStyleType === 'glass') {
+      card.classList.add('card-style-glass');
+      card.style.backgroundColor = '';
+    } else {
+      card.classList.add('card-style-opaque');
+      card.style.backgroundColor = data.card_bg || '#11111f';
+    }
+
+    if (data.wallpaper_url) {
+      document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.75), rgba(8, 8, 18, 0.75)), url('${data.wallpaper_url}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundAttachment = 'fixed';
+    }
+
+    card.style.border = 'none';
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xc = rect.width / 2;
+      const yc = rect.height / 2;
+      const dx = (x - xc) / xc;
+      const dy = (y - yc) / yc;
+      card.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+    });
+  }
+
+  const nameEl = document.getElementById('name');
+  if (nameEl) {
+    nameEl.style.color = data.title_color || '#ffffff';
+    if (data.name_effect === 'glow') {
+      nameEl.classList.add('text-effect-glow');
+    }
+  }
+
+  const activeTextColor = data.text_color || '#f6f4ff';
+  const bioEl = document.getElementById('bio');
+  if (bioEl) bioEl.style.color = activeTextColor;
+
+  const handleEl = document.getElementById('handle');
+  if (handleEl) handleEl.style.color = activeTextColor;
+
+  document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
+  nameEl.textContent = data.name || 'Sem nome';
+  handleEl.textContent = '@' + data.handle;
+
+  const roleBadge = document.getElementById('roleBadge');
+  if (roleBadge) {
+    const r = data.role || 'Membro';
+    roleBadge.innerHTML = r === 'Fundador' ? '💎 Fundador' : r === 'Suporte' ? '🛡️ Suporte' : r === 'Apoiador' ? '⭐ Apoiador' : '👾 Membro';
+  }
+
+  bioEl.textContent = data.bio || '';
+  document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
+  document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
+
+  const avatarEl = document.getElementById('avatar');
+  if (data.avatar_url) {
+    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
   } else {
-   avatarEl.textContent = '⌬';
+    avatarEl.textContent = '⌬';
   }
 
-  const frameEl = document.getElementById('previewFrame');
-  const frameType = avatarFrameSelect.value;
+  const frameEl = document.getElementById('avatarFrame');
+  const frameType = data.avatar_frame || 'none';
   frameEl.className = 'avatar-frame';
   if (frameType === 'cyberpunk') frameEl.classList.add('frame-cyberpunk');
   else if (frameType === 'neon-gold') frameEl.classList.add('frame-neon-gold');
   else if (frameType === 'royal-purple') frameEl.classList.add('frame-royal-purple');
 
-  document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
-  document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
-
-  const card = document.getElementById('profileCard');
-  card.className = 'profile-card';
-  if (cardStyleSelect.value === 'glass') {
-   card.classList.add('card-style-glass');
-   card.style.backgroundColor = '';
-  } else {
-   card.classList.add('card-style-opaque');
-   card.style.backgroundColor = cardBgInput.value;
+  const emblemsEl = document.getElementById('emblems');
+  if (emblemsEl) {
+    emblemsEl.innerHTML = (data.emblems || []).map(id => {
+      const svg = emblemSvgs[id] || '';
+      return `<span>${svg} ${emblemNames[id] || id}</span>`;
+    }).join('');
   }
 
-  const wallpaperVal = wallpaperUrlInput.value.trim();
-  if (wallpaperVal) {
-   document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.8), rgba(8, 8, 18, 0.8)), url('${wallpaperVal}')`;
-   document.body.style.backgroundSize = 'cover';
-   document.body.style.backgroundPosition = 'center';
-   document.body.style.backgroundRepeat = 'no-repeat';
-   document.body.style.backgroundAttachment = 'fixed';
-  } else {
-   document.body.style.backgroundImage = '';
-   document.body.style.background = bgColorInput.value;
+  const socialsBar = document.getElementById('socialsBar');
+  if (socialsBar && data.socials) {
+    let sHTML = '';
+    Object.keys(data.socials).forEach(key => {
+      const val = data.socials[key];
+      if (val && socialUrls[key]) {
+        const url = socialUrls[key](val);
+        const svg = socialSvgs[key] || '';
+        sHTML += `<a class="social-icon-btn" href="${url}" target="_blank" rel="noopener" title="${key}" style="color:${activeTextColor}">${svg}</a>`;
+      }
+    });
+    socialsBar.innerHTML = sHTML;
   }
 
-  if (fx === 'none') nameEl.style.color = titleColorInput.value;
-  else nameEl.style.color = '';
-
-  const activeTextColor = textColorInput.value;
-  document.getElementById('previewBio').style.color = activeTextColor;
-  document.getElementById('previewHandle').style.color = activeTextColor;
-
-  const emPreview = document.getElementById('previewEmblems');
-  emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemSvgs[id] || ''} ${emblemNames[id] || id}</span>`).join('');
-
-  const socPreview = document.getElementById('previewSocials');
-  let socHTML = '';
-  Object.keys(socialSvgs).forEach(key => {
-   const val = document.getElementById('soc_' + key)?.value.trim();
-   if (val) {
-    socHTML += `<a class="preview-social-icon" title="${key}" href="#" onclick="return false;" style="color:${activeTextColor}">${socialSvgs[key]}</a>`;
-   }
-  });
-  socPreview.innerHTML = socHTML;
-
-  const embedsPreview = document.getElementById('previewEmbeds');
-  let embedsHTML = '';
-  embedsHTML += getSpotifyEmbed(embedSpotifyInput.value.trim());
-  embedsHTML += getYoutubeEmbed(embedYoutubeInput.value.trim());
-  embedsHTML += getInstagramEmbed(embedInstagramInput.value.trim());
-  embedsPreview.innerHTML = embedsHTML;
-
-  const lnPreview = document.getElementById('previewLinks');
-  lnPreview.innerHTML = currentProfile.links.map(l => `
-   <a class="preview-link" href="${l.url || '#'}" target="_blank" style="background: rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px)">
-    <span style="display:flex;align-items:center;gap:10px"><span>${l.emoji || '↗'}</span><span>${l.title || 'Link'}</span></span>
-    <span style="color:${activeTextColor}">↗</span>
-   </a>
-  `).join('');
- }
-
- [nameInput, bioInput, activityInput].forEach(el => {
-  el.addEventListener('input', () => {
-   if (el === bioInput) bioCount.textContent = bioInput.value.length;
-   updatePreview(); triggerAutoSave();
-  });
- });
-
- handleInput.addEventListener('input', () => {
-  if (currentProfile.handle_changed) return;
-  
-  currentProfile.handle_changed = true;
-  toast('💡 Aviso: O @ só pode ser alterado uma única vez!');
-
-  if (handleInput.value) {
-   shareUrlInput.value = `${window.location.origin}/perfil.html?u=${handleInput.value.trim().replace(/^@/, '')}`;
+  const embedsBar = document.getElementById('embedsBar');
+  if (embedsBar) {
+    let eHTML = '';
+    eHTML += getSpotifyEmbed(data.embed_spotify);
+    eHTML += getYoutubeEmbed(data.embed_youtube);
+    eHTML += getInstagramEmbed(data.embed_instagram);
+    embedsBar.innerHTML = eHTML;
   }
-  updatePreview(); 
-  triggerAutoSave();
- });
 
- updatePreview();
+  const linksEl = document.getElementById('links');
+  if (linksEl) {
+    linksEl.innerHTML = (data.links || []).map(link => `
+      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px)">
+        <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
+        <span class="arr" style="color:${activeTextColor}">↗</span>
+      </a>
+    `).join('');
 
- document.getElementById('saveBtn').addEventListener('click', async () => {
-  clearTimeout(saveTimer);
-  syncDot.classList.add('saving');
-  syncText.textContent = 'Salvando...';
+    document.querySelectorAll('.public-link').forEach(linkBtn => {
+      linkBtn.addEventListener('click', async (evt) => {
+        evt.preventDefault();
+        const targetUrl = linkBtn.getAttribute('data-url');
+        try {
+          const currentClicks = (data.clicks_count || 0) + 1;
+          await window.islySupabase.saveProfile({ id: data.id, clicks_count: currentClicks });
+        } catch (e) {
+          console.warn("Analytics Error:", e);
+        }
+        if (targetUrl && targetUrl !== '#') window.open(targetUrl, '_blank');
+      });
+    });
+  }
 
-  const socialsData = {};
-  Object.keys(socialSvgs).forEach(key => {
-   const val = document.getElementById('soc_' + key)?.value.trim();
-   if (val) socialsData[key] = val;
-  });
+  // RENDERIZAR FRIENDSHIPS (AMIGOS EM DESTAQUE NO RODAPÉ DO CARD)
+  if (data.friendships && data.friendships.length > 0) {
+    const friendContainer = document.getElementById('friendshipsFooter');
+    if (friendContainer) {
+      window.islySupabase.client
+        .from('profiles')
+        .select('handle, name, avatar_url')
+        .in('handle', data.friendships)
+        .then(({ data: friendsData, error }) => {
+          if (!error && friendsData && friendsData.length > 0) {
+            friendContainer.style.display = 'flex';
+            friendContainer.innerHTML = friendsData.map(friend => {
+              const avatarContent = friend.avatar_url 
+                ? `<img src="${friend.avatar_url}" alt="${friend.name || friend.handle}">`
+                : `<div class="friendship-bubble-fallback">${(friend.name || friend.handle).substring(0, 2).toUpperCase()}</div>`;
+              
+              return `
+                <a href="perfil.html?u=${friend.handle}" class="friendship-bubble" title="@${friend.handle}">
+                  ${avatarContent}
+                </a>
+              `;
+            }).join('');
+          }
+        });
+    }
+  }
 
-  const payload = {
-   id: userId, name: nameInput.value, handle: handleInput.value,
-   bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
-   status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-   card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
-   bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-   accent_color: textColorInput.value,
-   title_color: titleColorInput.value, text_color: textColorInput.value,
-   name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
-   avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
-   embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
-   emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
-   handle_changed: currentProfile.handle_changed
-  };
+  // ATIVAÇÃO DA TRILHA SONORA (MINIMALISTA, APENAS SOB CLIQUE)
+  if (data.soundtrack_url) {
+    const widget = document.getElementById('soundtrackWidget');
+    const audio = document.getElementById('stAudio');
+    const playBtn = document.getElementById('stPlayBtn');
+    const statusTxt = document.getElementById('stStatus');
 
-  const err = await window.islySupabase.saveProfile(payload);
-  syncDot.classList.remove('saving');
-  syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
-  toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
- });
-}
+    if (widget && audio) {
+      audio.src = data.soundtrack_url;
+      widget.style.display = 'flex';
+
+      playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play().then(() => {
+            playBtn.textContent = '❚❚';
+            statusTxt.textContent = 'A tocar...';
+          }).catch(err => {
+            console.warn("Erro ao reproduzir áudio:", err);
+          });
+        } else {
+          audio.pause();
+          playBtn.textContent = '▶';
+          statusTxt.textContent = 'Pausado';
+        }
+      });
+    }
+  }
+});
 </script>
 </body>
 </html>
