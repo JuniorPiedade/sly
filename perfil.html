@@ -428,7 +428,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (handleEl) handleEl.style.color = activeTextColor;
 
   document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
-  nameEl.innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
+  nameEl.textContent = data.name || 'Sem nome';
   handleEl.textContent = '@' + data.handle;
 
   const roleBadge = document.getElementById('roleBadge');
