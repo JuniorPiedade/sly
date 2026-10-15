@@ -124,7 +124,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
     0 0 35px rgba(255, 255, 255, 0.3);
 }
 
-.verified{color:var(--blue);font-size:13px}
 .handle{font-size:13px;font-weight:600;letter-spacing:0.02em;margin-bottom:4px}
 .role-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc;width:fit-content}
 
@@ -210,6 +209,140 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 }
 .st-status { font-size: 9px; color: var(--muted); letter-spacing: 0.3px; }
 
+/* ========================================================= */
+/* GUESTBOOK (MURAL DE RECADOS ESTILO POST-IT / MARGENS)     */
+/* ========================================================= */
+#guestbookContainer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.guestbook-note {
+  position: absolute;
+  pointer-events: auto;
+  padding: 10px 14px;
+  max-width: 140px;
+  font-size: 11px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, z-index 0.2s ease;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.guestbook-note:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  z-index: 1000;
+}
+
+.note-style-vintage {
+  background: #fdfbf7;
+  color: #1a1a1a;
+  border-left: 3px solid #d4c5a9;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 2px 4px 15px rgba(0,0,0,0.3);
+}
+
+.note-style-chalk {
+  background: rgba(18, 18, 26, 0.85);
+  backdrop-filter: blur(8px);
+  color: #e2e8f0;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.note-style-dev {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  font-family: 'Times New Roman', Times, serif;
+}
+.note-style-dev .note-code-tag {
+  font-size: 9px;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.note-author {
+  font-size: 9px;
+  font-weight: 700;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+/* Botão minimalista sem ícone de lápis */
+#openNoteModalBtn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1000;
+  background: rgba(13, 11, 20, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f6f4ff;
+  border-radius: 99px;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  transition: all 0.2s;
+}
+#openNoteModalBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+#noteModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  place-items: center;
+  padding: 20px;
+}
+.note-modal-box {
+  background: #11111f;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 340px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+.note-modal-box h3 { margin: 0; font-size: 16px; color: #f6f4ff; }
+.note-modal-box input, .note-modal-box select {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+}
+.note-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.note-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.note-btn-cancel { background: rgba(255,255,255,0.08); color: #a6a4c4; }
+.note-btn-submit { background: #a855f7; color: #fff; }
+
 .animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 @keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
 .delay-1 { animation-delay: 0.05s; }
@@ -231,7 +364,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
         <div id="avatarFrame" class="avatar-frame"></div>
       </div>
       <div class="profile-info">
-        <h3 id="name">Carregando... <span class="verified">✦</span></h3>
+        <h3 id="name">Carregando...</h3>
         <div class="handle" id="handle">@...</div>
         <div class="role-badge" id="roleBadge">👾 Membro</div>
       </div>
@@ -254,7 +387,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   </div>
 </div>
 
-<!-- Widget Flutuante de Trilha Sonora (Minimalista & Transparente) -->
+<!-- Widget Flutuante de Trilha Sonora -->
 <div id="soundtrackWidget">
   <button id="stPlayBtn" aria-label="Tocar Trilha Sonora">▶</button>
   <div class="st-info">
@@ -262,6 +395,26 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
     <span class="st-status" id="stStatus">Pausado</span>
   </div>
   <audio id="stAudio" preload="none" loop></audio>
+</div>
+
+<!-- Container dos recados nas margens -->
+<div id="guestbookContainer"></div>
+
+<!-- Botão flutuante limpo para abrir o modal -->
+<button id="openNoteModalBtn" aria-label="Deixar Recado">Deixar Recado</button>
+
+<!-- Modal -->
+<div id="noteModal">
+  <div class="note-modal-box">
+    <h3>Deixar um recado no mural</h3>
+    <p style="font-size: 11px; color: #a6a4c4; margin: 0;">Até 10 caracteres por campo para manter o espaço limpo.</p>
+    <input type="text" id="noteAuthorInput" placeholder="Seu nome (máx 10)" maxlength="10">
+    <input type="text" id="noteMessageInput" placeholder="Recado (máx 10)" maxlength="10">
+    <div class="note-modal-actions">
+      <button class="note-btn note-btn-cancel" id="closeNoteModalBtn">Cancelar</button>
+      <button class="note-btn note-btn-submit" id="submitNoteBtn">Fixar Recado</button>
+    </div>
+  </div>
 </div>
 
 <script src="js/supabase.js"></script>
@@ -335,6 +488,15 @@ function getInstagramEmbed(url) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Configuração global imediata do Modal do Guestbook (independente do carregamento do perfil)
+  const modal = document.getElementById('noteModal');
+  document.getElementById('openNoteModalBtn').addEventListener('click', () => {
+    if (modal) modal.style.display = 'grid';
+  });
+  document.getElementById('closeNoteModalBtn').addEventListener('click', () => {
+    if (modal) modal.style.display = 'none';
+  });
+
   const urlParams = new URLSearchParams(window.location.search);
   const rawHandle = urlParams.get('u') || urlParams.get('user');
 
@@ -510,7 +672,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // ATIVAÇÃO DA TRILHA SONORA (MINIMALISTA, APENAS SOB CLIQUE)
+  // ATIVAÇÃO DA TRILHA SONORA
   if (data.soundtrack_url) {
     const widget = document.getElementById('soundtrackWidget');
     const audio = document.getElementById('stAudio');
@@ -537,293 +699,105 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
   }
-});
-</script>
-  <!-- ========================================================= -->
-<!-- GUESTBOOK (MURAL DE RECADOS ESTILO POST-IT / MARGENS)     -->
-<!-- ========================================================= -->
-<style>
-/* Container flutuante global para os recados nas margens */
-#guestbookContainer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 999;
-  overflow: hidden;
-}
 
-/* Estilo Base dos Recados */
-.guestbook-note {
-  position: absolute;
-  pointer-events: auto;
-  padding: 10px 14px;
-  max-width: 140px;
-  font-size: 11px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-  transition: transform 0.2s ease, z-index 0.2s ease;
-  cursor: default;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.guestbook-note:hover {
-  transform: scale(1.08) rotate(0deg) !important;
-  z-index: 1000;
-}
+  // Lógica de Carregamento e Posicionamento do Guestbook nas Margens
+  const container = document.getElementById('guestbookContainer');
+  const profileId = data.id;
+  const globalStyle = data.guestbook_style || 'vintage';
 
-/* Estilo 1: Vintage (Pedaço de papel branco rasgado/envelhecido) */
-.note-style-vintage {
-  background: #fdfbf7;
-  color: #1a1a1a;
-  border-left: 3px solid #d4c5a9;
-  font-family: 'Courier New', Courier, monospace;
-  box-shadow: 2px 4px 15px rgba(0,0,0,0.3);
-}
+  function getRandomSafePosition() {
+    let x, y;
+    const isLeftSide = Math.random() < 0.5;
+    
+    if (isLeftSide) {
+      x = Math.floor(Math.random() * 20) + 2;
+    } else {
+      x = Math.floor(Math.random() * 20) + 75;
+    }
+    y = Math.floor(Math.random() * 75) + 10;
+    return { x, y };
+  }
 
-/* Estilo 2: Chalk (Giz escrito sobre fundo escuro rústico) */
-.note-style-chalk {
-  background: rgba(18, 18, 26, 0.85);
-  backdrop-filter: blur(8px);
-  color: #e2e8f0;
-  border: 1px dashed rgba(255, 255, 255, 0.25);
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  letter-spacing: 0.5px;
-}
+  async function loadNotes() {
+    try {
+      const { data: notes, error } = await window.islySupabase.client
+        .from('guestbook_notes')
+        .select('*')
+        .eq('profile_id', profileId)
+        .order('created_at', { ascending: false })
+        .limit(16);
 
-/* Estilo 3: Dev Notes (Anotação de código minimalista branca e serifada) */
-.note-style-dev {
-  background: #ffffff;
-  color: #0f172a;
-  border-radius: 4px;
-  border: 1px solid #e2e8f0;
-  font-family: 'Times New Roman', Times, serif;
-}
-.note-style-dev .note-code-tag {
-  font-size: 9px;
-  color: #64748b;
-  font-family: monospace;
-}
+      if (error) throw error;
+      container.innerHTML = '';
 
-.note-author {
-  font-size: 9px;
-  font-weight: 700;
-  opacity: 0.7;
-  text-transform: uppercase;
-}
+      if (notes) {
+        notes.forEach(note => {
+          const el = document.createElement('div');
+          el.className = `guestbook-note note-style-${note.style || globalStyle}`;
+          
+          const rot = Math.floor(Math.random() * 12) - 6;
+          el.style.left = `${note.pos_x}%`;
+          el.style.top = `${note.pos_y}%`;
+          el.style.transform = `rotate(${rot}deg)`;
 
-/* Botão flutuante para abrir o Modal de Novo Recado */
-#openNoteModalBtn {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  z-index: 1000;
-  background: rgba(13, 11, 20, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #f6f4ff;
-  border-radius: 99px;
-  padding: 8px 16px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-  transition: all 0.2s;
-}
-#openNoteModalBtn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
+          let innerHTML = `<span class="note-author">@${escapeHtml(note.author)}</span>`;
+          if (note.style === 'dev' || globalStyle === 'dev') {
+            innerHTML += `<span class="note-code-tag">// msg</span>`;
+          }
+          innerHTML += `<span>${escapeHtml(note.message)}</span>`;
 
-/* Modal de Envio */
-#noteModal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
-  place-items: center;
-  padding: 20px;
-}
-.note-modal-box {
-  background: #11111f;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 20px;
-  width: 100%;
-  max-width: 340px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-}
-.note-modal-box h3 { margin: 0; font-size: 16px; color: #f6f4ff; }
-.note-modal-box input, .note-modal-box select {
-  width: 100%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  padding: 10px 14px;
-  color: #fff;
-  font-size: 13px;
-  outline: none;
-}
-.note-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-.note-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-}
-.note-btn-cancel { background: rgba(255,255,255,0.08); color: #a6a4c4; }
-.note-btn-submit { background: #a855f7; color: #fff; }
-</style>
-
-<!-- Container dos recados nas margens -->
-<div id="guestbookContainer"></div>
-
-<!-- Botão para abrir modal -->
-<button id="openNoteModalBtn" aria-label="Deixar Recado">Deixar Recado</button>
-
-<!-- Modal -->
-<div id="noteModal">
-  <div class="note-modal-box">
-    <h3>Deixar um recado no mural</h3>
-    <p style="font-size: 11px; color: #a6a4c4; margin: 0;">Até 10 caracteres por campo para manter o espaço limpo.</p>
-    <input type="text" id="noteAuthorInput" placeholder="Seu nome (máx 10)" maxlength="10">
-    <input type="text" id="noteMessageInput" placeholder="Recado (máx 10)" maxlength="10">
-    <div class="note-modal-actions">
-      <button class="note-btn note-btn-cancel" id="closeNoteModalBtn">Cancelar</button>
-      <button class="note-btn note-btn-submit" id="submitNoteBtn">Fixar Recado</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// Lógica de Carregamento e Posicionamento Inteligente (Fora do Card Central)
-document.addEventListener("DOMContentLoaded", async () => {
-  // Aguarda carregar os dados do perfil principal
-  setTimeout(async () => {
-    if (typeof data === 'undefined' || !data || !window.islySupabase) return;
-
-    const container = document.getElementById('guestbookContainer');
-    const profileId = data.id;
-    // O estilo padrão do mural definido pelo dono do perfil (pode vir de data.guestbook_style ou padrão 'vintage')
-    const globalStyle = data.guestbook_style || 'vintage';
-
-    // Função para gerar coordenadas seguras nas margens (Evitando a área central de 640px)
-    function getRandomSafePosition() {
-      let x, y;
-      const isLeftSide = Math.random() < 0.5;
-      
-      if (isLeftSide) {
-        // Margem Esquerda (2% a 22%)
-        x = Math.floor(Math.random() * 20) + 2;
-      } else {
-        // Margem Direita (75% a 95%)
-        x = Math.floor(Math.random() * 20) + 75;
+          el.innerHTML = innerHTML;
+          container.appendChild(el);
+        });
       }
-      
-      // Altura vertical variada (10% a 85%)
-      y = Math.floor(Math.random() * 75) + 10;
-      
-      return { x, y };
+    } catch (e) {
+      console.warn("Erro ao carregar guestbook:", e);
+    }
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>'"]/g, 
+      tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+  }
+
+  loadNotes();
+
+  // Envio do Recado
+  document.getElementById('submitNoteBtn').addEventListener('click', async () => {
+    const author = document.getElementById('noteAuthorInput').value.trim();
+    const message = document.getElementById('noteMessageInput').value.trim();
+
+    if (!author || !message) {
+      alert('Preencha ambos os campos (máximo de 10 caracteres cada).');
+      return;
     }
 
-    // Busca recados do Supabase
-    async function loadNotes() {
-      try {
-        const { data: notes, error } = await window.islySupabase.client
-          .from('guestbook_notes')
-          .select('*')
-          .eq('profile_id', profileId)
-          .order('created_at', { ascending: false })
-          .limit(16); // Limite máximo para evitar peso
+    const pos = getRandomSafePosition();
 
-        if (error) throw error;
-        container.innerHTML = '';
+    try {
+      const { error } = await window.islySupabase.client
+        .from('guestbook_notes')
+        .insert([{
+          profile_id: profileId,
+          author: author.substring(0, 10),
+          message: message.substring(0, 10),
+          style: globalStyle,
+          pos_x: pos.x,
+          pos_y: pos.y
+        }]);
 
-        if (notes) {
-          notes.forEach(note => {
-            const el = document.createElement('div');
-            el.className = `guestbook-note note-style-${note.style || globalStyle}`;
-            
-            // Rotação leve natural aleatória entre -6 e 6 graus
-            const rot = Math.floor(Math.random() * 12) - 6;
-            el.style.left = `${note.pos_x}%`;
-            el.style.top = `${note.pos_y}%`;
-            el.style.transform = `rotate(${rot}deg)`;
+      if (error) throw error;
 
-            let innerHTML = `<span class="note-author">@${escapeHtml(note.author)}</span>`;
-            if (note.style === 'dev' || globalStyle === 'dev') {
-              innerHTML += `<span class="note-code-tag">// msg</span>`;
-            }
-            innerHTML += `<span>${escapeHtml(note.message)}</span>`;
-
-            el.innerHTML = innerHTML;
-            container.appendChild(el);
-          });
-        }
-      } catch (e) {
-        console.warn("Erro ao carregar guestbook:", e);
-      }
+      modal.style.display = 'none';
+      document.getElementById('noteAuthorInput').value = '';
+      document.getElementById('noteMessageInput').value = '';
+      loadNotes();
+    } catch (e) {
+      alert('Erro ao fixar recado. Tente novamente.');
+      console.error(e);
     }
-
-    function escapeHtml(str) {
-      return str.replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-      );
-    }
-
-    loadNotes();
-
-    // Controle do Modal
-    const modal = document.getElementById('noteModal');
-    document.getElementById('openNoteModalBtn').addEventListener('click', () => modal.style.display = 'grid');
-    document.getElementById('closeNoteModalBtn').addEventListener('click', () => modal.style.display = 'none');
-
-    // Envio do Recado
-    document.getElementById('submitNoteBtn').addEventListener('click', async () => {
-      const author = document.getElementById('noteAuthorInput').value.trim();
-      const message = document.getElementById('noteMessageInput').value.trim();
-
-      if (!author || !message) {
-        alert('Preencha ambos os campos (máximo de 10 caracteres cada).');
-        return;
-      }
-
-      const pos = getRandomSafePosition();
-
-      try {
-        const { error } = await window.islySupabase.client
-          .from('guestbook_notes')
-          .insert([{
-            profile_id: profileId,
-            author: author.substring(0, 10),
-            message: message.substring(0, 10),
-            style: globalStyle,
-            pos_x: pos.x,
-            pos_y: pos.y
-          }]);
-
-        if (error) throw error;
-
-        modal.style.display = 'none';
-        document.getElementById('noteAuthorInput').value = '';
-        document.getElementById('noteMessageInput').value = '';
-        loadNotes();
-      } catch (e) {
-        alert('Erro ao fixar recado. Tente novamente.');
-        console.error(e);
-      }
-    });
-
-  }, 800);
+  });
 });
 </script>
 </body>
