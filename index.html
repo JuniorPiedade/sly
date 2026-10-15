@@ -652,7 +652,13 @@ function getInstagramEmbed(url) {
 }
 
 async function initEditor(userId) {
- let profile = await window.islySupabase.getProfileById(userId);
+ let profile = null;
+ try {
+  profile = await window.islySupabase.getProfileById(userId);
+ } catch (e) {
+  console.warn("Erro ao buscar perfil:", e);
+ }
+
  if (!profile) {
   profile = {
    id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6),
