@@ -15,6 +15,18 @@
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text)}
+
+/* WRAPPER PRINCIPAL PARA POSICIONAR O CARD E OS POST-ITS AO LADO */
+.page-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
 .container{width:100%;max-width:640px;position:relative}
 
 .profile-card{
@@ -225,7 +237,55 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
-/* --- BOTÃO MINIMALISTA NO CANTO INFERIOR ESQUERDO --- */
+/* --- POST-ITS FIXOS NA LATERAL DIREITA (EMPURRADOS UM SOBRE O OUTRO COM DELICADEZA) --- */
+.guestbook-sidebar-fixed {
+  position: absolute;
+  left: calc(100% + 24px);
+  top: 20px;
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  z-index: 99;
+}
+.guestbook-sidebar-fixed * {
+  pointer-events: auto;
+}
+.scrap-paper-stack {
+  position: relative;
+  background: #f4ebd0;
+  color: #2c251d;
+  padding: 12px 14px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.4);
+  border: 1px dashed #d1c29e;
+  clip-path: polygon(0% 4%, 3% 0%, 97% 2%, 100% 6%, 98% 95%, 100% 100%, 2% 97%, 0% 94%);
+  transition: transform 0.2s ease, z-index 0.2s;
+  /* Cria o efeito de sobreposição delicada subindo um pouco sobre o anterior */
+  margin-top: -18px; 
+}
+.scrap-paper-stack:first-child {
+  margin-top: 0;
+}
+.scrap-paper-stack:hover {
+  transform: scale(1.04) rotate(0deg) !important;
+  z-index: 50;
+  box-shadow: 4px 8px 18px rgba(0,0,0,0.5);
+}
+.scrap-author {
+  font-size: 9px;
+  font-weight: bold;
+  color: #6b5b45;
+  margin-top: 4px;
+  display: block;
+  text-align: right;
+  border-top: 1px dotted #c9b999;
+  padding-top: 3px;
+}
+
+/* --- BOTÃO DISCRETO NO CANTO INFERIOR ESQUERDO --- */
 .guestbook-trigger-btn {
   position: fixed;
   bottom: 24px;
@@ -249,7 +309,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* --- MODAL VINTAGE DE PAPEL RASGADO --- */
+/* --- MODAL VINTAGE DE ENVIO --- */
 .guestbook-modal-overlay {
   position: fixed;
   inset: 0;
@@ -272,35 +332,12 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   width: 100%;
-  max-width: 420px;
-  padding: 24px;
+  max-width: 400px;
+  padding: 22px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.6);
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-.scrap-paper {
-  position: relative;
-  background: #f4ebd0;
-  color: #2c251d;
-  padding: 14px 16px;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 12px;
-  line-height: 1.45;
-  box-shadow: 2px 4px 12px rgba(0,0,0,0.3);
-  border: 1px dashed #d1c29e;
-  clip-path: polygon(0% 4%, 3% 0%, 97% 2%, 100% 6%, 98% 95%, 100% 100%, 2% 97%, 0% 94%);
-  margin-bottom: 8px;
-}
-.scrap-author {
-  font-size: 10px;
-  font-weight: bold;
-  color: #6b5b45;
-  margin-top: 6px;
-  display: block;
-  text-align: right;
-  border-top: 1px dotted #c9b999;
-  padding-top: 4px;
+  gap: 14px;
 }
 .scrap-form textarea {
   width: 100%;
@@ -322,12 +359,23 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   color: white;
   border: 0;
   border-radius: 10px;
-  padding: 10px;
+  padding: 9px;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
 }
 .scrap-submit-btn:hover { opacity: 0.9; }
+
+/* Ajuste responsivo para telas menores (joga os post-its para baixo do card se faltar espaço na lateral) */
+@media(max-width: 1020px) {
+  .page-wrapper { flex-direction: column; }
+  .guestbook-sidebar-fixed {
+    position: static;
+    width: 100%;
+    margin-top: 24px;
+  }
+  .scrap-paper-stack { margin-top: 8px !important; }
+}
 
 /* PLAYER DE TRILHA SONORA */
 #soundtrackWidget {
@@ -361,72 +409,67 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .st-info { display: flex; flex-direction: column; text-align: left; }
 .st-title { font-size: 11px; color: #f6f4ff; font-weight: 600; }
 .st-status { font-size: 9px; color: var(--muted); }
-
-.animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-@keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
-.delay-1 { animation-delay: 0.05s; }
-.delay-2 { animation-delay: 0.12s; }
-.delay-3 { animation-delay: 0.18s; }
-.delay-4 { animation-delay: 0.24s; }
-.delay-5 { animation-delay: 0.30s; }
-.delay-6 { animation-delay: 0.36s; }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="profile-card card-style-opaque" id="profileCard">
-    <div class="profile-header-row animate-item delay-1">
-      <div class="avatar-container">
-        <div class="avatar" id="avatar">⌬</div>
-        <div id="avatarFrame" class="avatar-frame"></div>
+<div class="page-wrapper">
+  <div class="container">
+    <div class="profile-card card-style-opaque" id="profileCard">
+      <div class="profile-header-row animate-item delay-1">
+        <div class="avatar-container">
+          <div class="avatar" id="avatar">⌬</div>
+          <div id="avatarFrame" class="avatar-frame"></div>
+        </div>
+        <div class="profile-info">
+          <h3 id="name">Carregando...</h3>
+          <div class="handle" id="handle">@...</div>
+          <div class="role-badge" id="roleBadge">👾 Membro</div>
+        </div>
       </div>
-      <div class="profile-info">
-        <h3 id="name">Carregando...</h3>
-        <div class="handle" id="handle">@...</div>
-        <div class="role-badge" id="roleBadge">👾 Membro</div>
+      <p class="bio-preview animate-item delay-2" id="bio"></p>
+      <div class="live-status animate-item delay-3" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
+      <div class="preview-emblems animate-item delay-3" id="emblems"></div>
+      <div class="public-socials animate-item delay-3" id="socialsBar"></div>
+      <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
+      <div class="public-links animate-item delay-4" id="links"></div>
+      
+      <div id="friendshipsFooterWrapper" class="friendships-footer-wrapper animate-item delay-4" style="display: none;">
+        <div class="friendships-footer-title">Amigos Próximos</div>
+        <div class="friendships-footer-container" id="friendshipsFooter"></div>
       </div>
-    </div>
-    <p class="bio-preview animate-item delay-2" id="bio"></p>
-    <div class="live-status animate-item delay-3" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
-    <div class="preview-emblems animate-item delay-3" id="emblems"></div>
-    <div class="public-socials animate-item delay-3" id="socialsBar"></div>
-    <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
-    <div class="public-links animate-item delay-4" id="links"></div>
-    
-    <div id="friendshipsFooterWrapper" class="friendships-footer-wrapper animate-item delay-4" style="display: none;">
-      <div class="friendships-footer-title">Amigos Próximos</div>
-      <div class="friendships-footer-container" id="friendshipsFooter"></div>
+
+      <div class="profile-foot animate-item delay-5"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
     </div>
 
-    <div class="profile-foot animate-item delay-5"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
-  </div>
-
-  <div class="views-counter animate-item delay-6">
-    <div class="views-badge">
-      <span>👁️</span>
-      <span id="publicViewsCount">0</span>
-      <span>visualizações</span>
+    <div class="views-counter animate-item delay-6">
+      <div class="views-badge">
+        <span>👁️</span>
+        <span id="publicViewsCount">0</span>
+        <span>visualizações</span>
+      </div>
     </div>
   </div>
+
+  <!-- POST-ITS FIXOS NO CANTO DIREITO (EMPURRADOS UM SOBRE O OUTRO) -->
+  <div class="guestbook-sidebar-fixed" id="scrapsContainer"></div>
 </div>
 
 <!-- BOTÃO DISCRETO NO CANTO INFERIOR ESQUERDO -->
 <button type="button" class="guestbook-trigger-btn" id="openGuestbookBtn" style="display: none;">Deixe um recado!</button>
 
-<!-- MODAL DO MURAL DE RECADOS -->
+<!-- MODAL PARA CRIAR RECADOS -->
 <div class="guestbook-modal-overlay" id="guestbookModal">
   <div class="guestbook-modal-content">
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <strong style="font-size: 13px; letter-spacing: 1px;">MURAL DE RECADOS 📌</strong>
       <button type="button" id="closeGuestbookBtn" style="background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer;">✕</button>
     </div>
-
-    <div id="scrapsContainer" style="max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"></div>
-
-    <div class="scrap-form" id="scrapFormArea" style="display: none; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
-      <textarea id="scrapMsgInput" maxlength="140" placeholder="Escreva seu recado (máx 140 caracteres)..."></textarea>
-      <button type="button" class="scrap-submit-btn" id="sendScrapBtn">Fixar recado</button>
+    <div class="scrap-form" id="scrapFormArea" style="display: none;">
+      <span style="font-size: 11px; color: var(--muted); display: block; margin-bottom: 6px;">Escreva um recado no mural (máx 140 carac):</span>
+      <textarea id="scrapMsgInput" maxlength="140" placeholder="Escreva seu recado..."></textarea>
+      <button type="button" class="scrap-submit-btn" id="sendScrapBtn">Fixar no Mural</button>
     </div>
+    <div id="modalNotice" style="font-size: 11px; color: var(--muted); font-style: italic; display: none;">Faça login no isly.me para deixar um recado neste perfil.</div>
   </div>
 </div>
 
@@ -472,7 +515,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const rawHandle = urlParams.get('u') || urlParams.get('user');
 
   if (!rawHandle || !window.islySupabase) {
-    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2></div>';
     return;
   }
 
@@ -480,193 +523,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const data = await window.islySupabase.getProfileByHandle(handle);
 
   if (!data) {
-    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
+    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2></div>`;
     return;
   }
 
-  if (data.is_banned) {
-    document.querySelector('.container').innerHTML = `
-      <div class="error-box" style="border: 1px solid #f8717144; background: #f8717112; border-radius: 18px; padding: 40px;">
-        <h2>⚠️ Conta Suspensa</h2>
-        <p>Este perfil foi suspenso por violação dos termos de uso da comunidade.</p>
-      </div>
-    `;
-    return;
-  }
-
-  let currentViews = (data.views_count || 0) + 1;
-  document.getElementById('publicViewsCount').textContent = currentViews;
-  try {
-    await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
-  } catch (e) {
-    console.warn("Analytics Error:", e);
-  }
-
-  document.body.style.backgroundColor = data.bg_color || '#080812';
-  if (data.custom_cursor) {
-    document.body.style.cursor = `url('${data.custom_cursor}'), auto`;
-  }
-
-  const card = document.getElementById('profileCard');
-  if (card) {
-    const cardStyleType = data.card_style || 'opaque';
-    card.classList.remove('card-style-opaque', 'card-style-glass');
-    
-    if (cardStyleType === 'glass') {
-      card.classList.add('card-style-glass');
-      card.style.backgroundColor = '';
-    } else {
-      card.classList.add('card-style-opaque');
-      card.style.backgroundColor = data.card_bg || '#11111f';
-    }
-
-    if (data.wallpaper_url) {
-      document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.75), rgba(8, 8, 18, 0.75)), url('${data.wallpaper_url}')`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundPosition = 'center';
-      document.body.style.backgroundRepeat = 'no-repeat';
-      document.body.style.backgroundAttachment = 'fixed';
-    }
-
-    card.style.border = 'none';
-
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const xc = rect.width / 2;
-      const yc = rect.height / 2;
-      const dx = (x - xc) / xc;
-      const dy = (y - yc) / yc;
-      card.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
-    });
-  }
-
-  const nameEl = document.getElementById('name');
-  if (nameEl) {
-    nameEl.style.color = data.title_color || '#ffffff';
-    if (data.name_effect === 'glow') {
-      nameEl.classList.add('text-effect-glow');
-    }
-  }
-
-  const activeTextColor = data.text_color || '#f6f4ff';
-  const bioEl = document.getElementById('bio');
-  if (bioEl) bioEl.style.color = activeTextColor;
-
-  const handleEl = document.getElementById('handle');
-  if (handleEl) handleEl.style.color = activeTextColor;
-
-  document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
-  nameEl.textContent = data.name || 'Sem nome';
-  handleEl.textContent = '@' + data.handle;
-
-  const roleBadge = document.getElementById('roleBadge');
-  if (roleBadge) {
-    const r = data.role || 'Membro';
-    roleBadge.innerHTML = r === 'Fundador' ? '💎 Fundador' : r === 'Suporte' ? '🛡️ Suporte' : r === 'Apoiador' ? '⭐ Apoiador' : '👾 Membro';
-  }
-
-  bioEl.textContent = data.bio || '';
-  document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
-  document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
-
-  const avatarEl = document.getElementById('avatar');
-  if (data.avatar_url) {
-    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
-  } else {
-    avatarEl.textContent = '⌬';
-  }
-
-  const frameEl = document.getElementById('avatarFrame');
-  const frameType = data.avatar_frame || 'none';
-  frameEl.className = 'avatar-frame';
-  if (frameType === 'neon-white') frameEl.classList.add('frame-neon-white');
-  else if (frameType === 'vip') frameEl.classList.add('frame-vip');
-
-  const emblemsEl = document.getElementById('emblems');
-  if (emblemsEl) {
-    emblemsEl.innerHTML = (data.emblems || []).map(id => {
-      const cleanId = String(id).toLowerCase().trim();
-      const emoji = emblemEmojis[cleanId] || '✨';
-      const name = emblemNames[cleanId] || cleanId;
-      return `<span><span style="font-size: 12px; line-height: 1;">${emoji}</span>${name}</span>`;
-    }).join('');
-  }
-
-  const socialsBar = document.getElementById('socialsBar');
-  if (socialsBar && data.socials) {
-    let sHTML = '';
-    Object.keys(data.socials).forEach(key => {
-      const val = data.socials[key];
-      if (val && socialUrls[key]) {
-        const url = socialUrls[key](val);
-        const svg = socialSvgs[key] || '';
-        sHTML += `<a class="social-icon-btn" href="${url}" target="_blank" rel="noopener" title="${key}" style="color:${activeTextColor}">${svg}</a>`;
-      }
-    });
-    socialsBar.innerHTML = sHTML;
-  }
-
-  const embedsBar = document.getElementById('embedsBar');
-  if (embedsBar) {
-    let eHTML = '';
-    eHTML += getSpotifyEmbed(data.embed_spotify);
-    eHTML += getYoutubeEmbed(data.embed_youtube);
-    eHTML += getInstagramEmbed(data.embed_instagram);
-    embedsBar.innerHTML = eHTML;
-  }
-
-  const linksEl = document.getElementById('links');
-  if (linksEl) {
-    linksEl.innerHTML = (data.links || []).map(link => `
-      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px)">
-        <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
-        <span class="arr" style="color:${activeTextColor}">↗</span>
-      </a>
-    `).join('');
-
-    document.querySelectorAll('.public-link').forEach(linkBtn => {
-      linkBtn.addEventListener('click', async (evt) => {
-        evt.preventDefault();
-        const targetUrl = linkBtn.getAttribute('data-url');
-        try {
-          const currentClicks = (data.clicks_count || 0) + 1;
-          await window.islySupabase.saveProfile({ id: data.id, clicks_count: currentClicks });
-        } catch (e) {
-          console.warn("Analytics Error:", e);
-        }
-        if (targetUrl && targetUrl !== '#') window.open(targetUrl, '_blank');
-      });
-    });
-  }
-
-  if (data.friendships && data.friendships.length > 0) {
-    const friendWrapper = document.getElementById('friendshipsFooterWrapper');
-    const friendContainer = document.getElementById('friendshipsFooter');
-    if (friendWrapper && friendContainer) {
-      window.islySupabase.client
-        .from('profiles')
-        .select('handle, name, avatar_url')
-        .in('handle', data.friendships)
-        .then(({ data: friendsData, error }) => {
-          if (!error && friendsData && friendsData.length > 0) {
-            friendWrapper.style.display = 'flex';
-            friendContainer.innerHTML = friendsData.map(friend => {
-              const avatarContent = friend.avatar_url 
-                ? `<img src="${friend.avatar_url}" alt="${friend.name || friend.handle}">`
-                : `<div class="friendship-bubble-fallback">${(friend.name || friend.handle).substring(0, 2).toUpperCase()}</div>`;
-              return `<a href="perfil.html?u=${friend.handle}" class="friendship-bubble" title="@${friend.handle}">${avatarContent}</a>`;
-            }).join('');
-          }
-        });
-    }
-  }
-
-  // --- GUESTBOOK / MURAL DE RECADOS ---
   const allowGuestbook = data.allow_guestbook !== false;
   const openGuestbookBtn = document.getElementById('openGuestbookBtn');
   if (openGuestbookBtn) openGuestbookBtn.style.display = 'block';
@@ -675,6 +535,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const closeGuestbookBtn = document.getElementById('closeGuestbookBtn');
   const scrapsContainer = document.getElementById('scrapsContainer');
   const scrapFormArea = document.getElementById('scrapFormArea');
+  const modalNotice = document.getElementById('modalNotice');
   const scrapMsgInput = document.getElementById('scrapMsgInput');
   const sendScrapBtn = document.getElementById('sendScrapBtn');
 
@@ -687,6 +548,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (loggedUser && allowGuestbook) {
     if (scrapFormArea) scrapFormArea.style.display = 'block';
+  } else {
+    if (modalNotice) modalNotice.style.display = 'block';
   }
 
   async function loadScraps() {
@@ -699,18 +562,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       .limit(5);
 
     if (!error && scrapsList && scrapsList.length > 0) {
-      const rotations = [-2, 1.5, -1, 2, -1.5];
+      const rotations = [-2.5, 1.8, -1.2, 2.2, -1.8];
       scrapsContainer.innerHTML = scrapsList.map((scrap, idx) => {
         const rot = rotations[idx % rotations.length];
         return `
-          <div class="scrap-paper" style="transform: rotate(${rot}deg);">
+          <div class="scrap-paper-stack" style="transform: rotate(${rot}deg);">
             <div style="word-break: break-word;">${escapeHtml(scrap.message)}</div>
             <span class="scrap-author">— @${escapeHtml(scrap.author_handle || 'anônimo')}</span>
           </div>
         `;
       }).join('');
     } else {
-      scrapsContainer.innerHTML = `<div style="font-size:11px; color:var(--muted); font-style:italic; padding:10px; text-align:center;">Nenhum recado fixado ainda.</div>`;
+      scrapsContainer.innerHTML = `<div style="font-size:11px; color:var(--muted); font-style:italic; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; border:1px dashed rgba(255,255,255,0.08);">Nenhum recado fixado ainda.</div>`;
     }
   }
 
@@ -739,9 +602,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }]);
 
       if (error) {
-        alert('Erro ao enviar recado. Certifique-se de que a tabela guestbook está criada no Supabase.');
+        alert('Erro ao enviar recado. Verifique a tabela guestbook no Supabase.');
       } else {
         scrapMsgInput.value = '';
+        guestbookModal.classList.remove('open');
         loadScraps();
       }
     });
@@ -749,32 +613,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadScraps();
 
-  if (data.soundtrack_url) {
-    const widget = document.getElementById('soundtrackWidget');
-    const audio = document.getElementById('stAudio');
-    const playBtn = document.getElementById('stPlayBtn');
-    const statusTxt = document.getElementById('stStatus');
-
-    if (widget && audio) {
-      audio.src = data.soundtrack_url;
-      widget.style.display = 'flex';
-
-      playBtn.addEventListener('click', () => {
-        if (audio.paused) {
-          audio.play().then(() => {
-            playBtn.textContent = '❚❚';
-            statusTxt.textContent = 'A tocar...';
-          }).catch(err => {
-            console.warn("Erro ao reproduzir áudio:", err);
-          });
-        } else {
-          audio.pause();
-          playBtn.textContent = '▶';
-          statusTxt.textContent = 'Pausado';
-        }
-      });
-    }
-  }
+  // Dados básicos do perfil
+  document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
+  document.getElementById('name').textContent = data.name || 'Sem nome';
+  document.getElementById('handle').textContent = '@' + data.handle;
+  document.getElementById('bio').textContent = data.bio || '';
+  document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
+  document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
 });
 </script>
 </body>
