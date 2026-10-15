@@ -124,6 +124,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
     0 0 35px rgba(255, 255, 255, 0.3);
 }
 
+.verified{color:var(--blue);font-size:13px}
 .handle{font-size:13px;font-weight:600;letter-spacing:0.02em;margin-bottom:4px}
 .role-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc;width:fit-content}
 
@@ -155,7 +156,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
 /* =========================================================
-   PLAYER DE TRILHA SONORA
+   PLAYER DE TRILHA SONORA (MINIMALISTA, TRANSLÚCIDO E DISCRETO)
    ========================================================= */
 #soundtrackWidget {
   display: none;
@@ -201,151 +202,13 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   transform: scale(1.05);
 }
 .st-info { display: flex; flex-direction: column; text-align: left; }
-.st-title { font-size: 11px; color: #f6f4ff; font-weight: 600; letter-spacing: 0.3px; }
-.st-status { font-size: 9px; color: var(--muted); letter-spacing: 0.3px; }
-
-/* ========================================================= */
-/* GUESTBOOK (MURAL EMPILHADO NO CANTO DIREITO COM ZOOM)     */
-/* ========================================================= */
-#guestbookContainer {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  bottom: 80px;
-  width: 200px;
-  pointer-events: none;
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-end;
-  overflow: hidden;
-}
-
-.guestbook-note {
-  pointer-events: auto;
-  width: 100%;
-  padding: 14px 16px;
-  font-size: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  transition: transform 0.2s ease, z-index 0.2s ease;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  border-radius: 6px;
-}
-.guestbook-note:hover {
-  transform: scale(1.04) translateX(-4px);
-  z-index: 1000;
-}
-
-.note-style-vintage {
-  background: #fdfbf7;
-  color: #1a1a1a;
-  border-left: 4px solid #d4c5a9;
-  font-family: 'Courier New', Courier, monospace;
-}
-.note-style-chalk {
-  background: rgba(18, 18, 26, 0.9);
-  backdrop-filter: blur(8px);
-  color: #e2e8f0;
-  border: 1px dashed rgba(255, 255, 255, 0.3);
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-}
-.note-style-dev {
-  background: #ffffff;
-  color: #0f172a;
-  border: 1px solid #e2e8f0;
-  font-family: 'Times New Roman', Times, serif;
-}
-.note-style-dev .note-code-tag {
-  font-size: 9px;
-  color: #64748b;
-  font-family: monospace;
-}
-
-.note-author {
-  font-size: 10px;
-  font-weight: 700;
-  opacity: 0.7;
-  text-transform: uppercase;
-}
-
-.note-preview-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Botão para abrir o modal de novo recado */
-#openNoteModalBtn {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  z-index: 1000;
-  background: rgba(13, 11, 20, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.st-title {
+  font-size: 11px;
   color: #f6f4ff;
-  border-radius: 99px;
-  padding: 10px 18px;
-  font-size: 12px;
   font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-  transition: all 0.2s;
+  letter-spacing: 0.3px;
 }
-#openNoteModalBtn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-/* Modais (Envio e Leitura Expandida) */
-.note-modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
-  place-items: center;
-  padding: 20px;
-}
-.note-modal-box {
-  background: #11111f;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 20px;
-  width: 100%;
-  max-width: 360px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-}
-.note-modal-box h3 { margin: 0; font-size: 16px; color: #f6f4ff; }
-.note-modal-box input, .note-modal-box textarea {
-  width: 100%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  padding: 10px 14px;
-  color: #fff;
-  font-size: 13px;
-  outline: none;
-}
-.note-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-.note-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-}
-.note-btn-cancel { background: rgba(255,255,255,0.08); color: #a6a4c4; }
-.note-btn-submit { background: #a855f7; color: #fff; }
+.st-status { font-size: 9px; color: var(--muted); letter-spacing: 0.3px; }
 
 .animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 @keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
@@ -355,6 +218,8 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .delay-4 { animation-delay: 0.24s; }
 .delay-5 { animation-delay: 0.30s; }
 .delay-6 { animation-delay: 0.36s; }
+.delay-7 { animation-delay: 0.42s; }
+.delay-8 { animation-delay: 0.48s; }
 </style>
 </head>
 <body>
@@ -366,7 +231,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
         <div id="avatarFrame" class="avatar-frame"></div>
       </div>
       <div class="profile-info">
-        <h3 id="name">Carregando...</h3>
+        <h3 id="name">Carregando... <span class="verified">✦</span></h3>
         <div class="handle" id="handle">@...</div>
         <div class="role-badge" id="roleBadge">👾 Membro</div>
       </div>
@@ -389,7 +254,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   </div>
 </div>
 
-<!-- Widget Trilha Sonora -->
+<!-- Widget Flutuante de Trilha Sonora (Minimalista & Transparente) -->
 <div id="soundtrackWidget">
   <button id="stPlayBtn" aria-label="Tocar Trilha Sonora">▶</button>
   <div class="st-info">
@@ -399,10 +264,280 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   <audio id="stAudio" preload="none" loop></audio>
 </div>
 
-<!-- Container do Mural no Canto Direito -->
-<div id="guestbookContainer"></div>
+<script src="js/supabase.js"></script>
+<script>
+const emblemNames = { gamer: 'Gamer', geek: 'Geek', rpg: 'RPG', anime: 'Anime', artist: 'Criador', founder: 'Fundador' };
 
-<!-- Botão Deixar Recado -->
-<button id="openNoteModalBtn" aria-label="Deixar Recado">Deixar Recado</button>
+const socialUrls = {
+  steam: val => `https://steamcommunity.com/id/${val}`,
+  spotify: val => `https://open.spotify.com/user/${val}`,
+  youtube: val => `https://youtube.com/${val.startsWith('@') ? val : '@' + val}`,
+  discord: val => `https://discord.com/users/${val}`,
+  instagram: val => `https://instagram.com/${val.replace(/^@/, '')}`,
+  twitter: val => `https://twitter.com/${val.replace(/^@/, '')}`,
+  letterboxd: val => `https://letterboxd.com/${val}`,
+  onlyfans: val => `https://onlyfans.com/${val.replace(/^@/, '')}`,
+  behance: val => `https://behance.net/${val}`,
+  pinterest: val => `https://pinterest.com/${val}`,
+  tumblr: val => `https://${val}.tumblr.com`
+};
 
-<!-- Modal de Envio -->
+const socialSvgs = {
+  steam: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-9.9 8.6l4.4 1.9a3.5 3.5 0 0 1 4.7 2.3l2.8 1.2a4 4 0 1 0 .2-2.3l-2.8-1.2a3.5 3.5 0 0 0-2.1-1.7L4.5 9.7A8 8 0 1 1 12 2z"/></svg>',
+  spotify: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.6 14.4a.6.6 0 0 1-.8.2c-2.2-1.3-5-1.6-8.3-.9a.6.6 0 1 1-.3-1.2c3.6-.8 6.7-.5 9.2 1a.6.6 0 0 1 .2.9zm1.2-2.7a.8.8 0 0 1-1 .3c-2.6-1.6-6.5-2-9.5-1.1a.8.8 0 1 1-.5-1.5c3.4-1 7.7-.6 10.7 1.3a.8.8 0 0 1 .3 1zm.1-2.8C14.3 9.4 9 9.2 5.9 10.2a1 1 0 1 1-.6-1.9c3.5-1.1 9.4-.9 13.1 1.3a1 1 0 0 1-.5 1.7z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>',
+  discord: '<svg viewBox="0 0 24 24"><path d="M20.3 4.4a17.4 17.4 0 0 0-4.3-1.3.1.1 0 0 0-.1.1c-.2.4-.4.8-.6 1.2a16 16 0 0 0-5.6 0c-.2-.4-.4-.8-.6-1.2a.1.1 0 0 0-.1-.1 17.4 17.4 0 0 0-4.3 1.3.1.1 0 0 0 0 .1C2 9.2 1.3 13.9 2.5 18.5a.2.2 0 0 0 .1.1 17.7 17.7 0 0 0 5.4 2.7.1.1 0 0 0 .1 0c.4-.6.8-1.2 1.1-1.9a.1.1 0 0 0 0-.1 11.5 11.5 0 0 1-1.7-.8.1.1 0 0 1 0-.2c.1-.1.2-.2.3-.3a12.3 12.3 0 0 0 10.6 0c.1.1.2.2.3.3a.1.1 0 0 1 0 .2 11.5 11.5 0 0 1-1.7.8.1.1 0 0 0 0 .1c.4.7.8 1.3 1.1 1.9a.1.1 0 0 0 .1 0 17.7 17.7 0 0 0 5.4-2.7.2.2 0 0 0 .1-.1c1.3-4.8-.2-9.5-2.7-14.1a.1.1 0 0 0-.1-.1zM8.5 14.5c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2zm7 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.2.1 4.7 1.7 4.8 4.8.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.6 4.7-4.8 4.8-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.2-.1-4.7-1.6-4.8-4.8-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-3.2 1.6-4.7 4.8-4.8 1.2 0 1.6 0 4.8 0zm0 2.2c-3.1 0-3.5 0-4.7.1-2 .1-2.9 1-3 3-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 2 1 2.9 3 3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c2-.1 2.9-1 3-3 .1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-2-1-2.9-3-3-1.2-.1-1.6-.1-4.7-.1zm0 3.6a5.8 5.8 0 1 1 0 11.6 5.8 5.8 0 0 1 0-11.6zm0 9.4a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2zm6.2-10.4a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0 z"/></svg>',
+  twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
+  letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
+  onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
+  behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1z"/></svg>',
+  pinterest: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.7 19.3c-.1-.8-.2-2 .03-2.9l.7-3.1s-.2-.4-.2-1c0-1 .6-1.7 1.3-1.7.6 0 .9.5.9 1.1 0 .7-.4 1.7-.6 2.6-.2.8.4 1.5 1.2 1.5 1.4 0 2.5-1.5 2.5-3.6 0-1.9-1.4-3.2-3.4-3.2-2.3 0-3.7 1.7-3.7 3.5 0 .7.3 1.4.6 1.8l-.2.8c-.1 0-.3-.1-.4-.2-1.5-.7-2.4-2.8-2.4-4.5 0-3.7 2.7-7.1 7.8-7.1 4.1 0 7.3 2.9 7.3 6.8 0 4.1-2.6 7.4-6.2 7.4-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-1.1 2.5-1.6 3.4A10 10 0 1 0 12 2z"/></svg>',
+  tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
+};
+
+const emblemSvgs = {
+  gamer: '<svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
+  geek: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>',
+  rpg: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
+  anime: '<svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>',
+  artist: '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>',
+  founder: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
+};
+
+function getSpotifyEmbed(url) {
+  if (!url) return '';
+  const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
+  if (match) {
+    return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
+  }
+  return '';
+}
+
+function getYoutubeEmbed(url) {
+  if (!url) return '';
+  let id = '';
+  if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
+  else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
+  if (id) {
+    return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+  }
+  return '';
+}
+
+function getInstagramEmbed(url) {
+  if (!url) return '';
+  const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    return `<div class="embed-wrapper"><iframe src="https://www.instagram.com/${match[1]}/${match[2]}/embed" height="360" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
+  }
+  return '';
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const rawHandle = urlParams.get('u') || urlParams.get('user');
+
+  if (!rawHandle || !window.islySupabase) {
+    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+    return;
+  }
+
+  const handle = rawHandle.trim().replace(/^@/, '');
+  const data = await window.islySupabase.getProfileByHandle(handle);
+
+  if (!data) {
+    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
+    return;
+  }
+
+  if (data.is_banned) {
+    document.querySelector('.container').innerHTML = `
+      <div class="error-box" style="border: 1px solid #f8717144; background: #f8717112; border-radius: 18px; padding: 40px;">
+        <h2>⚠️ Conta Suspensa</h2>
+        <p>Este perfil foi suspenso por violação dos termos de uso da comunidade.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let currentViews = (data.views_count || 0) + 1;
+  document.getElementById('publicViewsCount').textContent = currentViews;
+  try {
+    await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
+  } catch (e) {
+    console.warn("Analytics Error:", e);
+  }
+
+  document.body.style.backgroundColor = data.bg_color || '#080812';
+  if (data.custom_cursor) {
+    document.body.style.cursor = `url('${data.custom_cursor}'), auto`;
+  }
+
+  const card = document.getElementById('profileCard');
+  if (card) {
+    const cardStyleType = data.card_style || 'opaque';
+    card.classList.remove('card-style-opaque', 'card-style-glass');
+    
+    if (cardStyleType === 'glass') {
+      card.classList.add('card-style-glass');
+      card.style.backgroundColor = '';
+    } else {
+      card.classList.add('card-style-opaque');
+      card.style.backgroundColor = data.card_bg || '#11111f';
+    }
+
+    if (data.wallpaper_url) {
+      document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.75), rgba(8, 8, 18, 0.75)), url('${data.wallpaper_url}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundAttachment = 'fixed';
+    }
+
+    card.style.border = 'none';
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xc = rect.width / 2;
+      const yc = rect.height / 2;
+      const dx = (x - xc) / xc;
+      const dy = (y - yc) / yc;
+      card.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+    });
+  }
+
+  const nameEl = document.getElementById('name');
+  if (nameEl) {
+    nameEl.style.color = data.title_color || '#ffffff';
+    if (data.name_effect === 'glow') {
+      nameEl.classList.add('text-effect-glow');
+    }
+  }
+
+  const activeTextColor = data.text_color || '#f6f4ff';
+  const bioEl = document.getElementById('bio');
+  if (bioEl) bioEl.style.color = activeTextColor;
+
+  const handleEl = document.getElementById('handle');
+  if (handleEl) handleEl.style.color = activeTextColor;
+
+  document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
+  nameEl.innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
+  handleEl.textContent = '@' + data.handle;
+
+  const roleBadge = document.getElementById('roleBadge');
+  if (roleBadge) {
+    const r = data.role || 'Membro';
+    roleBadge.innerHTML = r === 'Fundador' ? '💎 Fundador' : r === 'Suporte' ? '🛡️ Suporte' : r === 'Apoiador' ? '⭐ Apoiador' : '👾 Membro';
+  }
+
+  bioEl.textContent = data.bio || '';
+  document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
+  document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
+
+  const avatarEl = document.getElementById('avatar');
+  if (data.avatar_url) {
+    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
+  } else {
+    avatarEl.textContent = '⌬';
+  }
+
+  const frameEl = document.getElementById('avatarFrame');
+  const frameType = data.avatar_frame || 'none';
+  frameEl.className = 'avatar-frame';
+  if (frameType === 'cyberpunk') frameEl.classList.add('frame-cyberpunk');
+  else if (frameType === 'neon-gold') frameEl.classList.add('frame-neon-gold');
+  else if (frameType === 'royal-purple') frameEl.classList.add('frame-royal-purple');
+
+  const emblemsEl = document.getElementById('emblems');
+  if (emblemsEl) {
+    emblemsEl.innerHTML = (data.emblems || []).map(id => {
+      const svg = emblemSvgs[id] || '';
+      return `<span>${svg} ${emblemNames[id] || id}</span>`;
+    }).join('');
+  }
+
+  const socialsBar = document.getElementById('socialsBar');
+  if (socialsBar && data.socials) {
+    let sHTML = '';
+    Object.keys(data.socials).forEach(key => {
+      const val = data.socials[key];
+      if (val && socialUrls[key]) {
+        const url = socialUrls[key](val);
+        const svg = socialSvgs[key] || '';
+        sHTML += `<a class="social-icon-btn" href="${url}" target="_blank" rel="noopener" title="${key}" style="color:${activeTextColor}">${svg}</a>`;
+      }
+    });
+    socialsBar.innerHTML = sHTML;
+  }
+
+  const embedsBar = document.getElementById('embedsBar');
+  if (embedsBar) {
+    let eHTML = '';
+    eHTML += getSpotifyEmbed(data.embed_spotify);
+    eHTML += getYoutubeEmbed(data.embed_youtube);
+    eHTML += getInstagramEmbed(data.embed_instagram);
+    embedsBar.innerHTML = eHTML;
+  }
+
+  const linksEl = document.getElementById('links');
+  if (linksEl) {
+    linksEl.innerHTML = (data.links || []).map(link => `
+      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px)">
+        <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
+        <span class="arr" style="color:${activeTextColor}">↗</span>
+      </a>
+    `).join('');
+
+    document.querySelectorAll('.public-link').forEach(linkBtn => {
+      linkBtn.addEventListener('click', async (evt) => {
+        evt.preventDefault();
+        const targetUrl = linkBtn.getAttribute('data-url');
+        try {
+          const currentClicks = (data.clicks_count || 0) + 1;
+          await window.islySupabase.saveProfile({ id: data.id, clicks_count: currentClicks });
+        } catch (e) {
+          console.warn("Analytics Error:", e);
+        }
+        if (targetUrl && targetUrl !== '#') window.open(targetUrl, '_blank');
+      });
+    });
+  }
+
+  // ATIVAÇÃO DA TRILHA SONORA (MINIMALISTA, APENAS SOB CLIQUE)
+  if (data.soundtrack_url) {
+    const widget = document.getElementById('soundtrackWidget');
+    const audio = document.getElementById('stAudio');
+    const playBtn = document.getElementById('stPlayBtn');
+    const statusTxt = document.getElementById('stStatus');
+
+    if (widget && audio) {
+      audio.src = data.soundtrack_url;
+      widget.style.display = 'flex';
+
+      playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play().then(() => {
+            playBtn.textContent = '❚❚';
+            statusTxt.textContent = 'A tocar...';
+          }).catch(err => {
+            console.warn("Erro ao reproduzir áudio:", err);
+          });
+        } else {
+          audio.pause();
+          playBtn.textContent = '▶';
+          statusTxt.textContent = 'Pausado';
+        }
+      });
+    }
+  }
+});
+</script>
+</body>
+</html>
