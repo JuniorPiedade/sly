@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadDashboard();
   });
 
-  // Lógica da Busca e Alteração de @ por Admin/Fundador
+  // Lógica da Busca Direta no Banco pelo @ para Alteração de Handle
   document.getElementById('adminSearchBtn')?.addEventListener('click', async () => {
     const query = document.getElementById('adminSearchHandle').value.trim().replace(/^@/, '');
     if (!query) {
@@ -264,19 +264,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    const profile = allUsers.find(u => u.handle && u.handle.toLowerCase() === query.toLowerCase());
-    if (!profile) {
-      showToast('Nenhum usuário encontrado com este @.');
-      document.getElementById('adminUserResult').style.display = 'none';
-      return;
-    }
+    showToast('A buscar...');
 
-    selectedFoundUserId = profile.id;
-    document.getElementById('resUserName').textContent = profile.name || 'Sem nome';
-    document.getElementById('resUserHandleCurrent').textContent = '@' + profile.handle;
-    document.getElementById('adminNewHandleInput').value = profile.handle || '';
-    document.getElementById('adminUserResult').style.display = 'block';
-    showToast('Usuário localizado com sucesso! ✓');
+    try {
+      const profile = await window.islySupabase.getProfileByHandle(query);
+      if (!profile) {
+        showToast('Nenhum usuário encontrado com este @.');
+        document.getElementById('adminUserResult').style.display = 'none';
+        return;
+      }
+
+      selectedFoundUserId = profile.id;
+      document.getElementById('resUserName').textContent = profile.name || 'Sem nome';
+      document.getElementById('resUserHandleCurrent').textContent = '@' + profile.handle;
+      document.getElementById('adminNewHandleInput').value = profile.handle || '';
+      document.getElementById('adminUserResult').style.display = 'block';
+      showToast('Usuário localizado com sucesso! ✓');
+    } catch (err) {
+      console.error(err);
+      showToast('Erro ao buscar utilizador.');
+    }
   });
 
   document.getElementById('adminSaveNewHandleBtn')?.addEventListener('click', async () => {
