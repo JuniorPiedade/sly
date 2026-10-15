@@ -408,8 +408,8 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   <div class="note-modal-box">
     <h3>Deixar um recado no mural</h3>
     <p style="font-size: 11px; color: #a6a4c4; margin: 0;">Até 10 caracteres por campo para manter o espaço limpo.</p>
-    <input type="text" id="noteAuthorInput" placeholder="Seu nome (máx 10)" maxlength="10">
-    <input type="text" id="noteMessageInput" placeholder="Recado (máx 10)" maxlength="10">
+    <input type="text" id="noteAuthorInput" placeholder="Seu nome (máx 10)" maxlength="20">
+    <input type="text" id="noteMessageInput" placeholder="Recado (máx 10)" maxlength="20">
     <div class="note-modal-actions">
       <button class="note-btn note-btn-cancel" id="closeNoteModalBtn">Cancelar</button>
       <button class="note-btn note-btn-submit" id="submitNoteBtn">Fixar Recado</button>
@@ -780,7 +780,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .from('guestbook_notes')
         .insert([{
           profile_id: profileId,
-          author: author.substring(0, 10),
+          author: author.substring(0, 20),
           message: message.substring(0, 10),
           style: globalStyle,
           pos_x: pos.x,
