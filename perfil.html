@@ -58,7 +58,9 @@ a{color:inherit;text-decoration:none}
 .cover{
   height:88px;
   position:relative;
-  background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d)
+  background:radial-gradient(circle at 75% 20%,#22d3ee88,transparent 27%),radial-gradient(circle at 22% 100%,#c084fcaa,transparent 42%),linear-gradient(120deg,#25104a,#13152d);
+  background-size:cover;
+  background-position:center
 }
 .theme-sakura .cover{background:radial-gradient(circle at 75% 20%,#f472b688,transparent 30%),linear-gradient(120deg,#461b43,#1c1631)}
 .theme-matrix .cover{background:radial-gradient(circle at 75% 20%,#4ade8088,transparent 30%),linear-gradient(120deg,#10392d,#101923)}
@@ -189,7 +191,7 @@ a{color:inherit;text-decoration:none}
 <body>
 <main class="container" id="profileContainer">
   <div class="profile-card" id="profileCard">
-    <div class="cover" id="previewCover"></div>
+    <div class="cover" id="cover"></div>
     <div class="avatar" id="avatar" aria-label="Avatar do perfil">👾</div>
     <h3 id="name">Carregando...</h3>
     <div class="handle" id="handle">@...</div>
@@ -204,7 +206,6 @@ a{color:inherit;text-decoration:none}
       <span>◎</span><span>▶</span><span>⌘</span><span>◈</span>
     </div>
     <div class="public-links" id="links"></div>
-    <!-- Seção de Recados Dinâmica (Controlada pelo allow_guestbook) -->
     <div id="guestbookSection" style="display:none; padding:0 14px 14px;"></div>
     <div class="profile-foot">
       <a href="/landing.html">CRIADO NO ISLY.ME ✦</a>
@@ -411,12 +412,10 @@ a{color:inherit;text-decoration:none}
     renderEmblems(data.emblems);
     renderLinks(data.links);
 
-    // Banner e Wallpaper personalizados
-    const cover = document.getElementById('previewCover');
-    if (data.banner_url) {
+    // Banner e Wallpaper personalizados com segurança
+    const cover = document.getElementById('cover');
+    if (cover && data.banner_url) {
       cover.style.backgroundImage = `url('${data.banner_url}')`;
-      cover.style.backgroundSize = 'cover';
-      cover.style.backgroundPosition = 'center';
     }
 
     const card = document.getElementById('profileCard');
@@ -436,12 +435,11 @@ a{color:inherit;text-decoration:none}
 
     // Gerenciamento da preferência de recados (Guestbook Clean)
     const guestbookSection = document.getElementById('guestbookSection');
-    const allowGuestbook = data.allow_guestbook !== false; // Padrão verdadeiro
+    const allowGuestbook = data.allow_guestbook !== false;
 
     if (!allowGuestbook || !guestbookSection) {
       if (guestbookSection) guestbookSection.style.display = 'none';
     } else {
-      // Se ativado, mas sem recados, mantém vazio sem exibir avisos indesejados
       guestbookSection.style.display = 'none'; 
     }
   }
