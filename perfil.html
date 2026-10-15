@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
-<title id="pageTitle">isly.me — Perfil</title>
+<title>ISLY.ME — Perfil</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   if (typeof supabase === 'undefined') {
@@ -14,435 +14,169 @@
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text)}
-.container{width:100%;max-width:640px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;min-height:100vh;display:grid;place-items:center;padding:20px}
+.profile-card{width:100%;max-width:440px;background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:32px 24px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.6);position:relative;overflow:hidden}
 
-.profile-card{
-  overflow: visible !important;
-  border-radius:28px;
-  width:100%;
-  max-width:640px;
-  margin:0 auto;
-  box-shadow:0 24px 70px rgba(0,0,0,0.6);
-  padding:36px;
-  text-align:left;
-  transform-style:preserve-3d;
-  perspective:1200px;
-  transition:transform 0.15s ease-out;
-  background-size:cover;
-  background-position:center;
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-  border: none !important;
-}
+.avatar-container{width:96px;height:96px;margin:0 auto 16px;border-radius:50%;background:#8b5cf633;display:grid;place-items:center;overflow:hidden;border:2px solid var(--purple);box-shadow:0 0 15px rgba(168,85,247,0.3)}
+.avatar-container img{width:100%;height:100%;object-fit:cover}
 
-.card-style-opaque { background-color: #11111f; }
-.card-style-glass {
-  background: rgba(13, 11, 20, 0.25) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
-}
-.profile-header-row {
-  display: flex;
+h1{font-size:22px;font-weight:800;margin:0 0 4px;color:white}
+.handle{font-size:13px;color:var(--muted);margin-bottom:16px}
+.bio{font-size:14px;line-height:1.5;color:var(--text);margin-bottom:24px;opacity:0.9}
+
+.links-stack{display:flex;flex-direction:column;gap:12px}
+.profile-link{display:flex;align-items:center;justify-content:center;gap:10px;background:#ffffff08;border:1px solid var(--line);padding:12px 16px;border-radius:14px;color:white;font-weight:600;text-decoration:none;transition:all 0.2s ease}
+.profile-link:hover{background:#ffffff15;border-color:var(--purple);box-shadow:0 0 15px rgba(168,85,247,0.2);transform:translateY(-2px)}
+
+/* ==========================================
+   PLAYER DE TRILHA SONORA (GLASS + NEON SUAVE)
+   ========================================== */
+#soundtrackWidget {
+  display: none; /* Só aparece se houver áudio */
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  background: rgba(17, 17, 31, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 99px;
+  padding: 8px 18px 8px 10px;
   align-items: center;
-  gap: 18px;
-  overflow: visible !important;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.15);
+  transition: all 0.3s ease;
 }
 
-.avatar-container {
-  position: relative;
-  width: 76px;
-  height: 76px;
-  flex-shrink: 0;
-  display: block;
+#soundtrackWidget:hover {
+  border-color: rgba(168, 85, 247, 0.7);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(168, 85, 247, 0.3);
 }
 
-.avatar {
-  width: 100% !important;
-  height: 100% !important;
-  border-radius: 20px;
-  background: linear-gradient(145deg, #8b5cf6, #4c1d95);
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  display: block;
-  padding: 0 !important;
-  margin: 0 !important;
+#stPlayBtn {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  border: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.avatar img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  display: block !important;
-  border-radius: inherit !important;
+#stPlayBtn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
 }
 
-.avatar-frame {
-  position: absolute;
-  inset: -6px; /* Ajusta a moldura para contornar perfeitamente o conjunto */
-  pointer-events: none;
-  z-index: 2;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.frame-cyberpunk { border: 2px solid var(--blue); border-radius: 22px; box-shadow: 0 0 12px var(--blue); }
-.frame-neon-gold { border: 2px solid #facc15; border-radius: 22px; box-shadow: 0 0 12px #facc15; }
-.frame-royal-purple { border: 2px solid #c084fc; border-radius: 22px; box-shadow: 0 0 12px #c084fc; }
-
-.profile-info {
+.st-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-  overflow: visible !important;
+  text-align: left;
 }
 
-.profile-card h3{
-  margin:0 0 2px;
-  font-size:24px;
-  font-weight:800;
-  letter-spacing:-0.01em;
-  white-space:nowrap;
-  overflow: visible !important;
-  text-overflow: clip;
+.st-title {
+  font-size: 12px;
+  color: #f6f4ff;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
 }
 
-.text-effect-glow {
-  color: #ffffff !important;
-  text-shadow: 
-    0 0 5px rgba(255, 255, 255, 0.9),
-    0 0 10px rgba(255, 255, 255, 0.7),
-    0 0 20px rgba(255, 255, 255, 0.5),
-    0 0 35px rgba(255, 255, 255, 0.3);
+.st-status {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
 }
-}
-
-.verified{color:var(--blue);font-size:13px}
-.handle{font-size:13px;font-weight:600;letter-spacing:0.02em;margin-bottom:4px}
-.role-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc;width:fit-content}
-
-.bio-preview{font-size:13px;margin:4px 0 0;overflow-wrap:anywhere;line-height:1.5}
-.live-status{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.08);color:#cffafe;border-radius:999px;font-size:11px;font-weight:600;margin:4px 0 0;width:fit-content}
-.preview-emblems{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
-.preview-emblems span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid rgba(168,85,247,0.25);background:rgba(168,85,247,0.08);border-radius:99px;font-size:11px;font-weight:600;color:#ddd6fe}
-.preview-emblems svg{width:14px;height:14px;fill:currentColor}
-
-.public-socials{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
-.social-icon-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);text-decoration:none;transition:.2s}
-.social-icon-btn svg{width:16px;height:16px;fill:currentColor}
-.social-icon-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,0.08)}
-
-.embeds-container{display:flex;flex-direction:column;gap:12px;margin-top:4px}
-.embed-wrapper{width:100%;border-radius:14px;overflow:hidden;background:#00000033;line-height:0}
-.embed-wrapper iframe{width:100%;border:0;display:block}
-
-.public-links{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.public-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-radius:14px;font-size:13px;font-weight:700;text-align:left;text-decoration:none;transition:all .25s ease;cursor:pointer;background:rgba(255,255,255,0.06);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12)}
-.public-link:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.4)}
-.public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
-.public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
-
-.views-counter{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;font-size:12px;color:var(--muted)}
-.views-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px);color:#c9c5e2;font-weight:600}
-
-.profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
-.error-box{text-align:center;padding:30px;color:#fcd9a1}
-
-.animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-@keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
-.delay-1 { animation-delay: 0.05s; }
-.delay-2 { animation-delay: 0.12s; }
-.delay-3 { animation-delay: 0.18s; }
-.delay-4 { animation-delay: 0.24s; }
-.delay-5 { animation-delay: 0.30s; }
-.delay-6 { animation-delay: 0.36s; }
-.delay-7 { animation-delay: 0.42s; }
-.delay-8 { animation-delay: 0.48s; }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="profile-card card-style-opaque" id="profileCard">
-    <div class="profile-header-row animate-item delay-1">
-      <div class="avatar-container">
-        <div class="avatar" id="avatar">⌬</div>
-        <div id="avatarFrame" class="avatar-frame"></div>
-      </div>
-      <div class="profile-info">
-        <h3 id="name">Carregando... <span class="verified">✦</span></h3>
-        <div class="handle" id="handle">@...</div>
-        <div class="role-badge" id="roleBadge">👾 Membro</div>
-      </div>
-    </div>
-    <p class="bio-preview animate-item delay-2" id="bio"></p>
-    <div class="live-status animate-item delay-3" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
-    <div class="preview-emblems animate-item delay-3" id="emblems"></div>
-    <div class="public-socials animate-item delay-3" id="socialsBar"></div>
-    <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
-    <div class="public-links animate-item delay-4" id="links"></div>
-    <div class="profile-foot animate-item delay-5"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
-  </div>
 
-  <div class="views-counter animate-item delay-6">
-    <div class="views-badge">
-      <span>👁️</span>
-      <span id="publicViewsCount">0</span>
-      <span>visualizações</span>
-    </div>
+<div class="profile-card" id="mainCard">
+  <div class="avatar-container">
+    <div id="profileAvatar">⌬</div>
   </div>
+  <h1 id="profileName">Carregando...</h1>
+  <div class="handle" id="profileHandle">@...</div>
+  <p class="bio" id="profileBio"></p>
+  <div class="links-stack" id="profileLinks"></div>
+</div>
+
+<!-- Widget Flutuante de Trilha Sonora -->
+<div id="soundtrackWidget">
+  <button id="stPlayBtn" aria-label="Tocar Trilha Sonora">▶</button>
+  <div class="st-info">
+    <span class="st-title">🎵 Trilha Sonora</span>
+    <span class="st-status" id="stStatus">Pausado</span>
+  </div>
+  <audio id="stAudio" preload="none" loop></audio>
 </div>
 
 <script src="js/supabase.js"></script>
 <script>
-const emblemNames = { gamer: 'Gamer', geek: 'Geek', rpg: 'RPG', anime: 'Anime', artist: 'Criador', founder: 'Fundador' };
-
-const socialUrls = {
-  steam: val => `https://steamcommunity.com/id/${val}`,
-  spotify: val => `https://open.spotify.com/user/${val}`,
-  youtube: val => `https://youtube.com/${val.startsWith('@') ? val : '@' + val}`,
-  discord: val => `https://discord.com/users/${val}`,
-  instagram: val => `https://instagram.com/${val.replace(/^@/, '')}`,
-  twitter: val => `https://twitter.com/${val.replace(/^@/, '')}`,
-  letterboxd: val => `https://letterboxd.com/${val}`,
-  onlyfans: val => `https://onlyfans.com/${val.replace(/^@/, '')}`,
-  behance: val => `https://behance.net/${val}`,
-  pinterest: val => `https://pinterest.com/${val}`,
-  tumblr: val => `https://${val}.tumblr.com`
-};
-
-const socialSvgs = {
-  steam: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-9.9 8.6l4.4 1.9a3.5 3.5 0 0 1 4.7 2.3l2.8 1.2a4 4 0 1 0 .2-2.3l-2.8-1.2a3.5 3.5 0 0 0-2.1-1.7L4.5 9.7A8 8 0 1 1 12 2z"/></svg>',
-  spotify: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.6 14.4a.6.6 0 0 1-.8.2c-2.2-1.3-5-1.6-8.3-.9a.6.6 0 1 1-.3-1.2c3.6-.8 6.7-.5 9.2 1a.6.6 0 0 1 .2.9zm1.2-2.7a.8.8 0 0 1-1 .3c-2.6-1.6-6.5-2-9.5-1.1a.8.8 0 1 1-.5-1.5c3.4-1 7.7-.6 10.7 1.3a.8.8 0 0 1 .3 1zm.1-2.8C14.3 9.4 9 9.2 5.9 10.2a1 1 0 1 1-.6-1.9c3.5-1.1 9.4-.9 13.1 1.3a1 1 0 0 1-.5 1.7z"/></svg>',
-  youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>',
-  discord: '<svg viewBox="0 0 24 24"><path d="M20.3 4.4a17.4 17.4 0 0 0-4.3-1.3.1.1 0 0 0-.1.1c-.2.4-.4.8-.6 1.2a16 16 0 0 0-5.6 0c-.2-.4-.4-.8-.6-1.2a.1.1 0 0 0-.1-.1 17.4 17.4 0 0 0-4.3 1.3.1.1 0 0 0 0 .1C2 9.2 1.3 13.9 2.5 18.5a.2.2 0 0 0 .1.1 17.7 17.7 0 0 0 5.4 2.7.1.1 0 0 0 .1 0c.4-.6.8-1.2 1.1-1.9a.1.1 0 0 0 0-.1 11.5 11.5 0 0 1-1.7-.8.1.1 0 0 1 0-.2c.1-.1.2-.2.3-.3a12.3 12.3 0 0 0 10.6 0c.1.1.2.2.3.3a.1.1 0 0 1 0 .2 11.5 11.5 0 0 1-1.7.8.1.1 0 0 0 0 .1c.4.7.8 1.3 1.1 1.9a.1.1 0 0 0 .1 0 17.7 17.7 0 0 0 5.4-2.7.2.2 0 0 0 .1-.1c1.3-4.8-.2-9.5-2.7-14.1a.1.1 0 0 0-.1-.1zM8.5 14.5c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2zm7 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2z"/></svg>',
-  instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.2.1 4.7 1.7 4.8 4.8.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.6 4.7-4.8 4.8-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.2-.1-4.7-1.6-4.8-4.8-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-3.2 1.6-4.7 4.8-4.8 1.2 0 1.6 0 4.8 0zm0 2.2c-3.1 0-3.5 0-4.7.1-2 .1-2.9 1-3 3-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 2 1 2.9 3 3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c2-.1 2.9-1 3-3 .1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-2-1-2.9-3-3-1.2-.1-1.6-.1-4.7-.1zm0 3.6a5.8 5.8 0 1 1 0 11.6 5.8 5.8 0 0 1 0-11.6zm0 9.4a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2zm6.2-10.4a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0 z"/></svg>',
-  twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
-  letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
-  onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
-  behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1z"/></svg>',
-  pinterest: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.7 19.3c-.1-.8-.2-2 .03-2.9l.7-3.1s-.2-.4-.2-1c0-1 .6-1.7 1.3-1.7.6 0 .9.5.9 1.1 0 .7-.4 1.7-.6 2.6-.2.8.4 1.5 1.2 1.5 1.4 0 2.5-1.5 2.5-3.6 0-1.9-1.4-3.2-3.4-3.2-2.3 0-3.7 1.7-3.7 3.5 0 .7.3 1.4.6 1.8l-.2.8c-.1 0-.3-.1-.4-.2-1.5-.7-2.4-2.8-2.4-4.5 0-3.7 2.7-7.1 7.8-7.1 4.1 0 7.3 2.9 7.3 6.8 0 4.1-2.6 7.4-6.2 7.4-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-1.1 2.5-1.6 3.4A10 10 0 1 0 12 2z"/></svg>',
-  tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
-};
-
-const emblemSvgs = {
-  gamer: '<svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
-  geek: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>',
-  rpg: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
-  anime: '<svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>',
-  artist: '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>',
-  founder: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
-};
-
-function getSpotifyEmbed(url) {
-  if (!url) return '';
-  const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
-  if (match) {
-    return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
-  }
-  return '';
-}
-
-function getYoutubeEmbed(url) {
-  if (!url) return '';
-  let id = '';
-  if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
-  else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
-  if (id) {
-    return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
-  }
-  return '';
-}
-
-function getInstagramEmbed(url) {
-  if (!url) return '';
-  const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
-  if (match) {
-    return `<div class="embed-wrapper"><iframe src="https://www.instagram.com/${match[1]}/${match[2]}/embed" height="360" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
-  }
-  return '';
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
+  if (!window.islySupabase) return;
+
+  // Pega o handle da URL (ex: perfil.html?u=dielsly ou rota amigável)
   const urlParams = new URLSearchParams(window.location.search);
-  const rawHandle = urlParams.get('u') || urlParams.get('user');
+  const handleQuery = urlParams.get('u') || window.location.pathname.split('/').pop();
 
-  if (!rawHandle || !window.islySupabase) {
-    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+  if (!handleQuery) {
+    document.getElementById('profileName').textContent = 'Perfil não especificado.';
     return;
   }
 
-  const handle = rawHandle.trim().replace(/^@/, '');
-  const data = await window.islySupabase.getProfileByHandle(handle);
-
-  if (!data) {
-    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
-    return;
-  }
-// Dentro da função de carregamento do perfil.html:
-if (data.is_banned) {
-  document.querySelector('.container').innerHTML = `
-    <div class="error-box" style="border: 1px solid #f8717144; background: #f8717112; border-radius: 18px; padding: 40px;">
-      <h2>⚠️ Conta Suspensa</h2>
-      <p>Este perfil foi suspenso por violação dos termos de uso da comunidade.</p>
-    </div>
-  `;
-  return;
-}
-  let currentViews = (data.views_count || 0) + 1;
-  document.getElementById('publicViewsCount').textContent = currentViews;
   try {
-    await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
-  } catch (e) {
-    console.warn("Analytics Error:", e);
-  }
-
-  document.body.style.backgroundColor = data.bg_color || '#080812';
-  if (data.custom_cursor) {
-    document.body.style.cursor = `url('${data.custom_cursor}'), auto`;
-  }
-
-  const card = document.getElementById('profileCard');
-  if (card) {
-    const cardStyleType = data.card_style || 'opaque';
-    card.classList.remove('card-style-opaque', 'card-style-glass');
+    const profile = await window.islySupabase.getProfileByHandle(handleQuery.replace('@', ''));
     
-    if (cardStyleType === 'glass') {
-      card.classList.add('card-style-glass');
-      card.style.backgroundColor = '';
-    } else {
-      card.classList.add('card-style-opaque');
-      card.style.backgroundColor = data.card_bg || '#11111f';
+    if (!profile) {
+      document.getElementById('profileName').textContent = 'Usuário não encontrado.';
+      document.getElementById('profileHandle').textContent = '';
+      return;
     }
 
-  if (data.wallpaper_url) {
-      document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.75), rgba(8, 8, 18, 0.75)), url('${data.wallpaper_url}')`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundPosition = 'center';
-      document.body.style.backgroundRepeat = 'no-repeat';
-      document.body.style.backgroundAttachment = 'fixed';
+    // Renderiza dados básicos do perfil
+    document.getElementById('profileName').textContent = profile.name || 'Sem nome';
+    document.getElementById('profileHandle').textContent = '@' + (profile.handle || 'isly');
+    document.getElementById('profileBio').textContent = profile.bio || '';
+
+    if (profile.avatar_url) {
+      document.querySelector('.avatar-container').innerHTML = `<img src="${profile.avatar_url}" alt="Avatar">`;
     }
 
-    card.style.border = 'none';
+    // Ativa e configura a Trilha Sonora se o usuário tiver cadastrado uma
+    if (profile.soundtrack_url) {
+      const widget = document.getElementById('soundtrackWidget');
+      const audio = document.getElementById('stAudio');
+      const playBtn = document.getElementById('stPlayBtn');
+      const statusTxt = document.getElementById('stStatus');
 
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const xc = rect.width / 2;
-      const yc = rect.height / 2;
-      const dx = (x - xc) / xc;
-      const dy = (y - yc) / yc;
-      card.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
-    });
-  }
+      audio.src = profile.soundtrack_url;
+      widget.style.display = 'flex';
 
-  const nameEl = document.getElementById('name');
-  if (nameEl) {
-    nameEl.style.color = data.title_color || '#ffffff';
-    if (data.name_effect === 'glow') {
-      nameEl.classList.add('text-effect-glow');
-    }
-  }
-
-  const activeTextColor = data.text_color || '#f6f4ff';
-  const bioEl = document.getElementById('bio');
-  if (bioEl) bioEl.style.color = activeTextColor;
-
-  const handleEl = document.getElementById('handle');
-  if (handleEl) handleEl.style.color = activeTextColor;
-
-  document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
-  nameEl.innerHTML = `${data.name || 'Sem nome'} <span class="verified">✦</span>`;
-  handleEl.textContent = '@' + data.handle;
-
-  const roleBadge = document.getElementById('roleBadge');
-  if (roleBadge) {
-    const r = data.role || 'Membro';
-    roleBadge.innerHTML = r === 'Fundador' ? '💎 Fundador' : r === 'Suporte' ? '🛡️ Suporte' : r === 'Apoiador' ? '⭐ Apoiador' : '👾 Membro';
-  }
-
-  bioEl.textContent = data.bio || '';
-  document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
-  document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
-
-  const avatarEl = document.getElementById('avatar');
-  if (data.avatar_url) {
-    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
-  } else {
-    avatarEl.textContent = '⌬';
-  }
-
-  const frameEl = document.getElementById('avatarFrame');
-  const frameType = data.avatar_frame || 'none';
-  frameEl.className = 'avatar-frame';
-  if (frameType === 'cyberpunk') frameEl.classList.add('frame-cyberpunk');
-  else if (frameType === 'neon-gold') frameEl.classList.add('frame-neon-gold');
-  else if (frameType === 'royal-purple') frameEl.classList.add('frame-royal-purple');
-
-  const emblemsEl = document.getElementById('emblems');
-  if (emblemsEl) {
-    emblemsEl.innerHTML = (data.emblems || []).map(id => {
-      const svg = emblemSvgs[id] || '';
-      return `<span>${svg} ${emblemNames[id] || id}</span>`;
-    }).join('');
-  }
-
-  const socialsBar = document.getElementById('socialsBar');
-  if (socialsBar && data.socials) {
-    let sHTML = '';
-    Object.keys(data.socials).forEach(key => {
-      const val = data.socials[key];
-      if (val && socialUrls[key]) {
-        const url = socialUrls[key](val);
-        const svg = socialSvgs[key] || '';
-        sHTML += `<a class="social-icon-btn" href="${url}" target="_blank" rel="noopener" title="${key}" style="color:${activeTextColor}">${svg}</a>`;
-      }
-    });
-    socialsBar.innerHTML = sHTML;
-  }
-
-  const embedsBar = document.getElementById('embedsBar');
-  if (embedsBar) {
-    let eHTML = '';
-    eHTML += getSpotifyEmbed(data.embed_spotify);
-    eHTML += getYoutubeEmbed(data.embed_youtube);
-    eHTML += getInstagramEmbed(data.embed_instagram);
-    embedsBar.innerHTML = eHTML;
-  }
-
-  const linksEl = document.getElementById('links');
-  if (linksEl) {
-    linksEl.innerHTML = (data.links || []).map(link => `
-      <a class="public-link" data-url="${link.url || '#'}" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px)">
-        <span class="left"><span>${link.emoji || '↗'}</span><span>${link.title || 'Link'}</span></span>
-        <span class="arr" style="color:${activeTextColor}">↗</span>
-      </a>
-    `).join('');
-
-    document.querySelectorAll('.public-link').forEach(linkBtn => {
-      linkBtn.addEventListener('click', async (evt) => {
-        evt.preventDefault();
-        const targetUrl = linkBtn.getAttribute('data-url');
-        try {
-          const currentClicks = (data.clicks_count || 0) + 1;
-          await window.islySupabase.saveProfile({ id: data.id, clicks_count: currentClicks });
-        } catch (e) {
-          console.warn("Analytics Error:", e);
+      playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play().then(() => {
+            playBtn.textContent = '❚❚';
+            statusTxt.textContent = 'A tocar...';
+          }).catch(err => {
+            console.warn("Reprodução bloqueada pelo navegador:", err);
+          });
+        } else {
+          audio.pause();
+          playBtn.textContent = '▶';
+          statusTxt.textContent = 'Pausado';
         }
-        if (targetUrl && targetUrl !== '#') window.open(targetUrl, '_blank');
       });
-    });
+    }
+
+  } catch (err) {
+    console.error("Erro ao carregar perfil público:", err);
+    document.getElementById('profileName').textContent = 'Erro ao carregar perfil.';
   }
 });
 </script>
