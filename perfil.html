@@ -539,5 +539,292 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 </script>
+  <!-- ========================================================= -->
+<!-- GUESTBOOK (MURAL DE RECADOS ESTILO POST-IT / MARGENS)     -->
+<!-- ========================================================= -->
+<style>
+/* Container flutuante global para os recados nas margens */
+#guestbookContainer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+
+/* Estilo Base dos Recados */
+.guestbook-note {
+  position: absolute;
+  pointer-events: auto;
+  padding: 10px 14px;
+  max-width: 140px;
+  font-size: 11px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, z-index 0.2s ease;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.guestbook-note:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  z-index: 1000;
+}
+
+/* Estilo 1: Vintage (Pedaço de papel branco rasgado/envelhecido) */
+.note-style-vintage {
+  background: #fdfbf7;
+  color: #1a1a1a;
+  border-left: 3px solid #d4c5a9;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 2px 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Estilo 2: Chalk (Giz escrito sobre fundo escuro rústico) */
+.note-style-chalk {
+  background: rgba(18, 18, 26, 0.85);
+  backdrop-filter: blur(8px);
+  color: #e2e8f0;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Estilo 3: Dev Notes (Anotação de código minimalista branca e serifada) */
+.note-style-dev {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  font-family: 'Times New Roman', Times, serif;
+}
+.note-style-dev .note-code-tag {
+  font-size: 9px;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.note-author {
+  font-size: 9px;
+  font-weight: 700;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+/* Botão flutuante para abrir o Modal de Novo Recado */
+#openNoteModalBtn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1000;
+  background: rgba(13, 11, 20, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f6f4ff;
+  border-radius: 99px;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  transition: all 0.2s;
+}
+#openNoteModalBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Modal de Envio */
+#noteModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  place-items: center;
+  padding: 20px;
+}
+.note-modal-box {
+  background: #11111f;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 340px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+.note-modal-box h3 { margin: 0; font-size: 16px; color: #f6f4ff; }
+.note-modal-box input, .note-modal-box select {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+}
+.note-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.note-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.note-btn-cancel { background: rgba(255,255,255,0.08); color: #a6a4c4; }
+.note-btn-submit { background: #a855f7; color: #fff; }
+</style>
+
+<!-- Container dos recados nas margens -->
+<div id="guestbookContainer"></div>
+
+<!-- Botão para abrir modal -->
+<button id="openNoteModalBtn" aria-label="Deixar Recado">✏️ Deixar Recado</button>
+
+<!-- Modal -->
+<div id="noteModal">
+  <div class="note-modal-box">
+    <h3>Deixar um recado no mural</h3>
+    <p style="font-size: 11px; color: #a6a4c4; margin: 0;">Até 10 caracteres por campo para manter o espaço limpo.</p>
+    <input type="text" id="noteAuthorInput" placeholder="Seu nome (máx 10)" maxlength="10">
+    <input type="text" id="noteMessageInput" placeholder="Recado (máx 10)" maxlength="10">
+    <div class="note-modal-actions">
+      <button class="note-btn note-btn-cancel" id="closeNoteModalBtn">Cancelar</button>
+      <button class="note-btn note-btn-submit" id="submitNoteBtn">Fixar Recado</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Lógica de Carregamento e Posicionamento Inteligente (Fora do Card Central)
+document.addEventListener("DOMContentLoaded", async () => {
+  // Aguarda carregar os dados do perfil principal
+  setTimeout(async () => {
+    if (typeof data === 'undefined' || !data || !window.islySupabase) return;
+
+    const container = document.getElementById('guestbookContainer');
+    const profileId = data.id;
+    // O estilo padrão do mural definido pelo dono do perfil (pode vir de data.guestbook_style ou padrão 'vintage')
+    const globalStyle = data.guestbook_style || 'vintage';
+
+    // Função para gerar coordenadas seguras nas margens (Evitando a área central de 640px)
+    function getRandomSafePosition() {
+      let x, y;
+      const isLeftSide = Math.random() < 0.5;
+      
+      if (isLeftSide) {
+        // Margem Esquerda (2% a 22%)
+        x = Math.floor(Math.random() * 20) + 2;
+      } else {
+        // Margem Direita (75% a 95%)
+        x = Math.floor(Math.random() * 20) + 75;
+      }
+      
+      // Altura vertical variada (10% a 85%)
+      y = Math.floor(Math.random() * 75) + 10;
+      
+      return { x, y };
+    }
+
+    // Busca recados do Supabase
+    async function loadNotes() {
+      try {
+        const { data: notes, error } = await window.islySupabase.client
+          .from('guestbook_notes')
+          .select('*')
+          .eq('profile_id', profileId)
+          .order('created_at', { ascending: false })
+          .limit(16); // Limite máximo para evitar peso
+
+        if (error) throw error;
+        container.innerHTML = '';
+
+        if (notes) {
+          notes.forEach(note => {
+            const el = document.createElement('div');
+            el.className = `guestbook-note note-style-${note.style || globalStyle}`;
+            
+            // Rotação leve natural aleatória entre -6 e 6 graus
+            const rot = Math.floor(Math.random() * 12) - 6;
+            el.style.left = `${note.pos_x}%`;
+            el.style.top = `${note.pos_y}%`;
+            el.style.transform = `rotate(${rot}deg)`;
+
+            let innerHTML = `<span class="note-author">@${escapeHtml(note.author)}</span>`;
+            if (note.style === 'dev' || globalStyle === 'dev') {
+              innerHTML += `<span class="note-code-tag">// msg</span>`;
+            }
+            innerHTML += `<span>${escapeHtml(note.message)}</span>`;
+
+            el.innerHTML = innerHTML;
+            container.appendChild(el);
+          });
+        }
+      } catch (e) {
+        console.warn("Erro ao carregar guestbook:", e);
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    loadNotes();
+
+    // Controle do Modal
+    const modal = document.getElementById('noteModal');
+    document.getElementById('openNoteModalBtn').addEventListener('click', () => modal.style.display = 'grid');
+    document.getElementById('closeNoteModalBtn').addEventListener('click', () => modal.style.display = 'none');
+
+    // Envio do Recado
+    document.getElementById('submitNoteBtn').addEventListener('click', async () => {
+      const author = document.getElementById('noteAuthorInput').value.trim();
+      const message = document.getElementById('noteMessageInput').value.trim();
+
+      if (!author || !message) {
+        alert('Preencha ambos os campos (máximo de 10 caracteres cada).');
+        return;
+      }
+
+      const pos = getRandomSafePosition();
+
+      try {
+        const { error } = await window.islySupabase.client
+          .from('guestbook_notes')
+          .insert([{
+            profile_id: profileId,
+            author: author.substring(0, 10),
+            message: message.substring(0, 10),
+            style: globalStyle,
+            pos_x: pos.x,
+            pos_y: pos.y
+          }]);
+
+        if (error) throw error;
+
+        modal.style.display = 'none';
+        document.getElementById('noteAuthorInput').value = '';
+        document.getElementById('noteMessageInput').value = '';
+        loadNotes();
+      } catch (e) {
+        alert('Erro ao fixar recado. Tente novamente.');
+        console.error(e);
+      }
+    });
+
+  }, 800);
+});
+</script>
 </body>
 </html>
