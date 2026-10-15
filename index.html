@@ -492,14 +492,28 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-emblems">
-    <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 3 emblemas.</p></div><span class="muted">03 / 09</span></div>
-    <div class="emblems" id="emblemGrid">
-     <button type="button" class="emblem" data-id="gamer"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>Gamer</button>
-     <button type="button" class="emblem" data-id="geek"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>Geek</button>
-     <button type="button" class="emblem" data-id="rpg"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>RPG</button>
-     <button type="button" class="emblem" data-id="anime"><svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>Anime</button>
-     <button type="button" class="emblem" data-id="artist"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>Criador</button>
-     <button type="button" class="emblem" data-id="founder"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Fundador</button>
+    <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 20 emblemas para exibir no seu perfil.</p></div><span class="muted">03 / 09</span></div>
+    <div class="emblems" id="emblemGrid" style="grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px;">
+     <button type="button" class="emblem" data-id="nerd"><span style="font-size:22px; display:block; margin-bottom:4px;">🤓</span>Nerd</button>
+     <button type="button" class="emblem" data-id="gamer"><span style="font-size:22px; display:block; margin-bottom:4px;">🎮</span>Gamer</button>
+     <button type="button" class="emblem" data-id="youtuber"><span style="font-size:22px; display:block; margin-bottom:4px;">▶️</span>Youtuber</button>
+     <button type="button" class="emblem" data-id="programador"><span style="font-size:22px; display:block; margin-bottom:4px;">💻</span>Programador</button>
+     <button type="button" class="emblem" data-id="hacker"><span style="font-size:22px; display:block; margin-bottom:4px;">⚡</span>Hacker</button>
+     <button type="button" class="emblem" data-id="streamer"><span style="font-size:22px; display:block; margin-bottom:4px;">🟣</span>Streamer</button>
+     <button type="button" class="emblem" data-id="gotico"><span style="font-size:22px; display:block; margin-bottom:4px;">🦇</span>Gótico</button>
+     <button type="button" class="emblem" data-id="anime"><span style="font-size:22px; display:block; margin-bottom:4px;">🍥</span>Anime</button>
+     <button type="button" class="emblem" data-id="lol"><span style="font-size:22px; display:block; margin-bottom:4px;">⚔️</span>LoL</button>
+     <button type="button" class="emblem" data-id="habbo"><span style="font-size:22px; display:block; margin-bottom:4px;">🏨</span>Habbo</button>
+     <button type="button" class="emblem" data-id="thesims"><span style="font-size:22px; display:block; margin-bottom:4px;">🟩</span>The Sims</button>
+     <button type="button" class="emblem" data-id="valorant"><span style="font-size:22px; display:block; margin-bottom:4px;">🎯</span>Valorant</button>
+     <button type="button" class="emblem" data-id="cod"><span style="font-size:22px; display:block; margin-bottom:4px;">🪖</span>Call Of Duty</button>
+     <button type="button" class="emblem" data-id="cs"><span style="font-size:22px; display:block; margin-bottom:4px;">💣</span>CS</button>
+     <button type="button" class="emblem" data-id="gta"><span style="font-size:22px; display:block; margin-bottom:4px;">💰</span>GTA</button>
+     <button type="button" class="emblem" data-id="minecraft"><span style="font-size:22px; display:block; margin-bottom:4px;">⛏️</span>Minecraft</button>
+     <button type="button" class="emblem" data-id="rpg"><span style="font-size:22px; display:block; margin-bottom:4px;">🎲</span>RPG</button>
+     <button type="button" class="emblem" data-id="artista"><span style="font-size:22px; display:block; margin-bottom:4px;">🎨</span>Artista</button>
+     <button type="button" class="emblem" data-id="musica"><span style="font-size:22px; display:block; margin-bottom:4px;">🎧</span>Música</button>
+     <button type="button" class="emblem" data-id="fundador"><span style="font-size:22px; display:block; margin-bottom:4px;">💎</span>Fundador</button>
     </div>
    </section>
 
