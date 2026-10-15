@@ -322,8 +322,11 @@ if (data.is_banned) {
       card.style.backgroundColor = data.card_bg || '#11111f';
     }
 
-    if (data.wallpaper_url) {
-      card.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${data.wallpaper_url}')`;
+   if (data.wallpaper_url) {
+      card.style.backgroundImage = `linear-gradient(rgba(13, 11, 20, 0.4), rgba(13, 11, 20, 0.4)), url('${data.wallpaper_url}')`;
+      card.style.backgroundSize = 'cover';
+      card.style.backgroundPosition = 'center';
+      card.style.backgroundRepeat = 'no-repeat';
     }
 
     card.style.border = 'none';
