@@ -322,11 +322,12 @@ if (data.is_banned) {
       card.style.backgroundColor = data.card_bg || '#11111f';
     }
 
-   if (data.wallpaper_url) {
-      card.style.backgroundImage = `linear-gradient(rgba(13, 11, 20, 0.4), rgba(13, 11, 20, 0.4)), url('${data.wallpaper_url}')`;
-      card.style.backgroundSize = 'cover';
-      card.style.backgroundPosition = 'center';
-      card.style.backgroundRepeat = 'no-repeat';
+  if (data.wallpaper_url) {
+      document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.75), rgba(8, 8, 18, 0.75)), url('${data.wallpaper_url}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundAttachment = 'fixed';
     }
 
     card.style.border = 'none';
