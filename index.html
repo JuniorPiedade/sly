@@ -166,9 +166,9 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   background-repeat: no-repeat;
   background-position: center;
 }
-.frame-cyberpunk{border:2px solid var(--blue);border-radius:22px;box-shadow:0 0 12px var(--blue)}
-.frame-neon-gold{border:2px solid #c4a46b;border-radius:22px;box-shadow:0 0 12px #c4a46b55}
-.frame-royal-purple{border:2px solid #b99aff;border-radius:22px;box-shadow:0 0 12px #8b5cf655}
+/* Molduras Atualizadas */
+.frame-neon-white { border: 2px solid #ffffff; border-radius: 22px; box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.4); }
+.frame-vip { border: 2px solid var(--purple); border-radius: 22px; box-shadow: 0 0 16px var(--purple), 0 0 30px var(--blue); }
 
 .profile-info{width:100%;min-width:0;overflow:visible!important}
 .profile-card h3{
@@ -215,7 +215,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 }
 .preview-link:hover{transform:translateY(-2px);border-color:#a78bfa55!important;background:#8b5cf60c!important}
 
-/* Preview Friendships no Card com Título e Efeito Neon */
 .preview-friendships-wrapper {
   grid-row: 6.5;
   margin-top: 6px;
@@ -455,31 +454,39 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
  <div class="editor-grid">
   <div>
    <section class="panel active-panel" id="panel-identity">
-    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, moldura VIP e uploads de foto e wallpaper.</p></div><span class="muted">01 / 09</span></div>
+    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio estendida, moldura e uploads de foto e wallpaper.</p></div><span class="muted">01 / 09</span></div>
     <div class="two">
      <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
      <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
     </div>
     <label class="field">
-     <span>🖼️ Moldura VIP do Avatar</span>
+     <span>🖼️ Moldura do Avatar</span>
      <select id="avatarFrameSelect">
       <option value="none">Nenhuma (Padrão)</option>
-      <option value="cyberpunk">Cyberpunk Neon (Azul)</option>
-      <option value="neon-gold">Gold Luxury (Dourado)</option>
-      <option value="royal-purple">Royal Purple (Roxo VIP)</option>
+      <option value="neon-white">Neon Branco Simples</option>
+      <option value="vip">VIP Customizada (Exclusivo)</option>
      </select>
     </label>
-    <label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/140</small></label>
+    <label class="field"><span>Bio curta (máx. 240 caracteres)</span><textarea id="bio" maxlength="240" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/240</small></label>
     <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
     <label class="field"><span>Wallpaper do cartão (Upload)</span><input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
    </section>
 
    <section class="panel" id="panel-status">
     <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 09</span></div>
-    <div class="options" id="statusOptions">
+    <div class="options" id="statusOptions" style="display:flex; flex-wrap:wrap; gap:6px;">
      <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando">🎮 Jogando</button>
-     <button type="button" class="choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button>
-     <button type="button" class="choice" data-emoji="🍥" data-label="Anime">🍥 Anime</button>
+     <button type="button" class="choice" data-emoji="💻" data-label="Programando">💻 Programando</button>
+     <button type="button" class="choice" data-emoji="🛠️" data-label="Construindo">🛠️ Construindo</button>
+     <button type="button" class="choice" data-emoji="👀" data-label="Assistindo">👀 Assistindo</button>
+     <button type="button" class="choice" data-emoji="🌐" data-label="Criando Sites">🌐 Criando Sites</button>
+     <button type="button" class="choice" data-emoji="🕹️" data-label="Criando Jogos">🕹️ Criando Jogos</button>
+     <button type="button" class="choice" data-emoji="🌙" data-label="Ausente">🌙 Ausente</button>
+     <button type="button" class="choice" data-emoji="⚡" data-label="Ocupado">⚡ Ocupado</button>
+     <button type="button" class="choice" data-emoji="💤" data-label="Dormindo">💤 Dormindo</button>
+     <button type="button" class="choice" data-emoji="🌴" data-label="Estou de férias">🌴 Estou de férias</button>
+     <button type="button" class="choice" data-emoji="▶️" data-label="No Youtube">▶️ No Youtube</button>
+     <button type="button" class="choice" data-emoji="🎵" data-label="Escutando música">🎵 Escutando música</button>
     </div>
     <label class="field" style="margin-top:14px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
    </section>
@@ -518,12 +525,10 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <label class="field">
      <span>🎵 Link de Player do Spotify (Música, Álbum ou Playlist)</span>
      <input id="embedSpotify" placeholder="https://open.spotify.com/track/...">
-     <small>Ex: https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT</small>
     </label>
     <label class="field">
      <span>▶ Link do Vídeo do YouTube</span>
      <input id="embedYoutube" placeholder="https://www.youtube.com/watch?v=...">
-     <small>Ex: https://www.youtube.com/watch?v=dQw4w9WgXcQ</small>
     </label>
     <label class="field"><span>📸 Link do Post do Instagram</span><input id="embedInstagram" placeholder="https://www.instagram.com/p/..."></label>
    </section>
@@ -533,13 +538,13 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <label class="field">
      <span>Arquivo de Trilha Sonora (.mp3, .wav)</span>
      <input id="soundtrackFile" type="file" accept="audio/mp3,audio/wav,audio/mpeg">
-     <small>Máximo de 8 minutos / 15MB. O áudio tocará de forma opcional para os visitantes.</small>
+     <small>Máximo de 8 minutos / 15MB.</small>
     </label>
     <input type="hidden" id="soundtrackUrl" value="">
    </section>
 
    <section class="panel" id="panel-appearance">
-    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos, Cursor e Mural de Recados.</p></div><span class="muted">07 / 09</span></div>
+    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos e Cursor.</p></div><span class="muted">07 / 09</span></div>
     <label class="field">
      <span>🪞 Estilo Visual do Card</span>
      <select id="cardStyle">
@@ -561,7 +566,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     </div>
     <div class="two">
      <label class="field"><span>Cor do Título do Nome</span><input type="color" id="titleColor" value="#ffffff"></label>
-     <label class="field"><span>Cor dos Demais Textos (Afeta Destaque e Texto dos Links)</span><input type="color" id="textColor" value="#f6f4ff"></label>
+     <label class="field"><span>Cor dos Demais Textos</span><input type="color" id="textColor" value="#f6f4ff"></label>
     </div>
     <label class="field">
      <span>✨ Efeito Especial no Nome</span>
@@ -573,7 +578,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <label class="field">
      <span>🖱️ Cursor Personalizado (.cur ou .png)</span>
      <input id="customCursorFile" type="file" accept=".cur,.png,.gif,.webp">
-     <small>Selecione um arquivo de cursor do seu computador. Máx. 1MB.</small>
+     <small>Máx. 1MB.</small>
     </label>
     <input type="hidden" id="customCursor" value="">
     <input type="hidden" id="avatarUrl" value="">
@@ -594,7 +599,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
       <input type="text" id="friendHandleInput" placeholder="ex: dielsly" style="flex:1;">
       <button type="button" id="addFriendBtn" class="btn primary" style="padding: 10px 16px;">Adicionar</button>
      </div>
-     <small>Digite o @ do amigo cadastrado no isly.me para exibi-lo em formato de bolinha minimalista no seu cartão.</small>
+     <small>Digite o @ do amigo cadastrado no isly.me.</small>
     </label>
     <div id="friendshipsListEdit" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;"></div>
    </section>
@@ -620,7 +625,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <div class="embeds-container" id="previewEmbeds"></div>
     <div class="preview-links" id="previewLinks"></div>
     
-    <!-- Amigos Próximos com Título e Efeito Neon -->
     <div class="preview-friendships-wrapper" id="previewFriendshipsWrapper" style="display: none;">
       <div class="preview-friendships-title">Amigos Próximos</div>
       <div class="preview-friendships" id="previewFriendships"></div>
@@ -1164,9 +1168,8 @@ async function initEditor(userId) {
   const frameEl = document.getElementById('previewFrame');
   const frameType = avatarFrameSelect.value;
   frameEl.className = 'avatar-frame';
-  if (frameType === 'cyberpunk') frameEl.classList.add('frame-cyberpunk');
-  else if (frameType === 'neon-gold') frameEl.classList.add('frame-neon-gold');
-  else if (frameType === 'royal-purple') frameEl.classList.add('frame-royal-purple');
+  if (frameType === 'neon-white') frameEl.classList.add('frame-neon-white');
+  else if (frameType === 'vip') frameEl.classList.add('frame-vip');
 
   document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
   document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
