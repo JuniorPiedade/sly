@@ -193,7 +193,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   border-color:#8b5cf638;background:#8b5cf60d;color:#e0d4fa;border-radius:99px;display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600
 }
 
-/* EMBLEMAS MINIMALISTAS E ENXUTOS NA PRÉVIA */
 .preview-emblems{
   grid-row:3;
   margin-top:0;
@@ -493,8 +492,10 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-status">
-    <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 09</span></div>
-    <div class="options" id="statusOptions" style="display:flex; flex-wrap:wrap; gap:6px;">
+    <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual e status personalizados.</p></div><span class="muted">02 / 09</span></div>
+    
+    <label class="field"><span>Escolha ou adicione seu status</span></label>
+    <div class="options" id="statusOptions" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;">
      <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando">🎮 Jogando</button>
      <button type="button" class="choice" data-emoji="💻" data-label="Programando">💻 Programando</button>
      <button type="button" class="choice" data-emoji="🛠️" data-label="Construindo">🛠️ Construindo</button>
@@ -508,7 +509,21 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
      <button type="button" class="choice" data-emoji="▶️" data-label="No Youtube">▶️ No Youtube</button>
      <button type="button" class="choice" data-emoji="🎵" data-label="Escutando música">🎵 Escutando música</button>
     </div>
-    <label class="field" style="margin-top:14px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
+
+    <!-- Container para status customizados adicionados pelo user -->
+    <div id="customStatusContainer" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;"></div>
+
+    <!-- Adicionar Novo Status -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid #35334e; padding:12px; border-radius:12px; margin-bottom:14px;">
+     <span style="font-size:12px; color:#c7c4dd; margin-bottom:6px; display:block; font-weight:700;">＋ Criar novo status personalizado</span>
+     <div style="display:flex; gap:8px;">
+      <input type="text" id="newStatusEmoji" maxlength="4" placeholder="emoji" style="width:70px; border:1px solid #35334e; border-radius:9px; padding:8px; background:#0a0a14; color:white; text-align:center;">
+      <input type="text" id="newStatusLabel" maxlength="25" placeholder="Ex: Treinando" style="flex:1; border:1px solid #35334e; border-radius:9px; padding:8px 12px; background:#0a0a14; color:white; font-size:13px;">
+      <button type="button" id="addStatusBtn" class="btn" style="padding:8px 14px; background:rgba(168,85,247,0.2); border-color:rgba(168,85,247,0.4); color:#d8b4fe;">Adicionar</button>
+     </div>
+    </div>
+
+    <label class="field"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
    </section>
 
    <section class="panel" id="panel-emblems">
@@ -800,7 +815,7 @@ async function initEditor(userId) {
    name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack_url: '', avatar_frame: 'none', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
-   guestbook_style: 'vintage', friendships: []
+   guestbook_style: 'vintage', friendships: [], custom_statuses: []
   };
  }
 
@@ -808,6 +823,7 @@ async function initEditor(userId) {
  if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
  if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
  if (!Array.isArray(currentProfile.friendships)) currentProfile.friendships = [];
+ if (!Array.isArray(currentProfile.custom_statuses)) currentProfile.custom_statuses = [];
  if (!currentProfile.socials || typeof currentProfile.socials !== 'object') currentProfile.socials = {};
 
  document.getElementById('statViews').textContent = currentProfile.views_count || 0;
@@ -1041,6 +1057,7 @@ async function initEditor(userId) {
     embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
     emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
     friendships: currentProfile.friendships,
+    custom_statuses: currentProfile.custom_statuses,
     handle_changed: currentProfile.handle_changed
    };
 
@@ -1059,19 +1076,64 @@ async function initEditor(userId) {
   });
  });
 
- document.querySelectorAll('#statusOptions .choice').forEach(btn => {
-  if (btn.getAttribute('data-label') === currentProfile.status_label) {
-   document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
-   btn.classList.add('active');
-  }
-  btn.addEventListener('click', () => {
-   document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
-   btn.classList.add('active');
-   currentProfile.status_emoji = btn.getAttribute('data-emoji');
-   currentProfile.status_label = btn.getAttribute('data-label');
+ function bindStatusClick(element) {
+  element.addEventListener('click', () => {
+   document.querySelectorAll('#statusOptions .choice, #customStatusContainer .choice').forEach(b => b.classList.remove('active'));
+   element.classList.add('active');
+   currentProfile.status_emoji = element.getAttribute('data-emoji');
+   currentProfile.status_label = element.getAttribute('data-label');
    updatePreview(); triggerAutoSave();
   });
+ }
+
+ document.querySelectorAll('#statusOptions .choice').forEach(btn => {
+  if (btn.getAttribute('data-label') === currentProfile.status_label) {
+   document.querySelectorAll('#statusOptions .choice, #customStatusContainer .choice').forEach(b => b.classList.remove('active'));
+   btn.classList.add('active');
+  }
+  bindStatusClick(btn);
  });
+
+ function renderCustomStatuses() {
+  const container = document.getElementById('customStatusContainer');
+  if (!container) return;
+  container.innerHTML = (currentProfile.custom_statuses || []).map((st, idx) => `
+   <button type="button" class="choice ${st.label === currentProfile.status_label ? 'active' : ''}" data-emoji="${st.emoji}" data-label="${st.label}">
+    ${st.emoji} ${st.label} <span onclick="event.stopPropagation(); window.removeCustomStatus(${idx})" style="margin-left:6px; color:#f87171; font-weight:bold;">&times;</span>
+   </button>
+  `).join('');
+  
+  container.querySelectorAll('.choice').forEach(btn => {
+   bindStatusClick(btn);
+  });
+ }
+
+ document.getElementById('addStatusBtn')?.addEventListener('click', () => {
+  const emojiInput = document.getElementById('newStatusEmoji');
+  const labelInput = document.getElementById('newStatusLabel');
+  const emoji = emojiInput.value.trim() || '✨';
+  const label = labelInput.value.trim();
+
+  if (!label) {
+   toast('Digite um rótulo para o status.');
+   return;
+  }
+
+  currentProfile.custom_statuses.push({ emoji, label });
+  emojiInput.value = '';
+  labelInput.value = '';
+  renderCustomStatuses();
+  triggerAutoSave();
+  toast('Status personalizado adicionado! ✨');
+ });
+
+ window.removeCustomStatus = function(index) {
+  currentProfile.custom_statuses.splice(index, 1);
+  renderCustomStatuses();
+  triggerAutoSave();
+ };
+
+ renderCustomStatuses();
 
  document.querySelectorAll('#emblemGrid .emblem').forEach(el => {
   const id = el.getAttribute('data-id');
@@ -1338,6 +1400,7 @@ async function initEditor(userId) {
    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
    emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
    friendships: currentProfile.friendships,
+   custom_statuses: currentProfile.custom_statuses,
    handle_changed: currentProfile.handle_changed
   };
 
