@@ -215,13 +215,32 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 }
 .preview-link:hover{transform:translateY(-2px);border-color:#a78bfa55!important;background:#8b5cf60c!important}
 
-/* Preview Friendships no Card */
-.preview-friendships {
+/* Preview Friendships no Card com Título e Efeito Neon */
+.preview-friendships-wrapper {
   grid-row: 6.5;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.preview-friendships-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: default;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+.preview-friendships-title:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
+}
+.preview-friendships {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 4px;
 }
 .preview-friend-bubble {
   width: 28px;
@@ -399,7 +418,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
  <button type="button" class="navbtn" data-sec="friendships">🤝 Friendships</button>
  <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
  
- <!-- Botão Painel Admin (visível apenas para admins/fundadores) -->
  <div id="adminNavContainer" style="display:none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);">
    <a href="admin.html" class="navbtn" style="background: rgba(168, 85, 247, 0.12); border-color: rgba(168, 85, 247, 0.35); color: #d8b4fe; text-align: center; font-weight: 700;">
      ⚙️ Painel Admin
@@ -601,7 +619,13 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <div class="preview-socials" id="previewSocials"></div>
     <div class="embeds-container" id="previewEmbeds"></div>
     <div class="preview-links" id="previewLinks"></div>
-    <div class="preview-friendships" id="previewFriendships"></div>
+    
+    <!-- Amigos Próximos com Título e Efeito Neon -->
+    <div class="preview-friendships-wrapper" id="previewFriendshipsWrapper" style="display: none;">
+      <div class="preview-friendships-title">Amigos Próximos</div>
+      <div class="preview-friendships" id="previewFriendships"></div>
+    </div>
+
     <div class="profile-foot">CRIADO NO ISLY.ME ✦</div>
    </div>
    <div class="share">
@@ -1072,7 +1096,6 @@ async function initEditor(userId) {
 
  renderLinksEditor();
 
- // Gestão de Friendships no Painel
  function renderFriendshipsEditor() {
   const container = document.getElementById('friendshipsListEdit');
   if (!container) return;
@@ -1205,15 +1228,16 @@ async function initEditor(userId) {
    </a>
   `).join('');
 
+  const previewWrapperEl = document.getElementById('previewFriendshipsWrapper');
   const previewFriendsEl = document.getElementById('previewFriendships');
-  if (previewFriendsEl) {
+  if (previewWrapperEl && previewFriendsEl) {
     if (currentProfile.friendships && currentProfile.friendships.length > 0) {
-      previewFriendsEl.style.display = 'flex';
+      previewWrapperEl.style.display = 'flex';
       previewFriendsEl.innerHTML = currentProfile.friendships.map(f => `
         <div class="preview-friend-bubble" title="@${f}">@${f.substring(0,2).toUpperCase()}</div>
       `).join('');
     } else {
-      previewFriendsEl.style.display = 'none';
+      previewWrapperEl.style.display = 'none';
     }
   }
  }
