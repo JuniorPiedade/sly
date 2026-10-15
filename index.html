@@ -992,9 +992,13 @@ async function initEditor(userId) {
    card.style.backgroundColor = cardBgInput.value;
   }
 
-  const wallpaperVal = wallpaperUrlInput.value.trim();
+ const wallpaperVal = wallpaperUrlInput.value.trim();
   if (wallpaperVal) {
-   card.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${wallpaperVal}')`;
+   // Aplica o wallpaper limpo ou com uma camada translúcida leve para destacar o texto
+   card.style.backgroundImage = `linear-gradient(rgba(13, 11, 20, 0.4), rgba(13, 11, 20, 0.4)), url('${wallpaperVal}')`;
+   card.style.backgroundSize = 'cover';
+   card.style.backgroundPosition = 'center';
+   card.style.backgroundRepeat = 'no-repeat';
   } else {
    card.style.backgroundImage = 'radial-gradient(ellipse at 10% 0%,#8b5cf61b,transparent 55%), linear-gradient(145deg,#17131f,#0f0c14)';
   }
