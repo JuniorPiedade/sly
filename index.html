@@ -131,4 +131,470 @@
 <label class="field"><span>Jogo, série ou atividade</span><input id="activity" maxlength="45" value="Valorant" placeholder="Ex.: Valorant, One Piece..."></label>
 <label class="field"><span>Duração do status</span><select id="duration"><option value="2 horas">2 horas</option><option value="Até eu mudar">Até eu mudar</option><option value="Hoje">Hoje</option></select></label>
 </div>
-<div class="status-current"><span class="emoji" id="statusEmoji">🎮</span><div><strong id="statusLine">Jogando agora · Valorant</strong><span id="statusDuration">Visível por
+<div class="status-current"><span class="emoji" id="statusEmoji">🎮</span><div><strong id="statusLine">Jogando agora · Valorant</strong><span id="statusDuration">Visível por 2 horas</span></div></div>
+</section>
+
+<section class="panel" id="section-emblems">
+<div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha badges para exibir no seu perfil.</p></div><span class="tiny">03 / 05</span></div>
+<div class="emblem-grid" id="emblemGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+  <button type="button" class="btn small emblem-btn" data-id="gamer" style="justify-content:flex-start">🎮 Gamer</button>
+  <button type="button" class="btn small emblem-btn" data-id="coder" style="justify-content:flex-start">💻 Coder</button>
+  <button type="button" class="btn small emblem-btn" data-id="otaku" style="justify-content:flex-start">🍥 Otaku</button>
+  <button type="button" class="btn small emblem-btn" data-id="artist" style="justify-content:flex-start">🎨 Artista</button>
+  <button type="button" class="btn small emblem-btn" data-id="streamer" style="justify-content:flex-start">🔴 Streamer</button>
+  <button type="button" class="btn small emblem-btn" data-id="nightowl" style="justify-content:flex-start">🌙 Night Owl</button>
+</div>
+</section>
+
+<section class="panel" id="section-themes">
+<div class="panel-head"><div><h2>◐ Temas, Molduras & Interações</h2><p>Personalize a estética e o comportamento do perfil.</p></div><span class="tiny">04 / 05</span></div>
+
+<div class="theme-grid" id="themeGrid">
+  <div class="theme selected" data-theme="cyber">
+    <div class="theme-art cyber">⚡</div>
+    <strong>Cyberpunk</strong>
+    <small>Neon roxo e azul</small>
+  </div>
+  <div class="theme" data-theme="sakura">
+    <div class="theme-art sakura">🌸</div>
+    <strong>Sakura</strong>
+    <small>Tons rosados e suaves</small>
+  </div>
+  <div class="theme" data-theme="matrix">
+    <div class="theme-art matrix">🍃</div>
+    <strong>Matrix</strong>
+    <small>Verde hacker orgânico</small>
+  </div>
+</div>
+
+<label class="field" style="margin-top:18px"><span>🖼️ Moldura do Avatar (VIP)</span></label>
+<div class="frame-grid">
+  <div class="frame-option selected" data-frame="none">
+    <div style="font-size:20px">◯</div>
+    <strong>Padrão</strong>
+    <small>Sem moldura</small>
+  </div>
+  <div class="frame-option" data-frame="neon">
+    <div style="font-size:20px;color:#22d3ee">❂</div>
+    <strong>Neon Cyan</strong>
+    <small>Brilho futurista</small>
+  </div>
+  <div class="frame-option" data-frame="gold">
+    <div style="font-size:20px;color:#f59e0b">👑</div>
+    <strong>Ouro VIP</strong>
+    <small>Exclusivo</small>
+  </div>
+</div>
+
+<!-- Opção de Permitir / Desativar Recados (Guestbook Clean) -->
+<label class="field" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:rgba(255,255,255,0.03);padding:12px 14px;border-radius:11px;border:1px solid #35334e;margin-top:20px">
+ <div>
+  <span style="margin:0;font-size:13px;color:#fff">💬 Permitir mural de recados (Guestbook)</span>
+  <small style="margin:0;color:#8582a5">Se desativado, o mural e avisos de recados ficam ocultos, deixando o perfil 100% clean.</small>
+ </div>
+ <input type="checkbox" id="allowGuestbook" checked style="width:20px;height:20px;accent-color:var(--purple);cursor:pointer">
+</label>
+</section>
+
+<section class="panel" id="section-links">
+<div class="panel-head"><div><h2>↗ Seus links</h2><p>Adicione links úteis para suas redes ou projetos.</p></div><span class="tiny">05 / 05</span></div>
+<div id="linksList"></div>
+<button type="button" class="add-link" id="addLinkBtn">＋ Adicionar novo link</button>
+</section>
+</div>
+
+<div class="preview-panel">
+<div class="preview-top"><strong>Prévia ao vivo</strong><span>Atualiza em tempo real</span></div>
+<div class="profile-card theme-cyber" id="profileCard">
+  <div class="cover" id="previewCover"></div>
+  <div class="avatar" id="previewAvatar">👾<div id="avatarRing"></div></div>
+  <h3 id="previewName">Nyx.exe</h3>
+  <div class="handle" id="previewHandle">@nyx.exe</div>
+  <div><span class="role-badge" id="previewRole">💎 Fundador</span></div>
+  <p class="bio-preview" id="previewBio">Gamer por escolha. Geek por essência. ✨</p>
+  <div class="live-status"><span id="previewStatusEmoji">🎮</span><span id="previewStatusText">Jogando agora · Valorant</span></div>
+  <div class="preview-emblems" id="previewEmblems"><span>🎮 Gamer</span><span>💻 Coder</span></div>
+  <div class="social-preview">
+    <span>🌐</span><span>💬</span><span>🐦</span><span>👾</span>
+  </div>
+  <div class="public-links" id="previewLinks">
+    <div class="public-link"><div class="left"><span>⚡</span><span>Portfólio / Projetos</span></div><span class="arr">↗</span></div>
+  </div>
+  <div class="profile-foot">ISLY.ME — UNIVERSO DIGITAL</div>
+</div>
+
+<div class="share-box">
+  <label>Link público do seu perfil</label>
+  <div class="share-url">
+    <input type="text" id="shareUrlInput" readonly value="https://isly.me/nyx.exe">
+    <button type="button" id="copyShareBtn">Copiar</button>
+  </div>
+  <div class="hint">Compartilhe este link nas suas bios para o mundo acessar seu perfil.</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="footer">
+<div class="wrap footer-inner">
+  <span>isly.me — Sua identidade digital descentralizada.</span>
+  <span>Painel seguro conectado ao Supabase</span>
+</div>
+</footer>
+</div>
+
+<div class="toast" id="toast">Alterações salvas com sucesso!</div>
+
+<script>
+let currentUser = null;
+let currentProfileData = {
+  name: 'Nyx.exe',
+  handle: 'nyx.exe',
+  role: 'Fundador',
+  avatar_emoji: '👾',
+  bio: 'Gamer por escolha. Geek por essência. ✨',
+  avatar_url: '',
+  banner_url: '',
+  wallpaper_url: '',
+  status_emoji: '🎮',
+  status_label: 'Jogando agora',
+  activity: 'Valorant',
+  duration: '2 horas',
+  emblems: ['gamer', 'coder'],
+  theme: 'cyber',
+  frame: 'none',
+  allow_guestbook: true,
+  links: [{emoji: '⚡', title: 'Portfólio / Projetos', url: 'https://github.com'}]
+};
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Navegação entre abas laterais e mobile
+document.querySelectorAll('.side-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.getAttribute('data-section');
+    document.querySelectorAll('.side-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
+    
+    const panel = document.getElementById('section-' + target);
+    if (panel) {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Inicialização e verificação de autenticação via Supabase
+async function initEditor() {
+  const lockScreen = document.getElementById('authLockScreen');
+  
+  if (!window.islySupabase) {
+    console.warn("islySupabase SDK não carregada. Modo de simulação local ativo.");
+    lockScreen.classList.add('hidden');
+    bindFormEvents();
+    updatePreview();
+    return;
+  }
+
+  try {
+    currentUser = await window.islySupabase.getUser();
+    if (!currentUser) {
+      lockScreen.classList.remove('hidden');
+      return;
+    }
+    lockScreen.classList.add('hidden');
+    document.getElementById('authStatusLabel').textContent = 'Conectado: ' + (currentUser.email || 'Usuário');
+
+    // Carregar perfil do usuário no Supabase
+    const profile = await window.islySupabase.getProfileById(currentUser.id);
+    if (profile) {
+      currentProfileData = { ...currentProfileData, ...profile };
+      populateFormFields();
+    }
+  } catch (err) {
+    console.warn("Erro ao carregar sessão ou perfil:", err);
+    lockScreen.classList.add('hidden');
+  }
+
+  bindFormEvents();
+  updatePreview();
+}
+
+function populateFormFields() {
+  document.getElementById('name').value = currentProfileData.name || '';
+  document.getElementById('handle').value = currentProfileData.handle || '';
+  document.getElementById('role').value = currentProfileData.role || 'Fundador';
+  document.getElementById('avatarEmoji').value = currentProfileData.avatar_emoji || '👾';
+  document.getElementById('bio').value = currentProfileData.bio || '';
+  document.getElementById('bioCount').textContent = (currentProfileData.bio || '').length;
+  document.getElementById('activity').value = currentProfileData.activity || '';
+  document.getElementById('duration').value = currentProfileData.duration || '2 horas';
+  
+  if (document.getElementById('allowGuestbook')) {
+    document.getElementById('allowGuestbook').checked = currentProfileData.allow_guestbook !== false;
+  }
+
+  // Selecionar tema ativo
+  document.querySelectorAll('.theme').forEach(th => {
+    if (th.getAttribute('data-theme') === currentProfileData.theme) {
+      th.classList.add('selected');
+    } else {
+      th.classList.remove('selected');
+    }
+  });
+
+  // Selecionar moldura ativa
+  document.querySelectorAll('.frame-option').forEach(fr => {
+    if (fr.getAttribute('data-frame') === currentProfileData.frame) {
+      fr.classList.add('selected');
+    } else {
+      fr.classList.remove('selected');
+    }
+  });
+
+  renderLinksEditor();
+}
+
+function renderLinksEditor() {
+  const container = document.getElementById('linksList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  (currentProfileData.links || []).forEach((link, idx) => {
+    const row = document.createElement('div');
+    row.className = 'link-row';
+    row.innerHTML = `
+      <input type="text" class="link-emoji-inp" value="${link.emoji || '🔗'}" maxlength="4" placeholder="Ícone">
+      <input type="text" class="link-title-inp" value="${link.title || ''}" placeholder="Título">
+      <button type="button" class="icon-btn remove-link-btn" title="Remover">✕</button>
+    `;
+    
+    row.querySelector('.link-emoji-inp').addEventListener('input', e => {
+      currentProfileData.links[idx].emoji = e.target.value;
+      updatePreview();
+    });
+    row.querySelector('.link-title-inp').addEventListener('input', e => {
+      currentProfileData.links[idx].title = e.target.value;
+      updatePreview();
+    });
+    row.querySelector('.remove-link-btn').addEventListener('click', () => {
+      currentProfileData.links.splice(idx, 1);
+      renderLinksEditor();
+      updatePreview();
+    });
+    
+    container.appendChild(row);
+  });
+}
+
+function updatePreview() {
+  const name = document.getElementById('name').value;
+  const handle = document.getElementById('handle').value || 'usuario';
+  const role = document.getElementById('role').value;
+  const emoji = document.getElementById('avatarEmoji').value || '👾';
+  const bio = document.getElementById('bio').value;
+  const activity = document.getElementById('activity').value;
+  const duration = document.getElementById('duration').value;
+
+  document.getElementById('previewName').textContent = name || 'Seu Nome';
+  document.getElementById('previewHandle').textContent = '@' + handle;
+  document.getElementById('previewRole').textContent = role ? '💎 ' + role : '';
+  document.getElementById('previewBio').textContent = bio;
+  document.getElementById('bioCount').textContent = bio.length;
+  document.getElementById('previewStatusText').textContent = `${currentProfileData.status_label || 'Jogando'} · ${activity}`;
+  document.getElementById('statusDuration').textContent = `Visível por ${duration}`;
+  document.getElementById('statusEmoji').textContent = currentProfileData.status_emoji || '🎮';
+  document.getElementById('previewStatusEmoji').textContent = currentProfileData.status_emoji || '🎮';
+
+  const avatarContainer = document.getElementById('previewAvatar');
+  if (currentProfileData.avatar_url) {
+    avatarContainer.innerHTML = `<img src="${currentProfileData.avatar_url}" alt="Avatar">`;
+  } else {
+    avatarContainer.innerHTML = emoji;
+  }
+
+  // Moldura do Avatar
+  avatarContainer.className = 'avatar';
+  if (currentProfileData.frame === 'neon') avatarContainer.classList.add('frame-neon');
+  if (currentProfileData.frame === 'gold') avatarContainer.classList.add('frame-gold');
+  if (currentProfileData.frame === 'cyber') avatarContainer.classList.add('frame-cyber');
+
+  // Imagens de Fundo
+  const cover = document.getElementById('previewCover');
+  if (currentProfileData.banner_url) {
+    cover.style.backgroundImage = `url('${currentProfileData.banner_url}')`;
+  } else {
+    cover.style.backgroundImage = '';
+  }
+
+  const profileCard = document.getElementById('profileCard');
+  profileCard.className = `profile-card theme-${currentProfileData.theme || 'cyber'}`;
+  if (currentProfileData.wallpaper_url) {
+    profileCard.style.backgroundImage = `url('${currentProfileData.wallpaper_url}')`;
+  } else {
+    profileCard.style.backgroundImage = '';
+  }
+
+  // Links na prévia
+  const linksContainer = document.getElementById('previewLinks');
+  linksContainer.innerHTML = (currentProfileData.links || []).map(l => `
+    <div class="public-link">
+      <div class="left"><span>${l.emoji || '🔗'}</span><span>${l.title || 'Link'}</span></div>
+      <span class="arr">↗</span>
+    </div>
+  `).join('');
+
+  // Link público URL
+  document.getElementById('shareUrlInput').value = `${window.location.origin}/perfil.html?u=${handle}`;
+}
+
+function bindFormEvents() {
+  ['name', 'handle', 'role', 'avatarEmoji', 'bio', 'activity', 'duration'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', updatePreview);
+      el.addEventListener('change', updatePreview);
+    }
+  });
+
+  document.getElementById('allowGuestbook')?.addEventListener('change', (e) => {
+    currentProfileData.allow_guestbook = e.target.checked;
+  });
+
+  // Status choices
+  document.querySelectorAll('.status-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.status-choice').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentProfileData.status_emoji = btn.getAttribute('data-emoji');
+      currentProfileData.status_label = btn.getAttribute('data-label');
+      updatePreview();
+    });
+  });
+
+  // Themes
+  document.querySelectorAll('.theme').forEach(th => {
+    th.addEventListener('click', () => {
+      document.querySelectorAll('.theme').forEach(t => t.classList.remove('selected'));
+      th.classList.add('selected');
+      currentProfileData.theme = th.getAttribute('data-theme');
+      updatePreview();
+    });
+  });
+
+  // Frames
+  document.querySelectorAll('.frame-option').forEach(fr => {
+    fr.addEventListener('click', () => {
+      document.querySelectorAll('.frame-option').forEach(f => f.classList.remove('selected'));
+      fr.classList.add('selected');
+      currentProfileData.frame = fr.getAttribute('data-frame');
+      updatePreview();
+    });
+  });
+
+  // Add Link
+  document.getElementById('addLinkBtn')?.addEventListener('click', () => {
+    if (!currentProfileData.links) currentProfileData.links = [];
+    currentProfileData.links.push({ emoji: '🌐', title: 'Novo Link', url: 'https://' });
+    renderLinksEditor();
+    updatePreview();
+  });
+
+  // File Uploads
+  ['avatarFile', 'bannerFile', 'wallpaperFile'].forEach(fileId => {
+    const input = document.getElementById(fileId);
+    if (input) {
+      input.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) {
+          showToast('O arquivo deve ter no máximo 2MB.');
+          return;
+        }
+        showToast('Enviando imagem...');
+        try {
+          if (window.islySupabase && currentUser) {
+            const ext = file.name.split('.').pop();
+            const path = `uploads/${currentUser.id}-${fileId}-${Date.now()}.${ext}`;
+            const uploadErr = await window.islySupabase.uploadMedia(path, file);
+            if (uploadErr) throw new Error(uploadErr);
+            const pubUrl = window.islySupabase.getPublicUrl(path);
+            
+            if (fileId === 'avatarFile') currentProfileData.avatar_url = pubUrl;
+            if (fileId === 'bannerFile') currentProfileData.banner_url = pubUrl;
+            if (fileId === 'wallpaperFile') currentProfileData.wallpaper_url = pubUrl;
+            
+            showToast('Imagem enviada com sucesso! ✓');
+            updatePreview();
+          } else {
+            // Modo local simulado
+            const fakeUrl = URL.createObjectURL(file);
+            if (fileId === 'avatarFile') currentProfileData.avatar_url = fakeUrl;
+            if (fileId === 'bannerFile') currentProfileData.banner_url = fakeUrl;
+            if (fileId === 'wallpaperFile') currentProfileData.wallpaper_url = fakeUrl;
+            showToast('Imagem carregada na prévia! ✓');
+            updatePreview();
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Erro ao enviar imagem.');
+        }
+      });
+    }
+  });
+
+  // Save Button
+  document.getElementById('saveBtn')?.addEventListener('click', async () => {
+    currentProfileData.name = document.getElementById('name').value;
+    currentProfileData.handle = document.getElementById('handle').value;
+    currentProfileData.role = document.getElementById('role').value;
+    currentProfileData.avatar_emoji = document.getElementById('avatarEmoji').value;
+    currentProfileData.bio = document.getElementById('bio').value;
+    currentProfileData.activity = document.getElementById('activity').value;
+    currentProfileData.duration = document.getElementById('duration').value;
+    currentProfileData.allow_guestbook = document.getElementById('allowGuestbook').checked;
+
+    if (window.islySupabase && currentUser) {
+      try {
+        const payload = {
+          id: currentUser.id,
+          ...currentProfileData
+        };
+        const err = await window.islySupabase.saveProfile(payload);
+        if (err) throw new Error(err);
+        showToast('Alterações salvas na nuvem com sucesso! ✓');
+      } catch (err) {
+        console.error(err);
+        showToast('Erro ao salvar no Supabase.');
+      }
+    } else {
+      showToast('Alterações salvas localmente! ✓');
+    }
+  });
+
+  // Sair / Logout
+  document.getElementById('authBtn')?.addEventListener('click', async () => {
+    if (window.islySupabase) {
+      try { await window.islySupabase.signOut(); } catch(e){}
+    }
+    window.location.replace('landing.html');
+  });
+
+  // Copiar Link
+  document.getElementById('copyShareBtn')?.addEventListener('click', () => {
+    const input = document.getElementById('shareUrlInput');
+    navigator.clipboard.writeText(input.value);
+    showToast('Link copiado para a área de transferência! 📋');
+  });
+}
+
+window.addEventListener('DOMContentLoaded', initEditor);
+</script>
+</body>
+</html>
