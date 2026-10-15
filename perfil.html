@@ -148,15 +148,33 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .public-link .left{display:flex;align-items:center;gap:10px;min-width:0}
 .public-link .left span:last-child{overflow:hidden;text-overflow:ellipsis}
 
-/* FRIENDSHIPS - AVATARES CIRCULARES MINIMALISTAS */
-.friendships-footer-container {
+/* FRIENDSHIPS - AMIGOS PRÓXIMOS */
+.friendships-footer-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 6px;
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.friendships-footer-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: default;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+.friendships-footer-title:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
+}
+.friendships-footer-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 .friendship-bubble {
   position: relative;
@@ -197,9 +215,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
-/* =========================================================
-   PLAYER DE TRILHA SONORA (MINIMALISTA, TRANSLÚCIDO E DISCRETO)
-   ========================================================= */
+/* PLAYER DE TRILHA SONORA */
 #soundtrackWidget {
   display: none;
   position: fixed;
@@ -285,8 +301,11 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
     <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
     <div class="public-links animate-item delay-4" id="links"></div>
     
-    <!-- Amigos em destaque (Friendships) -->
-    <div id="friendshipsFooter" class="friendships-footer-container animate-item delay-4" style="display: none;"></div>
+    <!-- Amigos Próximos no Rodapé do Card Público -->
+    <div id="friendshipsFooterWrapper" class="friendships-footer-wrapper animate-item delay-4" style="display: none;">
+      <div class="friendships-footer-title">Amigos Próximos</div>
+      <div class="friendships-footer-container" id="friendshipsFooter"></div>
+    </div>
 
     <div class="profile-foot animate-item delay-5"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
   </div>
@@ -300,7 +319,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   </div>
 </div>
 
-<!-- Widget Flutuante de Trilha Sonora (Minimalista & Transparente) -->
 <div id="soundtrackWidget">
   <button id="stPlayBtn" aria-label="Tocar Trilha Sonora">▶</button>
   <div class="st-info">
@@ -556,17 +574,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // RENDERIZAR FRIENDSHIPS (AMIGOS EM DESTAQUE NO RODAPÉ DO CARD)
+  // RENDERIZAR FRIENDSHIPS PÚBLICAS COM TÍTULO E EFEITO
   if (data.friendships && data.friendships.length > 0) {
+    const friendWrapper = document.getElementById('friendshipsFooterWrapper');
     const friendContainer = document.getElementById('friendshipsFooter');
-    if (friendContainer) {
+    if (friendWrapper && friendContainer) {
       window.islySupabase.client
         .from('profiles')
         .select('handle, name, avatar_url')
         .in('handle', data.friendships)
         .then(({ data: friendsData, error }) => {
           if (!error && friendsData && friendsData.length > 0) {
-            friendContainer.style.display = 'flex';
+            friendWrapper.style.display = 'flex';
             friendContainer.innerHTML = friendsData.map(friend => {
               const avatarContent = friend.avatar_url 
                 ? `<img src="${friend.avatar_url}" alt="${friend.name || friend.handle}">`
@@ -583,7 +602,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // ATIVAÇÃO DA TRILHA SONORA (MINIMALISTA, APENAS SOB CLIQUE)
   if (data.soundtrack_url) {
     const widget = document.getElementById('soundtrackWidget');
     const audio = document.getElementById('stAudio');
