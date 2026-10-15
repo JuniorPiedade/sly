@@ -497,12 +497,20 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-appearance">
-    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos e Cursor.</p></div><span class="muted">07 / 08</span></div>
+    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos, Cursor e Mural de Recados.</p></div><span class="muted">07 / 08</span></div>
     <label class="field">
      <span>🪞 Estilo Visual do Card</span>
      <select id="cardStyle">
       <option value="opaque">Opaco Sólido</option>
       <option value="glass">Vidro 3D (Glassmorphism)</option>
+     </select>
+    </label>
+    <label class="field">
+     <span>🗂️ Estilo do Mural de Recados (Guestbook)</span>
+     <select id="guestbookStyleSelect">
+      <option value="vintage">Vintage (Pedaço de Papel Envelhecido)</option>
+      <option value="chalk">Chalk (Giz Escrito sobre Fundo Escuro)</option>
+      <option value="dev">Dev Notes (Minimalista Serifado Branco)</option>
      </select>
     </label>
     <div class="two">
@@ -634,7 +642,7 @@ const socialSvgs = {
  twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
  letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
  onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
- behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1 z"/></svg>',
+ behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1z"/></svg>',
  pinterest: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.7 19.3c-.1-.8-.2-2 .03-2.9l.7-3.1s-.2-.4-.2-1c0-1 .6-1.7 1.3-1.7.6 0 .9.5.9 1.1 0 .7-.4 1.7-.6 2.6-.2.8.4 1.5 1.2 1.5 1.4 0 2.5-1.5 2.5-3.6 0-1.9-1.4-3.2-3.4-3.2-2.3 0-3.7 1.7-3.7 3.5 0 .7.3 1.4.6 1.8l-.2.8c-.1 0-.3-.1-.4-.2-1.5-.7-2.4-2.8-2.4-4.5 0-3.7 2.7-7.1 7.8-7.1 4.1 0 7.3 2.9 7.3 6.8 0 4.1-2.6 7.4-6.2 7.4-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-1.1 2.5-1.6 3.4A10 10 0 1 0 12 2z"/></svg>',
  tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
 };
@@ -683,7 +691,8 @@ async function initEditor(userId) {
    title_color: '#ffffff', text_color: '#f6f4ff',
    name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack_url: '', avatar_frame: 'none', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
-   embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false
+   embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
+   guestbook_style: 'vintage'
   };
  }
 
@@ -704,6 +713,7 @@ async function initEditor(userId) {
  const shareUrlInput = document.getElementById('shareUrl');
 
  const cardStyleSelect = document.getElementById('cardStyle');
+ const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
  const bgColorInput = document.getElementById('bgColor');
  const cardBgInput = document.getElementById('cardBg');
  const titleColorInput = document.getElementById('titleColor');
@@ -747,6 +757,7 @@ async function initEditor(userId) {
  activityInput.value = currentProfile.activity || '';
 
  cardStyleSelect.value = currentProfile.card_style || 'opaque';
+ guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
  bgColorInput.value = currentProfile.bg_color || '#080812';
  cardBgInput.value = currentProfile.card_bg || '#11111f';
  titleColorInput.value = currentProfile.title_color || '#ffffff';
@@ -913,7 +924,8 @@ async function initEditor(userId) {
     id: userId, name: nameInput.value, handle: handleInput.value,
     bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
     status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-    card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
+    card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
+    bg_color: bgColorInput.value, card_bg: cardBgInput.value,
     accent_color: textColorInput.value,
     title_color: titleColorInput.value, text_color: textColorInput.value,
     name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
@@ -971,11 +983,12 @@ async function initEditor(userId) {
   document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
 
- [cardStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+ [cardStyleSelect, guestbookStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
   input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
 
  avatarFrameSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
+ guestbookStyleSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
 
  function moveLink(fromIdx, toIdx) {
   if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
@@ -1150,7 +1163,8 @@ async function initEditor(userId) {
    id: userId, name: nameInput.value, handle: handleInput.value,
    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-   card_style: cardStyleSelect.value, bg_color: bgColorInput.value, card_bg: cardBgInput.value,
+   card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
+   bg_color: bgColorInput.value, card_bg: cardBgInput.value,
    accent_color: textColorInput.value,
    title_color: titleColorInput.value, text_color: textColorInput.value,
    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
@@ -1166,62 +1180,6 @@ async function initEditor(userId) {
   toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
  });
 }
-</script>
-  <!-- Widget Flutuante de Trilha Sonora (Glassmorphism + Neon Suave + Centralizado) -->
-<div id="soundtrackWidget" style="display:none; position:fixed; bottom:24px; right:24px; z-index:999; background:rgba(17,17,31,0.75); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(168,85,247,0.35); border-radius:99px; padding:8px 18px 8px 10px; align-items:center; gap:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(168,85,247,0.15);">
-  <button id="stPlayBtn" style="background:linear-gradient(135deg,#a855f7,#7c3aed); border:0; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; cursor:pointer; font-size:12px; box-shadow:0 0 10px rgba(168,85,247,0.5); padding:0; line-height:1; flex-shrink:0;">▶</button>
-  <div style="display:flex; flex-direction:column; text-align:left;">
-    <span style="font-size:12px; color:#f6f4ff; font-weight:700; text-shadow:0 0 8px rgba(168,85,247,0.4);">🎵 Trilha Sonora</span>
-    <span id="stStatus" style="font-size:10px; color:#a6a4c4; letter-spacing:0.5px;">Pausado</span>
-  </div>
-  <audio id="stAudio" preload="auto" loop></audio>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    // Verifica se a variável profile existe e possui a URL da trilha sonora
-    if (typeof profile !== 'undefined' && profile && profile.soundtrack_url) {
-      const widget = document.getElementById('soundtrackWidget');
-      const audio = document.getElementById('stAudio');
-      const playBtn = document.getElementById('stPlayBtn');
-      const statusTxt = document.getElementById('stStatus');
-      
-      if (widget && audio) {
-        audio.src = profile.soundtrack_url;
-        widget.style.display = 'flex';
-
-        // Função para alternar play/pause
-        const togglePlay = () => {
-          if (audio.paused) {
-            audio.play().then(() => {
-              playBtn.textContent = '❚❚';
-              statusTxt.textContent = 'A tocar...';
-            }).catch(err => {
-              console.log("Autoplay impedido pelo navegador:", err);
-              statusTxt.textContent = 'Clique para ouvir';
-            });
-          } else {
-            audio.pause();
-            playBtn.textContent = '▶';
-            statusTxt.textContent = 'Pausado';
-          }
-        };
-
-        playBtn.addEventListener('click', togglePlay);
-
-        // Tenta disparar o autoplay logo na entrada
-        audio.play().then(() => {
-          playBtn.textContent = '❚❚';
-          statusTxt.textContent = 'A tocar...';
-        }).catch(() => {
-          // Se o browser bloquear o autoplay sem interação, deixa pausado aguardando clique do usuário
-          statusTxt.textContent = 'Clique para ouvir';
-        });
-      }
-    }
-  }, 500);
-});
 </script>
 </body>
 </html>
