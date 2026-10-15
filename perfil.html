@@ -534,4 +534,60 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script>
 </body>
+  <!-- Widget Flutuante de Trilha Sonora (Glassmorphism + Neon Suave + Centralizado) -->
+<div id="soundtrackWidget" style="display:none; position:fixed; bottom:24px; right:24px; z-index:999; background:rgba(17,17,31,0.75); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(168,85,247,0.35); border-radius:99px; padding:8px 18px 8px 10px; align-items:center; gap:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(168,85,247,0.15);">
+  <button id="stPlayBtn" style="background:linear-gradient(135deg,#a855f7,#7c3aed); border:0; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; cursor:pointer; font-size:12px; box-shadow:0 0 10px rgba(168,85,247,0.5); padding:0; line-height:1; flex-shrink:0;">▶</button>
+  <div style="display:flex; flex-direction:column; text-align:left;">
+    <span style="font-size:12px; color:#f6f4ff; font-weight:700; text-shadow:0 0 8px rgba(168,85,247,0.4);">🎵 Trilha Sonora</span>
+    <span id="stStatus" style="font-size:10px; color:#a6a4c4; letter-spacing:0.5px;">Pausado</span>
+  </div>
+  <audio id="stAudio" preload="auto" loop></audio>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    // Verifica se a variável profile existe e possui a URL da trilha sonora
+    if (typeof profile !== 'undefined' && profile && profile.soundtrack_url) {
+      const widget = document.getElementById('soundtrackWidget');
+      const audio = document.getElementById('stAudio');
+      const playBtn = document.getElementById('stPlayBtn');
+      const statusTxt = document.getElementById('stStatus');
+      
+      if (widget && audio) {
+        audio.src = profile.soundtrack_url;
+        widget.style.display = 'flex';
+
+        // Função para alternar play/pause
+        const togglePlay = () => {
+          if (audio.paused) {
+            audio.play().then(() => {
+              playBtn.textContent = '❚❚';
+              statusTxt.textContent = 'A tocar...';
+            }).catch(err => {
+              console.log("Autoplay impedido pelo navegador:", err);
+              statusTxt.textContent = 'Clique para ouvir';
+            });
+          } else {
+            audio.pause();
+            playBtn.textContent = '▶';
+            statusTxt.textContent = 'Pausado';
+          }
+        };
+
+        playBtn.addEventListener('click', togglePlay);
+
+        // Tenta disparar o autoplay logo na entrada
+        audio.play().then(() => {
+          playBtn.textContent = '❚❚';
+          statusTxt.textContent = 'A tocar...';
+        }).catch(() => {
+          // Se o browser bloquear o autoplay sem interação, deixa pausado aguardando clique do usuário
+          statusTxt.textContent = 'Clique para ouvir';
+        });
+      }
+    }
+  }, 500);
+});
+</script>
 </html>
