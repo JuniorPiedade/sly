@@ -166,8 +166,9 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   background-repeat: no-repeat;
   background-position: center;
 }
-.frame-neon-white { border: 2px solid #ffffff; border-radius: 22px; box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.4); }
-.frame-vip { border: 2px solid var(--purple); border-radius: 22px; box-shadow: 0 0 16px var(--purple), 0 0 30px var(--blue); }
+.frame-cyberpunk{border:2px solid var(--blue);border-radius:22px;box-shadow:0 0 12px var(--blue)}
+.frame-neon-gold{border:2px solid #c4a46b;border-radius:22px;box-shadow:0 0 12px #c4a46b55}
+.frame-royal-purple{border:2px solid #b99aff;border-radius:22px;box-shadow:0 0 12px #8b5cf655}
 
 .profile-info{width:100%;min-width:0;overflow:visible!important}
 .profile-card h3{
@@ -192,29 +193,9 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   grid-row:2;margin:0;padding:6px 10px;width:fit-content;max-width:100%;
   border-color:#8b5cf638;background:#8b5cf60d;color:#e0d4fa;border-radius:99px;display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600
 }
-
-.preview-emblems{
-  grid-row:3;
-  margin-top:0;
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-}
-.preview-emblems span{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:3px 9px;
-  border-radius:8px;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:0.2px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  color:#e2dcf0;
-  backdrop-filter:blur(8px);
-}
-
+.preview-emblems{grid-row:3;margin-top:0;display:flex;flex-wrap:wrap;gap:6px}
+.preview-emblems span{border-color:#a78bfa28;background:#a78bfa0b;color:#ded0f8;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.preview-emblems svg{width:14px;height:14px;fill:currentColor}
 .preview-socials{grid-row:4;margin-top:0;display:flex;flex-wrap:wrap;gap:7px}
 .preview-social-icon{
   width:34px;height:34px;border:1px solid #ffffff10;border-radius:11px;
@@ -233,47 +214,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   overflow-wrap:anywhere;display:flex;justify-content:space-between;align-items:center;gap:10px;text-decoration:none
 }
 .preview-link:hover{transform:translateY(-2px);border-color:#a78bfa55!important;background:#8b5cf60c!important}
-
-.preview-friendships-wrapper {
-  grid-row: 6.5;
-  margin-top: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.preview-friendships-title {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  font-weight: 700;
-  color: var(--muted);
-  cursor: default;
-  transition: all 0.3s ease;
-  width: fit-content;
-}
-.preview-friendships-title:hover {
-  color: #ffffff;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
-}
-.preview-friendships {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.preview-friend-bubble {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.05);
-  display: grid;
-  place-items: center;
-  font-size: 9px;
-  font-weight: bold;
-}
-.preview-friend-bubble img { width: 100%; height: 100%; object-fit: cover; }
-
 .profile-foot{
   grid-row:7;text-align:left;padding-top:11px;margin-top:1px;border-top-color:#ffffff12;
   color:#887c99;font-size:9px;letter-spacing:1.4px;font-weight:700;text-transform:uppercase
@@ -409,7 +349,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 </head>
 <body>
 
-<div id="appRoot" style="display:block">
+<div id="appRoot" style="display:none">
 <header class="wrap topbar">
  <a class="brand" href="landing.html"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
  <div class="actions">
@@ -433,9 +373,9 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
  <button type="button" class="navbtn" data-sec="soundtrack">🎵 Trilha Sonora</button>
  <button type="button" class="navbtn" data-sec="appearance">🎨 Cores & Efeitos</button>
  <button type="button" class="navbtn" data-sec="links">↗ Meus links</button>
- <button type="button" class="navbtn" data-sec="friendships">🤝 Friendships</button>
  <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
  
+ <!-- Botão Painel Admin (visível apenas para admins/fundadores) -->
  <div id="adminNavContainer" style="display:none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);">
    <a href="admin.html" class="navbtn" style="background: rgba(168, 85, 247, 0.12); border-color: rgba(168, 85, 247, 0.35); color: #d8b4fe; text-align: center; font-weight: 700;">
      ⚙️ Painel Admin
@@ -473,85 +413,49 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
  <div class="editor-grid">
   <div>
    <section class="panel active-panel" id="panel-identity">
-    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio estendida, moldura e uploads de foto e wallpaper.</p></div><span class="muted">01 / 09</span></div>
+    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, moldura VIP e uploads de foto e wallpaper.</p></div><span class="muted">01 / 08</span></div>
     <div class="two">
      <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
      <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
     </div>
     <label class="field">
-     <span>🖼️ Moldura do Avatar</span>
+     <span>🖼️ Moldura VIP do Avatar</span>
      <select id="avatarFrameSelect">
       <option value="none">Nenhuma (Padrão)</option>
-      <option value="neon-white">Neon Branco Simples</option>
-      <option value="vip">VIP Customizada (Exclusivo)</option>
+      <option value="cyberpunk">Cyberpunk Neon (Azul)</option>
+      <option value="neon-gold">Gold Luxury (Dourado)</option>
+      <option value="royal-purple">Royal Purple (Roxo VIP)</option>
      </select>
     </label>
-    <label class="field"><span>Bio curta (máx. 240 caracteres)</span><textarea id="bio" maxlength="240" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/240</small></label>
+    <label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/140</small></label>
     <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
     <label class="field"><span>Wallpaper do cartão (Upload)</span><input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
    </section>
 
    <section class="panel" id="panel-status">
-    <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual e status personalizados.</p></div><span class="muted">02 / 09</span></div>
-    
-    <label class="field"><span>Escolha ou adicione seu status</span></label>
-    <div class="options" id="statusOptions" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;">
+    <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 08</span></div>
+    <div class="options" id="statusOptions">
      <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando">🎮 Jogando</button>
-     <button type="button" class="choice" data-emoji="💻" data-label="Programando">💻 Programando</button>
-     <button type="button" class="choice" data-emoji="🛠️" data-label="Construindo">🛠️ Construindo</button>
-     <button type="button" class="choice" data-emoji="👀" data-label="Assistindo">👀 Assistindo</button>
-     <button type="button" class="choice" data-emoji="🌐" data-label="Criando Sites">🌐 Criando Sites</button>
-     <button type="button" class="choice" data-emoji="🕹️" data-label="Criando Jogos">🕹️ Criando Jogos</button>
-     <button type="button" class="choice" data-emoji="🌙" data-label="Ausente">🌙 Ausente</button>
-     <button type="button" class="choice" data-emoji="⚡" data-label="Ocupado">⚡ Ocupado</button>
-     <button type="button" class="choice" data-emoji="💤" data-label="Dormindo">💤 Dormindo</button>
-     <button type="button" class="choice" data-emoji="🌴" data-label="Estou de férias">🌴 Estou de férias</button>
-     <button type="button" class="choice" data-emoji="▶️" data-label="No Youtube">▶️ No Youtube</button>
-     <button type="button" class="choice" data-emoji="🎵" data-label="Escutando música">🎵 Escutando música</button>
+     <button type="button" class="choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button>
+     <button type="button" class="choice" data-emoji="🍥" data-label="Anime">🍥 Anime</button>
     </div>
-
-    <div id="customStatusContainer" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;"></div>
-
-    <div style="background:rgba(255,255,255,0.03); border:1px solid #35334e; padding:12px; border-radius:12px; margin-bottom:14px;">
-     <span style="font-size:12px; color:#c7c4dd; margin-bottom:6px; display:block; font-weight:700;">＋ Criar novo status personalizado</span>
-     <div style="display:flex; gap:8px;">
-      <input type="text" id="newStatusEmoji" maxlength="4" placeholder="emoji" style="width:70px; border:1px solid #35334e; border-radius:9px; padding:8px; background:#0a0a14; color:white; text-align:center;">
-      <input type="text" id="newStatusLabel" maxlength="25" placeholder="Ex: Treinando" style="flex:1; border:1px solid #35334e; border-radius:9px; padding:8px 12px; background:#0a0a14; color:white; font-size:13px;">
-      <button type="button" id="addStatusBtn" class="btn" style="padding:8px 14px; background:rgba(168,85,247,0.2); border-color:rgba(168,85,247,0.4); color:#d8b4fe;">Adicionar</button>
-     </div>
-    </div>
-
-    <label class="field"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
+    <label class="field" style="margin-top:14px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
    </section>
 
    <section class="panel" id="panel-emblems">
-    <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 20 emblemas para exibir no seu perfil.</p></div><span class="muted">03 / 09</span></div>
-    <div class="emblems" id="emblemGrid" style="grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px;">
-     <button type="button" class="emblem" data-id="nerd"><span style="font-size:22px; display:block; margin-bottom:4px;">🤓</span>Nerd</button>
-     <button type="button" class="emblem" data-id="gamer"><span style="font-size:22px; display:block; margin-bottom:4px;">🎮</span>Gamer</button>
-     <button type="button" class="emblem" data-id="youtuber"><span style="font-size:22px; display:block; margin-bottom:4px;">▶️</span>Youtuber</button>
-     <button type="button" class="emblem" data-id="programador"><span style="font-size:22px; display:block; margin-bottom:4px;">💻</span>Programador</button>
-     <button type="button" class="emblem" data-id="hacker"><span style="font-size:22px; display:block; margin-bottom:4px;">⚡</span>Hacker</button>
-     <button type="button" class="emblem" data-id="streamer"><span style="font-size:22px; display:block; margin-bottom:4px;">🟣</span>Streamer</button>
-     <button type="button" class="emblem" data-id="gotico"><span style="font-size:22px; display:block; margin-bottom:4px;">🦇</span>Gótico</button>
-     <button type="button" class="emblem" data-id="anime"><span style="font-size:22px; display:block; margin-bottom:4px;">🍥</span>Anime</button>
-     <button type="button" class="emblem" data-id="lol"><span style="font-size:22px; display:block; margin-bottom:4px;">⚔️</span>LoL</button>
-     <button type="button" class="emblem" data-id="habbo"><span style="font-size:22px; display:block; margin-bottom:4px;">🏨</span>Habbo</button>
-     <button type="button" class="emblem" data-id="thesims"><span style="font-size:22px; display:block; margin-bottom:4px;">🟩</span>The Sims</button>
-     <button type="button" class="emblem" data-id="valorant"><span style="font-size:22px; display:block; margin-bottom:4px;">🎯</span>Valorant</button>
-     <button type="button" class="emblem" data-id="cod"><span style="font-size:22px; display:block; margin-bottom:4px;">🪖</span>Call Of Duty</button>
-     <button type="button" class="emblem" data-id="cs"><span style="font-size:22px; display:block; margin-bottom:4px;">💣</span>CS</button>
-     <button type="button" class="emblem" data-id="gta"><span style="font-size:22px; display:block; margin-bottom:4px;">💰</span>GTA</button>
-     <button type="button" class="emblem" data-id="minecraft"><span style="font-size:22px; display:block; margin-bottom:4px;">⛏️</span>Minecraft</button>
-     <button type="button" class="emblem" data-id="rpg"><span style="font-size:22px; display:block; margin-bottom:4px;">🎲</span>RPG</button>
-     <button type="button" class="emblem" data-id="artista"><span style="font-size:22px; display:block; margin-bottom:4px;">🎨</span>Artista</button>
-     <button type="button" class="emblem" data-id="musica"><span style="font-size:22px; display:block; margin-bottom:4px;">🎧</span>Música</button>
-     <button type="button" class="emblem" data-id="fundador"><span style="font-size:22px; display:block; margin-bottom:4px;">💎</span>Fundador</button>
+    <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 3 emblemas.</p></div><span class="muted">03 / 08</span></div>
+    <div class="emblems" id="emblemGrid">
+     <button type="button" class="emblem" data-id="gamer"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>Gamer</button>
+     <button type="button" class="emblem" data-id="geek"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>Geek</button>
+     <button type="button" class="emblem" data-id="rpg"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>RPG</button>
+     <button type="button" class="emblem" data-id="anime"><svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>Anime</button>
+     <button type="button" class="emblem" data-id="artist"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>Criador</button>
+     <button type="button" class="emblem" data-id="founder"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Fundador</button>
     </div>
    </section>
 
    <section class="panel" id="panel-socials">
-    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com ícones SVG 3D.</p></div><span class="muted">04 / 09</span></div>
+    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com ícones SVG 3D.</p></div><span class="muted">04 / 08</span></div>
     <div class="social-grid">
      <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
      <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
@@ -568,30 +472,32 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-embeds">
-    <div class="panel-head"><div><h2>🎬 Mídias Embed</h2><p>Cole o link completo da música, vídeo ou post.</p></div><span class="muted">05 / 09</span></div>
+    <div class="panel-head"><div><h2>🎬 Mídias Embed</h2><p>Cole o link completo da música, vídeo ou post.</p></div><span class="muted">05 / 08</span></div>
     <label class="field">
      <span>🎵 Link de Player do Spotify (Música, Álbum ou Playlist)</span>
      <input id="embedSpotify" placeholder="https://open.spotify.com/track/...">
+     <small>Ex: https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT</small>
     </label>
     <label class="field">
      <span>▶ Link do Vídeo do YouTube</span>
      <input id="embedYoutube" placeholder="https://www.youtube.com/watch?v=...">
+     <small>Ex: https://www.youtube.com/watch?v=dQw4w9WgXcQ</small>
     </label>
     <label class="field"><span>📸 Link do Post do Instagram</span><input id="embedInstagram" placeholder="https://www.instagram.com/p/..."></label>
    </section>
 
    <section class="panel" id="panel-soundtrack">
-    <div class="panel-head"><div><h2>🎵 Trilha Sonora</h2><p>Adicione uma música de fundo para o perfil.</p></div><span class="muted">06 / 09</span></div>
+    <div class="panel-head"><div><h2>🎵 Trilha Sonora</h2><p>Adicione uma música de fundo para o perfil.</p></div><span class="muted">06 / 08</span></div>
     <label class="field">
      <span>Arquivo de Trilha Sonora (.mp3, .wav)</span>
      <input id="soundtrackFile" type="file" accept="audio/mp3,audio/wav,audio/mpeg">
-     <small>Máximo de 8 minutos / 15MB.</small>
+     <small>Máximo de 8 minutos / 15MB. O áudio tocará de forma opcional para os visitantes.</small>
     </label>
     <input type="hidden" id="soundtrackUrl" value="">
    </section>
 
    <section class="panel" id="panel-appearance">
-    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos e Cursor.</p></div><span class="muted">07 / 09</span></div>
+    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos, Cursor e Mural de Recados.</p></div><span class="muted">07 / 08</span></div>
     <label class="field">
      <span>🪞 Estilo Visual do Card</span>
      <select id="cardStyle">
@@ -599,7 +505,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
       <option value="glass">Vidro 3D (Glassmorphism)</option>
      </select>
     </label>
-   <label class="field">
+    <label class="field">
      <span>🗂️ Estilo do Mural de Recados (Guestbook)</span>
      <select id="guestbookStyleSelect">
       <option value="vintage">Vintage (Pedaço de Papel Envelhecido)</option>
@@ -613,7 +519,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     </div>
     <div class="two">
      <label class="field"><span>Cor do Título do Nome</span><input type="color" id="titleColor" value="#ffffff"></label>
-     <label class="field"><span>Cor dos Demais Textos</span><input type="color" id="textColor" value="#f6f4ff"></label>
+     <label class="field"><span>Cor dos Demais Textos (Afeta Destaque e Texto dos Links)</span><input type="color" id="textColor" value="#f6f4ff"></label>
     </div>
     <label class="field">
      <span>✨ Efeito Especial no Nome</span>
@@ -625,7 +531,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <label class="field">
      <span>🖱️ Cursor Personalizado (.cur ou .png)</span>
      <input id="customCursorFile" type="file" accept=".cur,.png,.gif,.webp">
-     <small>Máx. 1MB.</small>
+     <small>Selecione um arquivo de cursor do seu computador. Máx. 1MB.</small>
     </label>
     <input type="hidden" id="customCursor" value="">
     <input type="hidden" id="avatarUrl" value="">
@@ -633,22 +539,9 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-links">
-    <div class="panel-head"><div><h2>↗ Meus links extras</h2><p>Até 6 links personalizados.</p></div><span class="muted">08 / 09</span></div>
+    <div class="panel-head"><div><h2>↗ Meus links extras</h2><p>Até 6 links personalizados.</p></div><span class="muted">08 / 08</span></div>
     <div id="linksList"></div>
     <button type="button" class="add" id="addLinkBtn">＋ Adicionar link</button>
-   </section>
-
-   <section class="panel" id="panel-friendships">
-    <div class="panel-head"><div><h2>🤝 Friendships</h2><p>Conecte até 3 amigos em destaque no seu perfil.</p></div><span class="muted">09 / 09</span></div>
-    <label class="field">
-     <span>Adicionar aliado (@handle)</span>
-     <div style="display: flex; gap: 8px;">
-      <input type="text" id="friendHandleInput" placeholder="ex: dielsly" style="flex:1;">
-      <button type="button" id="addFriendBtn" class="btn primary" style="padding: 10px 16px;">Adicionar</button>
-     </div>
-     <small>Digite o @ do amigo cadastrado no isly.me.</small>
-    </label>
-    <div id="friendshipsListEdit" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;"></div>
    </section>
   </div>
 
@@ -661,22 +554,16 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
       <div id="previewFrame" class="avatar-frame"></div>
      </div>
      <div class="profile-info">
-      <h3 id="previewName">Seu Nome</h3>
-      <div class="handle" id="previewHandle">@seunick</div>
+      <h3 id="previewName">Nyx.exe</h3>
+      <div class="handle" id="previewHandle">@nyx.exe</div>
      </div>
     </div>
-    <p class="bio-preview" id="previewBio"></p>
-    <div class="live-status"><span id="previewStatusEmoji">🎮</span><span id="previewStatusText">Jogando</span></div>
+    <p class="bio-preview" id="previewBio">Gamer e geek.</p>
+    <div class="live-status"><span id="previewStatusEmoji">🎮</span><span id="previewStatusText">Jogando · Valorant</span></div>
     <div class="preview-emblems" id="previewEmblems"></div>
     <div class="preview-socials" id="previewSocials"></div>
     <div class="embeds-container" id="previewEmbeds"></div>
     <div class="preview-links" id="previewLinks"></div>
-    
-    <div class="preview-friendships-wrapper" id="previewFriendshipsWrapper" style="display: none;">
-      <div class="preview-friendships-title">Amigos Próximos</div>
-      <div class="preview-friendships" id="previewFriendships"></div>
-    </div>
-
     <div class="profile-foot">CRIADO NO ISLY.ME ✦</div>
    </div>
    <div class="share">
@@ -696,54 +583,31 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 async function runAppInitializer() {
  const $ = (s) => document.querySelector(s);
  const appRoot = $('#appRoot');
- if (appRoot) appRoot.style.display = 'block';
-
- if (!window.islySupabase) { 
-  console.warn("SDK do Supabase não encontrada. Modo offline/estático."); 
- }
+ if (!window.islySupabase) { window.location.replace('landing.html'); return; }
 
  let user = null;
- try { 
-  if (window.islySupabase && typeof window.islySupabase.getUser === 'function') {
-   user = await window.islySupabase.getUser(); 
-  }
- } catch (e) { 
-  console.warn("Erro ao obter usuário:", e); 
- }
+ try { user = await window.islySupabase.getUser(); } catch (e) { console.warn(e); }
 
- // Se não houver usuário logado, redireciona para a página de login/landing
- if (!user) {
-  window.location.replace('landing.html');
-  return;
- }
-
- const activeUserId = user.id;
+ if (user) {
+  if (appRoot) appRoot.style.display = 'block';
   
- try {
-   if (window.islySupabase) {
-     const profile = await window.islySupabase.getProfileById(user.id);
-     if (profile && profile.is_admin) {
-       const adminNav = document.getElementById('adminNavContainer');
-       if (adminNav) adminNav.style.display = 'block';
-     }
-   }
- } catch (err) {
-   console.warn("Erro ao verificar status de admin:", err);
- }
-
- try {
-  initEditor(activeUserId, user);
- } catch (initErr) {
-  console.error("Erro ao inicializar o editor:", initErr);
- }
-
- // Botão Sair corrigido com signOut do Supabase
- $('#authBtn')?.addEventListener('click', async () => { 
-  if (window.islySupabase && typeof window.islySupabase.client?.auth?.signOut === 'function') {
-   try { await window.islySupabase.client.auth.signOut(); } catch(e){}
+  // Verifica se é administrador para exibir o botão do painel admin na barra lateral
+  try {
+    const profile = await window.islySupabase.getProfileById(user.id);
+    if (profile && profile.is_admin) {
+      const adminNav = document.getElementById('adminNavContainer');
+      if (adminNav) adminNav.style.display = 'block';
+    }
+  } catch (err) {
+    console.warn("Erro ao verificar status de admin:", err);
   }
-  window.location.replace('landing.html'); 
- });
+
+  initEditor(user.id);
+ } else {
+  window.location.replace('landing.html');
+ }
+
+ $('#authBtn')?.addEventListener('click', async () => { window.location.replace('landing.html'); });
 }
 
 if (window.__islySdkReadyFired) {
@@ -759,22 +623,14 @@ function toast(msg) {
  setTimeout(() => { t.classList.remove('show'); t.style.display = 'none'; }, 3000);
 }
 
-const emblemNames = {
-  nerd: 'Nerd', gamer: 'Gamer', youtuber: 'Youtuber', programador: 'Programador',
-  hacker: 'Hacker', streamer: 'Streamer', gotico: 'Gótico', anime: 'Anime',
-  lol: 'LoL', habbo: 'Habbo', thesims: 'The Sims', valorant: 'Valorant',
-  cod: 'Call Of Duty', cs: 'CS', gta: 'GTA', minecraft: 'Minecraft',
-  rpg: 'RPG', artista: 'Artista', artist: 'Criador', musica: 'Música', 
-  fundador: 'Fundador', founder: 'Fundador', geek: 'Geek'
-};
-
-const emblemEmojis = {
-  nerd: '🤓', gamer: '🎮', youtuber: '▶️', programador: '💻',
-  hacker: '⚡', streamer: '🟣', gotico: '🦇', anime: '🍥',
-  lol: '⚔️', habbo: '🏨', thesims: '🟩', valorant: '🎯',
-  cod: '🪖', cs: '💣', gta: '💰', minecraft: '⛏️',
-  rpg: '🎲', artista: '🎨', artist: '🎨', musica: '🎧', 
-  fundador: '💎', founder: '💎', geek: '🤓'
+const emblemNames = { gamer: 'Gamer', geek: 'Geek', rpg: 'RPG', anime: 'Anime', artist: 'Criador', founder: 'Fundador' };
+const emblemSvgs = {
+ gamer: '<svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
+ geek: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>',
+ rpg: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
+ anime: '<svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>',
+ artist: '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>',
+ founder: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
 };
 
 const socialSvgs = {
@@ -791,195 +647,537 @@ const socialSvgs = {
  tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
 };
 
-async function initEditor(userId, user) {
- const $ = (s) => document.querySelector(s);
- const $$ = (s) => document.querySelectorAll(s);
+function getSpotifyEmbed(url) {
+ if (!url) return '';
+ const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
+ if (match) {
+  return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
+ }
+ return '';
+}
 
- let profileData = {
-  id: userId,
-  name: '',
-  handle: '',
-  bio: '',
-  avatar_url: '',
-  wallpaper_url: '',
-  avatar_frame: 'none',
-  status_emoji: '🎮',
-  status_label: 'Jogando',
-  activity: '',
-  emblems: [],
-  socials: {},
-  embed_spotify: '',
-  embed_youtube: '',
-  embed_instagram: '',
-  card_style: 'opaque',
-  bg_color: '#080812',
-  card_bg: '#11111f',
-  title_color: '#ffffff',
-  text_color: '#f6f4ff',
-  name_effect: 'none',
-  links: [],
-  friendships: []
- };
+function getYoutubeEmbed(url) {
+ if (!url) return '';
+ let id = '';
+ if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
+ else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
+ if (id) {
+  return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+ }
+ return '';
+}
 
- if (window.islySupabase) {
-  try {
-   const remoteProfile = await window.islySupabase.getProfileById(userId);
-   if (remoteProfile) {
-    profileData = { ...profileData, ...remoteProfile };
-   }
-  } catch(e) {
-   console.warn("Erro ao carregar perfil do banco:", e);
-  }
+function getInstagramEmbed(url) {
+ if (!url) return '';
+ const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
+ if (match) {
+  return `<div class="embed-wrapper"><iframe src="https://www.instagram.com/${match[1]}/${match[2]}/embed" height="360" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
+ }
+ return '';
+}
+
+async function initEditor(userId) {
+ let profile = null;
+ try {
+  profile = await window.islySupabase.getProfileById(userId);
+ } catch (e) {
+  console.warn("Erro ao buscar perfil:", e);
  }
 
- $('#name').value = profileData.name || '';
- $('#handle').value = profileData.handle || '';
- $('#bio').value = profileData.bio || '';
- $('#bioCount').textContent = (profileData.bio || '').length;
- $('#activity').value = profileData.activity || '';
- $('#avatarFrameSelect').value = profileData.avatar_frame || 'none';
- $('#cardStyle').value = profileData.card_style || 'opaque';
- $('#bgColor').value = profileData.bg_color || '#080812';
- $('#cardBg').value = profileData.card_bg || '#11111f';
- $('#titleColor').value = profileData.title_color || '#ffffff';
- $('#textColor').value = profileData.text_color || '#f6f4ff';
- $('#nameEffect').value = profileData.name_effect || 'none';
- $('#embedSpotify').value = profileData.embed_spotify || '';
- $('#embedYoutube').value = profileData.embed_youtube || '';
- $('#embedInstagram').value = profileData.embed_instagram || '';
-
- if (profileData.handle) {
-  $('#shareUrl').value = `${window.location.origin}/perfil.html?u=${profileData.handle}`;
- } else {
-  $('#shareUrl').value = `${window.location.origin}/perfil.html?u=usuario`;
+ if (!profile) {
+  profile = {
+   id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6),
+   bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', accent_color: '#c084fc',
+   title_color: '#ffffff', text_color: '#f6f4ff',
+   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack_url: '', avatar_frame: 'none', bio: '', activity: '',
+   status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
+   embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
+   guestbook_style: 'vintage'
+  };
  }
 
- function updatePreview() {
-  $('#previewName').textContent = $('#name').value || 'Seu Nome';
-  $('#previewHandle').textContent = '@' + ($('#handle').value || 'seunick');
-  $('#previewBio').textContent = $('#bio').value || '';
+ let currentProfile = { ...profile };
+ if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
+ if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
+ if (!currentProfile.socials || typeof currentProfile.socials !== 'object') currentProfile.socials = {};
+
+ document.getElementById('statViews').textContent = currentProfile.views_count || 0;
+ document.getElementById('statClicks').textContent = currentProfile.clicks_count || 0;
+
+ const nameInput = document.getElementById('name');
+ const handleInput = document.getElementById('handle');
+ const bioInput = document.getElementById('bio');
+ const bioCount = document.getElementById('bioCount');
+ const avatarFrameSelect = document.getElementById('avatarFrameSelect');
+ const activityInput = document.getElementById('activity');
+ const shareUrlInput = document.getElementById('shareUrl');
+
+ const cardStyleSelect = document.getElementById('cardStyle');
+ const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
+ const bgColorInput = document.getElementById('bgColor');
+ const cardBgInput = document.getElementById('cardBg');
+ const titleColorInput = document.getElementById('titleColor');
+ const textColorInput = document.getElementById('textColor');
+ const nameEffectSelect = document.getElementById('nameEffect');
+ const customCursorInput = document.getElementById('customCursor');
+ const avatarUrlInput = document.getElementById('avatarUrl');
+ const wallpaperUrlInput = document.getElementById('wallpaperUrl');
+ const soundtrackUrlInput = document.getElementById('soundtrackUrl');
+
+ const embedSpotifyInput = document.getElementById('embedSpotify');
+ const embedYoutubeInput = document.getElementById('embedYoutube');
+ const embedInstagramInput = document.getElementById('embedInstagram');
+
+ const syncDot = document.getElementById('syncDot');
+ const syncText = document.getElementById('syncText');
+
+ nameInput.value = currentProfile.name || '';
+ handleInput.value = currentProfile.handle || '';
+
+ // REGRA DO @: Se o usuário já alterou o handle uma vez, bloqueia o campo e avisa
+ if (currentProfile.handle_changed) {
+  handleInput.disabled = true;
+  handleInput.style.opacity = '0.6';
+  handleInput.style.cursor = 'not-allowed';
   
-  const shareInput = $('#shareUrl');
-  if (shareInput && $('#handle').value) {
-   shareInput.value = `${window.location.origin}/perfil.html?u=${$('#handle').value.trim().replace(/^@/, '')}`;
-  }
-
-  $('#previewStatusEmoji').textContent = profileData.status_emoji || '🎮';
-  const actText = $('#activity').value.trim();
-  $('#previewStatusText').textContent = (profileData.status_label || 'Jogando') + (actText ? ' · ' + actText : '');
-
-  const previewAvatar = $('#previewAvatar');
-  if (profileData.avatar_url) {
-   previewAvatar.innerHTML = `<img src="${profileData.avatar_url}" alt="Avatar">`;
-  } else {
-   previewAvatar.textContent = '⌬';
-  }
-
-  const previewFrame = $('#previewFrame');
-  const frameType = $('#avatarFrameSelect').value;
-  previewFrame.className = 'avatar-frame';
-  if (frameType === 'neon-white') previewFrame.classList.add('frame-neon-white');
-  else if (frameType === 'vip') previewFrame.classList.add('frame-vip');
-
-  const profileCard = $('#profileCard');
-  if (profileCard) {
-   profileCard.className = 'profile-card ' + ($('#cardStyle').value === 'glass' ? 'card-style-glass' : 'card-style-opaque');
-   if ($('#cardStyle').value !== 'glass') {
-    profileCard.style.backgroundColor = $('#cardBg').value;
-   } else {
-    profileCard.style.backgroundColor = '';
-   }
-  }
-  document.body.style.backgroundColor = $('#bgColor').value;
-
-  $('#previewName').style.color = $('#titleColor').value;
-  if ($('#nameEffect').value === 'glow') {
-   $('#previewName').classList.add('text-effect-glow');
-  } else {
-   $('#previewName').classList.remove('text-effect-glow');
-  }
-
-  const actColor = $('#textColor').value;
-  $('#previewBio').style.color = actColor;
-  $('#previewHandle').style.color = actColor;
-
-  const previewEmblems = $('#previewEmblems');
-  if (previewEmblems) {
-   previewEmblems.innerHTML = (profileData.emblems || []).map(id => {
-    const emoji = emblemEmojis[id] || '✨';
-    const name = emblemNames[id] || id;
-    return `<span><span>${emoji}</span>${name}</span>`;
-   }).join('');
-  }
-
-  const previewSocials = $('#previewSocials');
-  if (previewSocials) {
-   let sHTML = '';
-   ['steam', 'spotify', 'youtube', 'discord', 'instagram', 'twitter', 'letterboxd', 'onlyfans', 'behance', 'pinterest', 'tumblr'].forEach(net => {
-    const val = profileData.socials?.[net];
-    if (val && socialSvgs[net]) {
-     sHTML += `<div class="preview-social-icon" title="${net}">${socialSvgs[net]}</div>`;
-    }
-   });
-   previewSocials.innerHTML = sHTML;
+  const parentField = handleInput.closest('.field');
+  if (parentField && !document.getElementById('handleWarning')) {
+   const warning = document.createElement('small');
+   warning.id = 'handleWarning';
+   warning.style.color = '#f43f5e';
+   warning.style.marginTop = '6px';
+   warning.innerHTML = '⚠️ O seu @ já foi alterado uma vez. Para trocar novamente, abra um ticket no nosso canal do <a href="https://discord.gg/SEU_LINK" target="_blank" style="color:var(--purple); text-decoration:underline;">Discord</a>.';
+   parentField.appendChild(warning);
   }
  }
 
- updatePreview();
+ bioInput.value = currentProfile.bio || '';
+ bioCount.textContent = (currentProfile.bio || '').length;
+ avatarFrameSelect.value = currentProfile.avatar_frame || 'none';
+ activityInput.value = currentProfile.activity || '';
 
- ['input', 'change'].forEach(evt => {
-  $$('input, textarea, select').forEach(el => {
-   el.addEventListener(evt, updatePreview);
+ cardStyleSelect.value = currentProfile.card_style || 'opaque';
+ guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
+ bgColorInput.value = currentProfile.bg_color || '#080812';
+ cardBgInput.value = currentProfile.card_bg || '#11111f';
+ titleColorInput.value = currentProfile.title_color || '#ffffff';
+ textColorInput.value = currentProfile.text_color || '#f6f4ff';
+ nameEffectSelect.value = currentProfile.name_effect || 'none';
+ customCursorInput.value = currentProfile.custom_cursor || '';
+ avatarUrlInput.value = currentProfile.avatar_url || '';
+ wallpaperUrlInput.value = currentProfile.wallpaper_url || '';
+ soundtrackUrlInput.value = currentProfile.soundtrack_url || '';
+
+ embedSpotifyInput.value = currentProfile.embed_spotify || '';
+ embedYoutubeInput.value = currentProfile.embed_youtube || '';
+ embedInstagramInput.value = currentProfile.embed_instagram || '';
+
+ Object.keys(socialSvgs).forEach(key => {
+  const field = document.getElementById('soc_' + key);
+  if (field && currentProfile.socials[key]) field.value = currentProfile.socials[key];
+ });
+
+ if (currentProfile.handle) {
+  shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentProfile.handle}`;
+ }
+
+ const previewCard = document.getElementById('profileCard');
+ previewCard.addEventListener('mousemove', (e) => {
+  const rect = previewCard.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const xc = rect.width / 2;
+  const yc = rect.height / 2;
+  const dx = (x - xc) / xc;
+  const dy = (y - yc) / yc;
+  previewCard.style.transform = `perspective(1200px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) translateY(-2px)`;
+ });
+ previewCard.addEventListener('mouseleave', () => {
+  previewCard.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+ });
+
+ document.getElementById('avatarFile')?.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
+  toast('Enviando foto de perfil...');
+
+  try {
+   const fileExt = file.name.split('.').pop();
+   const fileName = `${userId}-${Date.now()}.${fileExt}`;
+   const filePath = `avatars/${fileName}`;
+
+   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
+   if (uploadErr) throw new Error(uploadErr);
+
+   const publicUrl = window.islySupabase.getPublicUrl(filePath);
+   if (publicUrl) {
+    avatarUrlInput.value = publicUrl;
+    currentProfile.avatar_url = publicUrl;
+    updatePreview();
+    triggerAutoSave();
+    toast('Foto de perfil atualizada! ✓');
+   } else {
+    throw new Error('Não foi possível obter a URL pública.');
+   }
+  } catch (err) {
+   console.error("Erro no upload do avatar:", err);
+   toast('Erro ao enviar foto: ' + (err.message || 'Erro desconhecido'));
+  }
+ });
+
+ document.getElementById('wallpaperFile')?.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { toast('O wallpaper deve ter no máximo 2MB.'); return; }
+  toast('Enviando wallpaper do cartão...');
+
+  try {
+   const fileExt = file.name.split('.').pop();
+   const fileName = `${userId}-${Date.now()}.${fileExt}`;
+   const filePath = `wallpapers/${fileName}`;
+
+   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
+   if (uploadErr) throw new Error(uploadErr);
+
+   const publicUrl = window.islySupabase.getPublicUrl(filePath);
+   if (publicUrl) {
+    wallpaperUrlInput.value = publicUrl;
+    currentProfile.wallpaper_url = publicUrl;
+    updatePreview();
+    triggerAutoSave();
+    toast('Wallpaper atualizado! ✓');
+   } else {
+    throw new Error('Não foi possível obter a URL pública.');
+   }
+  } catch (err) {
+   console.error("Erro no upload do wallpaper:", err);
+   toast('Erro ao enviar wallpaper: ' + (err.message || 'Erro desconhecido'));
+  }
+ });
+
+ document.getElementById('soundtrackFile')?.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 15 * 1024 * 1024) { toast('A trilha sonora deve ter no máximo 15MB.'); return; }
+  toast('Enviando trilha sonora...');
+
+  try {
+   const fileExt = file.name.split('.').pop();
+   const fileName = `${userId}-${Date.now()}.${fileExt}`;
+   const filePath = `soundtracks/${fileName}`;
+
+   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
+   if (uploadErr) throw new Error(uploadErr);
+
+   const publicUrl = window.islySupabase.getPublicUrl(filePath);
+   if (publicUrl) {
+    soundtrackUrlInput.value = publicUrl;
+    currentProfile.soundtrack_url = publicUrl;
+    triggerAutoSave();
+    toast('Trilha sonora adicionada! 🎵');
+   } else {
+    throw new Error('Não foi possível obter a URL pública.');
+   }
+  } catch (err) {
+   console.error("Erro no upload da trilha sonora:", err);
+   toast('Erro ao enviar áudio: ' + (err.message || 'Erro desconhecido'));
+  }
+ });
+
+ document.getElementById('customCursorFile')?.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 1024 * 1024) { toast('O cursor deve ter no máximo 1MB.'); return; }
+  toast('Enviando cursor...');
+  try {
+   const fileExt = file.name.split('.').pop();
+   const filePath = `cursors/${userId}-${Date.now()}.${fileExt}`;
+   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
+   if (uploadErr) throw new Error(uploadErr);
+   const publicUrl = window.islySupabase.getPublicUrl(filePath);
+   if (publicUrl) {
+    customCursorInput.value = publicUrl;
+    currentProfile.custom_cursor = publicUrl;
+    updatePreview();
+    triggerAutoSave();
+    toast('Cursor atualizado! ✨');
+   }
+  } catch (err) {
+   toast('Erro ao enviar cursor.');
+  }
+ });
+
+ let saveTimer = null;
+ function triggerAutoSave() {
+  syncDot.classList.add('saving');
+  syncText.textContent = 'Salvando...';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+   const socialsData = {};
+   Object.keys(socialSvgs).forEach(key => {
+    const val = document.getElementById('soc_' + key)?.value.trim();
+    if (val) socialsData[key] = val;
+   });
+
+   const payload = {
+    id: userId, name: nameInput.value, handle: handleInput.value,
+    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
+    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
+    card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
+    bg_color: bgColorInput.value, card_bg: cardBgInput.value,
+    accent_color: textColorInput.value,
+    title_color: titleColorInput.value, text_color: textColorInput.value,
+    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
+    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
+    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
+    emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
+    handle_changed: currentProfile.handle_changed
+   };
+
+   const err = await window.islySupabase.saveProfile(payload);
+   syncDot.classList.remove('saving');
+   syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
+  }, 1200);
+ }
+
+ document.querySelectorAll('.sidebar .navbtn').forEach(btn => {
+  btn.addEventListener('click', () => {
+   document.querySelectorAll('.sidebar .navbtn').forEach(b => b.classList.remove('active'));
+   document.querySelectorAll('.content .panel').forEach(p => p.classList.remove('active-panel'));
+   btn.classList.add('active');
+   document.getElementById('panel-' + btn.getAttribute('data-sec'))?.classList.add('active-panel');
   });
  });
 
- $('#saveBtn')?.addEventListener('click', async () => {
-  const syncDot = $('#syncDot');
-  const syncText = $('#syncText');
-  if (syncDot) syncDot.classList.add('saving');
-  if (syncText) syncText.textContent = 'Salvando...';
+ document.querySelectorAll('#statusOptions .choice').forEach(btn => {
+  if (btn.getAttribute('data-label') === currentProfile.status_label) {
+   document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
+   btn.classList.add('active');
+  }
+  btn.addEventListener('click', () => {
+   document.querySelectorAll('#statusOptions .choice').forEach(b => b.classList.remove('active'));
+   btn.classList.add('active');
+   currentProfile.status_emoji = btn.getAttribute('data-emoji');
+   currentProfile.status_label = btn.getAttribute('data-label');
+   updatePreview(); triggerAutoSave();
+  });
+ });
 
-  const updatedPayload = {
-   id: userId,
-   name: $('#name').value.trim(),
-   handle: $('#handle').value.trim().replace(/^@/, ''),
-   bio: $('#bio').value.trim(),
-   activity: $('#activity').value.trim(),
-   avatar_frame: $('#avatarFrameSelect').value,
-   card_style: $('#cardStyle').value,
-   bg_color: $('#bgColor').value,
-   card_bg: $('#cardBg').value,
-   title_color: $('#titleColor').value,
-   text_color: $('#textColor').value,
-   name_effect: $('#nameEffect').value,
-   embed_spotify: $('#embedSpotify').value.trim(),
-   embed_youtube: $('#embedYoutube').value.trim(),
-   embed_instagram: $('#embedInstagram').value.trim(),
-   status_emoji: profileData.status_emoji,
-   status_label: profileData.status_label,
-   emblems: profileData.emblems,
-   socials: profileData.socials,
-   links: profileData.links,
-   friendships: profileData.friendships,
-   avatar_url: profileData.avatar_url,
-   wallpaper_url: profileData.wallpaper_url
-  };
-
-  if (window.islySupabase && typeof window.islySupabase.saveProfile === 'function') {
-   const err = await window.islySupabase.saveProfile(updatedPayload);
-   if (err) {
-    toast('Erro ao salvar: ' + err);
+ document.querySelectorAll('#emblemGrid .emblem').forEach(el => {
+  const id = el.getAttribute('data-id');
+  if (currentProfile.emblems.includes(id)) el.classList.add('selected');
+  el.addEventListener('click', () => {
+   if (currentProfile.emblems.includes(id)) {
+    currentProfile.emblems = currentProfile.emblems.filter(e => e !== id);
+    el.classList.remove('selected');
    } else {
-    toast('Alterações salvas com sucesso! ✓');
+    if (currentProfile.emblems.length >= 3) { toast('Máximo de 3 emblemas.'); return; }
+    currentProfile.emblems.push(id); el.classList.add('selected');
    }
-  } else {
-   toast('Modo estático: Alterações aplicadas na pré-via.');
+   updatePreview(); triggerAutoSave();
+  });
+ });
+
+ Object.keys(socialSvgs).forEach(key => {
+  document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
+ });
+
+ [cardStyleSelect, guestbookStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+  input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
+ });
+
+ avatarFrameSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
+ guestbookStyleSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
+
+ function moveLink(fromIdx, toIdx) {
+  if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
+  const item = currentProfile.links.splice(fromIdx, 1)[0];
+  currentProfile.links.splice(toIdx, 0, item);
+  renderLinksEditor(); updatePreview(); triggerAutoSave();
+ }
+
+ function renderLinksEditor() {
+  const container = document.getElementById('linksList');
+  container.innerHTML = '';
+  currentProfile.links.forEach((link, idx) => {
+   const row = document.createElement('div');
+   row.className = 'link-row';
+   row.innerHTML = `
+    <div class="reorder-btns">
+     <button type="button" class="reorder-btn move-up" ${idx === 0 ? 'disabled' : ''}>▲</button>
+     <button type="button" class="reorder-btn move-down" ${idx === currentProfile.links.length - 1 ? 'disabled' : ''}>▼</button>
+    </div>
+    <input type="text" value="${link.emoji || '↗'}" maxlength="4" placeholder="emoji" class="link-emoji">
+    <input type="text" value="${link.title || ''}" placeholder="Título do link" class="link-title">
+    <input type="text" value="${link.url || ''}" placeholder="https://..." class="link-url">
+    <button type="button" class="remove">✕</button>
+   `;
+   row.querySelector('.move-up').addEventListener('click', () => moveLink(idx, idx - 1));
+   row.querySelector('.move-down').addEventListener('click', () => moveLink(idx, idx + 1));
+   row.querySelector('.link-emoji').addEventListener('input', e => { currentProfile.links[idx].emoji = e.target.value; updatePreview(); triggerAutoSave(); });
+   row.querySelector('.link-title').addEventListener('input', e => { currentProfile.links[idx].title = e.target.value; updatePreview(); triggerAutoSave(); });
+   row.querySelector('.link-url').addEventListener('input', e => { currentProfile.links[idx].url = e.target.value; updatePreview(); triggerAutoSave(); });
+   row.querySelector('.remove').addEventListener('click', () => {
+    currentProfile.links.splice(idx, 1); renderLinksEditor(); updatePreview(); triggerAutoSave();
+   });
+   container.appendChild(row);
+  });
+ }
+
+ document.getElementById('addLinkBtn').addEventListener('click', () => {
+  if (currentProfile.links.length >= 6) { toast('Máximo de 6 links permitidos.'); return; }
+  currentProfile.links.push({ emoji: '↗', title: '', url: '' });
+  renderLinksEditor(); updatePreview(); triggerAutoSave();
+ });
+
+ renderLinksEditor();
+
+ document.getElementById('copyBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText(shareUrlInput.value);
+  toast('Link copiado para a área de transferência! 📋');
+ });
+
+ function updatePreview() {
+  const nameEl = document.getElementById('previewName');
+  nameEl.textContent = nameInput.value || 'Seu Nome';
+  nameEl.className = '';
+  const fx = nameEffectSelect.value;
+  if (fx === 'glow') {
+   nameEl.classList.add('text-effect-glow');
   }
 
-  setTimeout(() => {
-   if (syncDot) syncDot.classList.remove('saving');
-   if (syncText) syncText.textContent = 'Sincronizado';
-  }, 600);
+  document.getElementById('previewHandle').textContent = '@' + (handleInput.value || 'nick');
+  document.getElementById('previewBio').textContent = bioInput.value || 'Escreva sua bio...';
+  
+  const avatarEl = document.getElementById('previewAvatar');
+  const avatarVal = avatarUrlInput.value.trim();
+  if (avatarVal) {
+   avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
+  } else {
+   avatarEl.textContent = '⌬';
+  }
+
+  const frameEl = document.getElementById('previewFrame');
+  const frameType = avatarFrameSelect.value;
+  frameEl.className = 'avatar-frame';
+  if (frameType === 'cyberpunk') frameEl.classList.add('frame-cyberpunk');
+  else if (frameType === 'neon-gold') frameEl.classList.add('frame-neon-gold');
+  else if (frameType === 'royal-purple') frameEl.classList.add('frame-royal-purple');
+
+  document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
+  document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
+
+  const card = document.getElementById('profileCard');
+  card.className = 'profile-card';
+  if (cardStyleSelect.value === 'glass') {
+   card.classList.add('card-style-glass');
+   card.style.backgroundColor = '';
+  } else {
+   card.classList.add('card-style-opaque');
+   card.style.backgroundColor = cardBgInput.value;
+  }
+
+  const wallpaperVal = wallpaperUrlInput.value.trim();
+  if (wallpaperVal) {
+   document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.8), rgba(8, 8, 18, 0.8)), url('${wallpaperVal}')`;
+   document.body.style.backgroundSize = 'cover';
+   document.body.style.backgroundPosition = 'center';
+   document.body.style.backgroundRepeat = 'no-repeat';
+   document.body.style.backgroundAttachment = 'fixed';
+  } else {
+   document.body.style.backgroundImage = '';
+   document.body.style.background = bgColorInput.value;
+  }
+
+  if (fx === 'none') nameEl.style.color = titleColorInput.value;
+  else nameEl.style.color = '';
+
+  const activeTextColor = textColorInput.value;
+  document.getElementById('previewBio').style.color = activeTextColor;
+  document.getElementById('previewHandle').style.color = activeTextColor;
+
+  const emPreview = document.getElementById('previewEmblems');
+  emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemSvgs[id] || ''} ${emblemNames[id] || id}</span>`).join('');
+
+  const socPreview = document.getElementById('previewSocials');
+  let socHTML = '';
+  Object.keys(socialSvgs).forEach(key => {
+   const val = document.getElementById('soc_' + key)?.value.trim();
+   if (val) {
+    socHTML += `<a class="preview-social-icon" title="${key}" href="#" onclick="return false;" style="color:${activeTextColor}">${socialSvgs[key]}</a>`;
+   }
+  });
+  socPreview.innerHTML = socHTML;
+
+  const embedsPreview = document.getElementById('previewEmbeds');
+  let embedsHTML = '';
+  embedsHTML += getSpotifyEmbed(embedSpotifyInput.value.trim());
+  embedsHTML += getYoutubeEmbed(embedYoutubeInput.value.trim());
+  embedsHTML += getInstagramEmbed(embedInstagramInput.value.trim());
+  embedsPreview.innerHTML = embedsHTML;
+
+  const lnPreview = document.getElementById('previewLinks');
+  lnPreview.innerHTML = currentProfile.links.map(l => `
+   <a class="preview-link" href="${l.url || '#'}" target="_blank" style="background: rgba(255,255,255,0.06); color:${activeTextColor}; border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(12px)">
+    <span style="display:flex;align-items:center;gap:10px"><span>${l.emoji || '↗'}</span><span>${l.title || 'Link'}</span></span>
+    <span style="color:${activeTextColor}">↗</span>
+   </a>
+  `).join('');
+ }
+
+ [nameInput, bioInput, activityInput].forEach(el => {
+  el.addEventListener('input', () => {
+   if (el === bioInput) bioCount.textContent = bioInput.value.length;
+   updatePreview(); triggerAutoSave();
+  });
+ });
+
+ handleInput.addEventListener('input', () => {
+  if (currentProfile.handle_changed) return;
+  
+  currentProfile.handle_changed = true;
+  toast('💡 Aviso: O @ só pode ser alterado uma única vez!');
+
+  if (handleInput.value) {
+   shareUrlInput.value = `${window.location.origin}/perfil.html?u=${handleInput.value.trim().replace(/^@/, '')}`;
+  }
+  updatePreview(); 
+  triggerAutoSave();
+ });
+
+ updatePreview();
+
+ document.getElementById('saveBtn').addEventListener('click', async () => {
+  clearTimeout(saveTimer);
+  syncDot.classList.add('saving');
+  syncText.textContent = 'Salvando...';
+
+  const socialsData = {};
+  Object.keys(socialSvgs).forEach(key => {
+   const val = document.getElementById('soc_' + key)?.value.trim();
+   if (val) socialsData[key] = val;
+  });
+
+  const payload = {
+   id: userId, name: nameInput.value, handle: handleInput.value,
+   bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
+   status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
+   card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
+   bg_color: bgColorInput.value, card_bg: cardBgInput.value,
+   accent_color: textColorInput.value,
+   title_color: titleColorInput.value, text_color: textColorInput.value,
+   name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
+   avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
+   embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
+   emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
+   handle_changed: currentProfile.handle_changed
+  };
+
+  const err = await window.islySupabase.saveProfile(payload);
+  syncDot.classList.remove('saving');
+  syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
+  toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
  });
 }
 </script>
