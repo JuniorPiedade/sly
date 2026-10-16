@@ -1544,19 +1544,16 @@ document.addEventListener('keydown', (e) => {
 });
 
 <script>
-// 1. Bloqueia o clique direito
+// 1. Bloqueio agressivo do clique direito em toda a página
 document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
-  mostrarAvisoInspecao("⚠️ Clique direito desativado por segurança.");
-});
-<script>
-// 1. Bloqueia o clique direito
-document.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
+  e.stopImmediatePropagation();
+  e.stopPropagation();
   mostrarAvisoInspecao("Protegido por direitos autorais.");
-});
+  return false;
+}, true); // O 'true' garante prioridade máxima antes de qualquer outro script
 
-// 2. Bloqueia atalhos de inspeção e código fonte (com captura total)
+// 2. Bloqueia atalhos de inspeção e código fonte (F12, Ctrl+Shift+I, Ctrl+U)
 document.addEventListener('keydown', (e) => {
   const isF12 = e.key === 'F12' || e.keyCode === 123;
   const isCtrlShiftI = e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67);
@@ -1619,7 +1616,7 @@ function mostrarAvisoInspecao(texto) {
   }, 2500);
 }
 
-// 4. Armadilha de Debugger (Rodando de forma independente em segundo plano)
+// 4. Armadilha de Debugger em segundo plano
 setInterval(() => {
   const antes = performance.now();
   debugger; 
