@@ -303,3 +303,33 @@
           .from('media')
           .upload(filePath, file, {
             cacheControl: '3600',
+            upsert: true
+          });
+
+        if (error) throw error;
+        return null;
+      } catch (error) {
+        console.error('Erro ao enviar mídia:', error);
+        return error.message || 'Erro ao enviar arquivo.';
+      }
+    },
+
+    getPublicUrl(filePath) {
+      const sb = initSupabase();
+      if (!sb) return '';
+
+      try {
+        const { data } = sb.storage
+          .from('media')
+          .getPublicUrl(filePath);
+
+        return data?.publicUrl || '';
+      } catch (error) {
+        console.error('Erro ao obter URL pública:', error);
+        return '';
+      }
+    }
+  };
+
+  initSupabase();
+})();
