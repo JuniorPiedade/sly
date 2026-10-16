@@ -3,7 +3,7 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/sly.:handle",
+      "source": "/sly-:handle",
       "destination": "/perfil.html?u=:handle"
     }
   ]
