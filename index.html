@@ -1565,7 +1565,29 @@ document.addEventListener('keydown', (e) => {
   }
 }, true); // O 'true' aqui no final força a captura na fase de subida (capturing phase), pegando antes do navegador
 
-// 3. Função para exibir o aviso estilizado na tela do usuário
+<script>
+// 1. Bloqueia o clique direito
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  mostrarAvisoInspecao("Protegido por direitos autorais.");
+});
+
+// 2. Bloqueia atalhos de inspeção e código fonte
+document.addEventListener('keydown', (e) => {
+  const isF12 = e.key === 'F12' || e.keyCode === 123;
+  const isCtrlShiftI = e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67);
+  const isCtrlU = e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.keyCode === 85);
+
+  if (isF12 || isCtrlShiftI || isCtrlU) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    mostrarAvisoInspecao("Conteúdo protegido. Curta a experiência.");
+    return false;
+  }
+}, true);
+
+// 3. Função para exibir o aviso estilo iOS (Banner flutuante minimalista)
 function mostrarAvisoInspecao(texto) {
   let alerta = document.getElementById('avisoInspecaoModal');
   if (alerta) alerta.remove();
@@ -1573,44 +1595,47 @@ function mostrarAvisoInspecao(texto) {
   alerta = document.createElement('div');
   alerta.id = 'avisoInspecaoModal';
   alerta.innerHTML = `
-    <div style="display:flex; align-items:center; gap:12px;">
-      <span style="font-size:22px;">❌</span>
-      <div>
-        <div style="font-weight:800; font-size:14px; margin-bottom:2px; color:#fff;">Acesso Restrito</div>
-        <div style="font-size:12px; color:#d8b4fe;">${texto}</div>
-      </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="font-size:14px; opacity:0.8;">✦</span>
+      <span style="font-weight:500; letter-spacing:-0.2px;">${texto}</span>
     </div>
   `;
   
+  // Estilo minimalista tipo iOS: pílula escura, blur elegante e animação de mola suave
   alerta.style.cssText = `
     position: fixed;
-    top: 24px;
+    top: 20px;
     left: 50%;
-    transform: translateX(-50%) translateY(-20px);
-    background: linear-gradient(135deg, #17131f, #0f0c14);
-    border: 1px solid #7c3aed;
-    color: #f6f4ff;
-    padding: 14px 22px;
-    border-radius: 14px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 20px rgba(124,58,237,0.3);
+    transform: translateX(-50%) translateY(-15px) scale(0.96);
+    background: rgba(18, 18, 22, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e2e8f0;
+    padding: 10px 18px;
+    border-radius: 99px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
     z-index: 999999;
     font-family: inherit;
+    font-size: 13px;
     opacity: 0;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
   `;
 
   document.body.appendChild(alerta);
 
+  // Efeito de entrada suave
   requestAnimationFrame(() => {
-    alerta.style.transform = 'translateX(-50%) translateY(0)';
+    alerta.style.transform = 'translateX(-50%) translateY(0) scale(1)';
     alerta.style.opacity = '1';
   });
 
+  // Some com elegância após 2.5 segundos
   setTimeout(() => {
-    alerta.style.transform = 'translateX(-50%) translateY(-20px)';
+    alerta.style.transform = 'translateX(-50%) translateY(-10px) scale(0.96)';
     alerta.style.opacity = '0';
-    setTimeout(() => alerta.remove(), 250);
-  }, 3000);
+    setTimeout(() => alerta.remove(), 300);
+  }, 2500);
 }
 </script>
 </body>
