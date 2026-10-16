@@ -1522,23 +1522,78 @@ async function initEditor(userId) {
  });
 }
 </script>
-  <script>
-// Opcional: Bloquear clique direito e atalhos comuns de Inspecionar (F12, Ctrl+Shift+I, etc.)
-document.addEventListener('contextmenu', e => e.preventDefault());
+<script>
+// 1. Bloqueia o clique direito e mostra o aviso na tela
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  mostrarAvisoInspecao("⚠️ Clique direito desativado por segurança.");
+});
 
+// 2. Bloqueia atalhos de inspeção e visualização de código-fonte (Ctrl+U, F12, etc.)
 document.addEventListener('keydown', (e) => {
   if (
     e.key === 'F12' || 
     (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
-    (e.ctrlKey && e.key === 'U')
+    (e.ctrlKey && (e.key === 'u' || e.key === 'U')) // Aqui pegamos o Ctrl + U com precisão máxima
   ) {
     e.preventDefault();
-    console.warn("Perdeu alguma coisa? p.s: diel.");
+    e.stopPropagation();
+    mostrarAvisoInspecao("⚠️ Tentativa de inspeção bloqueada. Respeite o código do irmão!");
     return false;
   }
 });
+
+// 3. Função para exibir o aviso estilizado na tela do usuário
+function mostrarAvisoInspecao(texto) {
+  // Evita criar múltiplos avisos se a pessoa ficar spammando as teclas
+  let alerta = document.getElementById('avisoInspecaoModal');
+  if (alerta) alerta.remove();
+
+  alerta = document.createElement('div');
+  alerta.id = 'avisoInspecaoModal';
+  alerta.innerHTML = `
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span style="font-size:22px;">🛡️</span>
+      <div>
+        <div style="font-weight:800; font-size:14px; margin-bottom:2px; color:#fff;">Acesso Restrito</div>
+        <div style="font-size:12px; color:#d8b4fe;">${texto}</div>
+      </div>
+    </div>
+  `;
+  
+  // Estilo visual moderno com cara de painel hacker/geek
+  alerta.style.cssText = `
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: linear-gradient(135deg, #17131f, #0f0c14);
+    border: 1px solid #7c3aed;
+    color: #f6f4ff;
+    padding: 14px 22px;
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 20px rgba(124,58,237,0.3);
+    z-index: 999999;
+    font-family: inherit;
+    opacity: 0;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  `;
+
+  document.body.appendChild(alerta);
+
+  // Animação suave de entrada
+  requestAnimationFrame(() => {
+    alerta.style.transform = 'translateX(-50%) translateY(0)';
+    alerta.style.opacity = '1';
+  });
+
+  // Some sozinho depois de 3 segundos
+  setTimeout(() => {
+    alerta.style.transform = 'translateX(-50%) translateY(-20px)';
+    alerta.style.opacity = '0';
+    setTimeout(() => alerta.remove(), 250);
+  }, 3000);
+}
 </script>
-</body>
-</html>
 </body>
 </html>
