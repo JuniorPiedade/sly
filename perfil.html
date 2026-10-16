@@ -921,6 +921,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // Lógica do Player de Trilha Sonora (Usando a propriedade correta 'soundtrack')
+  const soundtrackWidget = document.getElementById('soundtrackWidget');
+  const stAudio = document.getElementById('stAudio');
+  const stPlayBtn = document.getElementById('stPlayBtn');
+  const stStatus = document.getElementById('stStatus');
+
+  if (soundtrackWidget && stAudio && data.soundtrack) {
+    stAudio.src = data.soundtrack;
+    soundtrackWidget.style.display = 'flex';
+
+    let isPlaying = false;
+    stPlayBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        stAudio.pause();
+        stPlayBtn.textContent = '▶';
+        stStatus.textContent = 'Pausado';
+        isPlaying = false;
+      } else {
+        stAudio.play().then(() => {
+          stPlayBtn.textContent = '⏸';
+          stStatus.textContent = 'Reproduzindo';
+          isPlaying = true;
+        }).catch(err => {
+          console.warn("Erro ao reproduzir áudio:", err);
+          stStatus.textContent = 'Erro ao tocar';
+        });
+      }
+    });
+  }
+
   // Lógica do Botão Hype (Com trava de clique único por usuário e design compacto)
   const hypeBtn = document.getElementById('hypeBtn');
   const iconWrapper = document.getElementById('iconWrapper');
