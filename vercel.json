@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/sly-:handle",
-      "destination": "/perfil.html?u=:handle"
+      "destination": "/perfil"
     }
   ]
 }
