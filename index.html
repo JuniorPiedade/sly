@@ -567,13 +567,20 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-soundtrack">
-    <div class="panel-head"><div><h2>🎵 Trilha Sonora & Introdução</h2><p>Adicione uma música de fundo e personalize a tela de entrada (Splash Screen).</p></div><span class="muted">06 / 09</span></div>
+    <div class="panel-head">
+        <div>
+            <h2>🎵 Trilha Sonora & Introdução</h2>
+            <p>Adicione uma música de fundo via YouTube e personalize a tela de entrada (Splash Screen).</p>
+        </div>
+        <span class="muted">06 / 09</span>
+    </div>
+    
     <label class="field">
-     <span>Arquivo de Trilha Sonora (.mp3, .wav)</span>
-     <input id="soundtrackFile" type="file" accept="audio/mp3,audio/wav,audio/mpeg">
-     <small>Máximo de 8 minutos / 15MB.</small>
+       <span>🔗 Link do YouTube (Trilha Sonora)</span>
+       <input id="soundtrackUrl" type="text" placeholder="https://www.youtube.com/watch?v=...">
+       <small>Recomendado: Músicas de até 8 minutos.</small>
     </label>
-    <input type="hidden" id="soundtrackUrl" value="">
+</section>
     
     <label class="field" style="margin-top: 18px;">
      <span>✨ Frase da Tela de Entrada (Splash Screen)</span>
