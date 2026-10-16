@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
 <title id="pageTitle">isly.me — Perfil</title>
+<!-- Tailwind CSS CDN para o player minimalista -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Font Awesome Icons CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&family=JetBrains+Mono:wght@200;300&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   if (typeof supabase === 'undefined') {
@@ -312,7 +318,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   color: var(--text);
 }
 
-/* --- CONTADORES E HYPE (ALINHAMENTO E TAMANHO UNIFICADOS) --- */
+/* --- CONTADORES E HYPE --- */
 .stats-container {
   display: flex;
   align-items: center;
@@ -470,16 +476,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   z-index: 50;
   box-shadow: 4px 8px 18px rgba(0,0,0,0.5);
 }
-.scrap-author {
-  font-size: 9px;
-  font-weight: bold;
-  color: #6b5b45;
-  margin-top: 4px;
-  display: block;
-  text-align: right;
-  border-top: 1px dotted #c9b999;
-  padding-top: 3px;
-}
 
 /* --- BOTÃO DISCRETO NO CANTO INFERIOR ESQUERDO --- */
 .guestbook-trigger-btn {
@@ -572,58 +568,23 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   .scrap-paper-stack { margin-top: 8px !important; }
 }
 
-/* PLAYER DE TRILHA SONORA */
-#soundtrackWidget {
-  display: none;
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 9999;
-  background: rgba(13, 11, 20, 0.45);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+/* PLAYER ULTRA MINIMALISTA (FIXO NO TOPO) */
+.glow-border {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.03), inset 0 0 15px rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 99px;
-  padding: 6px 14px 6px 6px;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  transition: all 0.25s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
-#soundtrackWidget:hover {
-  background: rgba(13, 11, 20, 0.65);
-  border-color: rgba(255, 255, 255, 0.15);
+.glow-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-#stPlayBtn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #f6f4ff;
-  cursor: pointer;
-  font-size: 10px;
-  padding: 0;
-  line-height: 1;
-  flex-shrink: 0;
-  transition: background 0.2s, transform 0.2s, border-color 0.2s;
-}
-#stPlayBtn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.25);
+.glow-btn:hover {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
   transform: scale(1.05);
 }
-.st-info { display: flex; flex-direction: column; text-align: left; }
-.st-title {
-  font-size: 11px;
-  color: #f6f4ff;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+.glow-btn:active {
+  transform: scale(0.95);
 }
-.st-status { font-size: 9px; color: var(--muted); letter-spacing: 0.3px; }
 
 .animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 @keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
@@ -638,6 +599,43 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 </style>
 </head>
 <body>
+
+<!-- PLAYER ULTRA MINIMALISTA (FIXO NO TOPO) -->
+<header class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-sm">
+    <div class="glow-border bg-[#09090b]/80 rounded-full px-4 py-2 flex items-center justify-between transition-all duration-500">
+        
+        <!-- Botão Play/Pause -->
+        <button id="playPauseBtn" class="glow-btn relative w-8 h-8 rounded-full bg-white text-black flex items-center justify-center focus:outline-none cursor-pointer">
+            <i id="playIcon" class="fa-solid fa-play text-[10px] translate-x-[1px]"></i>
+            <i id="pauseIcon" class="fa-solid fa-pause text-[10px] hidden"></i>
+        </button>
+
+        <!-- Status / Nome da Trilha / Canvas -->
+        <div class="flex flex-col items-center justify-center flex-1 mx-3 overflow-hidden">
+            <div class="flex items-center gap-1.5 mb-0.5 w-full justify-center">
+                <span id="trackStatus" class="inline-block w-1.5 h-1.5 rounded-full bg-neutral-600 transition-colors duration-300"></span>
+                <span id="trackTitle" class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 truncate max-w-[150px]">
+                    AUDIO TRACK
+                </span>
+            </div>
+            <!-- Canvas do Visualizador -->
+            <div class="w-full flex items-center justify-center h-2.5">
+                <canvas id="visualizer" class="w-full h-full opacity-70"></canvas>
+            </div>
+        </div>
+
+        <!-- Tempo / Mute -->
+        <div class="flex items-center gap-2.5 text-neutral-400">
+            <span id="timeDisplay" class="text-[9px] font-mono tracking-tighter text-neutral-500">00:00</span>
+            <button id="muteBtn" class="hover:text-white transition-colors duration-200 focus:outline-none cursor-pointer">
+                <i id="volumeIcon" class="fa-solid fa-volume-high text-[11px]"></i>
+            </button>
+        </div>
+
+        <!-- Player oculto do YouTube (Invisível) -->
+        <div id="youtubePlayerContainer" style="display:none; position:absolute; pointer-events:none; opacity:0;"></div>
+    </div>
+</header>
 
 <!-- TELA DE ENTRADA (SPLASH SCREEN) -->
 <div class="splash-overlay" id="splashScreen">
@@ -678,7 +676,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
         <div class="friendships-footer-container" id="friendshipsFooter"></div>
       </div>
 
-      <!-- Container de Estatísticas (Views + Hype lado a lado com tamanho unificado) -->
+      <!-- Container de Estatísticas (Views + Hype) -->
       <div class="stats-container animate-item delay-5" id="statsContainer">
         <div class="views-badge">
           <span>👁️</span>
@@ -721,16 +719,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
     </div>
     <div id="modalNotice" style="font-size: 11px; color: var(--muted); font-style: italic; display: none;">Faça login no isly.me para deixar um recado neste perfil.</div>
   </div>
-</div>
-
-<!-- PLAYER DE TRILHA SONORA -->
-<div id="soundtrackWidget">
-  <button id="stPlayBtn" aria-label="Tocar Trilha Sonora">▶</button>
-  <div class="st-info">
-    <span class="st-title">🎵 Trilha Sonora</span>
-    <span class="st-status" id="stStatus">Pausado</span>
-  </div>
-  <audio id="stAudio" preload="none" loop></audio>
 </div>
 
 <script src="js/supabase.js"></script>
@@ -810,11 +798,23 @@ function getInstagramEmbed(url) {
   return '';
 }
 
+// Função auxiliar para extrair o ID do YouTube da Trilha Sonora
+function getYoutubeAudioId(url) {
+  if (!url) return null;
+  let id = '';
+  if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
+  else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
+  else if (url.includes('embed/')) id = url.split('embed/')[1]?.split('?')[0];
+  return id || url;
+}
+
+let ytPlayer = null;
+let isYtPlaying = false;
+
 document.addEventListener("DOMContentLoaded", async () => {
  const urlParams = new URLSearchParams(window.location.search);
   let rawHandle = urlParams.get('u') || urlParams.get('user');
 
-  // Se não veio por parâmetro tradicional, tenta extrair da rota limpa (/sly-handle)
   if (!rawHandle) {
     const pathSegments = window.location.pathname.split('-');
     if (pathSegments.length > 1 && window.location.pathname.startsWith('/sly-')) {
@@ -853,13 +853,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.warn("Analytics Error:", e);
   }
 
-  // Preenche contador de Hypes
   const hypeCountEl = document.getElementById('hypeCount');
   if (hypeCountEl) {
     hypeCountEl.textContent = data.hypes || 0;
   }
 
-  // Configuração do Alinhamento do Card (center ou left)
   const statsContainer = document.getElementById('statsContainer');
   const alignment = data.card_alignment || 'center';
   if (statsContainer) {
@@ -1009,69 +1007,161 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- LÓGICA DA SPLASH SCREEN & AUTOPLAY DA TRILHA SONORA ---
+  // --- LÓGICA DA SPLASH SCREEN & PLAYER YOUTUBE ---
   const splashScreen = document.getElementById('splashScreen');
   const splashTextDisplay = document.getElementById('splashTextDisplay');
-  const soundtrackWidget = document.getElementById('soundtrackWidget');
-  const stAudio = document.getElementById('stAudio');
-  const stPlayBtn = document.getElementById('stPlayBtn');
-  const stStatus = document.getElementById('stStatus');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const trackStatus = document.getElementById('trackStatus');
+  const timeDisplay = document.getElementById('timeDisplay');
+  const muteBtn = document.getElementById('muteBtn');
+  const volumeIcon = document.getElementById('volumeIcon');
 
-  // Define o texto personalizado do usuário (ou 'clica aê' por padrão)
   if (splashTextDisplay) {
     splashTextDisplay.textContent = data.splash_text || 'clica aê';
   }
 
-  // Configura a música se houver trilha sonora cadastrada
-  if (stAudio && data.soundtrack) {
-    stAudio.src = data.soundtrack;
+  // Inicialização do YouTube Iframe API para o player oculto
+  if (data.soundtrack) {
+    const ytId = getYoutubeAudioId(data.soundtrack);
+    if (ytId) {
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+
+      window.onYouTubeIframeAPIReady = function() {
+        ytPlayer = new YT.Player('youtubePlayerContainer', {
+          height: '0',
+          width: '0',
+          videoId: ytId,
+          playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': ytId },
+          events: {
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      };
+    }
   }
 
+  function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+      updatePlayerUI(true);
+      isYtPlaying = true;
+    } else {
+      updatePlayerUI(false);
+      isYtPlaying = false;
+    }
+  }
+
+  function updatePlayerUI(isPlaying) {
+    if (isPlaying) {
+      playIcon.classList.add('hidden');
+      pauseIcon.classList.remove('hidden');
+      trackStatus.classList.remove('bg-neutral-600');
+      trackStatus.classList.add('bg-white', 'shadow-[0_0_8px_#fff]');
+    } else {
+      playIcon.classList.remove('hidden');
+      pauseIcon.classList.add('hidden');
+      trackStatus.classList.remove('bg-white', 'shadow-[0_0_8px_#fff]');
+      trackStatus.classList.add('bg-neutral-600');
+    }
+  }
+
+  function togglePlayAudio() {
+    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+      const state = ytPlayer.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        ytPlayer.pauseVideo();
+      } else {
+        ytPlayer.playVideo();
+      }
+    }
+  }
+
+  if (playPauseBtn) {
+    playPauseBtn.addEventListener('click', togglePlayAudio);
+  }
+
+  // Mute / Unmute
+  if (muteBtn && ytPlayer) {
+    let isMuted = false;
+    muteBtn.addEventListener('click', () => {
+      if (isMuted) {
+        ytPlayer.unMute();
+        volumeIcon.className = 'fa-solid fa-volume-high text-[11px] text-neutral-400';
+        isMuted = false;
+      } else {
+        ytPlayer.mute();
+        volumeIcon.className = 'fa-solid fa-volume-xmark text-[11px] text-neutral-600';
+        isMuted = true;
+      }
+    });
+  }
+
+  // Relógio do tempo percorrido
+  setInterval(() => {
+    if (ytPlayer && isYtPlaying && typeof ytPlayer.getCurrentTime === 'function') {
+      const currentTime = ytPlayer.getCurrentTime();
+      const minutes = Math.floor(currentTime / 60);
+      const seconds = Math.floor(currentTime % 60);
+      if (timeDisplay) {
+        timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+    }
+  }, 1000);
+
+  // Clique na Splash Screen ativa o som e some
   if (splashScreen) {
     splashScreen.addEventListener('click', () => {
-      // Remove a tela de entrada com animação
       splashScreen.classList.add('hidden');
-      
-      // Exibe o widget flutuante de áudio se houver trilha
-      if (soundtrackWidget && data.soundtrack) {
-        soundtrackWidget.style.display = 'flex';
-      }
-
-      // Toca a música automaticamente sem bloqueio do navegador
-      if (stAudio && data.soundtrack) {
-        stAudio.play().then(() => {
-          if (stPlayBtn) stPlayBtn.textContent = '⏸';
-          if (stStatus) stStatus.textContent = 'Reproduzindo';
-        }).catch(err => {
-          console.warn("Autoplay impedido ou sem áudio:", err);
-        });
+      if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+        ytPlayer.playVideo();
       }
     });
   }
 
-  // Controle manual do player flutuante
-  if (stPlayBtn && stAudio) {
-    let isPlaying = false;
-    stPlayBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        stAudio.pause();
-        stPlayBtn.textContent = '▶';
-        stStatus.textContent = 'Pausado';
-        isPlaying = false;
-      } else {
-        stAudio.play().then(() => {
-          stPlayBtn.textContent = '⏸';
-          stStatus.textContent = 'Reproduzindo';
-          isPlaying = true;
-        }).catch(err => {
-          console.warn("Erro ao reproduzir áudio:", err);
-          stStatus.textContent = 'Erro ao tocar';
-        });
-      }
-    });
-  }
+  // Canvas Visualizador Minimalista
+  const canvas = document.getElementById('visualizer');
+  const ctx = canvas ? canvas.getContext('2d') : null;
 
-  // Lógica do Botão Hype (Com trava de clique único por usuário e design compacto)
+  function resizeCanvas() {
+    if (canvas) {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function drawVisualizer() {
+    requestAnimationFrame(drawVisualizer);
+    if (!canvas || !ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const bars = 20;
+    const barWidth = 2;
+    const gap = (canvas.width - (bars * barWidth)) / (bars - 1);
+
+    for (let i = 0; i < bars; i++) {
+      let barHeight = 2;
+
+      if (isYtPlaying) {
+        const randomFactor = Math.sin(Date.now() / 150 + i) * 0.5 + 0.5;
+        barHeight = Math.max(4, randomFactor * canvas.height * 0.8);
+      }
+
+      const x = i * (barWidth + gap);
+      const y = (canvas.height - barHeight) / 2;
+
+      ctx.fillStyle = isYtPlaying ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.15)';
+      ctx.fillRect(x, y, barWidth, barHeight);
+    }
+  }
+  drawVisualizer();
+
+  // Lógica do Botão Hype
   const hypeBtn = document.getElementById('hypeBtn');
   const iconWrapper = document.getElementById('iconWrapper');
 
@@ -1134,34 +1224,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       targetContainer.appendChild(particle);
       setTimeout(() => particle.remove(), 500);
-    }
-  }
-
-  // RENDERIZAR FRIENDSHIPS PÚBLICAS
-  if (data.friendships && data.friendships.length > 0) {
-    const friendWrapper = document.getElementById('friendshipsFooterWrapper');
-    const friendContainer = document.getElementById('friendshipsFooter');
-    if (friendWrapper && friendContainer) {
-      window.islySupabase.client
-        .from('profiles')
-        .select('handle, name, avatar_url')
-        .in('handle', data.friendships)
-        .then(({ data: friendsData, error }) => {
-          if (!error && friendsData && friendsData.length > 0) {
-            friendWrapper.style.display = 'flex';
-            friendContainer.innerHTML = friendsData.map(friend => {
-              const avatarContent = friend.avatar_url 
-                ? `<img src="${friend.avatar_url}" alt="${friend.name || friend.handle}">`
-                : `<div class="friendship-bubble-fallback">${(friend.name || friend.handle).substring(0, 2).toUpperCase()}</div>`;
-              
-              return `
-                <a href="perfil.html?u=${friend.handle}" class="friendship-bubble" title="@${friend.handle}">
-                  ${avatarContent}
-                </a>
-              `;
-            }).join('');
-          }
-        });
     }
   }
 });
