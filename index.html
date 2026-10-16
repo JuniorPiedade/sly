@@ -1543,9 +1543,30 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+<script>
+// 1. Bloqueia o clique direito
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  mostrarAvisoInspecao("⚠️ Clique direito desativado por segurança.");
+});
+
+// 2. Bloqueia atalhos de inspeção e código fonte com interceptação total
+document.addEventListener('keydown', (e) => {
+  const isF12 = e.key === 'F12' || e.keyCode === 123;
+  const isCtrlShiftI = e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67);
+  const isCtrlU = e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.keyCode === 85);
+
+  if (isF12 || isCtrlShiftI || isCtrlU) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    mostrarAvisoInspecao("⚠️ Tentativa de inspeção bloqueada. Respeite o código do irmão!");
+    return false;
+  }
+}, true); // O 'true' aqui no final força a captura na fase de subida (capturing phase), pegando antes do navegador
+
 // 3. Função para exibir o aviso estilizado na tela do usuário
 function mostrarAvisoInspecao(texto) {
-  // Evita criar múltiplos avisos se a pessoa ficar spammando as teclas
   let alerta = document.getElementById('avisoInspecaoModal');
   if (alerta) alerta.remove();
 
@@ -1561,7 +1582,6 @@ function mostrarAvisoInspecao(texto) {
     </div>
   `;
   
-  // Estilo visual moderno com cara de painel hacker/geek
   alerta.style.cssText = `
     position: fixed;
     top: 24px;
@@ -1581,13 +1601,11 @@ function mostrarAvisoInspecao(texto) {
 
   document.body.appendChild(alerta);
 
-  // Animação suave de entrada
   requestAnimationFrame(() => {
     alerta.style.transform = 'translateX(-50%) translateY(0)';
     alerta.style.opacity = '1';
   });
 
-  // Some sozinho depois de 3 segundos
   setTimeout(() => {
     alerta.style.transform = 'translateX(-50%) translateY(-20px)';
     alerta.style.opacity = '0';
