@@ -1637,6 +1637,22 @@ function mostrarAvisoInspecao(texto) {
     setTimeout(() => alerta.remove(), 300);
   }, 2500);
 }
+  // 4. Detecção de abertura do Inspecionar por redimensionamento da janela
+let ultimaLargura = window.innerWidth;
+let ultimaAltura = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  // Se a janela encolher mais de 160px de largura ou altura sem que o usuário tenha redimensionado o navegador de fato
+  const larguraMudou = Math.abs(window.innerWidth - ultimaLargura) > 160;
+  const alturaMudou = Math.abs(window.innerHeight - ultimaAltura) > 160;
+
+  if (larguraMudou || alturaMudou) {
+    mostrarAvisoInspecao("Ambiente de inspeção detectado.");
+  }
+  
+  ultimaLargura = window.innerWidth;
+  ultimaAltura = window.innerHeight;
+});
 </script>
 </body>
 </html>
