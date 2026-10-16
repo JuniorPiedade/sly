@@ -488,7 +488,14 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     </label>
     <label class="field"><span>Bio curta (máx. 240 caracteres)</span><textarea id="bio" maxlength="240" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/240</small></label>
     <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
-    <label class="field"><span>Wallpaper do cartão (Upload)</span><input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
+    <label class="field">
+     <span>Wallpaper do cartão (Upload)</span>
+     <div style="display: flex; gap: 8px; align-items: center;">
+      <input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp" style="flex:1;">
+      <button type="button" id="removeWallpaperBtn" class="btn" style="padding: 10px 14px; color: #f87171; border-color: #7f1d1d; background: rgba(239, 68, 68, 0.1);" title="Remover Wallpaper">✕ Remover</button>
+     </div>
+     <small>Máx. 2MB</small>
+    </label>
    </section>
 
    <section class="panel" id="panel-status">
@@ -1010,6 +1017,17 @@ async function initEditor(userId) {
    console.error("Erro no upload do wallpaper:", err);
    toast('Erro ao enviar wallpaper: ' + (err.message || 'Erro desconhecido'));
   }
+ });
+
+ // Botão para Remover Wallpaper
+ document.getElementById('removeWallpaperBtn')?.addEventListener('click', () => {
+  wallpaperUrlInput.value = '';
+  currentProfile.wallpaper_url = '';
+  const fileInput = document.getElementById('wallpaperFile');
+  if (fileInput) fileInput.value = '';
+  updatePreview();
+  triggerAutoSave();
+  toast('Wallpaper removido! ✓');
  });
 
  document.getElementById('customCursorFile')?.addEventListener('change', async (e) => {
