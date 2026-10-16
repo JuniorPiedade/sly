@@ -1543,89 +1543,160 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+
 <script>
-// 1. Bloqueio agressivo do clique direito em toda a página
-document.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  e.stopPropagation();
-  mostrarAvisoInspecao("Protegido por direitos autorais.");
-  return false;
-}, true); // O 'true' garante prioridade máxima antes de qualquer outro script
+(() => {
+  const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
+  const assinatura = "P.S: Diel — SLY.ME";
 
-// 2. Bloqueia atalhos de inspeção e código fonte (F12, Ctrl+Shift+I, Ctrl+U)
-document.addEventListener('keydown', (e) => {
-  const isF12 = e.key === 'F12' || e.keyCode === 123;
-  const isCtrlShiftI = e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67);
-  const isCtrlU = e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.keyCode === 85);
+  function abrirTelaHacker() {
+    // Evita abrir várias abas repetidamente.
+    if (window.__slyHackerAberto) return;
+    window.__slyHackerAberto = true;
 
-  if (isF12 || isCtrlShiftI || isCtrlU) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    mostrarAvisoInspecao("Conteúdo protegido. Curta a experiência.");
-    return false;
+    const tela = window.open("about:blank", "_blank");
+
+    // O navegador pode bloquear a nova aba.
+    if (!tela) {
+      window.__slyHackerAberto = false;
+      return;
+    }
+
+    const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SLY.ME // TERMINAL</title>
+<style>
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background: #000;
+    color: #39ff78;
   }
-}, true);
 
-// 3. Função para exibir o aviso estilo iOS (Banner flutuante minimalista)
-function mostrarAvisoInspecao(texto) {
-  let alerta = document.getElementById('avisoInspecaoModal');
-  if (alerta) alerta.remove();
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    font-family: Consolas, "Courier New", monospace;
+  }
 
-  alerta = document.createElement('div');
-  alerta.id = 'avisoInspecaoModal';
-  alerta.innerHTML = `
-    <div style="display:flex; align-items:center; gap:10px;">
-      <span style="font-size:14px; opacity:0.8;">✦</span>
-      <span style="font-weight:500; letter-spacing:-0.2px;">${texto}</span>
-    </div>
-  `;
-  
-  alerta.style.cssText = `
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-15px) scale(0.96);
-    background: rgba(18, 18, 22, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #e2e8f0;
-    padding: 10px 18px;
-    border-radius: 99px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-    z-index: 999999;
-    font-family: inherit;
-    font-size: 13px;
+  .terminal {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  .header {
+    color: #238c48;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+  }
+
+  .message {
+    font-size: clamp(19px, 4vw, 30px);
+    line-height: 1.6;
+    text-shadow: 0 0 12px #00ff5944;
+    overflow-wrap: anywhere;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 9px;
+    height: 1em;
+    background: #39ff78;
+    vertical-align: -2px;
+    animation: piscar .7s steps(2) infinite;
+  }
+
+  .signature {
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-  `;
-
-  document.body.appendChild(alerta);
-
-  requestAnimationFrame(() => {
-    alerta.style.transform = 'translateX(-50%) translateY(0) scale(1)';
-    alerta.style.opacity = '1';
-  });
-
-  setTimeout(() => {
-    alerta.style.transform = 'translateX(-50%) translateY(-10px) scale(0.96)';
-    alerta.style.opacity = '0';
-    setTimeout(() => alerta.remove(), 300);
-  }, 2500);
-}
-
-// 4. Armadilha de Debugger em segundo plano
-setInterval(() => {
-  const antes = performance.now();
-  debugger; 
-  const depois = performance.now();
-  
-  if (depois - antes > 100) {
-    mostrarAvisoInspecao("Ambiente restrito.");
+    margin-top: 36px;
+    font-size: 14px;
+    color: #168b42;
+    transition: opacity .8s ease;
   }
-}, 1000);
+
+  .signature.visivel { opacity: 1; }
+
+  @keyframes piscar {
+    50% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor { animation: none; }
+    .signature { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="terminal">
+    <div class="header">SLY.ME // ACESSO OBSERVADO</div>
+    <div class="message">
+      <span id="texto"></span><span class="cursor"></span>
+    </div>
+    <div id="assinatura" class="signature"></div>
+  </main>
+
+  <script>
+    const mensagem = ${JSON.stringify(mensagem)};
+    const assinatura = ${JSON.stringify(assinatura)};
+    const texto = document.getElementById("texto");
+    const assinaturaEl = document.getElementById("assinatura");
+    let i = 0;
+
+    function digitar() {
+      if (i < mensagem.length) {
+        texto.textContent += mensagem.charAt(i++);
+        setTimeout(digitar, 48);
+      } else {
+        assinaturaEl.textContent = assinatura;
+        assinaturaEl.classList.add("visivel");
+      }
+    }
+
+    digitar();
+  <\/script>
+</body>
+</html>`;
+
+    try {
+      tela.document.open();
+      tela.document.write(html);
+      tela.document.close();
+    } catch (erro) {
+      window.__slyHackerAberto = false;
+    }
+  }
+
+  document.addEventListener("keydown", (e) => {
+    const tecla = e.key.toLowerCase();
+
+    const atalhoInspecao =
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey &&
+        ["i", "j", "c"].includes(tecla)) ||
+      (e.ctrlKey && tecla === "u");
+
+    if (atalhoInspecao) {
+      e.preventDefault();
+      e.stopPropagation();
+      abrirTelaHacker();
+    }
+  }, true);
+
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    abrirTelaHacker();
+  });
+})();
 </script>
+
 </body>
 </html>
