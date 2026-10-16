@@ -580,7 +580,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
        <input id="soundtrackUrl" type="text" placeholder="https://www.youtube.com/watch?v=...">
        <small>Recomendado: Músicas de até 8 minutos.</small>
     </label>
-</section>
     
     <label class="field" style="margin-top: 18px;">
      <span>✨ Frase da Tela de Entrada (Splash Screen)</span>
@@ -809,7 +808,7 @@ async function initEditor(userId) {
    id: userId, name: 'Novo Usuário', handle: 'user_' + userId.slice(0, 6),
    bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', accent_color: '#c084fc',
    title_color: '#ffffff', text_color: '#f6f4ff',
-   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack_url: '', splash_text: 'clica aê', avatar_frame: 'none', bio: '', activity: '',
+   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack: '', splash_text: 'clica aê', avatar_frame: 'none', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
    guestbook_style: 'vintage', friendships: []
@@ -887,7 +886,7 @@ async function initEditor(userId) {
  customCursorInput.value = currentProfile.custom_cursor || '';
  avatarUrlInput.value = currentProfile.avatar_url || '';
  wallpaperUrlInput.value = currentProfile.wallpaper_url || '';
- soundtrackUrlInput.value = currentProfile.soundtrack_url || '';
+ soundtrackUrlInput.value = currentProfile.soundtrack || currentProfile.soundtrack_url || '';
  splashTextInput.value = currentProfile.splash_text || '';
 
  embedSpotifyInput.value = currentProfile.embed_spotify || '';
@@ -899,7 +898,7 @@ async function initEditor(userId) {
   if (field && currentProfile.socials[key]) field.value = currentProfile.socials[key];
  });
 
-if (currentProfile.handle) {
+ if (currentProfile.handle) {
   shareUrlInput.value = `${window.location.origin}/sly-${currentProfile.handle}`;
  }
 
@@ -978,35 +977,6 @@ if (currentProfile.handle) {
   }
  });
 
- document.getElementById('soundtrackFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 15 * 1024 * 1024) { toast('A trilha sonora deve ter no máximo 15MB.'); return; }
-  toast('Enviando trilha sonora...');
-
-  try {
-   const fileExt = file.name.split('.').pop();
-   const fileName = `${userId}-${Date.now()}.${fileExt}`;
-   const filePath = `soundtracks/${fileName}`;
-
-   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-   if (uploadErr) throw new Error(uploadErr);
-
-   const publicUrl = window.islySupabase.getPublicUrl(filePath);
-   if (publicUrl) {
-    soundtrackUrlInput.value = publicUrl;
-    currentProfile.soundtrack_url = publicUrl;
-    triggerAutoSave();
-    toast('Trilha sonora adicionada! 🎵');
-   } else {
-    throw new Error('Não foi possível obter a URL pública.');
-   }
-  } catch (err) {
-   console.error("Erro no upload da trilha sonora:", err);
-   toast('Erro ao enviar áudio: ' + (err.message || 'Erro desconhecido'));
-  }
- });
-
  document.getElementById('customCursorFile')?.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -1042,6 +1012,8 @@ if (currentProfile.handle) {
     if (val) socialsData[key] = val;
    });
 
+   const soundtrackVal = soundtrackUrlInput.value.trim();
+
    const payload = {
     id: userId, name: nameInput.value, handle: handleInput.value,
     bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
@@ -1051,7 +1023,8 @@ if (currentProfile.handle) {
     accent_color: textColorInput.value,
     title_color: titleColorInput.value, text_color: textColorInput.value,
     name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
-    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
+    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
+    soundtrack: soundtrackVal, soundtrack_url: soundtrackVal,
     splash_text: splashTextInput.value,
     embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
     emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
@@ -1108,7 +1081,9 @@ if (currentProfile.handle) {
  });
 
  [cardStyleSelect, guestbookStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
-  input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
+  if (input) {
+    input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
+  }
  });
 
  avatarFrameSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
@@ -1321,7 +1296,7 @@ if (currentProfile.handle) {
   toast('💡 Aviso: O @ só pode ser alterado uma única vez!');
 
   if (handleInput.value) {
-   shareUrlInput.value = `${window.location.origin}/perfil.html?u=${handleInput.value.trim().replace(/^@/, '')}`;
+   shareUrlInput.value = `${window.location.origin}/sly-${handleInput.value.trim().replace(/^@/, '')}`;
   }
   updatePreview(); 
   triggerAutoSave();
@@ -1340,6 +1315,8 @@ if (currentProfile.handle) {
    if (val) socialsData[key] = val;
   });
 
+  const soundtrackVal = soundtrackUrlInput.value.trim();
+
   const payload = {
    id: userId, name: nameInput.value, handle: handleInput.value,
    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
@@ -1349,7 +1326,8 @@ if (currentProfile.handle) {
    accent_color: textColorInput.value,
    title_color: titleColorInput.value, text_color: textColorInput.value,
    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
-   avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
+   avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
+   soundtrack: soundtrackVal, soundtrack_url: soundtrackVal,
    splash_text: splashTextInput.value,
    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
    emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
