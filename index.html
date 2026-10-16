@@ -80,6 +80,20 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview{position:sticky;top:20px}
 .preview-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:14px}
 
+/* Canvas de Efeito na Prévia / Perfil */
+#effectCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+.preview-card, .topbar, .layout, footer {
+  position: relative;
+  z-index: 1;
+}
+
 .profile-card {
   position:relative;
   isolation:isolate;
@@ -409,6 +423,8 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 </head>
 <body>
 
+<canvas id="effectCanvas"></canvas>
+
 <div id="appRoot">
 <header class="wrap topbar">
  <a class="brand" href="landing.html"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
@@ -598,6 +614,15 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    <section class="panel" id="panel-appearance">
     <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos e Cursor.</p></div><span class="muted">07 / 09</span></div>
     <label class="field">
+     <span>✨ Efeito Visual de Fundo (Canvas)</span>
+     <select id="visualEffectSelect">
+      <option value="none">Nenhum (Desativado)</option>
+      <option value="stellar_dust">01 — Stellar Dust (Microestrelas)</option>
+      <option value="neon_snowfall">02 — Neon Snowfall (Neve Suave)</option>
+      <option value="matrix_glitch">03 — Matrix Glitch (Falhas Digitais)</option>
+     </select>
+    </label>
+    <label class="field">
      <span>🪞 Estilo Visual do Card</span>
      <select id="cardStyle">
       <option value="opaque">Opaco Sólido</option>
@@ -707,6 +732,90 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 
 <script>
 let editorInitialized = false;
+let currentAnimFrame = null;
+let canvasParticles = [];
+
+function initVisualEffect(effectType) {
+  const canvas = document.getElementById('effectCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  if (currentAnimFrame) {
+    cancelAnimationFrame(currentAnimFrame);
+    currentAnimFrame = null;
+  }
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  canvasParticles = [];
+  const count = effectType === 'stellar_dust' ? 70 : effectType === 'neon_snowfall' ? 50 : 0;
+  for (let i = 0; i < count; i++) {
+    canvasParticles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 2 + 0.8,
+      speed: Math.random() * 0.6 + 0.3,
+      alpha: Math.random() * 0.7 + 0.3,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  function loop(timestamp) {
+    const w = canvas.width;
+    const h = canvas.height;
+
+    if (effectType === 'stellar_dust') {
+      ctx.clearRect(0, 0, w, h);
+      for (const p of canvasParticles) {
+        const flicker = 0.35 + Math.abs(Math.sin(timestamp * 0.001 + p.phase)) * 0.65;
+        ctx.fillStyle = `rgba(255,255,255,${flicker * 0.65})`;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+      }
+    } else if (effectType === 'neon_snowfall') {
+      ctx.clearRect(0, 0, w, h);
+      for (const p of canvasParticles) {
+        p.y += p.speed;
+        p.x += Math.sin(p.y * 0.012) * 0.35;
+        if (p.y > h) {
+          p.y = -3;
+          p.x = Math.random() * w;
+        }
+        ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (effectType === 'matrix_glitch') {
+      ctx.clearRect(0, 0, w, h);
+      if (Math.random() < 0.045) {
+        const y = Math.random() * h;
+        const width = 10 + Math.random() * w * 0.35;
+        const x = Math.random() * (w - width);
+        ctx.fillStyle = `rgba(255,255,255,${0.15 + Math.random() * 0.4})`;
+        ctx.fillRect(x, y, width, 1 + Math.random() * 2);
+        if (Math.random() < 0.3) {
+          ctx.fillRect(0, y + 2, Math.random() * w * 0.2, 1);
+        }
+      }
+    } else {
+      ctx.clearRect(0, 0, w, h);
+      return;
+    }
+
+    currentAnimFrame = requestAnimationFrame(loop);
+  }
+
+  if (effectType && effectType !== 'none') {
+    currentAnimFrame = requestAnimationFrame(loop);
+  } else {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
 
 async function runAppInitializer() {
  if (editorInitialized) return;
@@ -715,7 +824,6 @@ async function runAppInitializer() {
  const appRoot = $('#appRoot');
  if (appRoot) appRoot.style.display = 'block';
 
- // Aguarda com retries se o SDK do Supabase ainda estiver inicializando
  let retries = 0;
  while ((!window.islySupabase || typeof window.islySupabase.getUser !== 'function') && retries < 20) {
   await new Promise(r => setTimeout(r, 100));
@@ -759,7 +867,6 @@ async function runAppInitializer() {
  });
 }
 
-// Escuta os eventos para carregar o perfil assim que o SDK estiver de fato pronto
 if (window.__islySdkReadyFired) {
  runAppInitializer();
 } else {
@@ -851,7 +958,7 @@ async function initEditor(userId) {
    name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack: '', player_style: 'default', splash_text: 'clica aê', avatar_frame: 'none', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: [], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
-   guestbook_style: 'vintage', friendships: []
+   guestbook_style: 'vintage', friendships: [], visual_effect: 'none'
   };
  }
 
@@ -875,6 +982,7 @@ async function initEditor(userId) {
  const cardStyleSelect = document.getElementById('cardStyle');
  const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
  const playerStyleSelect = document.getElementById('playerStyleSelect');
+ const visualEffectSelect = document.getElementById('visualEffectSelect');
  const bgColorInput = document.getElementById('bgColor');
  const cardBgInput = document.getElementById('cardBg');
  const titleColorInput = document.getElementById('titleColor');
@@ -920,6 +1028,9 @@ async function initEditor(userId) {
  cardStyleSelect.value = currentProfile.card_style || 'opaque';
  guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
  if (playerStyleSelect) playerStyleSelect.value = currentProfile.player_style || 'default';
+ if (visualEffectSelect) visualEffectSelect.value = currentProfile.visual_effect || 'none';
+ initVisualEffect(currentProfile.visual_effect || 'none');
+
  bgColorInput.value = currentProfile.bg_color || '#080812';
  cardBgInput.value = currentProfile.card_bg || '#11111f';
  titleColorInput.value = currentProfile.title_color || '#ffffff';
@@ -1019,7 +1130,6 @@ async function initEditor(userId) {
   }
  });
 
- // Botão para Remover Wallpaper
  document.getElementById('removeWallpaperBtn')?.addEventListener('click', () => {
   wallpaperUrlInput.value = '';
   currentProfile.wallpaper_url = '';
@@ -1053,6 +1163,13 @@ async function initEditor(userId) {
   }
  });
 
+ visualEffectSelect?.addEventListener('change', () => {
+  const val = visualEffectSelect.value;
+  currentProfile.visual_effect = val;
+  initVisualEffect(val);
+  triggerAutoSave();
+ });
+
  let saveTimer = null;
  function triggerAutoSave() {
   syncDot.classList.add('saving');
@@ -1067,6 +1184,7 @@ async function initEditor(userId) {
 
    const soundtrackVal = soundtrackUrlInput.value.trim();
    const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
+   const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
 
    const payload = {
     id: userId, name: nameInput.value, handle: handleInput.value,
@@ -1074,6 +1192,7 @@ async function initEditor(userId) {
     status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
     card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
     player_style: playerStyleVal,
+    visual_effect: visualEffectVal,
     bg_color: bgColorInput.value, card_bg: cardBgInput.value,
     accent_color: textColorInput.value,
     title_color: titleColorInput.value, text_color: textColorInput.value,
@@ -1135,7 +1254,7 @@ async function initEditor(userId) {
   document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
 
- [cardStyleSelect, guestbookStyleSelect, playerStyleSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+ [cardStyleSelect, guestbookStyleSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
   if (input) {
     input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
     input.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
@@ -1374,6 +1493,7 @@ async function initEditor(userId) {
 
   const soundtrackVal = soundtrackUrlInput.value.trim();
   const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
+  const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
 
   const payload = {
    id: userId, name: nameInput.value, handle: handleInput.value,
@@ -1381,6 +1501,7 @@ async function initEditor(userId) {
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
    card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
    player_style: playerStyleVal,
+   visual_effect: visualEffectVal,
    bg_color: bgColorInput.value, card_bg: cardBgInput.value,
    accent_color: textColorInput.value,
    title_color: titleColorInput.value, text_color: textColorInput.value,
