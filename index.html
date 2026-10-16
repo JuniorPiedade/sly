@@ -1522,5 +1522,23 @@ async function initEditor(userId) {
  });
 }
 </script>
+  <script>
+// Opcional: Bloquear clique direito e atalhos comuns de Inspecionar (F12, Ctrl+Shift+I, etc.)
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+document.addEventListener('keydown', (e) => {
+  if (
+    e.key === 'F12' || 
+    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+    (e.ctrlKey && e.key === 'U')
+  ) {
+    e.preventDefault();
+    console.warn("Perdeu alguma coisa? p.s: diel.");
+    return false;
+  }
+});
+</script>
+</body>
+</html>
 </body>
 </html>
