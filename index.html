@@ -1522,7 +1522,6 @@ async function initEditor(userId) {
  });
 }
 </script>
-<script>
 // 1. Bloqueia o clique direito e mostra o aviso na tela
 document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
@@ -1543,160 +1542,113 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-
 <script>
 (() => {
   const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
   const assinatura = "P.S: Diel — SLY.ME";
 
-  function abrirTelaHacker() {
-    // Evita abrir várias abas repetidamente.
-    if (window.__slyHackerAberto) return;
-    window.__slyHackerAberto = true;
+  // Evita registrar os eventos duas vezes.
+  if (window.__slyProtecaoInicializada) return;
+  window.__slyProtecaoInicializada = true;
 
-    const tela = window.open("about:blank", "_blank");
+  function mostrarTelaHacker() {
+    let tela = document.getElementById("sly-terminal-aviso");
 
-    // O navegador pode bloquear a nova aba.
-    if (!tela) {
-      window.__slyHackerAberto = false;
-      return;
-    }
+    // Se já estiver aberta, não cria outra.
+    if (tela) return;
 
-    const html = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SLY.ME // TERMINAL</title>
-<style>
-  * { box-sizing: border-box; }
+    tela = document.createElement("div");
+    tela.id = "sly-terminal-aviso";
 
-  html, body {
-    margin: 0;
-    min-height: 100%;
-    background: #000;
-    color: #39ff78;
-  }
+    Object.assign(tela.style, {
+      position: "fixed",
+      inset: "0",
+      zIndex: "2147483647",
+      background: "#000",
+      color: "#39ff78",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "28px",
+      fontFamily: 'Consolas, "Courier New", monospace'
+    });
 
-  body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 28px;
-    font-family: Consolas, "Courier New", monospace;
-  }
+    const terminal = document.createElement("div");
+    Object.assign(terminal.style, {
+      width: "100%",
+      maxWidth: "760px"
+    });
 
-  .terminal {
-    width: 100%;
-    max-width: 760px;
-  }
+    const cabecalho = document.createElement("div");
+    cabecalho.textContent = "SLY.ME // ACESSO OBSERVADO";
+    Object.assign(cabecalho.style, {
+      color: "#238c48",
+      fontSize: "12px",
+      letterSpacing: "2px",
+      marginBottom: "32px"
+    });
 
-  .header {
-    color: #238c48;
-    font-size: 12px;
-    letter-spacing: 2px;
-    margin-bottom: 32px;
-  }
+    const texto = document.createElement("div");
+    Object.assign(texto.style, {
+      fontSize: "clamp(19px, 4vw, 30px)",
+      lineHeight: "1.6",
+      overflowWrap: "anywhere",
+      textShadow: "0 0 12px #00ff5944"
+    });
 
-  .message {
-    font-size: clamp(19px, 4vw, 30px);
-    line-height: 1.6;
-    text-shadow: 0 0 12px #00ff5944;
-    overflow-wrap: anywhere;
-  }
+    const assinaturaEl = document.createElement("div");
+    assinaturaEl.textContent = assinatura;
+    Object.assign(assinaturaEl.style, {
+      marginTop: "36px",
+      fontSize: "14px",
+      color: "#168b42",
+      opacity: "0",
+      transition: "opacity .8s ease"
+    });
 
-  .cursor {
-    display: inline-block;
-    width: 9px;
-    height: 1em;
-    background: #39ff78;
-    vertical-align: -2px;
-    animation: piscar .7s steps(2) infinite;
-  }
+    terminal.append(cabecalho, texto, assinaturaEl);
+    tela.appendChild(terminal);
+    document.body.appendChild(tela);
 
-  .signature {
-    opacity: 0;
-    margin-top: 36px;
-    font-size: 14px;
-    color: #168b42;
-    transition: opacity .8s ease;
-  }
-
-  .signature.visivel { opacity: 1; }
-
-  @keyframes piscar {
-    50% { opacity: 0; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cursor { animation: none; }
-    .signature { transition: none; }
-  }
-</style>
-</head>
-<body>
-  <main class="terminal">
-    <div class="header">SLY.ME // ACESSO OBSERVADO</div>
-    <div class="message">
-      <span id="texto"></span><span class="cursor"></span>
-    </div>
-    <div id="assinatura" class="signature"></div>
-  </main>
-
-  <script>
-    const mensagem = ${JSON.stringify(mensagem)};
-    const assinatura = ${JSON.stringify(assinatura)};
-    const texto = document.getElementById("texto");
-    const assinaturaEl = document.getElementById("assinatura");
     let i = 0;
 
     function digitar() {
+      if (!tela.isConnected) return;
+
       if (i < mensagem.length) {
         texto.textContent += mensagem.charAt(i++);
         setTimeout(digitar, 48);
       } else {
-        assinaturaEl.textContent = assinatura;
-        assinaturaEl.classList.add("visivel");
+        assinaturaEl.style.opacity = "1";
       }
     }
 
     digitar();
-  <\/script>
-</body>
-</html>`;
-
-    try {
-      tela.document.open();
-      tela.document.write(html);
-      tela.document.close();
-    } catch (erro) {
-      window.__slyHackerAberto = false;
-    }
   }
 
+  // Intercepta o clique direito.
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    mostrarTelaHacker();
+  }, true);
+
+  // Intercepta alguns atalhos comuns.
   document.addEventListener("keydown", (e) => {
     const tecla = e.key.toLowerCase();
 
-    const atalhoInspecao =
+    const atalho =
       e.key === "F12" ||
       (e.ctrlKey && e.shiftKey &&
         ["i", "j", "c"].includes(tecla)) ||
       (e.ctrlKey && tecla === "u");
 
-    if (atalhoInspecao) {
+    if (atalho) {
       e.preventDefault();
-      e.stopPropagation();
-      abrirTelaHacker();
+      e.stopImmediatePropagation();
+      mostrarTelaHacker();
     }
   }, true);
-
-  document.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    abrirTelaHacker();
-  });
 })();
 </script>
-
 </body>
 </html>
