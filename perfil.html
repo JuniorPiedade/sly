@@ -811,8 +811,16 @@ function getInstagramEmbed(url) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const rawHandle = urlParams.get('u') || urlParams.get('user');
+ const urlParams = new URLSearchParams(window.location.search);
+  let rawHandle = urlParams.get('u') || urlParams.get('user');
+
+  // Se não veio por parâmetro tradicional, tenta extrair da rota limpa (/sly-handle)
+  if (!rawHandle) {
+    const pathSegments = window.location.pathname.split('-');
+    if (pathSegments.length > 1 && window.location.pathname.startsWith('/sly-')) {
+      rawHandle = pathSegments[pathSegments.length - 1];
+    }
+  }
 
   if (!rawHandle || !window.islySupabase) {
     document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
