@@ -245,20 +245,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   color: var(--text);
 }
 
-/* --- CONTADORES (VIEWS + HYPE) --- */
-.stats-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 16px;
-  width: 100%;
-}
-.stats-container.align-center { justify-content: center; }
-.stats-container.align-left { justify-content: flex-start; }
-
-.views-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(12px);color:#c9c5e2;font-weight:600;font-size:11px}
-
-/* Container que alinha perfeitamente as métricas lado a lado com harmonia */
+/* --- CONTADORES E HYPE (ALINHAMENTO E TAMANHO UNIFICADOS) --- */
 .stats-container {
   display: flex;
   align-items: center;
@@ -269,7 +256,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .profile-card.align-center .stats-container { justify-content: center; }
 .profile-card.align-left .stats-container { justify-content: flex-start; }
 
-/* Badge de Visualizações padronizado na mesma altura */
 .views-badge {
   display: inline-flex;
   align-items: center;
@@ -285,7 +271,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   font-size: 11px;
 }
 
-/* Botão Hype Compacto, Alinhado e Elegante */
 .hype-button {
   position: relative;
   display: inline-flex;
@@ -312,7 +297,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   transform: scale(0.96);
 }
 
-/* Estado quando o usuário já deu Hype */
 .hype-button.hyped {
   border-color: rgba(168, 85, 247, 0.6);
   background: rgba(168, 85, 247, 0.08);
@@ -366,7 +350,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   letter-spacing: -0.3px;
 }
 
-/* Partículas Neon Compactas */
 .particle {
   position: absolute;
   pointer-events: none;
@@ -615,7 +598,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
         <div class="friendships-footer-container" id="friendshipsFooter"></div>
       </div>
 
-      <!-- Container de Estatísticas (Views + Hype ao lado) -->
+      <!-- Container de Estatísticas (Views + Hype lado a lado com tamanho unificado) -->
       <div class="stats-container animate-item delay-5" id="statsContainer">
         <div class="views-badge">
           <span>👁️</span>
@@ -625,7 +608,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 
         <div class="hype-button" id="hypeBtn">
           <div class="icon-wrapper" id="iconWrapper">
-            <svg width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="neon-star">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="neon-star">
               <path d="M24 10L26.7634 19.4674L33.7128 20.1456L28.4724 24.8454L30.043 31.6786L24 28.02L17.957 31.6786L19.5276 24.8454L14.2872 20.1456L21.2366 19.4674L24 10Z" />
             </svg>
           </div>
@@ -938,21 +921,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
- // Lógica do Botão Hype (Com trava de clique único e visual refinado)
+  // Lógica do Botão Hype (Com trava de clique único por usuário e design compacto)
   const hypeBtn = document.getElementById('hypeBtn');
-  const hypeCountEl = document.getElementById('hypeCount');
   const iconWrapper = document.getElementById('iconWrapper');
 
   if (hypeBtn && hypeCountEl && iconWrapper) {
-    const storageKey = `isly_hyped_${handle}`;
+    const storageKey = `isly_hyped_${data.id || handle}`;
     
-    // Verifica se este usuário já deu hype neste perfil anteriormente
     if (localStorage.getItem(storageKey) === 'true') {
       hypeBtn.classList.add('hyped');
     }
 
     hypeBtn.addEventListener('click', async () => {
-      // Impede múltiplos cliques se já votou
       if (localStorage.getItem(storageKey) === 'true') {
         return; 
       }
@@ -960,14 +940,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       let current = parseInt(hypeCountEl.innerText, 10) || 0;
       let newCount = current + 1;
       
-      // Marca como votado no navegador do usuário
       localStorage.setItem(storageKey, 'true');
       hypeBtn.classList.add('hyped', 'animate-flash');
 
       hypeCountEl.innerText = newCount;
       createNeonBurst(iconWrapper);
 
-      // Persistência no Supabase
       try {
         if (window.islySupabase && typeof window.islySupabase.incrementHype === 'function') {
           await window.islySupabase.incrementHype(data.id, current);
