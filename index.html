@@ -1572,7 +1572,7 @@ document.addEventListener('contextmenu', (e) => {
   mostrarAvisoInspecao("Protegido por direitos autorais.");
 });
 
-// 2. Bloqueia atalhos de inspeção e código fonte
+// 2. Bloqueia atalhos de inspeção e código fonte (com captura total)
 document.addEventListener('keydown', (e) => {
   const isF12 = e.key === 'F12' || e.keyCode === 123;
   const isCtrlShiftI = e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67);
@@ -1585,7 +1585,7 @@ document.addEventListener('keydown', (e) => {
     mostrarAvisoInspecao("Conteúdo protegido. Curta a experiência.");
     return false;
   }
-}, true);
+}, true); // O 'true' garante a interceptação antes do navegador abrir as abas
 
 // 3. Função para exibir o aviso estilo iOS (Banner flutuante minimalista)
 function mostrarAvisoInspecao(texto) {
@@ -1601,7 +1601,6 @@ function mostrarAvisoInspecao(texto) {
     </div>
   `;
   
-  // Estilo minimalista tipo iOS: pílula escura, blur elegante e animação de mola suave
   alerta.style.cssText = `
     position: fixed;
     top: 20px;
@@ -1624,35 +1623,17 @@ function mostrarAvisoInspecao(texto) {
 
   document.body.appendChild(alerta);
 
-  // Efeito de entrada suave
   requestAnimationFrame(() => {
     alerta.style.transform = 'translateX(-50%) translateY(0) scale(1)';
     alerta.style.opacity = '1';
   });
 
-  // Some com elegância após 2.5 segundos
   setTimeout(() => {
     alerta.style.transform = 'translateX(-50%) translateY(-10px) scale(0.96)';
     alerta.style.opacity = '0';
     setTimeout(() => alerta.remove(), 300);
   }, 2500);
 }
-  // 4. Detecção de abertura do Inspecionar por redimensionamento da janela
-let ultimaLargura = window.innerWidth;
-let ultimaAltura = window.innerHeight;
-
-window.addEventListener('resize', () => {
-  // Se a janela encolher mais de 160px de largura ou altura sem que o usuário tenha redimensionado o navegador de fato
-  const larguraMudou = Math.abs(window.innerWidth - ultimaLargura) > 160;
-  const alturaMudou = Math.abs(window.innerHeight - ultimaAltura) > 160;
-
-  if (larguraMudou || alturaMudou) {
-    mostrarAvisoInspecao("Ambiente de inspeção detectado.");
-  }
-  
-  ultimaLargura = window.innerWidth;
-  ultimaAltura = window.innerHeight;
-});
 </script>
 </body>
 </html>
