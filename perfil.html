@@ -258,43 +258,77 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 
 .views-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(12px);color:#c9c5e2;font-weight:600;font-size:11px}
 
-/* --- BOTÃO HYPE NEON --- */
+/* Container que alinha perfeitamente as métricas lado a lado com harmonia */
+.stats-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  width: 100%;
+}
+.profile-card.align-center .stats-container { justify-content: center; }
+.profile-card.align-left .stats-container { justify-content: flex-start; }
+
+/* Badge de Visualizações padronizado na mesma altura */
+.views-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  color: #c9c5e2;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* Botão Hype Compacto, Alinhado e Elegante */
 .hype-button {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding: 8px 22px 8px 10px;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px 0 6px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 999px;
   cursor: pointer;
   backdrop-filter: blur(12px);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
   transition: transform 0.15s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .hype-button:hover {
-  transform: scale(1.03);
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.15);
 }
 
 .hype-button:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
 }
 
+/* Estado quando o usuário já deu Hype */
 .hype-button.hyped {
+  border-color: rgba(168, 85, 247, 0.6);
+  background: rgba(168, 85, 247, 0.08);
+}
+
+.hype-button.hyped.animate-flash {
   animation: flashGlow 0.4s ease-out;
 }
 
 @keyframes flashGlow {
   0% {
-    box-shadow: 0 0 35px rgba(255, 255, 255, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.3);
     border-color: #ffffff;
   }
   100% {
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -302,61 +336,49 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   position: relative;
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.02);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .neon-star {
+  width: 14px;
+  height: 14px;
   fill: #FFFFFF;
   stroke: #FFFFFF;
-  stroke-width: 2.5;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  stroke-width: 1.5;
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transform: rotate(0deg) scale(1);
 }
 
-.hyped .neon-star {
-  transform: rotate(0deg) scale(1.25);
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1));
+.hype-button.hyped .neon-star {
+  fill: #c084fc;
+  stroke: #c084fc;
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.8));
 }
 
 .hype-count {
   color: #ffffff;
-  font-size: 22px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: -0.5px;
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
-  transition: transform 0.15s ease;
+  letter-spacing: -0.3px;
 }
 
-.hyped .hype-count {
-  transform: scale(1.15);
-}
-
-/* Partículas Neon (Confetes) */
+/* Partículas Neon Compactas */
 .particle {
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 0 8px #ffffff, 0 0 14px rgba(255, 255, 255, 0.8);
-  animation: explode 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+  box-shadow: 0 0 6px #ffffff;
+  animation: explode 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
 }
 
 @keyframes explode {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(var(--tx), var(--ty)) scale(0);
-  }
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
 }
 
 .profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
@@ -916,25 +938,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Lógica de Cliques e Interatividade do Botão Hype (Estrela Neon + Confetes + Supabase)
+ // Lógica do Botão Hype (Com trava de clique único e visual refinado)
   const hypeBtn = document.getElementById('hypeBtn');
+  const hypeCountEl = document.getElementById('hypeCount');
   const iconWrapper = document.getElementById('iconWrapper');
 
   if (hypeBtn && hypeCountEl && iconWrapper) {
+    const storageKey = `isly_hyped_${handle}`;
+    
+    // Verifica se este usuário já deu hype neste perfil anteriormente
+    if (localStorage.getItem(storageKey) === 'true') {
+      hypeBtn.classList.add('hyped');
+    }
+
     hypeBtn.addEventListener('click', async () => {
+      // Impede múltiplos cliques se já votou
+      if (localStorage.getItem(storageKey) === 'true') {
+        return; 
+      }
+
       let current = parseInt(hypeCountEl.innerText, 10) || 0;
       let newCount = current + 1;
       
-      // Atualização visual imediata
+      // Marca como votado no navegador do usuário
+      localStorage.setItem(storageKey, 'true');
+      hypeBtn.classList.add('hyped', 'animate-flash');
+
       hypeCountEl.innerText = newCount;
-
-      hypeBtn.classList.remove('hyped');
-      void hypeBtn.offsetWidth;
-      hypeBtn.classList.add('hyped');
-
       createNeonBurst(iconWrapper);
 
-      // Persistência no banco Supabase
+      // Persistência no Supabase
       try {
         if (window.islySupabase && typeof window.islySupabase.incrementHype === 'function') {
           await window.islySupabase.incrementHype(data.id, current);
@@ -948,9 +981,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function createNeonBurst(targetContainer) {
-    const particleCount = 14; 
+    const particleCount = 10; 
     const rect = targetContainer.getBoundingClientRect();
-    
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
@@ -958,16 +990,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const particle = document.createElement('span');
       particle.classList.add('particle');
 
-      const size = Math.random() * 3 + 2;
+      const size = Math.random() * 2 + 2;
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
-
       particle.style.left = `${centerX}px`;
       particle.style.top = `${centerY}px`;
 
       const angle = Math.random() * Math.PI * 2;
-      const velocity = Math.random() * 45 + 25;
-      
+      const velocity = Math.random() * 30 + 15;
       const tx = Math.cos(angle) * velocity;
       const ty = Math.sin(angle) * velocity;
 
@@ -975,10 +1005,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       particle.style.setProperty('--ty', `${ty}px`);
 
       targetContainer.appendChild(particle);
-
-      setTimeout(() => {
-        particle.remove();
-      }, 600);
+      setTimeout(() => particle.remove(), 500);
     }
   }
 
