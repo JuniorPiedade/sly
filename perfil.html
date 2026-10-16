@@ -1111,13 +1111,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }, 1000);
 
-  // Clique na Splash Screen ativa o som e some
+  // Clique na Splash Screen
   if (splashScreen) {
     splashScreen.addEventListener('click', () => {
       splashScreen.classList.add('hidden');
-      if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-        ytPlayer.playVideo();
-      }
+      
+      // Função para tentar iniciar o vídeo com segurança
+      const tryPlay = () => {
+        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+          try {
+            ytPlayer.playVideo();
+          } catch (e) {
+            console.warn("Tentativa de autoplay falhou, tentando novamente...", e);
+            setTimeout(tryPlay, 300);
+          }
+        } else {
+          // Se o player ainda estiver carregando a API, tenta de novo em 300ms
+          setTimeout(tryPlay, 300);
+        }
+      };
+      
+      tryPlay();
     });
   }
 
