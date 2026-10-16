@@ -702,12 +702,13 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 async function runAppInitializer() {
  const $ = (s) => document.querySelector(s);
  const appRoot = $('#appRoot');
-
- // Força a exibição imediata para evitar tela preta caso o SDK demore um segundo a mais
+ 
+ // Mantém o painel visível imediatamente
  if (appRoot) appRoot.style.display = 'block';
 
  if (!window.islySupabase) { 
-   console.warn("SDK do Supabase não encontrado, mas mantendo painel visível."); 
+   console.warn("SDK do Supabase não encontrado."); 
+   return; 
  }
 
  let user = null;
@@ -720,7 +721,7 @@ async function runAppInitializer() {
  if (!user) {
   window.location.replace('landing.html');
   return;
- }
+}
   
  try {
    const profile = await window.islySupabase.getProfileById(user.id);
@@ -732,10 +733,11 @@ async function runAppInitializer() {
    console.warn("Erro ao verificar status de admin:", err);
  }
 
-// Inicialização direta e segura do painel
-document.addEventListener('DOMContentLoaded', () => {
-  runAppInitializer();
-});
+ // Agora inicializa o editor carregando os dados reais do usuário logado
+ initEditor(user.id);
+
+ $('#authBtn')?.addEventListener('click', async () => { window.location.replace('landing.html'); });
+}
 
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   runAppInitializer();
