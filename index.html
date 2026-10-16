@@ -1549,7 +1549,25 @@ document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   mostrarAvisoInspecao("⚠️ Clique direito desativado por segurança.");
 });
-
+<script>
+// 1. Bloqueia o clique direito
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  mostrarAvisoInspecao("⚠️ Clique direito desativado por segurança.");
+  
+  // 4. Armadilha de Debugger (Proteção extra para o F12 / Inspecionar)
+setInterval(() => {
+  const antes = performance.now();
+  debugger; // Se o inspecionar estiver aberto, o navegador pausa aqui
+  const depois = performance.now();
+  
+  // Se demorou mais de 100ms para passar, significa que o painel de dev estava aberto travando a execução
+  if (depois - antes > 100) {
+    mostrarAvisoInspecao("Ambiente restrito.");
+    // Opcional: redirecionar ou limpar a tela se insistirem
+  }
+}, 1000);
+});
 // 2. Bloqueia atalhos de inspeção e código fonte com interceptação total
 document.addEventListener('keydown', (e) => {
   const isF12 = e.key === 'F12' || e.keyCode === 123;
