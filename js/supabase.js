@@ -1,6 +1,6 @@
 /* ==========================================
    MÓDULO SUPABASE — ISLY.ME
-   Login, cadastro e recuperação de senha
+   Login, cadastro, recuperação de senha e métricas
 ========================================== */
 
 (function () {
@@ -100,6 +100,28 @@
         return data;
       } catch (error) {
         console.error('Erro ao buscar identificador:', error);
+        return null;
+      }
+    },
+
+    // INCREMENTAR HYPE (PERSISTÊNCIA DE LIKES)
+    async incrementHype(profileId, currentHypes) {
+      const sb = initSupabase();
+      if (!sb || !profileId) return null;
+
+      try {
+        const newHypeCount = (parseInt(currentHypes, 10) || 0) + 1;
+        const { data, error } = await sb
+          .from('profiles')
+          .update({ hypes: newHypeCount })
+          .eq('id', profileId)
+          .select('hypes')
+          .single();
+
+        if (error) throw error;
+        return data?.hypes ?? newHypeCount;
+      } catch (error) {
+        console.error('Erro ao incrementar hype:', error);
         return null;
       }
     },
@@ -281,33 +303,3 @@
           .from('media')
           .upload(filePath, file, {
             cacheControl: '3600',
-            upsert: true
-          });
-
-        if (error) throw error;
-        return null;
-      } catch (error) {
-        console.error('Erro ao enviar mídia:', error);
-        return error.message || 'Erro ao enviar arquivo.';
-      }
-    },
-
-    getPublicUrl(filePath) {
-      const sb = initSupabase();
-      if (!sb) return '';
-
-      try {
-        const { data } = sb.storage
-          .from('media')
-          .getPublicUrl(filePath);
-
-        return data?.publicUrl || '';
-      } catch (error) {
-        console.error('Erro ao obter URL pública:', error);
-        return '';
-      }
-    }
-  };
-
-  initSupabase();
-})();
