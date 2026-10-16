@@ -661,12 +661,12 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
       <div id="previewFrame" class="avatar-frame"></div>
      </div>
      <div class="profile-info">
-      <h3 id="previewName">Nyx.exe</h3>
-      <div class="handle" id="previewHandle">@nyx.exe</div>
+      <h3 id="previewName">Seu Nome</h3>
+      <div class="handle" id="previewHandle">@seunick</div>
      </div>
     </div>
-    <p class="bio-preview" id="previewBio">Gamer e geek.</p>
-    <div class="live-status"><span id="previewStatusEmoji">🎮</span><span id="previewStatusText">Jogando · Valorant</span></div>
+    <p class="bio-preview" id="previewBio"></p>
+    <div class="live-status"><span id="previewStatusEmoji">🎮</span><span id="previewStatusText">Jogando</span></div>
     <div class="preview-emblems" id="previewEmblems"></div>
     <div class="preview-socials" id="previewSocials"></div>
     <div class="embeds-container" id="previewEmbeds"></div>
@@ -711,11 +711,16 @@ async function runAppInitializer() {
   console.warn("Erro ao obter usuário:", e); 
  }
 
- const fallbackUserId = "local-user-preview";
- const activeUserId = user ? user.id : fallbackUserId;
+ // Se não houver usuário logado, redireciona para a página de login/landing
+ if (!user) {
+  window.location.replace('landing.html');
+  return;
+ }
+
+ const activeUserId = user.id;
   
  try {
-   if (user && window.islySupabase) {
+   if (window.islySupabase) {
      const profile = await window.islySupabase.getProfileById(user.id);
      if (profile && profile.is_admin) {
        const adminNav = document.getElementById('adminNavContainer');
@@ -732,9 +737,10 @@ async function runAppInitializer() {
   console.error("Erro ao inicializar o editor:", initErr);
  }
 
+ // Botão Sair corrigido com signOut do Supabase
  $('#authBtn')?.addEventListener('click', async () => { 
-  if (window.islySupabase && typeof window.islySupabase.signOut === 'function') {
-   try { await window.islySupabase.signOut(); } catch(e){}
+  if (window.islySupabase && typeof window.islySupabase.client?.auth?.signOut === 'function') {
+   try { await window.islySupabase.client.auth.signOut(); } catch(e){}
   }
   window.location.replace('landing.html'); 
  });
@@ -780,4 +786,202 @@ const socialSvgs = {
  twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
  letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
  onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
- behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.
+ behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1z"/></svg>',
+ pinterest: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.7 19.3c-.1-.8-.2-2 .03-2.9l.7-3.1s-.2-.4-.2-1c0-1 .6-1.7 1.3-1.7.6 0 .9.5.9 1.1 0 .7-.4 1.7-.6 2.6-.2.8.4 1.5 1.2 1.5 1.4 0 2.5-1.5 2.5-3.6 0-1.9-1.4-3.2-3.4-3.2-2.3 0-3.7 1.7-3.7 3.5 0 .7.3 1.4.6 1.8l-.2.8c-.1 0-.3-.1-.4-.2-1.5-.7-2.4-2.8-2.4-4.5 0-3.7 2.7-7.1 7.8-7.1 4.1 0 7.3 2.9 7.3 6.8 0 4.1-2.6 7.4-6.2 7.4-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-1.1 2.5-1.6 3.4A10 10 0 1 0 12 2z"/></svg>',
+ tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
+};
+
+async function initEditor(userId, user) {
+ const $ = (s) => document.querySelector(s);
+ const $$ = (s) => document.querySelectorAll(s);
+
+ let profileData = {
+  id: userId,
+  name: '',
+  handle: '',
+  bio: '',
+  avatar_url: '',
+  wallpaper_url: '',
+  avatar_frame: 'none',
+  status_emoji: '🎮',
+  status_label: 'Jogando',
+  activity: '',
+  emblems: [],
+  socials: {},
+  embed_spotify: '',
+  embed_youtube: '',
+  embed_instagram: '',
+  card_style: 'opaque',
+  bg_color: '#080812',
+  card_bg: '#11111f',
+  title_color: '#ffffff',
+  text_color: '#f6f4ff',
+  name_effect: 'none',
+  links: [],
+  friendships: []
+ };
+
+ if (window.islySupabase) {
+  try {
+   const remoteProfile = await window.islySupabase.getProfileById(userId);
+   if (remoteProfile) {
+    profileData = { ...profileData, ...remoteProfile };
+   }
+  } catch(e) {
+   console.warn("Erro ao carregar perfil do banco:", e);
+  }
+ }
+
+ $('#name').value = profileData.name || '';
+ $('#handle').value = profileData.handle || '';
+ $('#bio').value = profileData.bio || '';
+ $('#bioCount').textContent = (profileData.bio || '').length;
+ $('#activity').value = profileData.activity || '';
+ $('#avatarFrameSelect').value = profileData.avatar_frame || 'none';
+ $('#cardStyle').value = profileData.card_style || 'opaque';
+ $('#bgColor').value = profileData.bg_color || '#080812';
+ $('#cardBg').value = profileData.card_bg || '#11111f';
+ $('#titleColor').value = profileData.title_color || '#ffffff';
+ $('#textColor').value = profileData.text_color || '#f6f4ff';
+ $('#nameEffect').value = profileData.name_effect || 'none';
+ $('#embedSpotify').value = profileData.embed_spotify || '';
+ $('#embedYoutube').value = profileData.embed_youtube || '';
+ $('#embedInstagram').value = profileData.embed_instagram || '';
+
+ if (profileData.handle) {
+  $('#shareUrl').value = `${window.location.origin}/perfil.html?u=${profileData.handle}`;
+ } else {
+  $('#shareUrl').value = `${window.location.origin}/perfil.html?u=usuario`;
+ }
+
+ function updatePreview() {
+  $('#previewName').textContent = $('#name').value || 'Seu Nome';
+  $('#previewHandle').textContent = '@' + ($('#handle').value || 'seunick');
+  $('#previewBio').textContent = $('#bio').value || '';
+  
+  const shareInput = $('#shareUrl');
+  if (shareInput && $('#handle').value) {
+   shareInput.value = `${window.location.origin}/perfil.html?u=${$('#handle').value.trim().replace(/^@/, '')}`;
+  }
+
+  $('#previewStatusEmoji').textContent = profileData.status_emoji || '🎮';
+  const actText = $('#activity').value.trim();
+  $('#previewStatusText').textContent = (profileData.status_label || 'Jogando') + (actText ? ' · ' + actText : '');
+
+  const previewAvatar = $('#previewAvatar');
+  if (profileData.avatar_url) {
+   previewAvatar.innerHTML = `<img src="${profileData.avatar_url}" alt="Avatar">`;
+  } else {
+   previewAvatar.textContent = '⌬';
+  }
+
+  const previewFrame = $('#previewFrame');
+  const frameType = $('#avatarFrameSelect').value;
+  previewFrame.className = 'avatar-frame';
+  if (frameType === 'neon-white') previewFrame.classList.add('frame-neon-white');
+  else if (frameType === 'vip') previewFrame.classList.add('frame-vip');
+
+  const profileCard = $('#profileCard');
+  if (profileCard) {
+   profileCard.className = 'profile-card ' + ($('#cardStyle').value === 'glass' ? 'card-style-glass' : 'card-style-opaque');
+   if ($('#cardStyle').value !== 'glass') {
+    profileCard.style.backgroundColor = $('#cardBg').value;
+   } else {
+    profileCard.style.backgroundColor = '';
+   }
+  }
+  document.body.style.backgroundColor = $('#bgColor').value;
+
+  $('#previewName').style.color = $('#titleColor').value;
+  if ($('#nameEffect').value === 'glow') {
+   $('#previewName').classList.add('text-effect-glow');
+  } else {
+   $('#previewName').classList.remove('text-effect-glow');
+  }
+
+  const actColor = $('#textColor').value;
+  $('#previewBio').style.color = actColor;
+  $('#previewHandle').style.color = actColor;
+
+  const previewEmblems = $('#previewEmblems');
+  if (previewEmblems) {
+   previewEmblems.innerHTML = (profileData.emblems || []).map(id => {
+    const emoji = emblemEmojis[id] || '✨';
+    const name = emblemNames[id] || id;
+    return `<span><span>${emoji}</span>${name}</span>`;
+   }).join('');
+  }
+
+  const previewSocials = $('#previewSocials');
+  if (previewSocials) {
+   let sHTML = '';
+   ['steam', 'spotify', 'youtube', 'discord', 'instagram', 'twitter', 'letterboxd', 'onlyfans', 'behance', 'pinterest', 'tumblr'].forEach(net => {
+    const val = profileData.socials?.[net];
+    if (val && socialSvgs[net]) {
+     sHTML += `<div class="preview-social-icon" title="${net}">${socialSvgs[net]}</div>`;
+    }
+   });
+   previewSocials.innerHTML = sHTML;
+  }
+ }
+
+ updatePreview();
+
+ ['input', 'change'].forEach(evt => {
+  $$('input, textarea, select').forEach(el => {
+   el.addEventListener(evt, updatePreview);
+  });
+ });
+
+ $('#saveBtn')?.addEventListener('click', async () => {
+  const syncDot = $('#syncDot');
+  const syncText = $('#syncText');
+  if (syncDot) syncDot.classList.add('saving');
+  if (syncText) syncText.textContent = 'Salvando...';
+
+  const updatedPayload = {
+   id: userId,
+   name: $('#name').value.trim(),
+   handle: $('#handle').value.trim().replace(/^@/, ''),
+   bio: $('#bio').value.trim(),
+   activity: $('#activity').value.trim(),
+   avatar_frame: $('#avatarFrameSelect').value,
+   card_style: $('#cardStyle').value,
+   bg_color: $('#bgColor').value,
+   card_bg: $('#cardBg').value,
+   title_color: $('#titleColor').value,
+   text_color: $('#textColor').value,
+   name_effect: $('#nameEffect').value,
+   embed_spotify: $('#embedSpotify').value.trim(),
+   embed_youtube: $('#embedYoutube').value.trim(),
+   embed_instagram: $('#embedInstagram').value.trim(),
+   status_emoji: profileData.status_emoji,
+   status_label: profileData.status_label,
+   emblems: profileData.emblems,
+   socials: profileData.socials,
+   links: profileData.links,
+   friendships: profileData.friendships,
+   avatar_url: profileData.avatar_url,
+   wallpaper_url: profileData.wallpaper_url
+  };
+
+  if (window.islySupabase && typeof window.islySupabase.saveProfile === 'function') {
+   const err = await window.islySupabase.saveProfile(updatedPayload);
+   if (err) {
+    toast('Erro ao salvar: ' + err);
+   } else {
+    toast('Alterações salvas com sucesso! ✓');
+   }
+  } else {
+   toast('Modo estático: Alterações aplicadas na pré-via.');
+  }
+
+  setTimeout(() => {
+   if (syncDot) syncDot.classList.remove('saving');
+   if (syncText) syncText.textContent = 'Sincronizado';
+  }, 600);
+ });
+}
+</script>
+</body>
+</html>
