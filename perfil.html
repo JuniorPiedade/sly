@@ -14,7 +14,7 @@
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text)}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text);user-select:none}
 
 /* WRAPPER PRINCIPAL PARA POSICIONAR O CARD E OS POST-ITS AO LADO */
 .page-wrapper {
@@ -245,13 +245,124 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   color: var(--text);
 }
 
-.views-counter{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;font-size:12px;color:var(--muted)}
-.views-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px);color:#c9c5e2;font-weight:600}
+/* --- CONTADORES (VIEWS + HYPE) --- */
+.stats-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  width: 100%;
+}
+.stats-container.align-center { justify-content: center; }
+.stats-container.align-left { justify-content: flex-start; }
+
+.views-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(12px);color:#c9c5e2;font-weight:600;font-size:11px}
+
+/* --- BOTÃO HYPE NEON --- */
+.hype-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 22px 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+  transition: transform 0.15s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hype-button:hover {
+  transform: scale(1.03);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.2);
+}
+
+.hype-button:active {
+  transform: scale(0.95);
+}
+
+.hype-button.hyped {
+  animation: flashGlow 0.4s ease-out;
+}
+
+@keyframes flashGlow {
+  0% {
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.4);
+    border-color: #ffffff;
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.icon-wrapper {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
+}
+
+.neon-star {
+  fill: #FFFFFF;
+  stroke: #FFFFFF;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: rotate(0deg) scale(1);
+}
+
+.hyped .neon-star {
+  transform: rotate(0deg) scale(1.25);
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1));
+}
+
+.hype-count {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.hyped .hype-count {
+  transform: scale(1.15);
+}
+
+/* Partículas Neon (Confetes) */
+.particle {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px #ffffff, 0 0 14px rgba(255, 255, 255, 0.8);
+  animation: explode 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes explode {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0);
+  }
+}
 
 .profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
-/* --- POST-ITS FIXOS NA LATERAL DIREITA (EMPURRADOS UM SOBRE O OUTRO COM DELICADEZA) --- */
+/* --- POST-ITS FIXOS NA LATERAL DIREITA --- */
 .guestbook-sidebar-fixed {
   position: absolute;
   left: calc(100% + 24px);
@@ -482,19 +593,29 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
         <div class="friendships-footer-container" id="friendshipsFooter"></div>
       </div>
 
-      <div class="profile-foot animate-item delay-5"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
-    </div>
+      <!-- Container de Estatísticas (Views + Hype ao lado) -->
+      <div class="stats-container animate-item delay-5" id="statsContainer">
+        <div class="views-badge">
+          <span>👁️</span>
+          <span id="publicViewsCount">0</span>
+          <span>visualizações</span>
+        </div>
 
-    <div class="views-counter animate-item delay-6">
-      <div class="views-badge">
-        <span>👁️</span>
-        <span id="publicViewsCount">0</span>
-        <span>visualizações</span>
+        <div class="hype-button" id="hypeBtn">
+          <div class="icon-wrapper" id="iconWrapper">
+            <svg width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="neon-star">
+              <path d="M24 10L26.7634 19.4674L33.7128 20.1456L28.4724 24.8454L30.043 31.6786L24 28.02L17.957 31.6786L19.5276 24.8454L14.2872 20.1456L21.2366 19.4674L24 10Z" />
+            </svg>
+          </div>
+          <span class="hype-count" id="hypeCount">0</span>
+        </div>
       </div>
+
+      <div class="profile-foot animate-item delay-6"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
     </div>
   </div>
 
-  <!-- POST-ITS FIXOS NO CANTO DIREITO (EMPURRADOS UM SOBRE O OUTRO) -->
+  <!-- POST-ITS FIXOS NO CANTO DIREITO -->
   <div class="guestbook-sidebar-fixed" id="scrapsContainer"></div>
 </div>
 
@@ -639,6 +760,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.warn("Analytics Error:", e);
   }
 
+  // Preenche contador de Hypes
+  const hypeCountEl = document.getElementById('hypeCount');
+  if (hypeCountEl) {
+    hypeCountEl.textContent = data.hypes || 0;
+  }
+
+  // Configuração do Alinhamento do Card (center ou left)
+  const statsContainer = document.getElementById('statsContainer');
+  const alignment = data.card_alignment || 'center';
+  if (statsContainer) {
+    statsContainer.classList.remove('align-center', 'align-left');
+    statsContainer.classList.add('align-' + alignment);
+  }
+
   document.body.style.backgroundColor = data.bg_color || '#080812';
   if (data.custom_cursor) {
     document.body.style.cursor = `url('${data.custom_cursor}'), auto`;
@@ -781,6 +916,72 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // Lógica de Cliques e Interatividade do Botão Hype (Estrela Neon + Confetes + Supabase)
+  const hypeBtn = document.getElementById('hypeBtn');
+  const iconWrapper = document.getElementById('iconWrapper');
+
+  if (hypeBtn && hypeCountEl && iconWrapper) {
+    hypeBtn.addEventListener('click', async () => {
+      let current = parseInt(hypeCountEl.innerText, 10) || 0;
+      let newCount = current + 1;
+      
+      // Atualização visual imediata
+      hypeCountEl.innerText = newCount;
+
+      hypeBtn.classList.remove('hyped');
+      void hypeBtn.offsetWidth;
+      hypeBtn.classList.add('hyped');
+
+      createNeonBurst(iconWrapper);
+
+      // Persistência no banco Supabase
+      try {
+        if (window.islySupabase && typeof window.islySupabase.incrementHype === 'function') {
+          await window.islySupabase.incrementHype(data.id, current);
+        } else {
+          await window.islySupabase.saveProfile({ id: data.id, hypes: newCount });
+        }
+      } catch (err) {
+        console.warn("Erro ao salvar hype:", err);
+      }
+    });
+  }
+
+  function createNeonBurst(targetContainer) {
+    const particleCount = 14; 
+    const rect = targetContainer.getBoundingClientRect();
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('span');
+      particle.classList.add('particle');
+
+      const size = Math.random() * 3 + 2;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+
+      particle.style.left = `${centerX}px`;
+      particle.style.top = `${centerY}px`;
+
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = Math.random() * 45 + 25;
+      
+      const tx = Math.cos(angle) * velocity;
+      const ty = Math.sin(angle) * velocity;
+
+      particle.style.setProperty('--tx', `${tx}px`);
+      particle.style.setProperty('--ty', `${ty}px`);
+
+      targetContainer.appendChild(particle);
+
+      setTimeout(() => {
+        particle.remove();
+      }, 600);
+    }
+  }
+
   // RENDERIZAR FRIENDSHIPS PÚBLICAS
   if (data.friendships && data.friendships.length > 0) {
     const friendWrapper = document.getElementById('friendshipsFooterWrapper');
@@ -806,121 +1007,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }).join('');
           }
         });
-    }
-  }
-
-  // --- GUESTBOOK / MURAL DE RECADOS ---
-  const allowGuestbook = data.allow_guestbook !== false;
-  const openGuestbookBtn = document.getElementById('openGuestbookBtn');
-  if (openGuestbookBtn) openGuestbookBtn.style.display = 'block';
-
-  const guestbookModal = document.getElementById('guestbookModal');
-  const closeGuestbookBtn = document.getElementById('closeGuestbookBtn');
-  const scrapsContainer = document.getElementById('scrapsContainer');
-  const scrapFormArea = document.getElementById('scrapFormArea');
-  const modalNotice = document.getElementById('modalNotice');
-  const scrapMsgInput = document.getElementById('scrapMsgInput');
-  const sendScrapBtn = document.getElementById('sendScrapBtn');
-
-  openGuestbookBtn?.addEventListener('click', () => guestbookModal.classList.add('open'));
-  closeGuestbookBtn?.addEventListener('click', () => guestbookModal.classList.remove('open'));
-  guestbookModal?.addEventListener('click', (e) => { if (e.target === guestbookModal) guestbookModal.classList.remove('open'); });
-
-  let loggedUser = null;
-  try { loggedUser = await window.islySupabase.getUser(); } catch(e) {}
-
-  if (loggedUser && allowGuestbook) {
-    if (scrapFormArea) scrapFormArea.style.display = 'block';
-  } else {
-    if (modalNotice) modalNotice.style.display = 'block';
-  }
-
-  async function loadScraps() {
-    if (!scrapsContainer) return;
-    const { data: scrapsList, error } = await window.islySupabase.client
-      .from('guestbook')
-      .select('*')
-      .eq('profile_id', data.id)
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    if (!error && scrapsList && scrapsList.length > 0) {
-      const rotations = [-2.5, 1.8, -1.2, 2.2, -1.8];
-      scrapsContainer.innerHTML = scrapsList.map((scrap, idx) => {
-        const rot = rotations[idx % rotations.length];
-        return `
-          <div class="scrap-paper-stack" style="transform: rotate(${rot}deg);">
-            <div style="word-break: break-word;">${escapeHtml(scrap.message)}</div>
-            <span class="scrap-author">— @${escapeHtml(scrap.author_handle || 'anônimo')}</span>
-          </div>
-        `;
-      }).join('');
-    } else {
-      scrapsContainer.innerHTML = `<div style="font-size:11px; color:var(--muted); font-style:italic; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; border:1px dashed rgba(255,255,255,0.08);">Nenhum recado ainda.</div>`;
-    }
-  }
-
-  function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-  }
-
-  if (sendScrapBtn) {
-    sendScrapBtn.addEventListener('click', async () => {
-      const msg = scrapMsgInput.value.trim();
-      if (!msg) return;
-
-      let authorHandle = 'membro';
-      try {
-        const authorProfile = await window.islySupabase.getProfileById(loggedUser.id);
-        if (authorProfile && authorProfile.handle) authorHandle = authorProfile.handle;
-      } catch(e) {}
-
-      const { error } = await window.islySupabase.client
-        .from('guestbook')
-        .insert([{
-          profile_id: data.id,
-          author_id: loggedUser.id,
-          author_handle: authorHandle,
-          message: msg
-        }]);
-
-      if (error) {
-        alert('Erro ao enviar recado. Verifique a tabela guestbook no Supabase.');
-      } else {
-        scrapMsgInput.value = '';
-        guestbookModal.classList.remove('open');
-        loadScraps();
-      }
-    });
-  }
-
-  loadScraps();
-
-  // PLAYER DE TRILHA SONORA
-  if (data.soundtrack_url) {
-    const widget = document.getElementById('soundtrackWidget');
-    const audio = document.getElementById('stAudio');
-    const playBtn = document.getElementById('stPlayBtn');
-    const statusTxt = document.getElementById('stStatus');
-
-    if (widget && audio) {
-      audio.src = data.soundtrack_url;
-      widget.style.display = 'flex';
-
-      playBtn.addEventListener('click', () => {
-        if (audio.paused) {
-          audio.play().then(() => {
-            playBtn.textContent = '❚❚';
-            statusTxt.textContent = 'A tocar...';
-          }).catch(err => {
-            console.warn("Erro ao reproduzir áudio:", err);
-          });
-        } else {
-          audio.pause();
-          playBtn.textContent = '▶';
-          statusTxt.textContent = 'Pausado';
-        }
-      });
     }
   }
 });
