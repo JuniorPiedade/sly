@@ -821,14 +821,33 @@ async function runAppInitializer() {
  if (editorInitialized) return;
 
  const $ = (s) => document.querySelector(s);
- const appRoot = $('#appRoot');
- if (appRoot) appRoot.style.display = 'block';
 
  let retries = 0;
  while ((!window.islySupabase || typeof window.islySupabase.getUser !== 'function') && retries < 20) {
   await new Promise(r => setTimeout(r, 100));
   retries++;
  }
+
+ if (!window.islySupabase || typeof window.islySupabase.getUser !== 'function') {
+  window.location.replace('landing.html');
+  return;
+ }
+
+ let user = null;
+ try { 
+  user = await window.islySupabase.getUser(); 
+ } catch (e) { 
+  console.warn("Erro ao buscar usuário logado:", e); 
+ }
+
+ // Se não houver usuário logado, expulsa imediatamente para a landing page
+ if (!user) {
+  window.location.replace('landing.html');
+  return;
+ }
+
+ const appRoot = $('#appRoot');
+ if (appRoot) appRoot.style.display = 'block';
 
  if (!window.islySupabase || typeof window.islySupabase.getUser !== 'function') {
   console.warn("SDK do Supabase indisponível.");
