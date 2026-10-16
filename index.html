@@ -1553,40 +1553,6 @@ document.addEventListener('contextmenu', (e) => {
 // 1. Bloqueia o clique direito
 document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
-  mostrarAvisoInspecao("⚠️ Clique direito desativado por segurança.");
-  
-  // 4. Armadilha de Debugger (Proteção extra para o F12 / Inspecionar)
-setInterval(() => {
-  const antes = performance.now();
-  debugger; // Se o inspecionar estiver aberto, o navegador pausa aqui
-  const depois = performance.now();
-  
-  // Se demorou mais de 100ms para passar, significa que o painel de dev estava aberto travando a execução
-  if (depois - antes > 100) {
-    mostrarAvisoInspecao("Ambiente restrito.");
-    // Opcional: redirecionar ou limpar a tela se insistirem
-  }
-}, 1000);
-});
-// 2. Bloqueia atalhos de inspeção e código fonte com interceptação total
-document.addEventListener('keydown', (e) => {
-  const isF12 = e.key === 'F12' || e.keyCode === 123;
-  const isCtrlShiftI = e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67);
-  const isCtrlU = e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.keyCode === 85);
-
-  if (isF12 || isCtrlShiftI || isCtrlU) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    mostrarAvisoInspecao("Respeite o código do irmão!");
-    return false;
-  }
-}, true); // O 'true' aqui no final força a captura na fase de subida (capturing phase), pegando antes do navegador
-
-<script>
-// 1. Bloqueia o clique direito
-document.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
   mostrarAvisoInspecao("Protegido por direitos autorais.");
 });
 
@@ -1603,7 +1569,7 @@ document.addEventListener('keydown', (e) => {
     mostrarAvisoInspecao("Conteúdo protegido. Curta a experiência.");
     return false;
   }
-}, true); // O 'true' garante a interceptação antes do navegador abrir as abas
+}, true);
 
 // 3. Função para exibir o aviso estilo iOS (Banner flutuante minimalista)
 function mostrarAvisoInspecao(texto) {
@@ -1652,6 +1618,17 @@ function mostrarAvisoInspecao(texto) {
     setTimeout(() => alerta.remove(), 300);
   }, 2500);
 }
+
+// 4. Armadilha de Debugger (Rodando de forma independente em segundo plano)
+setInterval(() => {
+  const antes = performance.now();
+  debugger; 
+  const depois = performance.now();
+  
+  if (depois - antes > 100) {
+    mostrarAvisoInspecao("Ambiente restrito.");
+  }
+}, 1000);
 </script>
 </body>
 </html>
