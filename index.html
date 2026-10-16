@@ -702,17 +702,25 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 async function runAppInitializer() {
  const $ = (s) => document.querySelector(s);
  const appRoot = $('#appRoot');
- if (!window.islySupabase) { window.location.replace('landing.html'); return; }
+
+ // Força a exibição imediata para evitar tela preta caso o SDK demore um segundo a mais
+ if (appRoot) appRoot.style.display = 'block';
+
+ if (!window.islySupabase) { 
+   console.warn("SDK do Supabase não encontrado, mas mantendo painel visível."); 
+ }
 
  let user = null;
- try { user = await window.islySupabase.getUser(); } catch (e) { console.warn(e); }
+ try { 
+   user = await window.islySupabase.getUser(); 
+ } catch (e) { 
+   console.warn(e); 
+ }
 
  if (!user) {
   window.location.replace('landing.html');
   return;
  }
-
- if (appRoot) appRoot.style.display = 'block';
   
  try {
    const profile = await window.islySupabase.getProfileById(user.id);
