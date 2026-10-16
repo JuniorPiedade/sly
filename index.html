@@ -1560,7 +1560,7 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
     e.stopImmediatePropagation();
     e.stopPropagation();
-    mostrarAvisoInspecao("⚠️ Tentativa de inspeção bloqueada. Respeite o código do irmão!");
+    mostrarAvisoInspecao("Respeite o código do irmão!");
     return false;
   }
 }, true); // O 'true' aqui no final força a captura na fase de subida (capturing phase), pegando antes do navegador
@@ -1574,7 +1574,7 @@ function mostrarAvisoInspecao(texto) {
   alerta.id = 'avisoInspecaoModal';
   alerta.innerHTML = `
     <div style="display:flex; align-items:center; gap:12px;">
-      <span style="font-size:22px;">🛡️</span>
+      <span style="font-size:22px;">❌</span>
       <div>
         <div style="font-weight:800; font-size:14px; margin-bottom:2px; color:#fff;">Acesso Restrito</div>
         <div style="font-size:12px; color:#d8b4fe;">${texto}</div>
