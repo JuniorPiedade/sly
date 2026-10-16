@@ -425,7 +425,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 
 <canvas id="effectCanvas"></canvas>
 
-<div id="appRoot">
+<div id="appRoot" style="display:none;">
 <header class="wrap topbar">
  <a class="brand" href="landing.html"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
  <div class="actions">
@@ -840,7 +840,6 @@ async function runAppInitializer() {
   console.warn("Erro ao buscar usuário logado:", e); 
  }
 
- // Se não houver usuário logado, expulsa imediatamente para a landing page
  if (!user) {
   window.location.replace('landing.html');
   return;
@@ -848,23 +847,6 @@ async function runAppInitializer() {
 
  const appRoot = $('#appRoot');
  if (appRoot) appRoot.style.display = 'block';
-
- if (!window.islySupabase || typeof window.islySupabase.getUser !== 'function') {
-  console.warn("SDK do Supabase indisponível.");
-  return;
- }
-
- let user = null;
- try { 
-  user = await window.islySupabase.getUser(); 
- } catch (e) { 
-  console.warn("Erro ao buscar usuário logado:", e); 
- }
-
- if (!user) {
-  window.location.replace('landing.html');
-  return;
- }
 
  editorInitialized = true;
 
@@ -962,24 +944,11 @@ function getInstagramEmbed(url) {
 }
 
 async function initEditor(userId) {
- const cacheKey = `isly_profile_cache_${userId}`;
  let profile = null;
- 
- // Otimização de Velocidade: Tenta carregar do cache local instantaneamente se houver
- const cachedData = localStorage.getItem(cacheKey);
- if (cachedData) {
-  try {
-   profile = JSON.parse(cachedData);
-  } catch(e) {}
- }
-
- // Se não houver cache ou enquanto busca em background, tenta o Supabase
- if (!profile) {
-  try {
-   profile = await window.islySupabase.getProfileById(userId);
-  } catch (e) {
-   console.warn("Erro ao buscar perfil real:", e);
-  }
+ try {
+  profile = await window.islySupabase.getProfileById(userId);
+ } catch (e) {
+  console.warn("Erro ao buscar perfil real:", e);
  }
 
  if (!profile) {
@@ -992,11 +961,6 @@ async function initEditor(userId) {
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
    guestbook_style: 'vintage', friendships: [], visual_effect: 'none'
   };
- } else {
-  // Atualiza o cache em background com os dados mais recentes do banco
-  window.islySupabase.getProfileById(userId).then(latest => {
-   if (latest) localStorage.setItem(cacheKey, JSON.stringify(latest));
-  }).catch(() => {});
  }
 
  let currentProfile = { ...profile };
@@ -1051,191 +1015,4 @@ async function initEditor(userId) {
    const warning = document.createElement('small');
    warning.id = 'handleWarning';
    warning.style.color = '#f43f5e';
-   warning.style.marginTop = '6px';
-   warning.innerHTML = '⚠️ O seu @ já foi alterado uma vez. Para trocar novamente, abra um ticket no nosso canal do <a href="https://discord.gg/SEU_LINK" target="_blank" style="color:var(--purple); text-decoration:underline;">Discord</a>.';
-   parentField.appendChild(warning);
-  }
- }
-
- bioInput.value = currentProfile.bio || '';
- bioCount.textContent = (currentProfile.bio || '').length;
- avatarFrameSelect.value = currentProfile.avatar_frame || 'none';
- activityInput.value = currentProfile.activity || '';
-
- cardStyleSelect.value = currentProfile.card_style || 'opaque';
- guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
- if (playerStyleSelect) playerStyleSelect.value = currentProfile.player_style || 'default';
- if (visualEffectSelect) visualEffectSelect.value = currentProfile.visual_effect || 'none';
- initVisualEffect(currentProfile.visual_effect || 'none');
-
- bgColorInput.value = currentProfile.bg_color || '#080812';
- cardBgInput.value = currentProfile.card_bg || '#11111f';
- titleColorInput.value = currentProfile.title_color || '#ffffff';
- textColorInput.value = currentProfile.text_color || '#f6f4ff';
- nameEffectSelect.value = currentProfile.name_effect || 'none';
- customCursorInput.value = currentProfile.custom_cursor || '';
- avatarUrlInput.value = currentProfile.avatar_url || '';
- wallpaperUrlInput.value = currentProfile.wallpaper_url || '';
- soundtrackUrlInput.value = currentProfile.soundtrack || currentProfile.soundtrack_url || '';
- splashTextInput.value = currentProfile.splash_text || '';
-
- embedSpotifyInput.value = currentProfile.embed_spotify || '';
- embedYoutubeInput.value = currentProfile.embed_youtube || '';
- embedInstagramInput.value = currentProfile.embed_instagram || '';
-
- Object.keys(socialSvgs).forEach(key => {
-  const field = document.getElementById('soc_' + key);
-  if (field) field.value = currentProfile.socials[key] || '';
- });
-
- if (currentProfile.handle) {
-  shareUrlInput.value = `${window.location.origin}/sly-${currentProfile.handle}`;
- }
-
- const previewCard = document.getElementById('profileCard');
- previewCard.addEventListener('mousemove', (e) => {
-  const rect = previewCard.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const xc = rect.width / 2;
-  const yc = rect.height / 2;
-  const dx = (x - xc) / xc;
-  const dy = (y - yc) / yc;
-  previewCard.style.transform = `perspective(1200px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) translateY(-2px)`;
- });
- previewCard.addEventListener('mouseleave', () => {
-  previewCard.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
- });
-
- document.getElementById('avatarFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 5 * 1024 * 1024) { toast('O avatar deve ter no máximo 5MB (suporta GIFs VIP).'); return; }
-  toast('Enviando foto de perfil...');
-
-  try {
-   const fileExt = file.name.split('.').pop();
-   const fileName = `${userId}-${Date.now()}.${fileExt}`;
-   const filePath = `avatars/${fileName}`;
-
-   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-   if (uploadErr) throw new Error(uploadErr);
-
-   const publicUrl = window.islySupabase.getPublicUrl(filePath);
-   if (publicUrl) {
-    avatarUrlInput.value = publicUrl;
-    currentProfile.avatar_url = publicUrl;
-    updatePreview();
-    triggerAutoSave();
-    toast('Foto de perfil atualizada! ✓');
-   } else {
-    throw new Error('Não foi possível obter a URL pública.');
-   }
-  } catch (err) {
-   console.error("Erro no upload do avatar:", err);
-   toast('Erro ao enviar foto: ' + (err.message || 'Erro desconhecido'));
-  }
- });
-
- document.getElementById('wallpaperFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 2 * 1024 * 1024) { toast('O wallpaper deve ter no máximo 2MB.'); return; }
-  toast('Enviando wallpaper do cartão...');
-
-  try {
-   const fileExt = file.name.split('.').pop();
-   const fileName = `${userId}-${Date.now()}.${fileExt}`;
-   const filePath = `wallpapers/${fileName}`;
-
-   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-   if (uploadErr) throw new Error(uploadErr);
-
-   const publicUrl = window.islySupabase.getPublicUrl(filePath);
-   if (publicUrl) {
-    wallpaperUrlInput.value = publicUrl;
-    currentProfile.wallpaper_url = publicUrl;
-    updatePreview();
-    triggerAutoSave();
-    toast('Wallpaper atualizado! ✓');
-   } else {
-    throw new Error('Não foi possível obter a URL pública.');
-   }
-  } catch (err) {
-   console.error("Erro no upload do wallpaper:", err);
-   toast('Erro ao enviar wallpaper: ' + (err.message || 'Erro desconhecido'));
-  }
- });
-
- document.getElementById('removeWallpaperBtn')?.addEventListener('click', () => {
-  wallpaperUrlInput.value = '';
-  currentProfile.wallpaper_url = '';
-  const fileInput = document.getElementById('wallpaperFile');
-  if (fileInput) fileInput.value = '';
-  updatePreview();
-  triggerAutoSave();
-  toast('Wallpaper removido! ✓');
- });
-
- document.getElementById('customCursorFile')?.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 1024 * 1024) { toast('O cursor deve ter no máximo 1MB.'); return; }
-  toast('Enviando cursor...');
-  try {
-   const fileExt = file.name.split('.').pop();
-   const filePath = `cursors/${userId}-${Date.now()}.${fileExt}`;
-   const uploadErr = await window.islySupabase.uploadMedia(filePath, file);
-   if (uploadErr) throw new Error(uploadErr);
-   const publicUrl = window.islySupabase.getPublicUrl(filePath);
-   if (publicUrl) {
-    customCursorInput.value = publicUrl;
-    currentProfile.custom_cursor = publicUrl;
-    updatePreview();
-    triggerAutoSave();
-    toast('Cursor atualizado! ✨');
-   }
-  } catch (err) {
-   toast('Erro ao enviar cursor.');
-  }
- });
-
- visualEffectSelect?.addEventListener('change', () => {
-  const val = visualEffectSelect.value;
-  currentProfile.visual_effect = val;
-  initVisualEffect(val);
-  triggerAutoSave();
- });
-
- let saveTimer = null;
- function triggerAutoSave() {
-  syncDot.classList.add('saving');
-  syncText.textContent = 'Salvando...';
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => {
-   const socialsData = {};
-   Object.keys(socialSvgs).forEach(key => {
-    const val = document.getElementById('soc_' + key)?.value.trim();
-    if (val) socialsData[key] = val;
-   });
-
-   const soundtrackVal = soundtrackUrlInput.value.trim();
-   const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
-   const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
-
-   const payload = {
-    id: userId, name: nameInput.value, handle: handleInput.value,
-    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
-    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-    card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
-    player_style: playerStyleVal,
-    visual_effect: visualEffectVal,
-    bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-    accent_color: textColorInput.value,
-    title_color: titleColorInput.value, text_color: textColorInput.value,
-    name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
-    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
-    soundtrack: soundtrackVal, soundtrack_url: soundtrackVal,
-    splash_text: splashTextInput.value,
-    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
-    emblems: currentProfile.emblems, socials: socialsData, links: currentProfile
+   warning
