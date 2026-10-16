@@ -1541,7 +1541,6 @@ document.addEventListener('keydown', (e) => {
     return false;
   }
 });
-
 <script>
 (() => {
   const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
@@ -1626,14 +1625,13 @@ document.addEventListener('keydown', (e) => {
     digitar();
   }
 
- <script>
   // Intercepta o clique direito.
   document.addEventListener("contextmenu", (e) => {
     e.preventDefault();
     mostrarTelaHacker();
   }, true);
 
-  // Intercepta alguns atalhos comuns.
+  // Intercepta atalhos comuns (F12, Ctrl+Shift+I/J/C, Ctrl+U).
   document.addEventListener("keydown", (e) => {
     const tecla = e.key.toLowerCase();
 
@@ -1651,5 +1649,7 @@ document.addEventListener('keydown', (e) => {
   }, true);
 })();
 </script>
+</body>
+</html>
 </body>
 </html>
