@@ -602,10 +602,10 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 
 <!-- PLAYER ULTRA MINIMALISTA (DESENVOLVIDO POR DIEL> -->
 <header class="fixed bottom-6 left-6 z-50 w-[280px] max-w-[90vw]">
-    <div class="glow-border bg-[#09090b]/90 rounded-full px-3 py-1.5 flex items-center justify-between transition-all duration-500 shadow-2xl">
+    <div id="playerWrapper" class="glow-border bg-[#09090b]/90 rounded-full px-3 py-1.5 flex items-center justify-between transition-all duration-500 shadow-2xl">
         
         <!-- Botão Play/Pause -->
-        <button id="playPauseBtn" class="glow-btn relative w-7 h-7 rounded-full bg-white text-black flex items-center justify-center focus:outline-none cursor-pointer">
+        <button id="playPauseBtn" class="player-btn-action glow-btn relative w-7 h-7 rounded-full bg-white text-black flex items-center justify-center focus:outline-none cursor-pointer">
             <i id="playIcon" class="fa-solid fa-play text-[9px] translate-x-[1px]"></i>
             <i id="pauseIcon" class="fa-solid fa-pause text-[9px] hidden"></i>
         </button>
@@ -614,10 +614,28 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
         <div class="flex flex-col items-center justify-center flex-1 mx-2.5 overflow-hidden">
             <div class="flex items-center gap-1 mb-0.5 w-full justify-center">
                 <span id="trackStatus" class="inline-block w-1.5 h-1.5 rounded-full bg-neutral-600 transition-colors duration-300"></span>
-                <span id="trackTitle" class="text-[10px] font-mono tracking-wider uppercase text-neutral-400 truncate max-w-[100px]">
+                <span id="trackTitle" class="player-text-title text-[10px] font-mono tracking-wider uppercase text-neutral-400 truncate max-w-[100px]">
                     SOUNDTRACK
                 </span>
             </div>
+            <!-- Canvas do Visualizador -->
+            <div class="w-full flex items-center justify-center h-2">
+                <canvas id="visualizer" class="w-full h-full opacity-70"></canvas>
+            </div>
+        </div>
+
+        <!-- Tempo / Mute -->
+        <div class="player-text-meta flex items-center gap-2 text-neutral-400">
+            <span id="timeDisplay" class="text-[9px] font-mono tracking-tighter text-neutral-500">00:00</span>
+            <button id="muteBtn" class="hover:text-white transition-colors duration-200 focus:outline-none cursor-pointer">
+                <i id="volumeIcon" class="fa-solid fa-volume-high text-[10px]"></i>
+            </button>
+        </div>
+
+        <!-- Player oculto do YouTube (Invisível e totalmente fora do fluxo visual) -->
+        <div id="youtubePlayerContainer" style="display:none; position:absolute; pointer-events:none; opacity:0; width:0; height:0; overflow:hidden;"></div>
+    </div>
+</header>
             <!-- Canvas do Visualizador -->
             <div class="w-full flex items-center justify-center h-2">
                 <canvas id="visualizer" class="w-full h-full opacity-70"></canvas>
