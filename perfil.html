@@ -20,7 +20,23 @@
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text);user-select:none}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text);user-select:none; position: relative;}
+
+/* --- CANVAS DE EFEITOS VISUAIS DE FUNDO --- */
+#effectCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Garante que o conteúdo fique acima do canvas */
+.page-wrapper, .guestbook-trigger-btn, header.fixed, .splash-overlay {
+  position: relative;
+  z-index: 10;
+}
 
 /* --- TELA DE ENTRADA (SPLASH SCREEN) --- */
 .splash-overlay {
@@ -260,13 +276,12 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 /* Container de Amigos Próximos */
 .preview-friendships-wrapper {
   display: flex;
-  flex-direction: column; /* Força o título a ficar EM CIMA das bolinhas */
+  flex-direction: column;
   gap: 8px;
   margin-top: 14px;
   width: 100%;
 }
 
-/* Título com Efeito Neon no Hover */
 .preview-friendships-title {
   font-size: 10px;
   text-transform: uppercase;
@@ -283,7 +298,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 16px rgba(168, 85, 247, 0.8), 0 0 24px rgba(168, 85, 247, 0.5);
 }
 
-/* Container dos Amigos */
 .preview-friendships {
   display: flex;
   align-items: center;
@@ -291,7 +305,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   flex-wrap: wrap;
 }
 
-/* Bolinha do Amigo com suporte a Foto e Hover */
 .preview-friend-bubble {
   width: 32px;
   height: 32px;
@@ -319,6 +332,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   object-fit: cover;
   display: block;
 }
+
 /* --- CONTADORES E HYPE --- */
 .stats-container {
   display: flex;
@@ -569,7 +583,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   .scrap-paper-stack { margin-top: 8px !important; }
 }
 
-/* PLAYER ULTRA MINIMALISTA (FIXO NO TOPO) */
+/* PLAYER ULTRA MINIMALISTA */
 .glow-border {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.03), inset 0 0 15px rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -600,6 +614,9 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 </style>
 </head>
 <body>
+
+<!-- CANVAS PARA OS EFEITOS VISUAIS DE FUNDO -->
+<canvas id="effectCanvas"></canvas>
 
 <!-- PLAYER ULTRA MINIMALISTA (FIXO NO CANTO INFERIOR ESQUERDO) -->
 <header class="fixed bottom-6 left-6 z-50 w-[280px] max-w-[90vw]">
@@ -672,10 +689,10 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
       <div class="public-links animate-item delay-4" id="links"></div>
       
       <!-- Seção de Amigos Próximos / Friendships -->
-<div class="preview-friendships-wrapper" id="publicFriendshipsWrapper" style="display: none;">
-  <div class="preview-friendships-title">AMIGOS PRÓXIMOS</div>
-  <div class="preview-friendships" id="publicFriendships"></div>
-</div>
+      <div class="preview-friendships-wrapper" id="publicFriendshipsWrapper" style="display: none;">
+        <div class="preview-friendships-title">AMIGOS PRÓXIMOS</div>
+        <div class="preview-friendships" id="publicFriendships"></div>
+      </div>
 
       <!-- Container de Estatísticas (Views + Hype) -->
       <div class="stats-container animate-item delay-5" id="statsContainer">
@@ -724,6 +741,107 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 
 <script src="js/supabase.js"></script>
 <script>
+// --- SISTEMA DE EFEITOS VISUAIS DE FUNDO (CANVAS) ---
+let currentEffectAnimId = null;
+
+function initVisualEffect(effectName) {
+  const canvas = document.getElementById('effectCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  if (currentEffectAnimId) {
+    cancelAnimationFrame(currentEffectAnimId);
+  }
+
+  if (effectName === 'stellar_dust') {
+    const particles = Array.from({ length: 70 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5 + 0.5,
+      alpha: Math.random(),
+      speed: Math.random() * 0.2 + 0.05
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffffff';
+      particles.forEach(p => {
+        p.y -= p.speed;
+        if (p.y < 0) p.y = canvas.height;
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      currentEffectAnimId = requestAnimationFrame(draw);
+    }
+    draw();
+
+  } else if (effectName === 'neon_snowfall') {
+    const flakes = Array.from({ length: 50 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2 + 1,
+      speed: Math.random() * 0.8 + 0.3,
+      drift: Math.random() * 0.5 - 0.25
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#22d3ee';
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = '#22d3ee';
+      flakes.forEach(f => {
+        f.y += f.speed;
+        f.x += f.drift;
+        if (f.y > canvas.height) f.y = 0;
+        if (f.x > canvas.width) f.x = 0;
+        if (f.x < 0) f.x = canvas.width;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      currentEffectAnimId = requestAnimationFrame(draw);
+    }
+    draw();
+
+  } else if (effectName === 'matrix_glitch') {
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array.from({ length: columns }, () => 1);
+    const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&';
+
+    function draw() {
+      ctx.fillStyle = 'rgba(8, 8, 18, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#a855f7';
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+      currentEffectAnimId = requestAnimationFrame(draw);
+    }
+    draw();
+  } else {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
 const emblemNames = {
   nerd: 'Nerd', gamer: 'Gamer', youtuber: 'Youtuber', programador: 'Programador',
   hacker: 'Hacker', streamer: 'Streamer', gotico: 'Gótico', anime: 'Anime',
@@ -799,7 +917,6 @@ function getInstagramEmbed(url) {
   return '';
 }
 
-// Função auxiliar para extrair o ID do YouTube da Trilha Sonora
 function getYoutubeAudioId(url) {
   if (!url) return null;
   let id = '';
@@ -813,7 +930,7 @@ let ytPlayer = null;
 let isYtPlaying = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
- const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(window.location.search);
   let rawHandle = urlParams.get('u') || urlParams.get('user');
 
   if (!rawHandle) {
@@ -834,6 +951,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!data) {
     document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
     return;
+  }
+
+  // >>> INICIALIZA O EFEITO VISUAL DE FUNDO AQUI <<<
+  if (typeof initVisualEffect === 'function') {
+    initVisualEffect(data.visual_effect || 'none');
   }
 
   if (data.is_banned) {
@@ -1007,47 +1129,47 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
   }
-const pubWrapper = document.getElementById('publicFriendshipsWrapper');
-const pubFriends = document.getElementById('publicFriendships');
 
-if (pubWrapper && pubFriends) {
-  if (data.friendships && data.friendships.length > 0) {
-    pubWrapper.style.display = 'flex';
-    
-    // Renderiza as bolinhas chamando a busca de foto no Supabase se disponível
-    Promise.all(data.friendships.map(async (f) => {
-      let avatarUrl = null;
-      try {
-        if (window.islySupabase && window.islySupabase.getProfileByHandle) {
-          const friendProfile = await window.islySupabase.getProfileByHandle(f);
-          if (friendProfile && friendProfile.avatar_url) {
-            avatarUrl = friendProfile.avatar_url;
+  const pubWrapper = document.getElementById('publicFriendshipsWrapper');
+  const pubFriends = document.getElementById('publicFriendships');
+
+  if (pubWrapper && pubFriends) {
+    if (data.friendships && data.friendships.length > 0) {
+      pubWrapper.style.display = 'flex';
+      
+      Promise.all(data.friendships.map(async (f) => {
+        let avatarUrl = null;
+        try {
+          if (window.islySupabase && window.islySupabase.getProfileByHandle) {
+            const friendProfile = await window.islySupabase.getProfileByHandle(f);
+            if (friendProfile && friendProfile.avatar_url) {
+              avatarUrl = friendProfile.avatar_url;
+            }
           }
+        } catch (e) {
+          console.warn("Erro ao carregar avatar do amigo:", e);
         }
-      } catch (e) {
-        console.warn("Erro ao carregar avatar do amigo:", e);
-      }
 
-      const innerContent = avatarUrl 
-        ? `<img src="${avatarUrl}" alt="@${f}">` 
-        : `@${f.substring(0,2).toUpperCase()}`;
+        const innerContent = avatarUrl 
+          ? `<img src="${avatarUrl}" alt="@${f}">` 
+          : `@${f.substring(0,2).toUpperCase()}`;
 
-      return `
-        <a href="/sly-${f}" target="_blank" style="text-decoration: none;" title="@${f}">
-          <div class="preview-friend-bubble">
-            ${innerContent}
-          </div>
-        </a>
-      `;
-    })).then(htmlList => {
-      pubFriends.innerHTML = htmlList.join('');
-    });
+        return `
+          <a href="/sly-${f}" target="_blank" style="text-decoration: none;" title="@${f}">
+            <div class="preview-friend-bubble">
+              ${innerContent}
+            </div>
+          </a>
+        `;
+      })).then(htmlList => {
+        pubFriends.innerHTML = htmlList.join('');
+      });
 
-  } else {
-    pubWrapper.style.display = 'none';
+    } else {
+      pubWrapper.style.display = 'none';
+    }
   }
-}
-  // --- LÓGICA DA SPLASH SCREEN & PLAYER YOUTUBE ---
+
   const splashScreen = document.getElementById('splashScreen');
   const splashTextDisplay = document.getElementById('splashTextDisplay');
   const playPauseBtn = document.getElementById('playPauseBtn');
@@ -1062,7 +1184,6 @@ if (pubWrapper && pubFriends) {
     splashTextDisplay.textContent = data.splash_text || 'clica aê';
   }
 
-  // Inicialização do YouTube Iframe API para o player oculto
   if (data.soundtrack) {
     const ytId = getYoutubeAudioId(data.soundtrack);
     if (ytId) {
@@ -1123,7 +1244,6 @@ if (pubWrapper && pubFriends) {
     playPauseBtn.addEventListener('click', togglePlayAudio);
   }
 
-  // Mute / Unmute
   if (muteBtn && ytPlayer) {
     let isMuted = false;
     muteBtn.addEventListener('click', () => {
@@ -1139,7 +1259,6 @@ if (pubWrapper && pubFriends) {
     });
   }
 
-  // Relógio do tempo percorrido
   setInterval(() => {
     if (ytPlayer && isYtPlaying && typeof ytPlayer.getCurrentTime === 'function') {
       const currentTime = ytPlayer.getCurrentTime();
@@ -1151,31 +1270,25 @@ if (pubWrapper && pubFriends) {
     }
   }, 1000);
 
-  // Clique na Splash Screen
   if (splashScreen) {
     splashScreen.addEventListener('click', () => {
       splashScreen.classList.add('hidden');
       
-      // Função para tentar iniciar o vídeo com segurança
       const tryPlay = () => {
         if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
           try {
             ytPlayer.playVideo();
           } catch (e) {
-            console.warn("Tentativa de autoplay falhou, tentando novamente...", e);
             setTimeout(tryPlay, 300);
           }
         } else {
-          // Se o player ainda estiver carregando a API, tenta de novo em 300ms
           setTimeout(tryPlay, 300);
         }
       };
-      
       tryPlay();
     });
   }
 
-  // Canvas Visualizador Minimalista
   const canvas = document.getElementById('visualizer');
   const ctx = canvas ? canvas.getContext('2d') : null;
 
@@ -1215,7 +1328,6 @@ if (pubWrapper && pubFriends) {
   }
   drawVisualizer();
 
-  // Lógica do Botão Hype
   const hypeBtn = document.getElementById('hypeBtn');
   const iconWrapper = document.getElementById('iconWrapper');
 
