@@ -166,9 +166,8 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   background-repeat: no-repeat;
   background-position: center;
 }
-.frame-cyberpunk{border:2px solid var(--blue);border-radius:22px;box-shadow:0 0 12px var(--blue)}
-.frame-neon-gold{border:2px solid #c4a46b;border-radius:22px;box-shadow:0 0 12px #c4a46b55}
-.frame-royal-purple{border:2px solid #b99aff;border-radius:22px;box-shadow:0 0 12px #8b5cf655}
+.frame-neon-white { border: 2px solid #ffffff; border-radius: 22px; box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.4); }
+.frame-vip { border: 2px solid var(--purple); border-radius: 22px; box-shadow: 0 0 16px var(--purple), 0 0 30px var(--blue); }
 
 .profile-info{width:100%;min-width:0;overflow:visible!important}
 .profile-card h3{
@@ -193,9 +192,30 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   grid-row:2;margin:0;padding:6px 10px;width:fit-content;max-width:100%;
   border-color:#8b5cf638;background:#8b5cf60d;color:#e0d4fa;border-radius:99px;display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600
 }
-.preview-emblems{grid-row:3;margin-top:0;display:flex;flex-wrap:wrap;gap:6px}
-.preview-emblems span{border-color:#a78bfa28;background:#a78bfa0b;color:#ded0f8;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:99px;font-size:11px;font-weight:600}
-.preview-emblems svg{width:14px;height:14px;fill:currentColor}
+
+/* EMBLEMAS MINIMALISTAS E ENXUTOS NA PRÉVIA */
+.preview-emblems{
+  grid-row:3;
+  margin-top:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+}
+.preview-emblems span{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:3px 9px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.2px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  color:#e2dcf0;
+  backdrop-filter:blur(8px);
+}
+
 .preview-socials{grid-row:4;margin-top:0;display:flex;flex-wrap:wrap;gap:7px}
 .preview-social-icon{
   width:34px;height:34px;border:1px solid #ffffff10;border-radius:11px;
@@ -214,6 +234,47 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   overflow-wrap:anywhere;display:flex;justify-content:space-between;align-items:center;gap:10px;text-decoration:none
 }
 .preview-link:hover{transform:translateY(-2px);border-color:#a78bfa55!important;background:#8b5cf60c!important}
+
+.preview-friendships-wrapper {
+  grid-row: 6.5;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.preview-friendships-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: default;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+.preview-friendships-title:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
+}
+.preview-friendships {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.preview-friend-bubble {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: bold;
+}
+.preview-friend-bubble img { width: 100%; height: 100%; object-fit: cover; }
+
 .profile-foot{
   grid-row:7;text-align:left;padding-top:11px;margin-top:1px;border-top-color:#ffffff12;
   color:#887c99;font-size:9px;letter-spacing:1.4px;font-weight:700;text-transform:uppercase
@@ -373,9 +434,9 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
  <button type="button" class="navbtn" data-sec="soundtrack">🎵 Trilha Sonora</button>
  <button type="button" class="navbtn" data-sec="appearance">🎨 Cores & Efeitos</button>
  <button type="button" class="navbtn" data-sec="links">↗ Meus links</button>
+ <button type="button" class="navbtn" data-sec="friendships">🤝 Friendships</button>
  <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
  
- <!-- Botão Painel Admin (visível apenas para admins/fundadores) -->
  <div id="adminNavContainer" style="display:none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);">
    <a href="admin.html" class="navbtn" style="background: rgba(168, 85, 247, 0.12); border-color: rgba(168, 85, 247, 0.35); color: #d8b4fe; text-align: center; font-weight: 700;">
      ⚙️ Painel Admin
@@ -413,49 +474,71 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
  <div class="editor-grid">
   <div>
    <section class="panel active-panel" id="panel-identity">
-    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, moldura VIP e uploads de foto e wallpaper.</p></div><span class="muted">01 / 08</span></div>
+    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio estendida, moldura e uploads de foto e wallpaper.</p></div><span class="muted">01 / 09</span></div>
     <div class="two">
      <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
      <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
     </div>
     <label class="field">
-     <span>🖼️ Moldura VIP do Avatar</span>
+     <span>🖼️ Moldura do Avatar</span>
      <select id="avatarFrameSelect">
       <option value="none">Nenhuma (Padrão)</option>
-      <option value="cyberpunk">Cyberpunk Neon (Azul)</option>
-      <option value="neon-gold">Gold Luxury (Dourado)</option>
-      <option value="royal-purple">Royal Purple (Roxo VIP)</option>
+      <option value="neon-white">Neon Branco Simples</option>
+      <option value="vip">VIP Customizada (Exclusivo)</option>
      </select>
     </label>
-    <label class="field"><span>Bio curta</span><textarea id="bio" maxlength="140" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/140</small></label>
+    <label class="field"><span>Bio curta (máx. 240 caracteres)</span><textarea id="bio" maxlength="240" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/240</small></label>
     <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
     <label class="field"><span>Wallpaper do cartão (Upload)</span><input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Máx. 2MB</small></label>
    </section>
 
    <section class="panel" id="panel-status">
-    <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 08</span></div>
-    <div class="options" id="statusOptions">
+    <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 09</span></div>
+    <div class="options" id="statusOptions" style="display:flex; flex-wrap:wrap; gap:6px;">
      <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando">🎮 Jogando</button>
-     <button type="button" class="choice" data-emoji="🔴" data-label="Ao vivo">🔴 Ao vivo</button>
-     <button type="button" class="choice" data-emoji="🍥" data-label="Anime">🍥 Anime</button>
+     <button type="button" class="choice" data-emoji="💻" data-label="Programando">💻 Programando</button>
+     <button type="button" class="choice" data-emoji="🛠️" data-label="Construindo">🛠️ Construindo</button>
+     <button type="button" class="choice" data-emoji="👀" data-label="Assistindo">👀 Assistindo</button>
+     <button type="button" class="choice" data-emoji="🌐" data-label="Criando Sites">🌐 Criando Sites</button>
+     <button type="button" class="choice" data-emoji="🕹️" data-label="Criando Jogos">🕹️ Criando Jogos</button>
+     <button type="button" class="choice" data-emoji="🌙" data-label="Ausente">🌙 Ausente</button>
+     <button type="button" class="choice" data-emoji="⚡" data-label="Ocupado">⚡ Ocupado</button>
+     <button type="button" class="choice" data-emoji="💤" data-label="Dormindo">💤 Dormindo</button>
+     <button type="button" class="choice" data-emoji="🌴" data-label="Estou de férias">🌴 Estou de férias</button>
+     <button type="button" class="choice" data-emoji="▶️" data-label="No Youtube">▶️ No Youtube</button>
+     <button type="button" class="choice" data-emoji="🎵" data-label="Escutando música">🎵 Escutando música</button>
     </div>
     <label class="field" style="margin-top:14px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
    </section>
 
    <section class="panel" id="panel-emblems">
-    <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 3 emblemas.</p></div><span class="muted">03 / 08</span></div>
-    <div class="emblems" id="emblemGrid">
-     <button type="button" class="emblem" data-id="gamer"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>Gamer</button>
-     <button type="button" class="emblem" data-id="geek"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>Geek</button>
-     <button type="button" class="emblem" data-id="rpg"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>RPG</button>
-     <button type="button" class="emblem" data-id="anime"><svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>Anime</button>
-     <button type="button" class="emblem" data-id="artist"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>Criador</button>
-     <button type="button" class="emblem" data-id="founder"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Fundador</button>
+    <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 20 emblemas para exibir no seu perfil.</p></div><span class="muted">03 / 09</span></div>
+    <div class="emblems" id="emblemGrid" style="grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px;">
+     <button type="button" class="emblem" data-id="nerd"><span style="font-size:22px; display:block; margin-bottom:4px;">🤓</span>Nerd</button>
+     <button type="button" class="emblem" data-id="gamer"><span style="font-size:22px; display:block; margin-bottom:4px;">🎮</span>Gamer</button>
+     <button type="button" class="emblem" data-id="youtuber"><span style="font-size:22px; display:block; margin-bottom:4px;">▶️</span>Youtuber</button>
+     <button type="button" class="emblem" data-id="programador"><span style="font-size:22px; display:block; margin-bottom:4px;">💻</span>Programador</button>
+     <button type="button" class="emblem" data-id="hacker"><span style="font-size:22px; display:block; margin-bottom:4px;">⚡</span>Hacker</button>
+     <button type="button" class="emblem" data-id="streamer"><span style="font-size:22px; display:block; margin-bottom:4px;">🟣</span>Streamer</button>
+     <button type="button" class="emblem" data-id="gotico"><span style="font-size:22px; display:block; margin-bottom:4px;">🦇</span>Gótico</button>
+     <button type="button" class="emblem" data-id="anime"><span style="font-size:22px; display:block; margin-bottom:4px;">🍥</span>Anime</button>
+     <button type="button" class="emblem" data-id="lol"><span style="font-size:22px; display:block; margin-bottom:4px;">⚔️</span>LoL</button>
+     <button type="button" class="emblem" data-id="habbo"><span style="font-size:22px; display:block; margin-bottom:4px;">🏨</span>Habbo</button>
+     <button type="button" class="emblem" data-id="thesims"><span style="font-size:22px; display:block; margin-bottom:4px;">🟩</span>The Sims</button>
+     <button type="button" class="emblem" data-id="valorant"><span style="font-size:22px; display:block; margin-bottom:4px;">🎯</span>Valorant</button>
+     <button type="button" class="emblem" data-id="cod"><span style="font-size:22px; display:block; margin-bottom:4px;">🪖</span>Call Of Duty</button>
+     <button type="button" class="emblem" data-id="cs"><span style="font-size:22px; display:block; margin-bottom:4px;">💣</span>CS</button>
+     <button type="button" class="emblem" data-id="gta"><span style="font-size:22px; display:block; margin-bottom:4px;">💰</span>GTA</button>
+     <button type="button" class="emblem" data-id="minecraft"><span style="font-size:22px; display:block; margin-bottom:4px;">⛏️</span>Minecraft</button>
+     <button type="button" class="emblem" data-id="rpg"><span style="font-size:22px; display:block; margin-bottom:4px;">🎲</span>RPG</button>
+     <button type="button" class="emblem" data-id="artista"><span style="font-size:22px; display:block; margin-bottom:4px;">🎨</span>Artista</button>
+     <button type="button" class="emblem" data-id="musica"><span style="font-size:22px; display:block; margin-bottom:4px;">🎧</span>Música</button>
+     <button type="button" class="emblem" data-id="fundador"><span style="font-size:22px; display:block; margin-bottom:4px;">💎</span>Fundador</button>
     </div>
    </section>
 
    <section class="panel" id="panel-socials">
-    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com ícones SVG 3D.</p></div><span class="muted">04 / 08</span></div>
+    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com ícones SVG 3D.</p></div><span class="muted">04 / 09</span></div>
     <div class="social-grid">
      <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
      <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
@@ -472,32 +555,30 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-embeds">
-    <div class="panel-head"><div><h2>🎬 Mídias Embed</h2><p>Cole o link completo da música, vídeo ou post.</p></div><span class="muted">05 / 08</span></div>
+    <div class="panel-head"><div><h2>🎬 Mídias Embed</h2><p>Cole o link completo da música, vídeo ou post.</p></div><span class="muted">05 / 09</span></div>
     <label class="field">
      <span>🎵 Link de Player do Spotify (Música, Álbum ou Playlist)</span>
      <input id="embedSpotify" placeholder="https://open.spotify.com/track/...">
-     <small>Ex: https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT</small>
     </label>
     <label class="field">
      <span>▶ Link do Vídeo do YouTube</span>
      <input id="embedYoutube" placeholder="https://www.youtube.com/watch?v=...">
-     <small>Ex: https://www.youtube.com/watch?v=dQw4w9WgXcQ</small>
     </label>
     <label class="field"><span>📸 Link do Post do Instagram</span><input id="embedInstagram" placeholder="https://www.instagram.com/p/..."></label>
    </section>
 
    <section class="panel" id="panel-soundtrack">
-    <div class="panel-head"><div><h2>🎵 Trilha Sonora</h2><p>Adicione uma música de fundo para o perfil.</p></div><span class="muted">06 / 08</span></div>
+    <div class="panel-head"><div><h2>🎵 Trilha Sonora</h2><p>Adicione uma música de fundo para o perfil.</p></div><span class="muted">06 / 09</span></div>
     <label class="field">
      <span>Arquivo de Trilha Sonora (.mp3, .wav)</span>
      <input id="soundtrackFile" type="file" accept="audio/mp3,audio/wav,audio/mpeg">
-     <small>Máximo de 8 minutos / 15MB. O áudio tocará de forma opcional para os visitantes.</small>
+     <small>Máximo de 8 minutos / 15MB.</small>
     </label>
     <input type="hidden" id="soundtrackUrl" value="">
    </section>
 
    <section class="panel" id="panel-appearance">
-    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos, Cursor e Mural de Recados.</p></div><span class="muted">07 / 08</span></div>
+    <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos e Cursor.</p></div><span class="muted">07 / 09</span></div>
     <label class="field">
      <span>🪞 Estilo Visual do Card</span>
      <select id="cardStyle">
@@ -519,7 +600,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     </div>
     <div class="two">
      <label class="field"><span>Cor do Título do Nome</span><input type="color" id="titleColor" value="#ffffff"></label>
-     <label class="field"><span>Cor dos Demais Textos (Afeta Destaque e Texto dos Links)</span><input type="color" id="textColor" value="#f6f4ff"></label>
+     <label class="field"><span>Cor dos Demais Textos</span><input type="color" id="textColor" value="#f6f4ff"></label>
     </div>
     <label class="field">
      <span>✨ Efeito Especial no Nome</span>
@@ -531,7 +612,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <label class="field">
      <span>🖱️ Cursor Personalizado (.cur ou .png)</span>
      <input id="customCursorFile" type="file" accept=".cur,.png,.gif,.webp">
-     <small>Selecione um arquivo de cursor do seu computador. Máx. 1MB.</small>
+     <small>Máx. 1MB.</small>
     </label>
     <input type="hidden" id="customCursor" value="">
     <input type="hidden" id="avatarUrl" value="">
@@ -539,9 +620,22 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-links">
-    <div class="panel-head"><div><h2>↗ Meus links extras</h2><p>Até 6 links personalizados.</p></div><span class="muted">08 / 08</span></div>
+    <div class="panel-head"><div><h2>↗ Meus links extras</h2><p>Até 6 links personalizados.</p></div><span class="muted">08 / 09</span></div>
     <div id="linksList"></div>
     <button type="button" class="add" id="addLinkBtn">＋ Adicionar link</button>
+   </section>
+
+   <section class="panel" id="panel-friendships">
+    <div class="panel-head"><div><h2>🤝 Friendships</h2><p>Conecte até 3 amigos em destaque no seu perfil.</p></div><span class="muted">09 / 09</span></div>
+    <label class="field">
+     <span>Adicionar aliado (@handle)</span>
+     <div style="display: flex; gap: 8px;">
+      <input type="text" id="friendHandleInput" placeholder="ex: dielsly" style="flex:1;">
+      <button type="button" id="addFriendBtn" class="btn primary" style="padding: 10px 16px;">Adicionar</button>
+     </div>
+     <small>Digite o @ do amigo cadastrado no isly.me.</small>
+    </label>
+    <div id="friendshipsListEdit" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;"></div>
    </section>
   </div>
 
@@ -564,6 +658,12 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <div class="preview-socials" id="previewSocials"></div>
     <div class="embeds-container" id="previewEmbeds"></div>
     <div class="preview-links" id="previewLinks"></div>
+    
+    <div class="preview-friendships-wrapper" id="previewFriendshipsWrapper" style="display: none;">
+      <div class="preview-friendships-title">Amigos Próximos</div>
+      <div class="preview-friendships" id="previewFriendships"></div>
+    </div>
+
     <div class="profile-foot">CRIADO NO ISLY.ME ✦</div>
    </div>
    <div class="share">
@@ -588,24 +688,24 @@ async function runAppInitializer() {
  let user = null;
  try { user = await window.islySupabase.getUser(); } catch (e) { console.warn(e); }
 
- if (user) {
-  if (appRoot) appRoot.style.display = 'block';
-  
-  // Verifica se é administrador para exibir o botão do painel admin na barra lateral
-  try {
-    const profile = await window.islySupabase.getProfileById(user.id);
-    if (profile && profile.is_admin) {
-      const adminNav = document.getElementById('adminNavContainer');
-      if (adminNav) adminNav.style.display = 'block';
-    }
-  } catch (err) {
-    console.warn("Erro ao verificar status de admin:", err);
-  }
-
-  initEditor(user.id);
- } else {
+ if (!user) {
   window.location.replace('landing.html');
+  return;
  }
+
+ if (appRoot) appRoot.style.display = 'block';
+  
+ try {
+   const profile = await window.islySupabase.getProfileById(user.id);
+   if (profile && profile.is_admin) {
+     const adminNav = document.getElementById('adminNavContainer');
+     if (adminNav) adminNav.style.display = 'block';
+   }
+ } catch (err) {
+   console.warn("Erro ao verificar status de admin:", err);
+ }
+
+ initEditor(user.id);
 
  $('#authBtn')?.addEventListener('click', async () => { window.location.replace('landing.html'); });
 }
@@ -623,14 +723,22 @@ function toast(msg) {
  setTimeout(() => { t.classList.remove('show'); t.style.display = 'none'; }, 3000);
 }
 
-const emblemNames = { gamer: 'Gamer', geek: 'Geek', rpg: 'RPG', anime: 'Anime', artist: 'Criador', founder: 'Fundador' };
-const emblemSvgs = {
- gamer: '<svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
- geek: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.7 16.4L3 21l2.6-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/></svg>',
- rpg: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
- anime: '<svg viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-3.5 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 5c-2.3 0-4.2 1.5-4.8 3.6h9.6c-.6-2.1-2.5-3.6-4.8-3.6z"/></svg>',
- artist: '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 20l2.39-1.97C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-8c.83 0 1.5-.67 1.5-1.5S9.83 8 9 8s-1.5.67-1.5 1.5S8.17 11 9 11zm6 0c.83 0 1.5-.67 1.5-1.5S15.83 8 15 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 5c2.21 0 4-1.79 4-4H8c0 2.21 1.79 4 4 4z"/></svg>',
- founder: '<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
+const emblemNames = {
+  nerd: 'Nerd', gamer: 'Gamer', youtuber: 'Youtuber', programador: 'Programador',
+  hacker: 'Hacker', streamer: 'Streamer', gotico: 'Gótico', anime: 'Anime',
+  lol: 'LoL', habbo: 'Habbo', thesims: 'The Sims', valorant: 'Valorant',
+  cod: 'Call Of Duty', cs: 'CS', gta: 'GTA', minecraft: 'Minecraft',
+  rpg: 'RPG', artista: 'Artista', artist: 'Criador', musica: 'Música', 
+  fundador: 'Fundador', founder: 'Fundador', geek: 'Geek'
+};
+
+const emblemEmojis = {
+  nerd: '🤓', gamer: '🎮', youtuber: '▶️', programador: '💻',
+  hacker: '⚡', streamer: '🟣', gotico: '🦇', anime: '🍥',
+  lol: '⚔️', habbo: '🏨', thesims: '🟩', valorant: '🎯',
+  cod: '🪖', cs: '💣', gta: '💰', minecraft: '⛏️',
+  rpg: '🎲', artista: '🎨', artist: '🎨', musica: '🎧', 
+  fundador: '💎', founder: '💎', geek: '🤓'
 };
 
 const socialSvgs = {
@@ -692,13 +800,14 @@ async function initEditor(userId) {
    name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack_url: '', avatar_frame: 'none', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: ['gamer', 'geek'], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
-   guestbook_style: 'vintage'
+   guestbook_style: 'vintage', friendships: []
   };
  }
 
  let currentProfile = { ...profile };
  if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
  if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
+ if (!Array.isArray(currentProfile.friendships)) currentProfile.friendships = [];
  if (!currentProfile.socials || typeof currentProfile.socials !== 'object') currentProfile.socials = {};
 
  document.getElementById('statViews').textContent = currentProfile.views_count || 0;
@@ -734,7 +843,6 @@ async function initEditor(userId) {
  nameInput.value = currentProfile.name || '';
  handleInput.value = currentProfile.handle || '';
 
- // REGRA DO @: Se o usuário já alterou o handle uma vez, bloqueia o campo e avisa
  if (currentProfile.handle_changed) {
   handleInput.disabled = true;
   handleInput.style.opacity = '0.6';
@@ -932,6 +1040,7 @@ async function initEditor(userId) {
     avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
     embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
     emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
+    friendships: currentProfile.friendships,
     handle_changed: currentProfile.handle_changed
    };
 
@@ -972,7 +1081,7 @@ async function initEditor(userId) {
     currentProfile.emblems = currentProfile.emblems.filter(e => e !== id);
     el.classList.remove('selected');
    } else {
-    if (currentProfile.emblems.length >= 3) { toast('Máximo de 3 emblemas.'); return; }
+    if (currentProfile.emblems.length >= 20) { toast('Máximo de 20 emblemas.'); return; }
     currentProfile.emblems.push(id); el.classList.add('selected');
    }
    updatePreview(); triggerAutoSave();
@@ -1033,6 +1142,46 @@ async function initEditor(userId) {
 
  renderLinksEditor();
 
+ function renderFriendshipsEditor() {
+  const container = document.getElementById('friendshipsListEdit');
+  if (!container) return;
+  container.innerHTML = currentProfile.friendships.map((fHandle, idx) => `
+    <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); padding:5px 12px; border-radius:99px; font-size:12px;">
+      <span>@${fHandle}</span>
+      <button type="button" onclick="window.removeFriendship(${idx})" style="background:none; border:none; color:#f87171; cursor:pointer; font-weight:bold;">&times;</button>
+    </div>
+  `).join('');
+ }
+
+ document.getElementById('addFriendBtn')?.addEventListener('click', () => {
+  const input = document.getElementById('friendHandleInput');
+  const val = input.value.trim().replace(/^@/, '');
+  if (!val) return;
+  if (currentProfile.friendships.length >= 3) {
+   toast('Pode adicionar no máximo 3 aliados.');
+   return;
+  }
+  if (currentProfile.friendships.includes(val)) {
+   toast('Este amigo já está na lista.');
+   return;
+  }
+  currentProfile.friendships.push(val);
+  input.value = '';
+  renderFriendshipsEditor();
+  updatePreview();
+  triggerAutoSave();
+  toast('Aliado adicionado! 🤝');
+ });
+
+ window.removeFriendship = function(index) {
+  currentProfile.friendships.splice(index, 1);
+  renderFriendshipsEditor();
+  updatePreview();
+  triggerAutoSave();
+ };
+
+ renderFriendshipsEditor();
+
  document.getElementById('copyBtn').addEventListener('click', () => {
   navigator.clipboard.writeText(shareUrlInput.value);
   toast('Link copiado para a área de transferência! 📋');
@@ -1061,9 +1210,8 @@ async function initEditor(userId) {
   const frameEl = document.getElementById('previewFrame');
   const frameType = avatarFrameSelect.value;
   frameEl.className = 'avatar-frame';
-  if (frameType === 'cyberpunk') frameEl.classList.add('frame-cyberpunk');
-  else if (frameType === 'neon-gold') frameEl.classList.add('frame-neon-gold');
-  else if (frameType === 'royal-purple') frameEl.classList.add('frame-royal-purple');
+  if (frameType === 'neon-white') frameEl.classList.add('frame-neon-white');
+  else if (frameType === 'vip') frameEl.classList.add('frame-vip');
 
   document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
   document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
@@ -1098,7 +1246,12 @@ async function initEditor(userId) {
   document.getElementById('previewHandle').style.color = activeTextColor;
 
   const emPreview = document.getElementById('previewEmblems');
-  emPreview.innerHTML = currentProfile.emblems.map(id => `<span>${emblemSvgs[id] || ''} ${emblemNames[id] || id}</span>`).join('');
+  emPreview.innerHTML = (currentProfile.emblems || []).map(id => {
+    const cleanId = String(id).toLowerCase().trim();
+    const emoji = emblemEmojis[cleanId] || '✨';
+    const name = emblemNames[cleanId] || cleanId;
+    return `<span><span style="font-size: 12px; line-height: 1;">${emoji}</span>${name}</span>`;
+  }).join('');
 
   const socPreview = document.getElementById('previewSocials');
   let socHTML = '';
@@ -1124,6 +1277,19 @@ async function initEditor(userId) {
     <span style="color:${activeTextColor}">↗</span>
    </a>
   `).join('');
+
+  const previewWrapperEl = document.getElementById('previewFriendshipsWrapper');
+  const previewFriendsEl = document.getElementById('previewFriendships');
+  if (previewWrapperEl && previewFriendsEl) {
+    if (currentProfile.friendships && currentProfile.friendships.length > 0) {
+      previewWrapperEl.style.display = 'flex';
+      previewFriendsEl.innerHTML = currentProfile.friendships.map(f => `
+        <div class="preview-friend-bubble" title="@${f}">@${f.substring(0,2).toUpperCase()}</div>
+      `).join('');
+    } else {
+      previewWrapperEl.style.display = 'none';
+    }
+  }
  }
 
  [nameInput, bioInput, activityInput].forEach(el => {
@@ -1171,6 +1337,7 @@ async function initEditor(userId) {
    avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, soundtrack_url: soundtrackUrlInput.value,
    embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
    emblems: currentProfile.emblems, socials: socialsData, links: currentProfile.links,
+   friendships: currentProfile.friendships,
    handle_changed: currentProfile.handle_changed
   };
 
