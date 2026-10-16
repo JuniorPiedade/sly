@@ -892,8 +892,8 @@ async function initEditor(userId) {
   if (field && currentProfile.socials[key]) field.value = currentProfile.socials[key];
  });
 
- if (currentProfile.handle) {
-  shareUrlInput.value = `${window.location.origin}/perfil.html?u=${currentProfile.handle}`;
+if (currentProfile.handle) {
+  shareUrlInput.value = `${window.location.origin}/sly.${currentProfile.handle}`;
  }
 
  const previewCard = document.getElementById('profileCard');
