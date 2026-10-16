@@ -1521,26 +1521,6 @@ async function initEditor(userId) {
   toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
  });
 }
-</script>
-// 1. Bloqueia o clique direito e mostra o aviso na tela
-document.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-  mostrarAvisoInspecao("⚠️ Clique direito desativado por segurança.");
-});
-
-// 2. Bloqueia atalhos de inspeção e visualização de código-fonte (Ctrl+U, F12, etc.)
-document.addEventListener('keydown', (e) => {
-  if (
-    e.key === 'F12' || 
-    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
-    (e.ctrlKey && (e.key === 'u' || e.key === 'U')) // Aqui pegamos o Ctrl + U com precisão máxima
-  ) {
-    e.preventDefault();
-    e.stopPropagation();
-    mostrarAvisoInspecao("⚠️ Tentativa de inspeção bloqueada. Respeite o código do irmão!");
-    return false;
-  }
-});
 <script>
 (() => {
   const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
