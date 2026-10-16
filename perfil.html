@@ -206,6 +206,131 @@ a{color:inherit;text-decoration:none}
 .error-box p{font-size:13px;color:var(--muted);line-height:1.7}
 .error-box a{display:inline-block;margin-top:12px;color:#c084fc}
 .loading{color:var(--muted);text-align:center;padding:30px}
+
+/* --- ESTILOS DO BOTÃO HYPE & VIEWS (MÉTRICAS) --- */
+.stats-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 14px;
+  width: 100%;
+}
+.profile-card.align-center .stats-container { justify-content: center; }
+.profile-card.align-left .stats-container { justify-content: flex-start; }
+
+.views-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  backdrop-filter: blur(12px);
+}
+
+.hype-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 22px 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+  transition: transform 0.15s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hype-button:hover {
+  transform: scale(1.03);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.2);
+}
+
+.hype-button:active {
+  transform: scale(0.95);
+}
+
+.hype-button.hyped {
+  animation: flashGlow 0.4s ease-out;
+}
+
+@keyframes flashGlow {
+  0% {
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.4);
+    border-color: #ffffff;
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.icon-wrapper {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
+}
+
+.neon-star {
+  fill: #FFFFFF;
+  stroke: #FFFFFF;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: rotate(0deg) scale(1);
+}
+
+.hyped .neon-star {
+  transform: rotate(0deg) scale(1.25);
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1));
+}
+
+.hype-count {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.hyped .hype-count {
+  transform: scale(1.15);
+}
+
+/* Partículas Neon (Confetes) */
+.particle {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px #ffffff, 0 0 14px rgba(255, 255, 255, 0.8);
+  animation: explode 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes explode {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0);
+  }
+}
 </style>
 </head>
 
@@ -226,6 +351,24 @@ a{color:inherit;text-decoration:none}
     <div class="social-preview" aria-label="Universo gamer">
       <span>◎</span><span>▶</span><span>⌘</span><span>◈</span>
     </div>
+
+    <!-- Container unificado: Contador de Visualizações + Botão Hype (Estrela Neon) -->
+    <div class="stats-container" id="statsContainer">
+      <div class="views-badge">
+        <span>👀</span>
+        <span id="viewsCount">0</span> views
+      </div>
+
+      <div class="hype-button" id="hypeBtn">
+        <div class="icon-wrapper" id="iconWrapper">
+          <svg width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="neon-star">
+            <path d="M24 10L26.7634 19.4674L33.7128 20.1456L28.4724 24.8454L30.043 31.6786L24 28.02L17.957 31.6786L19.5276 24.8454L14.2872 20.1456L21.2366 19.4674L24 10Z" />
+          </svg>
+        </div>
+        <span class="hype-count" id="hypeCount">0</span>
+      </div>
+    </div>
+
     <div class="public-links" id="links"></div>
     <div id="guestbookSection" style="display:none; padding:0 14px 14px;"></div>
     <div class="profile-foot">
@@ -433,6 +576,14 @@ a{color:inherit;text-decoration:none}
     renderEmblems(data.emblems);
     renderLinks(data.links);
 
+    // Carrega contadores (Views e Hypes se houver na base)
+    if (document.getElementById('viewsCount')) {
+      document.getElementById('viewsCount').textContent = data.views || 0;
+    }
+    if (document.getElementById('hypeCount')) {
+      document.getElementById('hypeCount').textContent = data.hypes || 0;
+    }
+
     // Banner e Wallpaper personalizados com segurança
     const cover = document.getElementById('cover');
     if (cover && data.banner_url) {
@@ -467,6 +618,61 @@ a{color:inherit;text-decoration:none}
       if (guestbookSection) guestbookSection.style.display = 'none';
     } else {
       guestbookSection.style.display = 'none'; 
+    }
+  }
+
+  // Interatividade do Botão Hype (Estrela Neon + Confetes + Incremento)
+  document.addEventListener('DOMContentLoaded', () => {
+    const hypeBtn = document.getElementById('hypeBtn');
+    const hypeCount = document.getElementById('hypeCount');
+    const iconWrapper = document.getElementById('iconWrapper');
+
+    if (hypeBtn && hypeCount && iconWrapper) {
+      hypeBtn.addEventListener('click', () => {
+        let current = parseInt(hypeCount.innerText, 10) || 0;
+        hypeCount.innerText = current + 1;
+
+        hypeBtn.classList.remove('hyped');
+        void hypeBtn.offsetWidth;
+        hypeBtn.classList.add('hyped');
+
+        createNeonBurst(iconWrapper);
+      });
+    }
+  });
+
+  function createNeonBurst(targetContainer) {
+    const particleCount = 14; 
+    const rect = targetContainer.getBoundingClientRect();
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('span');
+      particle.classList.add('particle');
+
+      const size = Math.random() * 3 + 2;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+
+      particle.style.left = `${centerX}px`;
+      particle.style.top = `${centerY}px`;
+
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = Math.random() * 45 + 25;
+      
+      const tx = Math.cos(angle) * velocity;
+      const ty = Math.sin(angle) * velocity;
+
+      particle.style.setProperty('--tx', `${tx}px`);
+      particle.style.setProperty('--ty', `${ty}px`);
+
+      targetContainer.appendChild(particle);
+
+      setTimeout(() => {
+        particle.remove();
+      }, 600);
     }
   }
 
