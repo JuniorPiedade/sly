@@ -732,17 +732,16 @@ async function runAppInitializer() {
    console.warn("Erro ao verificar status de admin:", err);
  }
 
- initEditor(user.id);
+// Inicialização direta e segura do painel
+document.addEventListener('DOMContentLoaded', () => {
+  runAppInitializer();
+});
 
- $('#authBtn')?.addEventListener('click', async () => { window.location.replace('landing.html'); });
-}
-
-if (window.__islySdkReadyFired) {
- runAppInitializer();
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  runAppInitializer();
 } else {
- window.addEventListener('isly-sdk-ready', runAppInitializer);
+  window.addEventListener('isly-sdk-ready', runAppInitializer);
 }
-
 function toast(msg) {
  const t = document.getElementById('toast');
  if(!t) return;
