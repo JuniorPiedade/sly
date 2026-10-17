@@ -609,16 +609,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 
    <section class="panel" id="panel-appearance">
     <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos e Cursor.</p></div><span class="muted">07 / 08</span></div>
-    <!-- Campo de alinhamento do cartão -->
     <label class="field">
-     <span>📐 Alinhamento do Cartão de Perfil</span>
-     <select id="profileAlignSelect">
-      <option value="left">Esquerdo (Padrão)</option>
-      <option value="center">Centralizado</option>
-     </select>
-    </label>
-    <!-- Fim do novo campo -->
-     <label class="field">
      <span>✨ Efeito Visual de Fundo (Canvas)</span>
      <select id="visualEffectSelect">
       <option value="none">Nenhum (Desativado)</option>
@@ -943,7 +934,6 @@ async function initEditor(userId) {
    status_emoji: '🎮', status_label: 'Jogando', emblems: [], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
    guestbook_style: 'vintage', friendships: [], visual_effect: 'none'
-    card_align: 'left',
   };
  }
 
@@ -965,7 +955,6 @@ async function initEditor(userId) {
  const shareUrlInput = document.getElementById('shareUrl');
 
  const cardStyleSelect = document.getElementById('cardStyle');
- const profileAlignSelect = document.getElementById('profileAlignSelect');
  const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
  const playerStyleSelect = document.getElementById('playerStyleSelect');
  const visualEffectSelect = document.getElementById('visualEffectSelect');
@@ -1012,7 +1001,6 @@ async function initEditor(userId) {
  activityInput.value = currentProfile.activity || '';
 
  cardStyleSelect.value = currentProfile.card_style || 'opaque';
- if (profileAlignSelect) profileAlignSelect.value = currentProfile.card_align || 'left';
  guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
  if (playerStyleSelect) playerStyleSelect.value = currentProfile.player_style || 'default';
  if (visualEffectSelect) visualEffectSelect.value = currentProfile.visual_effect || 'none';
