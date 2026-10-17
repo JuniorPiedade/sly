@@ -17,6 +17,10 @@
     document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
   }
 </script>
+
+<!-- Importação correta do ficheiro central de redes sociais locais -->
+<script src="js/redes-sociais.js"></script>
+
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
@@ -725,22 +729,9 @@ const socialUrls = {
   behance: val => `https://behance.net/${val}`,
   pinterest: val => `https://pinterest.com/${val}`,
   tumblr: val => `https://${val}.tumblr.com`,
-  vercel: val => `https://${val}.vercel.app`
-};
-
-const socialLogos = {
- steam: 'https://cdn.simpleicons.org/steam/white',
- spotify: 'https://cdn.simpleicons.org/spotify/1DB954',
- youtube: 'https://cdn.simpleicons.org/youtube/FF0000',
- discord: 'https://cdn.simpleicons.org/discord/5865F2',
- instagram: 'https://cdn.simpleicons.org/instagram/E4405F',
- twitter: 'https://cdn.simpleicons.org/x/white',
- letterboxd: 'https://cdn.simpleicons.org/letterboxd/00D735',
- onlyfans: 'https://cdn.simpleicons.org/onlyfans/00AFF0',
- behance: 'https://cdn.simpleicons.org/behance/1769FF',
- pinterest: 'https://cdn.simpleicons.org/pinterest/BD081C',
- tumblr: 'https://cdn.simpleicons.org/tumblr/36465D',
- vercel: 'https://cdn.simpleicons.org/vercel/white'
+  vercel: val => `https://${val}.vercel.app`,
+  dribbble: val => `https://dribbble.com/${val}`,
+  valorant: val => `https://tracker.gg/valorant/profile/riot/${val}`
 };
 
 function getSpotifyEmbed(url) {
@@ -938,7 +929,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const socialsBar = document.getElementById('socialsBar');
-  if (socialsBar && data.socials) {
+  if (socialsBar && data.socials && typeof socialLogos !== 'undefined') {
     let sHTML = '';
     Object.keys(socialLogos).forEach(key => {
       const val = data.socials[key];
