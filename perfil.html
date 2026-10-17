@@ -46,7 +46,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   z-index: 99999;
   display: grid;
   place-items: center;
-  opacity: 1; /* Garante que nasce totalmente visível se houver texto */
+  opacity: 1;
   visibility: visible;
   transition: opacity 0.4s ease, visibility 0.4s ease;
   cursor: pointer;
@@ -122,7 +122,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .container{width:100%;max-width:640px;position:relative}
 
 .profile-card{
-  opacity: 1; /* Inicia invisível para evitar a piscada na tela */
+  opacity: 0; /* Inicia oculto por baixo da splash screen para evitar qualquer piscada */
   overflow: visible !important;
   border-radius:28px;
   width:100%;
@@ -133,7 +133,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   text-align:left;
   transform-style:preserve-3d;
   perspective:1200px;
-  transition: opacity 0.3s ease, transform 0.15s ease-out;
+  transition: opacity 0.4s ease, transform 0.15s ease-out;
   background-size:cover;
   background-position:center;
   display:flex;
@@ -658,8 +658,8 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
     </div>
 </header>
 
-<!-- TELA DE ENTRADA (SPLASH SCREEN) - Inicia oculta por padrão -->
-<div class="splash-overlay hidden" id="splashScreen">
+<!-- TELA DE ENTRADA (SPLASH SCREEN) - Inicia visível por padrão para proteger o card -->
+<div class="splash-overlay" id="splashScreen">
   <div class="splash-content">
     <div class="splash-star-wrapper" id="splashStarBtn">
       <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="splash-neon-star">
@@ -1182,42 +1182,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const muteBtn = document.getElementById('muteBtn');
   const volumeIcon = document.getElementById('volumeIcon');
 
-  // --- LÓGICA DA SPLASH SCREEN INSTANTÂNEA ---
-  const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
-
-  if (hasSplashText && splashScreen && splashTextDisplay) {
-    splashTextDisplay.textContent = data.splash_text;
-    splashScreen.classList.remove('hidden');
-
-    const handleSplashUnlock = (e) => {
-      e.stopPropagation();
-      splashScreen.classList.add('hidden');
-      
-      const tryPlay = () => {
-        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-          try {
-            ytPlayer.playVideo();
-          } catch (err) {
-            setTimeout(tryPlay, 300);
-          }
-        } else {
-          setTimeout(tryPlay, 300);
-        }
-      };
-      tryPlay();
-    };
-
-    splashScreen.addEventListener('click', handleSplashUnlock);
-    const starBtn = document.getElementById('splashStarBtn');
-    if (starBtn) {
-      starBtn.addEventListener('click', handleSplashUnlock);
-    }
-  } else {
-    if (splashScreen) {
-      splashScreen.classList.add('hidden');
-    }
-  }
-
   const playerSection = document.getElementById('playerSection');
 
   if (data.soundtrack && data.soundtrack.trim() !== '') {
@@ -1310,16 +1274,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }, 1000);
 
-  // --- LÓGICA REVISADA DA SPLASH SCREEN ---
+  // --- LÓGICA DEFINITIVA DA SPLASH SCREEN ---
   const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
+
+  const cardElement = document.getElementById('profileCard');
 
   if (hasSplashText && splashScreen && splashTextDisplay) {
     splashTextDisplay.textContent = data.splash_text;
-    splashScreen.classList.remove('hidden');
+    splashScreen.classList.remove('hidden'); // Mantém a splash cobrindo tudo
 
     const handleSplashUnlock = (e) => {
       e.stopPropagation();
       splashScreen.classList.add('hidden');
+      
+      // Revela o card suavemente apenas após o clique na estrela
+      if (cardElement) {
+        cardElement.style.opacity = '1';
+      }
       
       const tryPlay = () => {
         if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
@@ -1341,8 +1312,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       starBtn.addEventListener('click', handleSplashUnlock);
     }
   } else {
+    // Se não tiver texto na splash, esconde ela imediatamente e revela o card direto
     if (splashScreen) {
       splashScreen.classList.add('hidden');
+    }
+    if (cardElement) {
+      cardElement.style.opacity = '1';
     }
   }
 
@@ -1449,12 +1424,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       setTimeout(() => particle.remove(), 500);
     }
   }
-// Revela o card suavemente após carregar os dados
-  const cardElement = document.getElementById('profileCard');
-  if (cardElement) {
-    cardElement.style.opacity = '1';
-  }
-}); // <--- Esta única chave fecha o DOMContentLoaded de vez
+}); // <--- Fechamento correto do DOMContentLoaded
 </script>
 
 <!-- Proteção SLY.ME isolada -->
