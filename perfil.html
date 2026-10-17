@@ -1184,12 +1184,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     splashTextDisplay.textContent = data.splash_text || 'clica aê';
   }
 
-  if (data.soundtrack) {
+const playerSection = document.getElementById('playerSection');
+
+  // Verifica se existe trilha sonora preenchida no banco de dados e se não está vazia
+  if (data.soundtrack && data.soundtrack.trim() !== '') {
+    // Exibe o player na tela
+    if (playerSection) playerSection.style.display = 'block';
+
     const ytId = getYoutubeAudioId(data.soundtrack);
     if (ytId) {
       const tag = document.createElement('script');
       tag.src = "https://www.youtube.com/iframe_api";
       document.head.appendChild(tag);
+
+      window.onYouTubeIframeAPIReady = function() {
+        ytPlayer = new YT.Player('youtubePlayerContainer', {
+          height: '0',
+          width: '0',
+          videoId: ytId,
+          playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': ytId },
+          events: {
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      };
+    }
+  } else {
+    // Se não tem trilha sonora, mantém o player oculto
+    if (playerSection) playerSection.style.display = 'none';
+  }
 
       window.onYouTubeIframeAPIReady = function() {
         ytPlayer = new YT.Player('youtubePlayerContainer', {
