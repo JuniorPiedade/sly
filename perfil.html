@@ -120,6 +120,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .container{width:100%;max-width:640px;position:relative}
 
 .profile-card{
+  opacity: 0; /* Inicia invisível para evitar a piscada na tela */
   overflow: visible !important;
   border-radius:28px;
   width:100%;
@@ -130,7 +131,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   text-align:left;
   transform-style:preserve-3d;
   perspective:1200px;
-  transition:transform 0.15s ease-out;
+  transition: opacity 0.3s ease, transform 0.15s ease-out;
   background-size:cover;
   background-position:center;
   display:flex;
@@ -138,7 +139,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   gap:20px;
   border: none !important;
 }
-
 .card-style-opaque { background-color: #11111f; }
 .card-style-glass {
   background: rgba(13, 11, 20, 0.25) !important;
@@ -1411,7 +1411,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       setTimeout(() => particle.remove(), 500);
     }
   }
-});
+// Revela o card suavemente após carregar os dados
+  const cardElement = document.getElementById('profileCard');
+  if (cardElement) {
+    cardElement.style.opacity = '1';
+  }
+}); // <--- Esta única chave fecha o DOMContentLoaded de vez
 </script>
 
 <!-- Proteção SLY.ME isolada -->
