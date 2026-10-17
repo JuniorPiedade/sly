@@ -1031,7 +1031,7 @@ async function initEditor(userId) {
     }
   });
 
-  // Capturar o código de retorno do Spotify na URL (Callback)
+  /// Capturar o código de retorno do Spotify na URL (Callback)
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
 
@@ -1041,22 +1041,52 @@ async function initEditor(userId) {
     toast('Autenticando com o Spotify...');
 
     try {
-      // Simula ou regista o sucesso da conexão inicial guardando na base de dados
-      currentProfile.spotify_connected = true;
-      
-      const payload = {
-        id: userId,
-        spotify_connected: true
-      };
-      await window.islySupabase.saveProfile(payload);
+      // Substitui pelas tuas credenciais reais da app do Spotify
+      const clientId = '90048528b8ed425ab7762740275ef07';
+      // ATENÇÃO: Se tiveres o Client Secret, podes colocá-lo aqui de forma temporária para concluir a troca do token com segurança no teu painel privado:
+      const clientSecret = '38acb3a4b6da44f483d5f4d4ea984214'; 
+      const redirectUri = 'https://sly-inky.vercel.app/';
 
-      if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
-      if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
-      
-      toast('Spotify conectado com sucesso! ✓');
+      // Pedido POST para o Spotify trocar o código pelos tokens
+      const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
+        },
+        body: new URLSearchParams({
+          grant_type: 'authorization_code',
+          code: code,
+          redirect_uri: redirectUri
+        })
+      });
+
+      const tokenData = await tokenResponse.json();
+
+      if (tokenData.access_token) {
+        const expiresAt = Date.now() + (tokenData.expires_in * 1000);
+
+        // Prepara os dados para salvar no Supabase
+        const payload = {
+          id: userId,
+          spotify_connected: true,
+          spotify_access_token: tokenData.access_token,
+          spotify_refresh_token: tokenData.refresh_token || null,
+          spotify_token_expires: expiresAt
+        };
+
+        await window.islySupabase.saveProfile(payload);
+
+        if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
+        if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
+        
+        toast('Spotify conectado com sucesso! ✓');
+      } else {
+        throw new Error(tokenData.error_description || 'Falha ao obter tokens do Spotify.');
+      }
     } catch (err) {
       console.error("Erro ao processar callback do Spotify:", err);
-      toast('Erro ao autenticar com o Spotify.');
+      toast('Erro ao autenticar com o Spotify: ' + err.message);
     }
   }
   // --- FIM DA LÓGICA DO SPOTIFY ---
