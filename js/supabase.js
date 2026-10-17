@@ -62,24 +62,46 @@
       }
     },
 
-    async getProfileById(userId) {
-      const sb = initSupabase();
-      if (!sb) return null;
+    
+async getProfileById(userId) {
+  const sb = initSupabase();
 
-      try {
-        const { data, error } = await sb
-          .from('profiles')
-          .select('*')
-          .eq('id', userId)
-          .single();
+  if (!sb) {
+    alert('Diagnóstico SLYE: cliente Supabase não inicializado.');
+    return null;
+  }
 
-        if (error) throw error;
-        return data;
-      } catch (error) {
-        console.error('Erro ao buscar perfil:', error);
-        return null;
-      }
-    },
+  try {
+    const { data, error } = await sb
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error('Erro ao buscar perfil:', error);
+
+      alert(
+        'Diagnóstico SLYE — falha ao carregar o perfil.\n\n' +
+        'Código: ' + (error.code || 'não informado') + '\n' +
+        'Mensagem: ' + (error.message || 'sem detalhes') + '\n\n' +
+        'Nenhum dado foi alterado.'
+      );
+
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Erro ao buscar perfil:', error);
+
+    alert(
+      'Diagnóstico SLYE: ocorreu um erro inesperado ao buscar o perfil.'
+    );
+
+    return null;
+  }
+},
 
     async getProfileByHandle(handle) {
       const sb = initSupabase();
