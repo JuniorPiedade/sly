@@ -17,10 +17,6 @@
     document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
   }
 </script>
-
-<!-- Importação correta do ficheiro central de redes sociais locais -->
-<script src="js/redes-sociais.js"></script>
-
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
@@ -36,6 +32,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   z-index: 0;
 }
 
+/* Garante que o conteúdo fique acima do canvas */
 .page-wrapper, .guestbook-trigger-btn, header.fixed, .splash-overlay {
   position: relative;
   z-index: 10;
@@ -78,8 +75,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
   animation: splashPulse 2s infinite ease-in-out;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-  pointer-events: auto;
-  cursor: pointer;
 }
 .splash-star-wrapper:hover {
   transform: scale(1.12);
@@ -113,7 +108,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   50% { transform: scale(1.06); box-shadow: 0 0 40px rgba(168, 85, 247, 0.4); }
 }
 
-/* WRAPPER PRINCIPAL */
+/* WRAPPER PRINCIPAL PARA POSICIONAR O CARD E OS POST-ITS AO LADO */
 .page-wrapper {
   display: flex;
   align-items: center;
@@ -126,9 +121,8 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 
 .container{width:100%;max-width:640px;position:relative}
 
-/* --- PERSPETIVA 3D DO CARD NO RATO --- */
 .profile-card{
-  opacity: 1;
+  opacity: 0; /* Inicia oculto por baixo da splash screen para evitar qualquer piscada */
   overflow: visible !important;
   border-radius:28px;
   width:100%;
@@ -155,7 +149,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
 }
-
 .profile-header-row {
   display: flex;
   align-items: center;
@@ -240,6 +233,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .bio-preview{font-size:13px;margin:4px 0 0;overflow-wrap:anywhere;line-height:1.5}
 .live-status{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.08);color:#cffafe;border-radius:999px;font-size:11px;font-weight:600;margin:4px 0 0;width:fit-content}
 
+/* EMBLEMAS MINIMALISTAS E ENXUTOS */
 .preview-emblems {
   display: flex;
   flex-wrap: wrap;
@@ -261,6 +255,11 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   backdrop-filter: blur(8px);
   transition: all 0.2s ease;
 }
+.preview-emblems span:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
 
 .public-socials{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
 .social-icon-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);text-decoration:none;transition:.2s}
@@ -276,7 +275,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .embed-wrapper{width:100%;border-radius:14px;overflow:hidden;background:#00000033;line-height:0}
 .embed-wrapper iframe{width:100%;border:0;display:block}
 
-/* --- EFEITO NEON SOBRE A TAG AMIGOS PRÓXIMOS --- */
+/* Container de Amigos Próximos */
 .preview-friendships-wrapper {
   display: flex;
   flex-direction: column;
@@ -284,6 +283,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   margin-top: 14px;
   width: 100%;
 }
+
 .preview-friendships-title {
   font-size: 10px;
   text-transform: uppercase;
@@ -294,16 +294,19 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   transition: all 0.3s ease;
   width: fit-content;
 }
+
 .preview-friendships-title:hover {
   color: #ffffff;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 16px rgba(168, 85, 247, 0.8), 0 0 24px rgba(168, 85, 247, 0.5);
 }
+
 .preview-friendships {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
+
 .preview-friend-bubble {
   width: 32px;
   height: 32px;
@@ -318,11 +321,13 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   color: white;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 .preview-friend-bubble:hover {
   transform: translateY(-2px) scale(1.08);
   border-color: #a855f7;
   box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
 }
+
 .preview-friend-bubble img {
   width: 100%;
   height: 100%;
@@ -330,6 +335,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   display: block;
 }
 
+/* --- CONTADORES E HYPE --- */
 .stats-container {
   display: flex;
   align-items: center;
@@ -370,6 +376,36 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
   transition: transform 0.15s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
+
+.hype-button:hover {
+  transform: scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.15);
+}
+
+.hype-button:active {
+  transform: scale(0.96);
+}
+
+.hype-button.hyped {
+  border-color: rgba(168, 85, 247, 0.6);
+  background: rgba(168, 85, 247, 0.08);
+}
+
+.hype-button.hyped.animate-flash {
+  animation: flashGlow 0.4s ease-out;
+}
+
+@keyframes flashGlow {
+  0% {
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.3);
+    border-color: #ffffff;
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+  }
+}
+
 .icon-wrapper {
   position: relative;
   display: grid;
@@ -380,30 +416,39 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.04);
 }
+
 .neon-star {
   width: 14px;
   height: 14px;
   fill: #FFFFFF;
   stroke: #FFFFFF;
   stroke-width: 1.5;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 .hype-button.hyped .neon-star {
   fill: #c084fc;
   stroke: #c084fc;
   transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.8));
 }
+
 .hype-count {
   color: #ffffff;
   font-size: 13px;
   font-weight: 700;
+  letter-spacing: -0.3px;
 }
+
 .particle {
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
   background: #ffffff;
+  box-shadow: 0 0 6px #ffffff;
   animation: explode 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
 }
+
 @keyframes explode {
   0% { opacity: 1; transform: translate(0, 0) scale(1); }
   100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
@@ -412,6 +457,11 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
 .error-box{text-align:center;padding:30px;color:#fcd9a1}
 
+@media(max-width: 1020px) {
+  .page-wrapper { flex-direction: column; }
+}
+
+/* PLAYER ULTRA MINIMALISTA */
 .glow-border {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.03), inset 0 0 15px rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -425,40 +475,64 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
   transform: scale(1.05);
 }
+.glow-btn:active {
+  transform: scale(0.95);
+}
+
+.animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.12s; }
+.delay-3 { animation-delay: 0.18s; }
+.delay-4 { animation-delay: 0.24s; }
+.delay-5 { animation-delay: 0.30s; }
+.delay-6 { animation-delay: 0.36s; }
 </style>
 </head>
 <body>
 
+<!-- CANVAS PARA OS EFEITOS VISUAIS DE FUNDO -->
 <canvas id="effectCanvas"></canvas>
 
-<!-- PLAYER DE MÚSICA MINIMALISTA -->
+<!-- PLAYER ULTRA MINIMALISTA (FIXO NO CANTO INFERIOR ESQUERDO) -->
 <header id="playerSection" class="fixed bottom-6 left-6 z-50 w-[280px] max-w-[90vw]" style="display: none;">
     <div id="playerWrapper" class="glow-border bg-[#09090b]/90 rounded-full px-3 py-1.5 flex items-center justify-between transition-all duration-500 shadow-2xl">
+        
+        <!-- Botão Play/Pause -->
         <button id="playPauseBtn" class="player-btn-action glow-btn relative w-7 h-7 rounded-full bg-white text-black flex items-center justify-center focus:outline-none cursor-pointer">
             <i id="playIcon" class="fa-solid fa-play text-[9px] translate-x-[1px]"></i>
             <i id="pauseIcon" class="fa-solid fa-pause text-[9px] hidden"></i>
         </button>
+
+        <!-- Status / Nome da Trilha / Canvas -->
         <div class="flex flex-col items-center justify-center flex-1 mx-2.5 overflow-hidden">
             <div class="flex items-center gap-1 mb-0.5 w-full justify-center">
                 <span id="trackStatus" class="inline-block w-1.5 h-1.5 rounded-full bg-neutral-600 transition-colors duration-300"></span>
-                <span id="trackTitle" class="player-text-title text-[10px] font-mono tracking-wider uppercase text-neutral-400 truncate max-w-[100px]">SOUNDTRACK</span>
+                <span id="trackTitle" class="player-text-title text-[10px] font-mono tracking-wider uppercase text-neutral-400 truncate max-w-[100px]">
+                    SOUNDTRACK
+                </span>
             </div>
+            <!-- Canvas do Visualizador -->
             <div class="w-full flex items-center justify-center h-2">
                 <canvas id="visualizer" class="w-full h-full opacity-70"></canvas>
             </div>
         </div>
+
+        <!-- Tempo / Mute -->
         <div class="player-text-meta flex items-center gap-2 text-neutral-400">
             <span id="timeDisplay" class="text-[9px] font-mono tracking-tighter text-neutral-500">00:00</span>
             <button id="muteBtn" class="hover:text-white transition-colors duration-200 focus:outline-none cursor-pointer">
                 <i id="volumeIcon" class="fa-solid fa-volume-high text-[10px]"></i>
             </button>
         </div>
+
+        <!-- Player oculto do YouTube (Invisível) -->
         <div id="youtubePlayerContainer" style="display:none; position:absolute; pointer-events:none; opacity:0; width:0; height:0; overflow:hidden;"></div>
     </div>
 </header>
 
-<!-- TELA DE ENTRADA (SPLASH SCREEN) -->
-<div class="splash-overlay" id="splashScreen" style="display: none;">
+<!-- TELA DE ENTRADA (SPLASH SCREEN) - Inicia visível por padrão para proteger o card -->
+<div class="splash-overlay" id="splashScreen">
   <div class="splash-content">
     <div class="splash-star-wrapper" id="splashStarBtn">
       <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="splash-neon-star">
@@ -489,11 +563,13 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
       <div class="public-socials animate-item delay-3" id="socialsBar"></div>
       <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
       
+      <!-- Seção de Amigos Próximos / Friendships -->
       <div class="preview-friendships-wrapper" id="publicFriendshipsWrapper" style="display: none;">
         <div class="preview-friendships-title">AMIGOS PRÓXIMOS</div>
         <div class="preview-friendships" id="publicFriendships"></div>
       </div>
 
+      <!-- Container de Estatísticas (Views + Hype) -->
       <div class="stats-container animate-item delay-5" id="statsContainer">
         <div class="views-badge">
           <span>👁️</span>
@@ -518,7 +594,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 
 <script src="js/supabase.js"></script>
 <script>
-// --- CANVAS DE EFEITOS VISUAIS DE FUNDO CONFIGURÁVEIS ---
+// --- SISTEMA DE EFEITOS VISUAIS DE FUNDO (CANVAS) ---
 let currentEffectAnimId = null;
 
 function initVisualEffect(effectName) {
@@ -598,12 +674,14 @@ function initVisualEffect(effectName) {
     function draw() {
       ctx.fillStyle = 'rgba(8, 8, 18, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       ctx.fillStyle = '#a855f7';
       ctx.font = `${fontSize}px monospace`;
 
       for (let i = 0; i < drops.length; i++) {
         const text = chars.charAt(Math.floor(Math.random() * chars.length));
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
@@ -647,9 +725,22 @@ const socialUrls = {
   behance: val => `https://behance.net/${val}`,
   pinterest: val => `https://pinterest.com/${val}`,
   tumblr: val => `https://${val}.tumblr.com`,
-  vercel: val => `https://${val}.vercel.app`,
-  dribbble: val => `https://dribbble.com/${val}`,
-  valorant: val => `https://tracker.gg/valorant/profile/riot/${val}`
+  vercel: val => `https://${val}.vercel.app`
+};
+
+const socialLogos = {
+ steam: 'https://cdn.simpleicons.org/steam/white',
+ spotify: 'https://cdn.simpleicons.org/spotify/1DB954',
+ youtube: 'https://cdn.simpleicons.org/youtube/FF0000',
+ discord: 'https://cdn.simpleicons.org/discord/5865F2',
+ instagram: 'https://cdn.simpleicons.org/instagram/E4405F',
+ twitter: 'https://cdn.simpleicons.org/x/white',
+ letterboxd: 'https://cdn.simpleicons.org/letterboxd/00D735',
+ onlyfans: 'https://cdn.simpleicons.org/onlyfans/00AFF0',
+ behance: 'https://cdn.simpleicons.org/behance/1769FF',
+ pinterest: 'https://cdn.simpleicons.org/pinterest/BD081C',
+ tumblr: 'https://cdn.simpleicons.org/tumblr/36465D',
+ vercel: 'https://cdn.simpleicons.org/vercel/white'
 };
 
 function getSpotifyEmbed(url) {
@@ -735,11 +826,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById('publicViewsCount').textContent = currentViews;
   try {
     await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
-  } catch (e) {}
+  } catch (e) {
+    console.warn("Analytics Error:", e);
+  }
 
   const hypeCountEl = document.getElementById('hypeCount');
   if (hypeCountEl) {
     hypeCountEl.textContent = data.hypes || 0;
+  }
+
+  const statsContainer = document.getElementById('statsContainer');
+  const alignment = data.card_alignment || 'center';
+  if (statsContainer) {
+    statsContainer.classList.remove('align-center', 'align-left');
+    statsContainer.classList.add('align-' + alignment);
   }
 
   document.body.style.backgroundColor = data.bg_color || '#080812';
@@ -751,8 +851,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (card) {
     const cardStyleType = data.card_style || 'opaque';
     card.classList.remove('card-style-opaque', 'card-style-glass');
+    
     if (cardStyleType === 'glass') {
       card.classList.add('card-style-glass');
+      card.style.backgroundColor = '';
     } else {
       card.classList.add('card-style-opaque');
       card.style.backgroundColor = data.card_bg || '#11111f';
@@ -766,7 +868,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.body.style.backgroundAttachment = 'fixed';
     }
 
-    // --- EFECTO DE PERSPETIVA 3D DO CARD ---
+    card.style.border = 'none';
+
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -835,7 +938,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const socialsBar = document.getElementById('socialsBar');
-  if (socialsBar && data.socials && typeof socialLogos !== 'undefined') {
+  if (socialsBar && data.socials) {
     let sHTML = '';
     Object.keys(socialLogos).forEach(key => {
       const val = data.socials[key];
@@ -857,33 +960,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     embedsBar.innerHTML = eHTML;
   }
 
-  // --- AMIGOS PRÓXIMOS ---
   const pubWrapper = document.getElementById('publicFriendshipsWrapper');
   const pubFriends = document.getElementById('publicFriendships');
 
   if (pubWrapper && pubFriends) {
     if (data.friendships && data.friendships.length > 0) {
       pubWrapper.style.display = 'flex';
+      
       Promise.all(data.friendships.map(async (f) => {
         let avatarUrl = null;
         try {
           if (window.islySupabase && window.islySupabase.getProfileByHandle) {
             const friendProfile = await window.islySupabase.getProfileByHandle(f);
-            if (friendProfile && friendProfile.avatar_url) avatarUrl = friendProfile.avatar_url;
+            if (friendProfile && friendProfile.avatar_url) {
+              avatarUrl = friendProfile.avatar_url;
+            }
           }
-        } catch (e) {}
-        const innerContent = avatarUrl ? `<img src="${avatarUrl}" alt="@${f}">` : `@${f.substring(0,2).toUpperCase()}`;
-        return `<a href="/sly-${f}" target="_blank" style="text-decoration: none;" title="@${f}"><div class="preview-friend-bubble">${innerContent}</div></a>`;
+        } catch (e) {
+          console.warn("Erro ao carregar avatar do amigo:", e);
+        }
+
+        const innerContent = avatarUrl 
+          ? `<img src="${avatarUrl}" alt="@${f}">` 
+          : `@${f.substring(0,2).toUpperCase()}`;
+
+        return `
+          <a href="/sly-${f}" target="_blank" style="text-decoration: none;" title="@${f}">
+            <div class="preview-friend-bubble">
+              ${innerContent}
+            </div>
+          </a>
+        `;
       })).then(htmlList => {
         pubFriends.innerHTML = htmlList.join('');
       });
+
     } else {
       pubWrapper.style.display = 'none';
     }
   }
 
-  // --- TRILHA SONORA & PLAYER ---
-  const playerSection = document.getElementById('playerSection');
+  const splashScreen = document.getElementById('splashScreen');
+  const splashTextDisplay = document.getElementById('splashTextDisplay');
   const playPauseBtn = document.getElementById('playPauseBtn');
   const playIcon = document.getElementById('playIcon');
   const pauseIcon = document.getElementById('pauseIcon');
@@ -892,21 +1010,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   const muteBtn = document.getElementById('muteBtn');
   const volumeIcon = document.getElementById('volumeIcon');
 
+  const playerSection = document.getElementById('playerSection');
+
   if (data.soundtrack && data.soundtrack.trim() !== '') {
     if (playerSection) playerSection.style.display = 'block';
+
     const ytId = getYoutubeAudioId(data.soundtrack);
     if (ytId) {
       const tag = document.createElement('script');
       tag.src = "https://www.youtube.com/iframe_api";
       document.head.appendChild(tag);
+
       window.onYouTubeIframeAPIReady = function() {
         ytPlayer = new YT.Player('youtubePlayerContainer', {
-          height: '0', width: '0', videoId: ytId,
+          height: '0',
+          width: '0',
+          videoId: ytId,
           playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': ytId },
-          events: { 'onStateChange': onPlayerStateChange }
+          events: {
+            'onStateChange': onPlayerStateChange
+          }
         });
       };
     }
+  } else {
+    if (playerSection) playerSection.style.display = 'none';
   }
 
   function onPlayerStateChange(event) {
@@ -933,31 +1061,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  if (playPauseBtn) {
-    playPauseBtn.addEventListener('click', () => {
-      if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-        if (ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
-          ytPlayer.pauseVideo();
-        } else {
-          ytPlayer.playVideo();
-        }
+  function togglePlayAudio() {
+    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+      const state = ytPlayer.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        ytPlayer.pauseVideo();
+      } else {
+        ytPlayer.playVideo();
       }
-    });
+    }
   }
 
-  if (muteBtn) {
+  if (playPauseBtn) {
+    playPauseBtn.addEventListener('click', togglePlayAudio);
+  }
+
+  if (muteBtn && ytPlayer) {
     let isMuted = false;
     muteBtn.addEventListener('click', () => {
-      if (ytPlayer && typeof ytPlayer.mute === 'function') {
-        if (isMuted) {
-          ytPlayer.unMute();
-          volumeIcon.className = 'fa-solid fa-volume-high text-[10px] text-neutral-400';
-          isMuted = false;
-        } else {
-          ytPlayer.mute();
-          volumeIcon.className = 'fa-solid fa-volume-xmark text-[10px] text-neutral-600';
-          isMuted = true;
-        }
+      if (isMuted) {
+        ytPlayer.unMute();
+        volumeIcon.className = 'fa-solid fa-volume-high text-[11px] text-neutral-400';
+        isMuted = false;
+      } else {
+        ytPlayer.mute();
+        volumeIcon.className = 'fa-solid fa-volume-xmark text-[11px] text-neutral-600';
+        isMuted = true;
       }
     });
   }
@@ -965,17 +1094,69 @@ document.addEventListener("DOMContentLoaded", async () => {
   setInterval(() => {
     if (ytPlayer && isYtPlaying && typeof ytPlayer.getCurrentTime === 'function') {
       const currentTime = ytPlayer.getCurrentTime();
-      const m = Math.floor(currentTime / 60);
-      const s = Math.floor(currentTime % 60);
-      if (timeDisplay) timeDisplay.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      const minutes = Math.floor(currentTime / 60);
+      const seconds = Math.floor(currentTime % 60);
+      if (timeDisplay) {
+        timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
     }
   }, 1000);
 
-  // --- VISUALIZADOR DE ÁUDIO DO PLAYER ---
+  // --- LÓGICA DEFINITIVA DA SPLASH SCREEN ---
+  const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
+
+  const cardElement = document.getElementById('profileCard');
+
+  if (hasSplashText && splashScreen && splashTextDisplay) {
+    splashTextDisplay.textContent = data.splash_text;
+    splashScreen.classList.remove('hidden'); // Mantém a splash cobrindo tudo
+
+    const handleSplashUnlock = (e) => {
+      e.stopPropagation();
+      splashScreen.classList.add('hidden');
+      
+      // Revela o card suavemente apenas após o clique na estrela
+      if (cardElement) {
+        cardElement.style.opacity = '1';
+      }
+      
+      const tryPlay = () => {
+        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+          try {
+            ytPlayer.playVideo();
+          } catch (err) {
+            setTimeout(tryPlay, 300);
+          }
+        } else {
+          setTimeout(tryPlay, 300);
+        }
+      };
+      tryPlay();
+    };
+
+    splashScreen.addEventListener('click', handleSplashUnlock);
+    const starBtn = document.getElementById('splashStarBtn');
+    if (starBtn) {
+      starBtn.addEventListener('click', handleSplashUnlock);
+    }
+  } else {
+    // Se não tiver texto na splash, esconde ela imediatamente e revela o card direto
+    if (splashScreen) {
+      splashScreen.classList.add('hidden');
+    }
+    if (cardElement) {
+      cardElement.style.opacity = '1';
+    }
+  }
+
   const canvas = document.getElementById('visualizer');
   const ctx = canvas ? canvas.getContext('2d') : null;
+
   function resizeCanvas() {
-    if (canvas) { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+    if (canvas) {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
   }
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
@@ -983,65 +1164,195 @@ document.addEventListener("DOMContentLoaded", async () => {
   function drawVisualizer() {
     requestAnimationFrame(drawVisualizer);
     if (!canvas || !ctx) return;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const bars = 20, barWidth = 2;
+
+    const bars = 20;
+    const barWidth = 2;
     const gap = (canvas.width - (bars * barWidth)) / (bars - 1);
+
     for (let i = 0; i < bars; i++) {
       let barHeight = 2;
+
       if (isYtPlaying) {
-        const rf = Math.sin(Date.now() / 150 + i) * 0.5 + 0.5;
-        barHeight = Math.max(4, rf * canvas.height * 0.8);
+        const randomFactor = Math.sin(Date.now() / 150 + i) * 0.5 + 0.5;
+        barHeight = Math.max(4, randomFactor * canvas.height * 0.8);
       }
+
+      const x = i * (barWidth + gap);
+      const y = (canvas.height - barHeight) / 2;
+
       ctx.fillStyle = isYtPlaying ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.15)';
-      ctx.fillRect(i * (barWidth + gap), (canvas.height - barHeight) / 2, barWidth, barHeight);
+      ctx.fillRect(x, y, barWidth, barHeight);
     }
   }
   drawVisualizer();
 
-  // --- SPLASH SCREEN & AUTOPLAY AUTOMÁTICO AO CLICAR NA TELA ---
-  const splashScreen = document.getElementById('splashScreen');
-  const splashTextDisplay = document.getElementById('splashTextDisplay');
-  const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
-
-  if (hasSplashText && splashScreen && splashTextDisplay) {
-    splashTextDisplay.textContent = data.splash_text;
-    splashScreen.style.display = 'grid';
-
-    const unlockSplash = (e) => {
-      e.stopPropagation();
-      splashScreen.classList.add('hidden');
-      if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-        try { ytPlayer.playVideo(); } catch (err) {}
-      }
-    };
-
-    splashScreen.addEventListener('click', unlockSplash);
-    const starBtn = document.getElementById('splashStarBtn');
-    if (starBtn) starBtn.addEventListener('click', unlockSplash);
-  } else {
-    if (splashScreen) splashScreen.style.display = 'none';
-  }
-
-  // --- HYPE BUTTON ---
   const hypeBtn = document.getElementById('hypeBtn');
   const iconWrapper = document.getElementById('iconWrapper');
+
   if (hypeBtn && hypeCountEl && iconWrapper) {
     const storageKey = `isly_hyped_${data.id || handle}`;
-    if (localStorage.getItem(storageKey) === 'true') hypeBtn.classList.add('hyped');
+    
+    if (localStorage.getItem(storageKey) === 'true') {
+      hypeBtn.classList.add('hyped');
+    }
 
     hypeBtn.addEventListener('click', async () => {
-      if (localStorage.getItem(storageKey) === 'true') return;
+      if (localStorage.getItem(storageKey) === 'true') {
+        return; 
+      }
+
       let current = parseInt(hypeCountEl.innerText, 10) || 0;
       let newCount = current + 1;
+      
       localStorage.setItem(storageKey, 'true');
-      hypeBtn.classList.add('hyped');
+      hypeBtn.classList.add('hyped', 'animate-flash');
+
       hypeCountEl.innerText = newCount;
+      createNeonBurst(iconWrapper);
+
       try {
-        await window.islySupabase.saveProfile({ id: data.id, hypes: newCount });
-      } catch (err) {}
+        if (window.islySupabase && typeof window.islySupabase.incrementHype === 'function') {
+          await window.islySupabase.incrementHype(data.id, current);
+        } else {
+          await window.islySupabase.saveProfile({ id: data.id, hypes: newCount });
+        }
+      } catch (err) {
+        console.warn("Erro ao salvar hype:", err);
+      }
     });
   }
+
+  function createNeonBurst(targetContainer) {
+    const particleCount = 10; 
+    const rect = targetContainer.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('span');
+      particle.classList.add('particle');
+
+      const size = Math.random() * 2 + 2;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${centerX}px`;
+      particle.style.top = `${centerY}px`;
+
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = Math.random() * 30 + 15;
+      const tx = Math.cos(angle) * velocity;
+      const ty = Math.sin(angle) * velocity;
+
+      particle.style.setProperty('--tx', `${tx}px`);
+      particle.style.setProperty('--ty', `${ty}px`);
+
+      targetContainer.appendChild(particle);
+      setTimeout(() => particle.remove(), 500);
+    }
+  }
 });
+</script>
+
+<!-- Proteção SLY.ME isolada -->
+<script>
+(() => {
+  const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
+  const assinatura = "P.S: Diel — SLY.ME";
+
+  if (window.__slyProtecaoInicializada) return;
+  window.__slyProtecaoInicializada = true;
+
+  function mostrarTelaHacker() {
+    let tela = document.getElementById("sly-terminal-aviso");
+    if (tela) return;
+
+    tela = document.createElement("div");
+    tela.id = "sly-terminal-aviso";
+
+    Object.assign(tela.style, {
+      position: "fixed",
+      inset: "0",
+      zIndex: "2147483647",
+      background: "#000",
+      color: "#39ff78",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "28px",
+      fontFamily: 'Consolas, "Courier New", monospace'
+    });
+
+    const terminal = document.createElement("div");
+    Object.assign(terminal.style, {
+      width: "100%",
+      maxWidth: "760px"
+    });
+
+    const cabecalho = document.createElement("div");
+    cabecalho.textContent = "SLY.ME // ACESSO OBSERVADO";
+    Object.assign(cabecalho.style, {
+      color: "#238c48",
+      fontSize: "12px",
+      letterSpacing: "2px",
+      marginBottom: "32px"
+    });
+
+    const texto = document.createElement("div");
+    Object.assign(texto.style, {
+      fontSize: "clamp(19px, 4vw, 30px)",
+      lineHeight: "1.6",
+      overflowWrap: "anywhere",
+      textShadow: "0 0 12px #00ff5944"
+    });
+
+    const assinaturaEl = document.createElement("div");
+    assinaturaEl.textContent = assinatura;
+    Object.assign(assinaturaEl.style, {
+      marginTop: "36px",
+      fontSize: "14px",
+      color: "#168b42",
+      opacity: "0",
+      transition: "opacity .8s ease"
+    });
+
+    terminal.append(cabecalho, texto, assinaturaEl);
+    tela.appendChild(terminal);
+    document.body.appendChild(tela);
+
+    let i = 0;
+    function digitar() {
+      if (!tela.isConnected) return;
+      if (i < mensagem.length) {
+        texto.textContent += mensagem.charAt(i++);
+        setTimeout(digitar, 48);
+      } else {
+        assinaturaEl.style.opacity = "1";
+      }
+    }
+    digitar();
+  }
+
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    mostrarTelaHacker();
+  }, true);
+
+  document.addEventListener("keydown", (e) => {
+    const tecla = e.key.toLowerCase();
+    const atalho =
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(tecla)) ||
+      (e.ctrlKey && tecla === "u");
+
+    if (atalho) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      mostrarTelaHacker();
+    }
+  }, true);
+})();
 </script>
 </body>
 </html>
