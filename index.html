@@ -1041,18 +1041,20 @@ async function initEditor(userId) {
     toast('Autenticando com o Spotify...');
 
     try {
-      // Substitui pelas tuas credenciais reais da app do Spotify
-      const clientId = '90048528b8ed425ab7762740275ef07';
-      // ATENÇÃO: Se tiveres o Client Secret, podes colocá-lo aqui de forma temporária para concluir a troca do token com segurança no teu painel privado:
-      const clientSecret = '38acb3a4b6da44f483d5f4d4ea984214'; 
+      const clientId = '90048528b8ed4e25ab7762740275ef07';
+      const clientSecret = '38acb3a4b6da44f483d5f4d4ea984214';
       const redirectUri = 'https://sly-inky.vercel.app/';
+
+      // Credenciais codificadas
+      const credentials = btoa(clientId + ":" + clientSecret);
+      console.log("Enviando Client ID:", clientId);
 
       // Pedido POST para o Spotify trocar o código pelos tokens
       const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
+          'Authorization': 'Basic ' + credentials
         },
         body: new URLSearchParams({
           grant_type: 'authorization_code',
@@ -1062,8 +1064,9 @@ async function initEditor(userId) {
       });
 
       const tokenData = await tokenResponse.json();
+      console.log("Resposta completa do Spotify:", tokenData);
 
-      if (tokenData.access_token) {
+      if (tokenResponse.ok && tokenData.access_token) {
         const expiresAt = Date.now() + (tokenData.expires_in * 1000);
 
         // Prepara os dados para salvar no Supabase
@@ -1082,7 +1085,7 @@ async function initEditor(userId) {
         
         toast('Spotify conectado com sucesso! ✓');
       } else {
-        throw new Error(tokenData.error_description || 'Falha ao obter tokens do Spotify.');
+        throw new Error(tokenData.error_description || JSON.stringify(tokenData) || 'Falha ao obter tokens.');
       }
     } catch (err) {
       console.error("Erro ao processar callback do Spotify:", err);
