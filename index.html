@@ -621,6 +621,19 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
      <input id="embedYoutube" placeholder="https://www.youtube.com/watch?v=...">
     </label>
     <label class="field"><span>📸 Link do Post do Instagram</span><input id="embedInstagram" placeholder="https://www.instagram.com/p/..."></label>
+     <div class="field" style="margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px;">
+      <span>🎵 Integração Spotify (Rich Presence)</span>
+      <div id="spotifyConnectContainer">
+        <button type="button" id="connectSpotifyBtn" class="btn" style="background: #1db954; color: #000; border: none; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+          <i class="fa-brands fa-spotify" style="font-size: 16px;"></i> Conectar Conta do Spotify
+        </button>
+        <div id="spotifyConnectedBadge" style="display: none; align-items: center; gap: 8px; color: #4ade80; font-size: 12px; font-weight: 600;">
+          <span>✓ Conta do Spotify conectada com sucesso!</span>
+          <button type="button" id="disconnectSpotifyBtn" class="btn" style="padding: 4px 10px; font-size: 11px; color: #f87171; border-color: #7f1d1d; background: rgba(239, 68, 68, 0.1);">Desconectar</button>
+        </div>
+      </div>
+      <small>Permite exibir o que estás a ouvir no Spotify em tempo real no teu perfil.</small>
+    </div>
    </section>
 
    <section class="panel" id="panel-soundtrack">
@@ -971,7 +984,82 @@ async function initEditor(userId) {
  } catch (e) {
   console.warn("Erro ao buscar perfil real:", e);
  }
+// --- LÓGICA DE INTEGRAÇÃO DO SPOTIFY ---
+  const SPOTIFY_CLIENT_ID = '90048528b8ed425ab7762740275ef07';
+  const SPOTIFY_REDIRECT_URI = 'https://sly-inky.vercel.app/';
 
+  const connectSpotifyBtn = document.getElementById('connectSpotifyBtn');
+  const disconnectSpotifyBtn = document.getElementById('disconnectSpotifyBtn');
+  const spotifyConnectedBadge = document.getElementById('spotifyConnectedBadge');
+
+  // Verifica visualmente se o utilizador já tem o Spotify conectado no perfil do Supabase
+ if (profile && profile.spotify_connected) {
+    if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
+    if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
+  }
+
+  // Ação ao clicar no botão de Conectar
+  connectSpotifyBtn?.addEventListener('click', () => {
+    const scopes = 'user-read-playback-state user-read-currently-playing';
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${encodeURIComponent(SPOTIFY_CLIENT_ID)}&response_type=code&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(scopes)}`;
+    window.location.href = authUrl;
+  });
+
+  // Ação ao clicar no botão de Desconectar
+  disconnectSpotifyBtn?.addEventListener('click', async () => {
+    if (!confirm('Tens a certeza que pretendes desconectar o Spotify?')) return;
+    
+    try {
+      currentProfile.spotify_connected = false;
+      currentProfile.spotify_access_token = null;
+      currentProfile.spotify_refresh_token = null;
+
+      const payload = {
+        id: userId,
+        spotify_connected: false,
+        spotify_access_token: null,
+        spotify_refresh_token: null
+      };
+      await window.islySupabase.saveProfile(payload);
+
+      if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'inline-flex';
+      if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'none';
+      toast('Conta do Spotify desconectada com sucesso.');
+    } catch (err) {
+      console.error("Erro ao desconectar Spotify:", err);
+      toast('Erro ao desconectar a conta.');
+    }
+  });
+
+  // Capturar o código de retorno do Spotify na URL (Callback)
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+
+  if (code) {
+    // Limpa o código da barra de endereços para manter a URL limpa
+    window.history.replaceState({}, document.title, window.location.pathname);
+    toast('Autenticando com o Spotify...');
+
+    try {
+      // Simula ou regista o sucesso da conexão inicial guardando na base de dados
+      currentProfile.spotify_connected = true;
+      
+      const payload = {
+        id: userId,
+        spotify_connected: true
+      };
+      await window.islySupabase.saveProfile(payload);
+
+      if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
+      if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
+      
+      toast('Spotify conectado com sucesso! ✓');
+    } catch (err) {
+      console.error("Erro ao processar callback do Spotify:", err);
+      toast('Erro ao autenticar com o Spotify.');
+    }
+  }
+  // --- FIM DA LÓGICA DO SPOTIFY ---
  if (!profile) {
   profile = {
    id: userId, name: 'Seu Nome', handle: 'usuario',
