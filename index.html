@@ -565,8 +565,8 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
        <label class="field"><span>▶ YouTube</span><input id="soc_youtube" placeholder="ex: @canal"></label>
        <label class="field"><span>💬 Discord</span><input id="soc_discord" placeholder="ex: user#0001"></label>
        <label class="field"><span>📸 Instagram</span><input id="soc_instagram" placeholder="ex: usuario"></label>
-       <label class="field"><span>✖ X / Twitter</span><input id="soc_x" placeholder="ex: usuario"></label>
-       <label class="field"><span>🔒 Privacy</span><input id="soc_privacy" placeholder="ex: usuario"></label>
+     <label class="field"><span>🔒 Privacy</span><input id="soc_onlyfans" placeholder="ex: usuario"></label>
+      <label class="field"><span>🔒 Privacy</span><input id="soc_onlyfans" placeholder="ex: usuario"></label>
        <label class="field"><span>🎬 Letterboxd</span><input id="soc_letterboxd" placeholder="ex: usuario"></label>
        <label class="field"><span>🎨 Behance</span><input id="soc_behance" placeholder="ex: usuario"></label>
        <label class="field"><span>📌 Pinterest</span><input id="soc_pinterest" placeholder="ex: usuario"></label>
@@ -1561,31 +1561,6 @@ async function initEditor(userId) {
   }, true);
 })();
 <script>
-// Script de correção forçada para incluir X e Privacy no salvamento
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    // Interceta qualquer tentativa de clique no botão de salvar ou função de guardar
-    const saveButtons = document.querySelectorAll('button, .save-btn, #saveBtn');
-    saveButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (window.currentProfile && window.currentProfile.socials) {
-          window.currentProfile.socials.x = document.getElementById('soc_x')?.value.trim() || '';
-          window.currentProfile.socials.privacy = document.getElementById('soc_privacy')?.value.trim() || '';
-        }
-      }, true);
-    });
-
-    // Se o template usar um objeto global de dados, injeta diretamente lá também
-    setInterval(() => {
-      if (window.currentProfile && window.currentProfile.socials) {
-        const xVal = document.getElementById('soc_x')?.value.trim();
-        const privVal = document.getElementById('soc_privacy')?.value.trim();
-        if (xVal !== undefined) window.currentProfile.socials.x = xVal;
-        if (privVal !== undefined) window.currentProfile.socials.privacy = privVal;
-      }
-    }, 500);
-  }, 1000);
-});
 </script>
 </body>
 </html>
