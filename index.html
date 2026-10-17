@@ -226,7 +226,12 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   width:34px;height:34px;border:1px solid #ffffff10;border-radius:11px;
   background:#ffffff06;color:#ded3eb;transition:transform .18s,border-color .18s,background .18s;display:grid;place-items:center
 }
-.preview-social-icon svg{width:16px;height:16px;fill:currentColor}
+.preview-social-icon img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
 .preview-social-icon:hover{transform:translateY(-2px);border-color:#a78bfa55;background:#8b5cf61a}
 .embeds-container{grid-row:5;margin-top:0;display:flex;flex-direction:column;gap:12px}
 .embed-wrapper{border:1px solid #ffffff12;border-radius:12px;background:#08070b;overflow:hidden;line-height:0}
@@ -549,7 +554,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-socials">
-    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com ícones SVG 3D.</p></div><span class="muted">04 / 08</span></div>
+    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com logos oficiais originais.</p></div><span class="muted">04 / 08</span></div>
     <div class="social-grid">
      <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
      <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
@@ -562,6 +567,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
      <label class="field"><span>🎨 Behance</span><input id="soc_behance" placeholder="ex: usuario"></label>
      <label class="field"><span>📌 Pinterest</span><input id="soc_pinterest" placeholder="ex: usuario"></label>
      <label class="field"><span>🇹 Tumblr</span><input id="soc_tumblr" placeholder="ex: blog"></label>
+     <label class="field"><span>▲ Vercel</span><input id="soc_vercel" placeholder="ex: usuario"></label>
     </div>
    </section>
 
@@ -1029,7 +1035,7 @@ async function initEditor(userId) {
  embedYoutubeInput.value = currentProfile.embed_youtube || '';
  embedInstagramInput.value = currentProfile.embed_instagram || '';
 
- Object.keys(socialSvgs).forEach(key => {
+ Object.keys(socialLogos).forEach(key => {
   const field = document.getElementById('soc_' + key);
   if (field) field.value = currentProfile.socials[key] || '';
  });
@@ -1160,7 +1166,7 @@ async function initEditor(userId) {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
    const socialsData = {};
-   Object.keys(socialSvgs).forEach(key => {
+   Object.keys(socialLogos).forEach(key => {
     const val = document.getElementById('soc_' + key)?.value.trim();
     if (val) socialsData[key] = val;
    });
@@ -1233,7 +1239,7 @@ async function initEditor(userId) {
   });
  });
 
- Object.keys(socialSvgs).forEach(key => {
+ Object.keys(socialLogos).forEach(key => {
   document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
 
@@ -1358,14 +1364,14 @@ async function initEditor(userId) {
     return `<span><span style="font-size: 12px; line-height: 1;">${emoji}</span>${name}</span>`;
   }).join('');
 
- const socPreview = document.getElementById('previewSocials');
+  const socPreview = document.getElementById('previewSocials');
   let socHTML = '';
   Object.keys(socialLogos).forEach(key => {
    const val = document.getElementById('soc_' + key)?.value.trim();
    if (val) {
     socHTML += `
-     <a class="preview-social-icon" title="${key}" href="#" onclick="return false;" style="display:grid; place-items:center; padding:6px;">
-      <img src="${socialLogos[key]}" alt="${key}" style="width:18px; height:18px; object-fit:contain; display:block;">
+     <a class="preview-social-icon" title="${key}" href="#" onclick="return false;">
+      <img src="${socialLogos[key]}" alt="${key}">
      </a>`;
    }
   });
@@ -1420,7 +1426,7 @@ async function initEditor(userId) {
   syncText.textContent = 'Salvando...';
 
   const socialsData = {};
-  Object.keys(socialSvgs).forEach(key => {
+  Object.keys(socialLogos).forEach(key => {
    const val = document.getElementById('soc_' + key)?.value.trim();
    if (val) socialsData[key] = val;
   });
