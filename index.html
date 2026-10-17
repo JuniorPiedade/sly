@@ -609,6 +609,16 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 
    <section class="panel" id="panel-appearance">
     <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos e Cursor.</p></div><span class="muted">07 / 08</span></div>
+    
+    <!-- NOVO: Alinhamento do Cartão -->
+    <label class="field">
+     <span>📐 Alinhamento do Cartão de Perfil</span>
+     <select id="profileAlignSelect">
+      <option value="left">Esquerdo (Padrão)</option>
+      <option value="center">Centralizado</option>
+     </select>
+    </label>
+
     <label class="field">
      <span>✨ Efeito Visual de Fundo (Canvas)</span>
      <select id="visualEffectSelect">
@@ -928,7 +938,7 @@ async function initEditor(userId) {
  if (!profile) {
   profile = {
    id: userId, name: 'Seu Nome', handle: 'usuario',
-   bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', accent_color: '#c084fc',
+   bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', card_align: 'left', accent_color: '#c084fc',
    title_color: '#ffffff', text_color: '#f6f4ff',
    name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack: '', player_style: 'default', splash_text: 'clica aê', avatar_frame: 'none', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: [], socials: {},
@@ -955,6 +965,7 @@ async function initEditor(userId) {
  const shareUrlInput = document.getElementById('shareUrl');
 
  const cardStyleSelect = document.getElementById('cardStyle');
+ const profileAlignSelect = document.getElementById('profileAlignSelect');
  const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
  const playerStyleSelect = document.getElementById('playerStyleSelect');
  const visualEffectSelect = document.getElementById('visualEffectSelect');
@@ -1001,6 +1012,7 @@ async function initEditor(userId) {
  activityInput.value = currentProfile.activity || '';
 
  cardStyleSelect.value = currentProfile.card_style || 'opaque';
+ if (profileAlignSelect) profileAlignSelect.value = currentProfile.card_align || 'left';
  guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
  if (playerStyleSelect) playerStyleSelect.value = currentProfile.player_style || 'default';
  if (visualEffectSelect) visualEffectSelect.value = currentProfile.visual_effect || 'none';
@@ -1164,12 +1176,13 @@ async function initEditor(userId) {
    const soundtrackVal = soundtrackUrlInput.value.trim();
    const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
    const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
+   const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
 
    const payload = {
     id: userId, name: nameInput.value, handle: handleInput.value,
     bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
     status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-    card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
+    card_style: cardStyleSelect.value, card_align: alignVal, guestbook_style: guestbookStyleSelect.value,
     player_style: playerStyleVal,
     visual_effect: visualEffectVal,
     bg_color: bgColorInput.value, card_bg: cardBgInput.value,
@@ -1235,7 +1248,7 @@ async function initEditor(userId) {
   });
  }
 
- [cardStyleSelect, guestbookStyleSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+ [cardStyleSelect, profileAlignSelect, guestbookStyleSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
   if (input) {
     input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
     input.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
@@ -1321,6 +1334,17 @@ async function initEditor(userId) {
 
   const card = document.getElementById('profileCard');
   card.className = 'profile-card';
+
+  // Lógica do alinhamento centralizado ou esquerdo
+  const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
+  if (alignVal === 'center') {
+    card.style.textAlign = 'center';
+    card.style.gridTemplateColumns = '1fr';
+  } else {
+    card.style.textAlign = 'left';
+    card.style.gridTemplateColumns = '';
+  }
+
   if (cardStyleSelect.value === 'glass') {
    card.classList.add('card-style-glass');
    card.style.backgroundColor = '';
@@ -1431,12 +1455,13 @@ async function initEditor(userId) {
   const soundtrackVal = soundtrackUrlInput.value.trim();
   const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
   const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
+  const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
 
   const payload = {
    id: userId, name: nameInput.value, handle: handleInput.value,
    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-   card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
+   card_style: cardStyleSelect.value, card_align: alignVal, guestbook_style: guestbookStyleSelect.value,
    player_style: playerStyleVal,
    visual_effect: visualEffectVal,
    bg_color: bgColorInput.value, card_bg: cardBgInput.value,
