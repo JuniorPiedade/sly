@@ -901,7 +901,52 @@ connectSpotifyBtn?.addEventListener('click', () => {
   const authUrl = `https://accounts.spotify.com/authorize?client_id=${encodeURIComponent(SPOTIFY_CLIENT_ID)}&response_type=code&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(scopes)}`;
   window.location.href = authUrl;
 });
+// Ação para desconectar do Spotify (ao clicar no botão de desconectar)
+disconnectSpotifyBtn?.addEventListener('click', async () => {
+  try {
+    toast('A desconectar o Spotify...');
+    
+    const SUPABASE_URL = 'https://hmnuafaihsbvzejqsakt.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
+    
+    // Garante que o cliente do Supabase está disponível
+    if (!window.supabase) {
+      await new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+        script.onload = resolve;
+        document.head.appendChild(script);
+      });
+    }
 
+    const directSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Limpa os campos do Spotify na base de dados
+    const { error } = await directSupabase
+      .from('profiles')
+      .update({
+        spotify_connected: false,
+        spotify_access_token: null,
+        spotify_refresh_token: null,
+        spotify_token_expires: null
+      })
+      .eq('id', currentUserId);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    // Atualiza a interface visual
+    if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'inline-flex';
+    if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'none';
+    if (disconnectSpotifyBtn) disconnectSpotifyBtn.style.display = 'none';
+    
+    toast('Spotify desconectado com sucesso! ✓');
+  } catch (err) {
+    console.error("Erro ao desconectar do Spotify:", err);
+    alert("Erro ao desconectar: " + err.message);
+  }
+});
 // Processar o retorno do Spotify
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code');
