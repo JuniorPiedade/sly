@@ -398,7 +398,8 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 #panel-appearance .field input[type="color"]:hover{border-color:#b39ad2!important;box-shadow:0 0 0 3px #a78bfa12!important;transform:scale(1.04)}
 #panel-appearance .field input[type="color"]:focus-visible{outline:2px solid #a78bfa;outline-offset:3px}
 </style>
-  <!-- Arquivo das Redes Sociais -->
+
+<!-- Arquivo das Redes Sociais locais (com as logos coloridas) -->
 <script src="js/redes-sociais.js"></script>
   
 <script>
@@ -557,7 +558,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    </section>
 
    <section class="panel" id="panel-socials">
-    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com logos oficiais originais.</p></div><span class="muted">04 / 08</span></div>
+    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com logos oficiais originais locais.</p></div><span class="muted">04 / 08</span></div>
     <div class="social-grid">
      <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
      <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
@@ -571,6 +572,8 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
      <label class="field"><span>📌 Pinterest</span><input id="soc_pinterest" placeholder="ex: usuario"></label>
      <label class="field"><span>🇹 Tumblr</span><input id="soc_tumblr" placeholder="ex: blog"></label>
      <label class="field"><span>▲ Vercel</span><input id="soc_vercel" placeholder="ex: usuario"></label>
+     <label class="field"><span>🏀 Dribbble</span><input id="soc_dribbble" placeholder="ex: usuario"></label>
+     <label class="field"><span>🎯 Valorant</span><input id="soc_valorant" placeholder="ex: tag"></label>
     </div>
    </section>
 
@@ -888,21 +891,6 @@ const emblemEmojis = {
   cod: '🪖', cs: '💣', gta: '💰', minecraft: '⛏️',
   rpg: '🎲', artista: '🎨', artist: '🎨', musica: '🎧', 
   fundador: '💎', founder: '💎', geek: '🤓'
-};
-
-const socialLogos = {
- steam: 'https://cdn.simpleicons.org/steam/white',
- spotify: 'https://cdn.simpleicons.org/spotify/1DB954',
- youtube: 'https://cdn.simpleicons.org/youtube/FF0000',
- discord: 'https://cdn.simpleicons.org/discord/5865F2',
- instagram: 'https://cdn.simpleicons.org/instagram/E4405F',
- twitter: 'https://cdn.simpleicons.org/x/white',
- letterboxd: 'https://cdn.simpleicons.org/letterboxd/00D735',
- onlyfans: 'https://cdn.simpleicons.org/onlyfans/00AFF0',
- behance: 'https://cdn.simpleicons.org/behance/1769FF',
- pinterest: 'https://cdn.simpleicons.org/pinterest/BD081C',
- tumblr: 'https://cdn.simpleicons.org/tumblr/36465D',
- vercel: 'https://cdn.simpleicons.org/vercel/white'
 };
 
 function getSpotifyEmbed(url) {
@@ -1322,7 +1310,7 @@ async function initEditor(userId) {
    avatarEl.textContent = '⌬';
   }
 
-  const frameEl = document.getElementById('avatarFrame');
+  const frameEl = document.getElementById('previewFrame');
   if (frameEl) {
     frameEl.style.display = 'none';
   }
@@ -1372,9 +1360,10 @@ async function initEditor(userId) {
   Object.keys(socialLogos).forEach(key => {
    const val = document.getElementById('soc_' + key)?.value.trim();
    if (val) {
+    const logoUrl = socialLogos[key];
     socHTML += `
-     <a class="preview-social-icon" title="${key}" href="#" onclick="return false;" style="display:grid; place-items:center; padding:6px;">
-      <img src="${socialLogos[key]}" alt="${key}">
+     <a class="preview-social-icon" title="${key}" href="#" onclick="return false;">
+      <img src="${logoUrl}" alt="${key}">
      </a>`;
    }
   });
@@ -1440,129 +1429,3 @@ async function initEditor(userId) {
 
   const payload = {
    id: userId, name: nameInput.value, handle: handleInput.value,
-   bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
-   status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-   card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
-   player_style: playerStyleVal,
-   visual_effect: visualEffectVal,
-   bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-   accent_color: textColorInput.value,
-   title_color: titleColorInput.value, text_color: textColorInput.value,
-   name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
-   avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
-   soundtrack: soundtrackVal, soundtrack_url: soundtrackVal,
-   splash_text: splashTextInput.value,
-   embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
-   emblems: currentProfile.emblems, socials: socialsData, links: [],
-   friendships: currentProfile.friendships,
-   handle_changed: currentProfile.handle_changed
-  };
-
-  const err = await window.islySupabase.saveProfile(payload);
-  syncDot.classList.remove('saving');
-  syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
-  toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
- });
-}
-</script>
-
-<script>
-(() => {
-  const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
-  const assinatura = "P.S: Diel — SLY.ME";
-
-  if (window.__slyProtecaoInicializada) return;
-  window.__slyProtecaoInicializada = true;
-
-  function mostrarTelaHacker() {
-    let tela = document.getElementById("sly-terminal-aviso");
-    if (tela) return;
-
-    tela = document.createElement("div");
-    tela.id = "sly-terminal-aviso";
-
-    Object.assign(tela.style, {
-      position: "fixed",
-      inset: "0",
-      zIndex: "2147483647",
-      background: "#000",
-      color: "#39ff78",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "28px",
-      fontFamily: 'Consolas, "Courier New", monospace'
-    });
-
-    const terminal = document.createElement("div");
-    Object.assign(terminal.style, {
-      width: "100%",
-      maxWidth: "760px"
-    });
-
-    const cabecalho = document.createElement("div");
-    cabecalho.textContent = "SLY.ME // ACESSO OBSERVADO";
-    Object.assign(cabecalho.style, {
-      color: "#238c48",
-      fontSize: "12px",
-      letterSpacing: "2px",
-      marginBottom: "32px"
-    });
-
-    const texto = document.createElement("div");
-    Object.assign(texto.style, {
-      fontSize: "clamp(19px, 4vw, 30px)",
-      lineHeight: "1.6",
-      overflowWrap: "anywhere",
-      textShadow: "0 0 12px #00ff5944"
-    });
-
-    const assinaturaEl = document.createElement("div");
-    assinaturaEl.textContent = assinatura;
-    Object.assign(assinaturaEl.style, {
-      marginTop: "36px",
-      fontSize: "14px",
-      color: "#168b42",
-      opacity: "0",
-      transition: "opacity .8s ease"
-    });
-
-    terminal.append(cabecalho, texto, assinaturaEl);
-    tela.appendChild(terminal);
-    document.body.appendChild(tela);
-
-    let i = 0;
-    function digitar() {
-      if (!tela.isConnected) return;
-      if (i < mensagem.length) {
-        texto.textContent += mensagem.charAt(i++);
-        setTimeout(digitar, 48);
-      } else {
-        assinaturaEl.style.opacity = "1";
-      }
-    }
-    digitar();
-  }
-
-  document.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    mostrarTelaHacker();
-  }, true);
-
-  document.addEventListener("keydown", (e) => {
-    const tecla = e.key.toLowerCase();
-    const atalho =
-      e.key === "F12" ||
-      (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(tecla)) ||
-      (e.ctrlKey && tecla === "u");
-
-    if (atalho) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      mostrarTelaHacker();
-    }
-  }, true);
-})();
-</script>
-</body>
-</html>
