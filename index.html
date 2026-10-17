@@ -90,15 +90,10 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   isolation:isolate;
   overflow:visible!important;
   width:100%;
-  max-width:560px; /* Reduzido de 680px para ocupar menos espaço */
+  max-width:560px;
   min-width:0;
   margin:0 auto;
-  display:grid;
-  grid-template-columns:minmax(110px,.65fr) minmax(0,1.35fr);
-  grid-template-rows:auto;
-  align-items:start;
-  gap:10px 18px;
-  padding:20px 22px; /* Reduzido o padding interno para ficar mais compacto */
+  padding:20px 22px;
   border:1px solid #a78bfa2b!important;
   border-radius:20px;
   background-color:#13101a;
@@ -108,13 +103,17 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   background-size: cover;
   background-position: center;
   box-shadow:0 20px 50px #00000055,0 0 0 1px #ffffff04,inset 0 1px #ffffff0a;
-  text-align:left;
   transform-style:preserve-3d;
   perspective:1200px;
   transition:transform 0.15s ease-out, border-color .2s, box-shadow .2s;
 }
-.profile-card:before{
-  /* --- ESTILOS DE ALINHAMENTO DO CARTÃO (ESQUERDO E CENTRO) --- */
+
+.profile-card:before {
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:linear-gradient(125deg,#ffffff06,transparent 35%,#8b5cf608);
+}
+
+/* --- ESTILOS DE ALINHAMENTO DO CARTÃO (ESQUERDO E CENTRO) --- */
 .profile-card.align-left {
   text-align: left;
   display: grid;
@@ -179,9 +178,7 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .profile-card.align-center .preview-socials {
   justify-content: center !important;
 }
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
-  background:linear-gradient(125deg,#ffffff06,transparent 35%,#8b5cf608);
-}
+
 .card-style-opaque{background-color:#13101a}
 .card-style-glass {
   background: rgba(13, 11, 20, 0.25) !important;
@@ -190,11 +187,7 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
 }
-.profile-header-row{
-  grid-column:1;grid-row:1 / span 7;display:flex;flex-direction:column;
-  align-items:flex-start;gap:14px;min-width:0;padding:3px 0 0;
-  overflow:visible!important
-}
+
 .avatar-container{
   position: relative;
   width: 76px;
@@ -254,17 +247,13 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
     0 0 35px rgba(255, 255, 255, 0.3);
 }
 .handle{font-size:12px;color:#b9a0f7;overflow-wrap:anywhere}
-.bio-preview,.live-status,.preview-emblems,.preview-socials,.embeds-container,.preview-links,.profile-foot{
-  grid-column:2;min-width:0
-}
-.bio-preview{grid-row:1;font-size:13px;color:#c0b6cd;line-height:1.65;margin:2px 0 0}
+.bio-preview{font-size:13px;color:#c0b6cd;line-height:1.65;margin:2px 0 0}
 .live-status{
-  grid-row:2;margin:0;padding:6px 10px;width:fit-content;max-width:100%;
+  margin:0;padding:6px 10px;width:fit-content;max-width:100%;
   border-color:#8b5cf638;background:#8b5cf60d;color:#e0d4fa;border-radius:99px;display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600
 }
 
 .preview-emblems{
-  grid-row:3;
   margin-top:0;
   display:flex;
   flex-wrap:wrap;
@@ -285,7 +274,7 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   backdrop-filter:blur(8px);
 }
 
-.preview-socials{grid-row:4;margin-top:0;display:flex;flex-wrap:wrap;gap:7px}
+.preview-socials{margin-top:0;display:flex;flex-wrap:wrap;gap:7px}
 .preview-social-icon{
   width:34px;height:34px;border:1px solid #ffffff10;border-radius:11px;
   background:#ffffff06;color:#ded3eb;transition:transform .18s,border-color .18s,background .18s;display:grid;place-items:center
@@ -297,10 +286,10 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   display: block;
 }
 .preview-social-icon:hover{transform:translateY(-2px);border-color:#a78bfa55;background:#8b5cf61a}
-.embeds-container{grid-row:5;margin-top:0;display:flex;flex-direction:column;gap:12px}
+.embeds-container{margin-top:0;display:flex;flex-direction:column;gap:12px;width:100%}
 .embed-wrapper{border:1px solid #ffffff12;border-radius:12px;background:#08070b;overflow:hidden;line-height:0}
 .embed-wrapper iframe{width:100%;border:0;display:block}
-.preview-links{grid-row:6;display:flex;flex-direction:column;gap:8px;margin-top:0}
+.preview-links{display:flex;flex-direction:column;gap:8px;margin-top:0}
 .preview-link{
   padding:12px 14px;border-radius:12px;font-size:12px;font-weight:700;
   background:#ffffff04!important;border:1px solid #ffffff13!important;
@@ -310,11 +299,11 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview-link:hover{transform:translateY(-2px);border-color:#a78bfa55!important;background:#8b5cf60c!important}
 
 .preview-friendships-wrapper {
-  grid-row: 6.5;
   margin-top: 6px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
 }
 .preview-friendships-title {
   font-size: 10px;
@@ -350,8 +339,8 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
 .preview-friend-bubble img { width: 100%; height: 100%; object-fit: cover; }
 
 .profile-foot{
-  grid-row:7;text-align:left;padding-top:11px;margin-top:1px;border-top-color:#ffffff12;
-  color:#887c99;font-size:9px;letter-spacing:1.4px;font-weight:700;text-transform:uppercase
+  text-align:center;padding-top:11px;margin-top:1px;border-top:1px solid #ffffff12;
+  color:#887c99;font-size:9px;letter-spacing:1.4px;font-weight:700;text-transform:uppercase;width:100%
 }
 .share{border-color:#30283d;border-radius:14px;background:#ffffff02;padding:13px;margin-top:14px}
 .share label{color:#a99fb8;display:block;font-size:11px;margin-bottom:8px;font-weight:700}
@@ -383,22 +372,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
   .panel{padding:16px}
   .two,.social-grid{grid-template-columns:1fr}
   .analytics-grid{grid-template-columns:1fr}
-  .profile-card{
-    grid-template-columns:minmax(100px,.68fr) minmax(0,1.32fr);
-    gap:11px 14px;padding:18px 15px;border-radius:19px
-  }
-  .profile-header-row{gap:11px}
-}
-@media(max-width:390px){
-  .wrap{width:calc(100% - 18px)}
-  .topbar{flex-wrap:wrap;padding:10px 0}
-  .actions{margin-left:auto}
-  .sync-badge{display:none}
-  .profile-card{grid-template-columns:88px minmax(0,1fr);gap:10px;padding:14px 11px}
-  .avatar-container{width:58px;height:58px}
-  .avatar{width:50px;height:50px;border-radius:14px}
-  .profile-card h3{font-size:16px}
-  .preview-link{gap:6px;padding:9px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -675,7 +648,6 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
    <section class="panel" id="panel-appearance">
     <div class="panel-head"><div><h2>🎨 Cores & Efeitos</h2><p>Cores, Estilo do Card, Efeitos e Cursor.</p></div><span class="muted">07 / 08</span></div>
     
-    <!-- NOVO: Alinhamento do Cartão -->
     <label class="field">
      <span>📐 Alinhamento do Cartão de Perfil</span>
      <select id="profileAlignSelect">
@@ -1389,9 +1361,19 @@ async function initEditor(userId) {
    avatarEl.textContent = '⌬';
   }
 
-  const frameEl = document.getElementById('avatarFrame');
+  const frameEl = document.getElementById('previewFrame');
+  const frameType = avatarFrameSelect ? avatarFrameSelect.value : 'none';
   if (frameEl) {
-    frameEl.style.display = 'none';
+    frameEl.className = 'avatar-frame';
+    if (frameType === 'neon-white') {
+      frameEl.classList.add('frame-neon-white');
+      frameEl.style.display = 'block';
+    } else if (frameType === 'vip') {
+      frameEl.classList.add('frame-vip');
+      frameEl.style.display = 'block';
+    } else {
+      frameEl.style.display = 'none';
+    }
   }
 
   document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
@@ -1406,16 +1388,6 @@ async function initEditor(userId) {
     card.classList.add('align-center');
   } else {
     card.classList.add('align-left');
-  }
-
-  // Lógica do alinhamento centralizado ou esquerdo
-  const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
-  if (alignVal === 'center') {
-    card.style.textAlign = 'center';
-    card.style.gridTemplateColumns = '1fr';
-  } else {
-    card.style.textAlign = 'left';
-    card.style.gridTemplateColumns = '';
   }
 
   if (cardStyleSelect.value === 'glass') {
