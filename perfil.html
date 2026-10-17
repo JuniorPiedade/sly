@@ -60,6 +60,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   align-items: center;
   gap: 16px;
   text-align: center;
+  pointer-events: none; /* Deixa o clique passar para o overlay principal */
 }
 .splash-star-wrapper {
   width: 68px;
@@ -953,7 +954,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // >>> INICIALIZA O EFEITO VISUAL DE FUNDO AQUI <<<
   if (typeof initVisualEffect === 'function') {
     initVisualEffect(data.visual_effect || 'none');
   }
@@ -1270,15 +1270,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }, 1000);
 
+  // --- CORREÇÃO DO GATILHO DA SPLASH SCREEN ---
   if (splashScreen) {
-    splashScreen.addEventListener('click', () => {
+    const handleSplashUnlock = (e) => {
+      e.stopPropagation();
       splashScreen.classList.add('hidden');
       
       const tryPlay = () => {
         if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
           try {
             ytPlayer.playVideo();
-          } catch (e) {
+          } catch (err) {
             setTimeout(tryPlay, 300);
           }
         } else {
@@ -1286,7 +1288,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       };
       tryPlay();
-    });
+    };
+
+    splashScreen.addEventListener('click', handleSplashUnlock);
+    const starBtn = document.getElementById('splashStarBtn');
+    if (starBtn) {
+      starBtn.addEventListener('click', handleSplashUnlock);
+    }
   }
 
   const canvas = document.getElementById('visualizer');
@@ -1393,20 +1401,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 });
-  });
+</script>
+
+<!-- Proteção SLY.ME isolada -->
 <script>
 (() => {
   const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
   const assinatura = "P.S: Diel — SLY.ME";
 
-  // Evita registrar os eventos duas vezes.
   if (window.__slyProtecaoInicializada) return;
   window.__slyProtecaoInicializada = true;
 
   function mostrarTelaHacker() {
     let tela = document.getElementById("sly-terminal-aviso");
-
-    // Se já estiver aberta, não cria outra.
     if (tela) return;
 
     tela = document.createElement("div");
@@ -1463,10 +1470,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.body.appendChild(tela);
 
     let i = 0;
-
     function digitar() {
       if (!tela.isConnected) return;
-
       if (i < mensagem.length) {
         texto.textContent += mensagem.charAt(i++);
         setTimeout(digitar, 48);
@@ -1474,24 +1479,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         assinaturaEl.style.opacity = "1";
       }
     }
-
     digitar();
   }
 
-  // Intercepta o clique direito.
   document.addEventListener("contextmenu", (e) => {
     e.preventDefault();
     mostrarTelaHacker();
   }, true);
 
-  // Intercepta alguns atalhos comuns.
   document.addEventListener("keydown", (e) => {
     const tecla = e.key.toLowerCase();
-
     const atalho =
       e.key === "F12" ||
-      (e.ctrlKey && e.shiftKey &&
-        ["i", "j", "c"].includes(tecla)) ||
+      (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(tecla)) ||
       (e.ctrlKey && tecla === "u");
 
     if (atalho) {
