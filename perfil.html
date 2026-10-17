@@ -169,16 +169,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   grid-column: 2;
   min-width: 0;
 }
-<!-- Widget de Rich Presence do Spotify no Perfil -->
-<div id="spotify-widget" class="spotify-card animate-item delay-4" style="display: none; margin-top: 12px; width: 100%;">
-  <div class="spotify-body" style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-    <img id="spotify-cover" src="" alt="Capa" style="width: 48px; height: 48px; border-radius: 6px; object-fit: cover;" />
-    <div style="overflow: hidden;">
-      <div id="spotify-title" style="font-weight: bold; font-size: 14px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">A carregar música...</div>
-      <div id="spotify-artist" style="font-size: 12px; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">...</div>
-    </div>
-  </div>
-</div>
+
 .profile-card.align-center {
   text-align: center;
   display: flex;
@@ -834,7 +825,6 @@ const socialUrls = {
   valorant: val => `https://tracker.gg/valorant/profile/riot/${val}`
 };
 
-// Assests/logos
 const socialLogos = {
   steam: 'assets/logos/steam.png',
   spotify: 'assets/logos/spotify.png',
@@ -893,6 +883,7 @@ function getYoutubeAudioId(url) {
 let ytPlayer = null;
 let isYtPlaying = false;
 
+document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
   let rawHandle = urlParams.get('u') || urlParams.get('user');
 
@@ -915,8 +906,8 @@ let isYtPlaying = false;
     document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
     return;
   }
-  
-// --- LÓGICA DE RICH PRESENCE DO SPOTIFY NO PERFIL PÚBLICO ---
+
+  // --- LÓGICA DE RICH PRESENCE DO SPOTIFY NO PERFIL PÚBLICO ---
   async function updateSpotifyPresence(accessToken) {
     const widget = document.getElementById('spotify-widget');
     const coverEl = document.getElementById('spotify-cover');
@@ -955,6 +946,7 @@ let isYtPlaying = false;
       updateSpotifyPresence(data.spotify_access_token);
     }, 15000);
   }
+
   if (typeof initVisualEffect === 'function') {
     initVisualEffect(data.visual_effect || 'none');
   }
@@ -1242,7 +1234,7 @@ let isYtPlaying = false;
     }
   }, 1000);
 
- const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
+  const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
   const cardElement = document.getElementById('profileCard');
 
   if (hasSplashText && splashScreen && splashTextDisplay) {
