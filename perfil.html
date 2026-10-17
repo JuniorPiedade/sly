@@ -46,7 +46,9 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   z-index: 99999;
   display: grid;
   place-items: center;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  opacity: 1; /* Garante que nasce totalmente visível se houver texto */
+  visibility: visible;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
   cursor: pointer;
 }
 .splash-overlay.hidden {
@@ -1179,6 +1181,42 @@ document.addEventListener("DOMContentLoaded", async () => {
   const timeDisplay = document.getElementById('timeDisplay');
   const muteBtn = document.getElementById('muteBtn');
   const volumeIcon = document.getElementById('volumeIcon');
+
+  // --- LÓGICA DA SPLASH SCREEN INSTANTÂNEA ---
+  const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
+
+  if (hasSplashText && splashScreen && splashTextDisplay) {
+    splashTextDisplay.textContent = data.splash_text;
+    splashScreen.classList.remove('hidden');
+
+    const handleSplashUnlock = (e) => {
+      e.stopPropagation();
+      splashScreen.classList.add('hidden');
+      
+      const tryPlay = () => {
+        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+          try {
+            ytPlayer.playVideo();
+          } catch (err) {
+            setTimeout(tryPlay, 300);
+          }
+        } else {
+          setTimeout(tryPlay, 300);
+        }
+      };
+      tryPlay();
+    };
+
+    splashScreen.addEventListener('click', handleSplashUnlock);
+    const starBtn = document.getElementById('splashStarBtn');
+    if (starBtn) {
+      starBtn.addEventListener('click', handleSplashUnlock);
+    }
+  } else {
+    if (splashScreen) {
+      splashScreen.classList.add('hidden');
+    }
+  }
 
   const playerSection = document.getElementById('playerSection');
 
