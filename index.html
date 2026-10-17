@@ -557,22 +557,22 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     </div>
    </section>
 
-   <section class="panel" id="panel-socials">
-    <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com logos oficiais originais locais.</p></div><span class="muted">04 / 08</span></div>
-    <div class="social-grid">
-     <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
-     <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
-     <label class="field"><span>▶ YouTube</span><input id="soc_youtube" placeholder="ex: @canal"></label>
-     <label class="field"><span>💬 Discord</span><input id="soc_discord" placeholder="ex: user#0001"></label>
-     <label class="field"><span>📸 Instagram</span><input id="soc_instagram" placeholder="ex: usuario"></label>
-     <label class="field"><span>✖ X / Twitter</span><input id="soc_twitter" placeholder="ex: usuario"></label>
-     <label class="field"><span>🎬 Letterboxd</span><input id="soc_letterboxd" placeholder="ex: usuario"></label>
-     <label class="field"><span>💎 OnlyFans</span><input id="soc_onlyfans" placeholder="ex: usuario"></label>
-     <label class="field"><span>🎨 Behance</span><input id="soc_behance" placeholder="ex: usuario"></label>
-     <label class="field"><span>📌 Pinterest</span><input id="soc_pinterest" placeholder="ex: usuario"></label>
-     <label class="field"><span>🇹 Tumblr</span><input id="soc_tumblr" placeholder="ex: blog"></label>
-     <label class="field"><span>▲ Vercel</span><input id="soc_vercel" placeholder="ex: usuario"></label>
-    </div>
+  <section class="panel" id="panel-socials">
+      <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com logos oficiais originais locais.</p></div><span class="muted">04 / 08</span></div>
+      <div class="social-grid">
+       <label class="field"><span>🎮 Steam</span><input id="soc_steam" placeholder="ex: seu_id"></label>
+       <label class="field"><span>🎵 Spotify</span><input id="soc_spotify" placeholder="ex: usuario"></label>
+       <label class="field"><span>▶ YouTube</span><input id="soc_youtube" placeholder="ex: @canal"></label>
+       <label class="field"><span>💬 Discord</span><input id="soc_discord" placeholder="ex: user#0001"></label>
+       <label class="field"><span>📸 Instagram</span><input id="soc_instagram" placeholder="ex: usuario"></label>
+       <label class="field"><span>✖ X / Twitter</span><input id="soc_x" placeholder="ex: usuario"></label>
+       <label class="field"><span>🔒 Privacy</span><input id="soc_privacy" placeholder="ex: usuario"></label>
+       <label class="field"><span>🎬 Letterboxd</span><input id="soc_letterboxd" placeholder="ex: usuario"></label>
+       <label class="field"><span>🎨 Behance</span><input id="soc_behance" placeholder="ex: usuario"></label>
+       <label class="field"><span>📌 Pinterest</span><input id="soc_pinterest" placeholder="ex: usuario"></label>
+       <label class="field"><span>🇹 Tumblr</span><input id="soc_tumblr" placeholder="ex: blog"></label>
+       <label class="field"><span>▲ Vercel</span><input id="soc_vercel" placeholder="ex: usuario"></label>
+      </div>
    </section>
 
    <section class="panel" id="panel-embeds">
@@ -1560,6 +1560,25 @@ async function initEditor(userId) {
     }
   }, true);
 })();
+</script>
+  <script>
+// Script universal para ligar os novos inputs ao sistema de salvamento do painel
+document.addEventListener("DOMContentLoaded", () => {
+  // Se existir uma função de carregamento global, escutamos por ela ou injetamos nos inputs
+  const inputsSociais = ['steam', 'spotify', 'youtube', 'discord', 'instagram', 'x', 'privacy', 'letterboxd', 'behance', 'pinterest', 'tumblr', 'vercel'];
+  
+  // Garante que o objeto global que envia para o Supabase recolha o 'x' e o 'privacy'
+  if (typeof window.getSocialsData !== 'function') {
+    window.getSocialsData = function() {
+      const socials = {};
+      inputsSociais.forEach(key => {
+        const el = document.getElementById(`soc_${key}`);
+        if (el) socials[key] = el.value.trim();
+      });
+      return socials;
+    };
+  }
+});
 </script>
 </body>
 </html>
