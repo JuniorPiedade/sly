@@ -917,19 +917,19 @@ if (code) {
     if (tokenResponse.ok && tokenData.access_token) {
       const expiresAt = Date.now() + (tokenData.expires_in * 1000);
 
-      // Gravação direta no Supabase
-      const { error: sbError } = await window.supabaseClient
-        .from('profiles')
-        .update({
-          spotify_connected: true,
-          spotify_access_token: tokenData.access_token,
-          spotify_refresh_token: tokenData.refresh_token || null,
-          spotify_token_expires: expiresAt
-        })
-        .eq('id', currentUserId);
+     // Gravação utilizando o método nativo do projeto
+      const payload = {
+        id: currentUserId,
+        spotify_connected: true,
+        spotify_access_token: tokenData.access_token,
+        spotify_refresh_token: tokenData.refresh_token || null,
+        spotify_token_expires: expiresAt
+      };
 
-      if (sbError) {
-        throw new Error("Erro direto do Supabase: " + sbError.message);
+      if (window.islySupabase && typeof window.islySupabase.saveProfile === 'function') {
+        await window.islySupabase.saveProfile(payload);
+      } else {
+        throw new Error('Função de salvamento do perfil não encontrada.');
       }
 
       if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
