@@ -893,8 +893,29 @@ function getYoutubeAudioId(url) {
 let ytPlayer = null;
 let isYtPlaying = false;
 
-document.addEventListener("DOMContentLoaded", async () => {
-  // --- LÓGICA DE RICH PRESENCE DO SPOTIFY NO PERFIL PÚBLICO ---
+  const urlParams = new URLSearchParams(window.location.search);
+  let rawHandle = urlParams.get('u') || urlParams.get('user');
+
+  if (!rawHandle) {
+    const pathSegments = window.location.pathname.split('-');
+    if (pathSegments.length > 1 && window.location.pathname.startsWith('/sly-')) {
+      rawHandle = pathSegments[pathSegments.length - 1];
+    }
+  }
+
+  if (!rawHandle || !window.islySupabase) {
+    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+    return;
+  }
+
+  const handle = rawHandle.trim().replace(/^@/, '');
+  const data = await window.islySupabase.getProfileByHandle(handle);
+
+  if (!data) {
+    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
+    return;
+  }
+// --- LÓGICA DE RICH PRESENCE DO SPOTIFY NO PERFIL PÚBLICO ---
   async function updateSpotifyPresence(accessToken) {
     const widget = document.getElementById('spotify-widget');
     const coverEl = document.getElementById('spotify-cover');
@@ -926,42 +947,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error('Erro ao procurar música do Spotify:', err);
     }
   }
-if (data.spotify_access_token) {
-    updateSpotifyPresence(data.spotify_access_token);
-    setInterval(() => {
-      updateSpotifyPresence(data.spotify_access_token);
-    }, 15000);
-  }
-  // Verifica se o perfil do Supabase tem o token gravado e ativa a verificação a cada 15s
+
   if (data.spotify_access_token) {
     updateSpotifyPresence(data.spotify_access_token);
     setInterval(() => {
       updateSpotifyPresence(data.spotify_access_token);
     }, 15000);
   }
-  const urlParams = new URLSearchParams(window.location.search);
-  let rawHandle = urlParams.get('u') || urlParams.get('user');
-
-  if (!rawHandle) {
-    const pathSegments = window.location.pathname.split('-');
-    if (pathSegments.length > 1 && window.location.pathname.startsWith('/sly-')) {
-      rawHandle = pathSegments[pathSegments.length - 1];
-    }
-  }
-
-  if (!rawHandle || !window.islySupabase) {
-    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
-    return;
-  }
-
-  const handle = rawHandle.trim().replace(/^@/, '');
-  const data = await window.islySupabase.getProfileByHandle(handle);
-
-  if (!data) {
-    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
-    return;
-  }
-
   if (typeof initVisualEffect === 'function') {
     initVisualEffect(data.visual_effect || 'none');
   }
