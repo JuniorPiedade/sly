@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
-<title id="pageTitle">Perfil — ISLY.ME</title>
+<title id="pageTitle">isly.me — Perfil</title>
+<!-- Tailwind CSS CDN para o player minimalista -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Font Awesome Icons CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&family=JetBrains+Mono:wght@200;300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  if (typeof supabase === 'undefined') {
+    document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
+  }
+</script>
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-a{color:inherit;text-decoration:none}
-button{-webkit-tap-highlight-color:transparent;cursor:pointer}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;overflow-x:hidden;font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;background:var(--bg);color:var(--text);user-select:none; position: relative;}
 
+/* --- CANVAS DE EFEITOS VISUAIS DE FUNDO --- */
 #effectCanvas {
   position: fixed;
   inset: 0;
@@ -21,39 +32,116 @@ button{-webkit-tap-highlight-color:transparent;cursor:pointer}
   z-index: 0;
 }
 
-.profile-card {
-  position:relative;
-  isolation:isolate;
-  overflow:visible!important;
+/* Garante que o conteúdo fique acima do canvas */
+.page-wrapper, .guestbook-trigger-btn, header.fixed, .splash-overlay {
+  position: relative;
+  z-index: 10;
+}
+
+/* --- TELA DE ENTRADA (SPLASH SCREEN) --- */
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  background: #080812;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  cursor: pointer;
+}
+.splash-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  pointer-events: none;
+}
+.splash-star-wrapper {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
+  animation: splashPulse 2s infinite ease-in-out;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.splash-star-wrapper:hover {
+  transform: scale(1.12);
+  border-color: rgba(168, 85, 247, 0.9);
+  box-shadow: 0 0 45px rgba(168, 85, 247, 0.6);
+}
+.splash-neon-star {
+  width: 28px;
+  height: 28px;
+  fill: #ffffff;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9));
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+.splash-star-wrapper:hover .splash-neon-star {
+  fill: #c084fc;
+  stroke: #c084fc;
+  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.9));
+}
+.splash-text {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: #c9c5e2;
+  text-transform: lowercase;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+@keyframes splashPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(168, 85, 247, 0.2); }
+  50% { transform: scale(1.06); box-shadow: 0 0 40px rgba(168, 85, 247, 0.4); }
+}
+
+/* WRAPPER PRINCIPAL PARA POSICIONAR O CARD E OS POST-ITS AO LADO */
+.page-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.container{width:100%;max-width:640px;position:relative}
+
+.profile-card{
+  opacity: 0; /* Inicia oculto por baixo da splash screen para evitar qualquer piscada */
+  overflow: visible !important;
+  border-radius:28px;
   width:100%;
-  max-width:680px;
-  min-width:0;
+  max-width:640px;
   margin:0 auto;
-  display:grid;
-  grid-template-columns:minmax(132px,.72fr) minmax(0,1.28fr);
-  grid-template-rows:auto;
-  align-items:start;
-  gap:12px 22px;
-  padding:27px;
-  border:1px solid #a78bfa2b!important;
-  border-radius:23px;
-  background-color:#13101a;
-  background-image:
-    radial-gradient(ellipse at 10% 0%,#8b5cf61b,transparent 55%),
-    linear-gradient(145deg,#17131f,#0f0c14);
-  background-size: cover;
-  background-position: center;
-  box-shadow:0 24px 70px #00000055,0 0 0 1px #ffffff04,inset 0 1px #ffffff0a;
+  box-shadow:0 24px 70px rgba(0,0,0,0.6);
+  padding:36px;
   text-align:left;
   transform-style:preserve-3d;
   perspective:1200px;
-  z-index: 1;
+  transition: opacity 0.4s ease, transform 0.15s ease-out;
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  border: none !important;
 }
-.profile-card:before{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
-  background:linear-gradient(125deg,#ffffff06,transparent 35%,#8b5cf608);
-}
-.card-style-opaque{background-color:#13101a}
+.card-style-opaque { background-color: #11111f; }
 .card-style-glass {
   background: rgba(13, 11, 20, 0.25) !important;
   backdrop-filter: blur(16px) !important;
@@ -61,13 +149,14 @@ button{-webkit-tap-highlight-color:transparent;cursor:pointer}
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
 }
-
-.profile-header-row{
-  grid-column:1;grid-row:1 / span 7;display:flex;flex-direction:column;
-  align-items:flex-start;gap:14px;min-width:0;padding:3px 0 0;
-  overflow:visible!important
+.profile-header-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  overflow: visible !important;
 }
-.avatar-container{
+
+.avatar-container {
   position: relative;
   width: 76px;
   height: 76px;
@@ -84,6 +173,8 @@ button{-webkit-tap-highlight-color:transparent;cursor:pointer}
   position: relative;
   z-index: 1;
   display: block;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .avatar img {
@@ -97,12 +188,36 @@ button{-webkit-tap-highlight-color:transparent;cursor:pointer}
   border-radius: inherit !important;
 }
 
-.profile-info{width:100%;min-width:0;overflow:visible!important}
-.profile-card h3{
-  font-size:clamp(19px,2vw,25px);font-weight:800;line-height:1.2;
-  letter-spacing:-.7px;white-space:normal;overflow-wrap:anywhere;
-  margin:0 0 5px
+.avatar-frame {
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  z-index: 2;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
+.frame-neon-white { border: 2px solid #ffffff; border-radius: 22px; box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.4); }
+.frame-vip { border: 2px solid var(--purple); border-radius: 22px; box-shadow: 0 0 16px var(--purple), 0 0 30px var(--blue); }
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  overflow: visible !important;
+}
+
+.profile-card h3{
+  margin:0 0 2px;
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:-0.01em;
+  white-space:nowrap;
+  overflow: visible !important;
+  text-overflow: clip;
+}
+
 .text-effect-glow {
   color: #ffffff !important;
   text-shadow: 
@@ -111,153 +226,482 @@ button{-webkit-tap-highlight-color:transparent;cursor:pointer}
     0 0 20px rgba(255, 255, 255, 0.5),
     0 0 35px rgba(255, 255, 255, 0.3);
 }
-.handle{font-size:12px;color:#b9a0f7;overflow-wrap:anywhere}
-.bio-preview,.live-status,.preview-emblems,.preview-socials,.embeds-container,.preview-links,.profile-foot{
-  grid-column:2;min-width:0
+
+.handle{font-size:13px;font-weight:600;letter-spacing:0.02em;margin-bottom:4px}
+.role-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc;width:fit-content}
+
+.bio-preview{font-size:13px;margin:4px 0 0;overflow-wrap:anywhere;line-height:1.5}
+.live-status{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border:1px solid rgba(34,211,238,0.3);background:rgba(34,211,238,0.08);color:#cffafe;border-radius:999px;font-size:11px;font-weight:600;margin:4px 0 0;width:fit-content}
+
+/* EMBLEMAS MINIMALISTAS E ENXUTOS */
+.preview-emblems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 4px;
 }
-.bio-preview{grid-row:1;font-size:13px;color:#c0b6cd;line-height:1.65;margin:2px 0 0}
-.live-status{
-  grid-row:2;margin:0;padding:6px 10px;width:fit-content;max-width:100%;
-  border-color:#8b5cf638;background:#8b5cf60d;color:#e0d4fa;border-radius:99px;display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600
+.preview-emblems span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e2dcf0;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+.preview-emblems span:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
 }
 
-.preview-emblems{
-  grid-row:3;
-  margin-top:0;
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-}
-.preview-emblems span{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:3px 9px;
-  border-radius:8px;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:0.2px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  color:#e2dcf0;
-  backdrop-filter:blur(8px);
-}
-
-.preview-socials{grid-row:4;margin-top:0;display:flex;flex-wrap:wrap;gap:7px}
-.preview-social-icon{
-  width:34px;height:34px;border:1px solid #ffffff10;border-radius:11px;
-  background:#ffffff06;color:#ded3eb;transition:transform .18s,border-color .18s,background .18s;display:grid;place-items:center
-}
-.preview-social-icon img {
+.public-socials{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.social-icon-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);text-decoration:none;transition:.2s}
+.social-icon-btn img {
   width: 18px;
   height: 18px;
   object-fit: contain;
   display: block;
 }
-.preview-social-icon:hover{transform:translateY(-2px);border-color:#a78bfa55;background:#8b5cf61a}
+.social-icon-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,0.08)}
 
-.embeds-container{grid-row:5;margin-top:0;display:flex;flex-direction:column;gap:12px}
-.embed-wrapper{border:1px solid #ffffff12;border-radius:12px;background:#08070b;overflow:hidden;line-height:0}
+.embeds-container{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.embed-wrapper{width:100%;border-radius:14px;overflow:hidden;background:#00000033;line-height:0}
 .embed-wrapper iframe{width:100%;border:0;display:block}
 
+/* Container de Amigos Próximos */
 .preview-friendships-wrapper {
-  grid-row: 6.5;
-  margin-top: 6px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  margin-top: 14px;
+  width: 100%;
 }
+
 .preview-friendships-title {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 1.2px;
   font-weight: 700;
-  color: var(--muted);
+  color: var(--muted, #a6a4c4);
+  cursor: default;
+  transition: all 0.3s ease;
+  width: fit-content;
 }
+
+.preview-friendships-title:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 16px rgba(168, 85, 247, 0.8), 0 0 24px rgba(168, 85, 247, 0.5);
+}
+
 .preview-friendships {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
+
 .preview-friend-bubble {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
   display: grid;
   place-items: center;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: bold;
+  color: white;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.profile-foot{
-  grid-row:7;text-align:left;padding-top:11px;margin-top:1px;border-top-color:#ffffff12;
-  color:#887c99;font-size:9px;letter-spacing:1.4px;font-weight:700;text-transform:uppercase
+.preview-friend-bubble:hover {
+  transform: translateY(-2px) scale(1.08);
+  border-color: #a855f7;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
 }
 
-@media(max-width:650px){
-  body{padding:12px}
-  .profile-card{
-    grid-template-columns:minmax(100px,.68fr) minmax(0,1.32fr);
-    gap:11px 14px;padding:18px 15px;border-radius:19px
+.preview-friend-bubble img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- CONTADORES E HYPE --- */
+.stats-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  width: 100%;
+}
+.profile-card.align-center .stats-container { justify-content: center; }
+.profile-card.align-left .stats-container { justify-content: flex-start; }
+
+.views-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  color: #c9c5e2;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.hype-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px 0 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+  transition: transform 0.15s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hype-button:hover {
+  transform: scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.15);
+}
+
+.hype-button:active {
+  transform: scale(0.96);
+}
+
+.hype-button.hyped {
+  border-color: rgba(168, 85, 247, 0.6);
+  background: rgba(168, 85, 247, 0.08);
+}
+
+.hype-button.hyped.animate-flash {
+  animation: flashGlow 0.4s ease-out;
+}
+
+@keyframes flashGlow {
+  0% {
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.3);
+    border-color: #ffffff;
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
   }
 }
+
+.icon-wrapper {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.neon-star {
+  width: 14px;
+  height: 14px;
+  fill: #FFFFFF;
+  stroke: #FFFFFF;
+  stroke-width: 1.5;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hype-button.hyped .neon-star {
+  fill: #c084fc;
+  stroke: #c084fc;
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.8));
+}
+
+.hype-count {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 6px #ffffff;
+  animation: explode 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes explode {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+}
+
+.profile-foot{font-size:10px;color:#777391;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;padding:14px 0 18px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);margin-top:6px}
+.error-box{text-align:center;padding:30px;color:#fcd9a1}
+
+@media(max-width: 1020px) {
+  .page-wrapper { flex-direction: column; }
+}
+
+/* PLAYER ULTRA MINIMALISTA */
+.glow-border {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.03), inset 0 0 15px rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.glow-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glow-btn:hover {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+.glow-btn:active {
+  transform: scale(0.95);
+}
+
+.animate-item { opacity: 0; transform: translateY(16px); animation: cascadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes cascadeIn { to { opacity: 1; transform: translateY(0); } }
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.12s; }
+.delay-3 { animation-delay: 0.18s; }
+.delay-4 { animation-delay: 0.24s; }
+.delay-5 { animation-delay: 0.30s; }
+.delay-6 { animation-delay: 0.36s; }
 </style>
-<script>
-(function(){
- const sources=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2','https://unpkg.com/@supabase/supabase-js@2'];
- function loadSdk(i){
-  if(i>=sources.length){window.__islySdkReadyFired=true;window.dispatchEvent(new Event('isly-sdk-ready'));return;}
-  const s=document.createElement('script');s.src=sources[i];
-  s.onload=function(){
-   const m=document.createElement('script');m.src='/js/supabase.js';
-   m.onload=function(){window.__islySdkReadyFired=true;window.dispatchEvent(new Event('isly-sdk-ready'));};
-   m.onerror=function(){window.__islySdkReadyFired=true;window.dispatchEvent(new Event('isly-sdk-ready'));};
-   document.head.appendChild(m);
-  };
-  s.onerror=function(){loadSdk(i+1);};document.head.appendChild(s);
- }
- loadSdk(0);
-})();
-</script>
 </head>
 <body>
 
+<!-- CANVAS PARA OS EFEITOS VISUAIS DE FUNDO -->
 <canvas id="effectCanvas"></canvas>
 
-<div class="profile-card card-style-opaque" id="profileCard">
- <div class="profile-header-row">
-  <div class="avatar-container">
-   <div class="avatar" id="pubAvatar">⌬</div>
-  </div>
-  <div class="profile-info">
-   <h3 id="pubName">Carregando...</h3>
-   <div class="handle" id="pubHandle">@...</div>
-  </div>
- </div>
- <p class="bio-preview" id="pubBio">...</p>
- <div class="live-status"><span id="pubStatusEmoji">🎮</span><span id="pubStatusText">Carregando status...</span></div>
- <div class="preview-emblems" id="pubEmblems"></div>
- <div class="preview-socials" id="pubSocials"></div>
- <div class="embeds-container" id="pubEmbeds"></div>
- 
- <div class="preview-friendships-wrapper" id="pubFriendshipsWrapper" style="display: none;">
-   <div class="preview-friendships-title">Amigos Próximos</div>
-   <div class="preview-friendships" id="pubFriendships"></div>
- </div>
+<!-- PLAYER ULTRA MINIMALISTA (FIXO NO CANTO INFERIOR ESQUERDO) -->
+<header id="playerSection" class="fixed bottom-6 left-6 z-50 w-[280px] max-w-[90vw]" style="display: none;">
+    <div id="playerWrapper" class="glow-border bg-[#09090b]/90 rounded-full px-3 py-1.5 flex items-center justify-between transition-all duration-500 shadow-2xl">
+        
+        <!-- Botão Play/Pause -->
+        <button id="playPauseBtn" class="player-btn-action glow-btn relative w-7 h-7 rounded-full bg-white text-black flex items-center justify-center focus:outline-none cursor-pointer">
+            <i id="playIcon" class="fa-solid fa-play text-[9px] translate-x-[1px]"></i>
+            <i id="pauseIcon" class="fa-solid fa-pause text-[9px] hidden"></i>
+        </button>
 
- <div class="profile-foot">CRIADO NO ISLY.ME ✦</div>
+        <!-- Status / Nome da Trilha / Canvas -->
+        <div class="flex flex-col items-center justify-center flex-1 mx-2.5 overflow-hidden">
+            <div class="flex items-center gap-1 mb-0.5 w-full justify-center">
+                <span id="trackStatus" class="inline-block w-1.5 h-1.5 rounded-full bg-neutral-600 transition-colors duration-300"></span>
+                <span id="trackTitle" class="player-text-title text-[10px] font-mono tracking-wider uppercase text-neutral-400 truncate max-w-[100px]">
+                    SOUNDTRACK
+                </span>
+            </div>
+            <!-- Canvas do Visualizador -->
+            <div class="w-full flex items-center justify-center h-2">
+                <canvas id="visualizer" class="w-full h-full opacity-70"></canvas>
+            </div>
+        </div>
+
+        <!-- Tempo / Mute -->
+        <div class="player-text-meta flex items-center gap-2 text-neutral-400">
+            <span id="timeDisplay" class="text-[9px] font-mono tracking-tighter text-neutral-500">00:00</span>
+            <button id="muteBtn" class="hover:text-white transition-colors duration-200 focus:outline-none cursor-pointer">
+                <i id="volumeIcon" class="fa-solid fa-volume-high text-[10px]"></i>
+            </button>
+        </div>
+
+        <!-- Player oculto do YouTube (Invisível) -->
+        <div id="youtubePlayerContainer" style="display:none; position:absolute; pointer-events:none; opacity:0; width:0; height:0; overflow:hidden;"></div>
+    </div>
+</header>
+
+<!-- TELA DE ENTRADA (SPLASH SCREEN) - Inicia visível por padrão para proteger o card -->
+<div class="splash-overlay" id="splashScreen">
+  <div class="splash-content">
+    <div class="splash-star-wrapper" id="splashStarBtn">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="splash-neon-star">
+        <path d="M24 10L26.7634 19.4674L33.7128 20.1456L28.4724 24.8454L30.043 31.6786L24 28.02L17.957 31.6786L19.5276 24.8454L14.2872 20.1456L21.2366 19.4674L24 10Z" />
+      </svg>
+    </div>
+    <div class="splash-text" id="splashTextDisplay"></div>
+  </div>
 </div>
 
+<div class="page-wrapper">
+  <div class="container">
+    <div class="profile-card card-style-opaque" id="profileCard">
+      <div class="profile-header-row animate-item delay-1">
+        <div class="avatar-container">
+          <div class="avatar" id="avatar">⌬</div>
+          <div id="avatarFrame" class="avatar-frame"></div>
+        </div>
+        <div class="profile-info">
+          <h3 id="name">Carregando...</h3>
+          <div class="handle" id="handle">@...</div>
+          <div class="role-badge" id="roleBadge">👾 Membro</div>
+        </div>
+      </div>
+      <p class="bio-preview animate-item delay-2" id="bio"></p>
+      <div class="live-status animate-item delay-3" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
+      <div class="preview-emblems animate-item delay-3" id="emblems"></div>
+      <div class="public-socials animate-item delay-3" id="socialsBar"></div>
+      <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
+      
+      <!-- Seção de Amigos Próximos / Friendships -->
+      <div class="preview-friendships-wrapper" id="publicFriendshipsWrapper" style="display: none;">
+        <div class="preview-friendships-title">AMIGOS PRÓXIMOS</div>
+        <div class="preview-friendships" id="publicFriendships"></div>
+      </div>
+
+      <!-- Container de Estatísticas (Views + Hype) -->
+      <div class="stats-container animate-item delay-5" id="statsContainer">
+        <div class="views-badge">
+          <span>👁️</span>
+          <span id="publicViewsCount">0</span>
+          <span>visualizações</span>
+        </div>
+
+        <div class="hype-button" id="hypeBtn">
+          <div class="icon-wrapper" id="iconWrapper">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="neon-star">
+              <path d="M24 10L26.7634 19.4674L33.7128 20.1456L28.4724 24.8454L30.043 31.6786L24 28.02L17.957 31.6786L19.5276 24.8454L14.2872 20.1456L21.2366 19.4674L24 10Z" />
+            </svg>
+          </div>
+          <span class="hype-count" id="hypeCount">0</span>
+        </div>
+      </div>
+
+      <div class="profile-foot animate-item delay-6"><a href="landing.html" style="color:inherit">CRIADO NO ISLY.ME ✦</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/supabase.js"></script>
 <script>
+// --- SISTEMA DE EFEITOS VISUAIS DE FUNDO (CANVAS) ---
+let currentEffectAnimId = null;
+
+function initVisualEffect(effectName) {
+  const canvas = document.getElementById('effectCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  if (currentEffectAnimId) {
+    cancelAnimationFrame(currentEffectAnimId);
+  }
+
+  if (effectName === 'stellar_dust') {
+    const particles = Array.from({ length: 70 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5 + 0.5,
+      alpha: Math.random(),
+      speed: Math.random() * 0.2 + 0.05
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffffff';
+      particles.forEach(p => {
+        p.y -= p.speed;
+        if (p.y < 0) p.y = canvas.height;
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      currentEffectAnimId = requestAnimationFrame(draw);
+    }
+    draw();
+
+  } else if (effectName === 'neon_snowfall') {
+    const flakes = Array.from({ length: 50 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2 + 1,
+      speed: Math.random() * 0.8 + 0.3,
+      drift: Math.random() * 0.5 - 0.25
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#22d3ee';
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = '#22d3ee';
+      flakes.forEach(f => {
+        f.y += f.speed;
+        f.x += f.drift;
+        if (f.y > canvas.height) f.y = 0;
+        if (f.x > canvas.width) f.x = 0;
+        if (f.x < 0) f.x = canvas.width;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      currentEffectAnimId = requestAnimationFrame(draw);
+    }
+    draw();
+
+  } else if (effectName === 'matrix_glitch') {
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array.from({ length: columns }, () => 1);
+    const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&';
+
+    function draw() {
+      ctx.fillStyle = 'rgba(8, 8, 18, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#a855f7';
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+      currentEffectAnimId = requestAnimationFrame(draw);
+    }
+    draw();
+  } else {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
 const emblemNames = {
   nerd: 'Nerd', gamer: 'Gamer', youtuber: 'Youtuber', programador: 'Programador',
   hacker: 'Hacker', streamer: 'Streamer', gotico: 'Gótico', anime: 'Anime',
   lol: 'LoL', habbo: 'Habbo', thesims: 'The Sims', valorant: 'Valorant',
   cod: 'Call Of Duty', cs: 'CS', gta: 'GTA', minecraft: 'Minecraft',
-  rpg: 'RPG', artista: 'Artista', musica: 'Música', fundador: 'Fundador', geek: 'Geek'
+  rpg: 'RPG', artista: 'Artista', artist: 'Criador', musica: 'Música', 
+  fundador: 'Fundador', founder: 'Fundador', geek: 'Geek'
 };
 
 const emblemEmojis = {
@@ -265,7 +709,23 @@ const emblemEmojis = {
   hacker: '⚡', streamer: '🟣', gotico: '🦇', anime: '🍥',
   lol: '⚔️', habbo: '🏨', thesims: '🟩', valorant: '🎯',
   cod: '🪖', cs: '💣', gta: '💰', minecraft: '⛏️',
-  rpg: '🎲', artista: '🎨', musica: '🎧', fundador: '💎', geek: '🤓'
+  rpg: '🎲', artista: '🎨', artist: '🎨', musica: '🎧', 
+  fundador: '💎', founder: '💎', geek: '🤓'
+};
+
+const socialUrls = {
+  steam: val => `https://steamcommunity.com/id/${val}`,
+  spotify: val => `https://open.spotify.com/user/${val}`,
+  youtube: val => `https://youtube.com/${val.startsWith('@') ? val : '@' + val}`,
+  discord: val => `https://discord.com/users/${val}`,
+  instagram: val => `https://instagram.com/${val.replace(/^@/, '')}`,
+  twitter: val => `https://twitter.com/${val.replace(/^@/, '')}`,
+  letterboxd: val => `https://letterboxd.com/${val}`,
+  onlyfans: val => `https://onlyfans.com/${val.replace(/^@/, '')}`,
+  behance: val => `https://behance.net/${val}`,
+  pinterest: val => `https://pinterest.com/${val}`,
+  tumblr: val => `https://${val}.tumblr.com`,
+  vercel: val => `https://${val}.vercel.app`
 };
 
 const socialLogos = {
@@ -284,177 +744,192 @@ const socialLogos = {
 };
 
 function getSpotifyEmbed(url) {
- if (!url) return '';
- const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
- if (match) {
-  return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
- }
- return '';
+  if (!url) return '';
+  const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
+  if (match) {
+    return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
+  }
+  return '';
 }
 
 function getYoutubeEmbed(url) {
- if (!url) return '';
- let id = '';
- if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
- else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
- if (id) {
-  return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
- }
- return '';
+  if (!url) return '';
+  let id = '';
+  if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
+  else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
+  if (id) {
+    return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+  }
+  return '';
 }
 
 function getInstagramEmbed(url) {
- if (!url) return '';
- const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
- if (match) {
-  return `<div class="embed-wrapper"><iframe src="https://www.instagram.com/${match[1]}/${match[2]}/embed" height="360" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
- }
- return '';
+  if (!url) return '';
+  const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    return `<div class="embed-wrapper"><iframe src="https://www.instagram.com/${match[1]}/${match[2]}/embed" height="360" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
+  }
+  return '';
 }
 
-function initVisualEffect(effectType) {
-  const canvas = document.getElementById('effectCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resize);
-  resize();
+function getYoutubeAudioId(url) {
+  if (!url) return null;
+  let id = '';
+  if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
+  else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
+  else if (url.includes('embed/')) id = url.split('embed/')[1]?.split('?')[0];
+  return id || url;
+}
 
-  const particles = [];
-  const count = effectType === 'stellar_dust' ? 70 : effectType === 'neon_snowfall' ? 50 : 0;
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      size: Math.random() * 2 + 0.8,
-      speed: Math.random() * 0.6 + 0.3,
-      alpha: Math.random() * 0.7 + 0.3,
-      phase: Math.random() * Math.PI * 2
+let ytPlayer = null;
+let isYtPlaying = false;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  let rawHandle = urlParams.get('u') || urlParams.get('user');
+
+  if (!rawHandle) {
+    const pathSegments = window.location.pathname.split('-');
+    if (pathSegments.length > 1 && window.location.pathname.startsWith('/sly-')) {
+      rawHandle = pathSegments[pathSegments.length - 1];
+    }
+  }
+
+  if (!rawHandle || !window.islySupabase) {
+    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+    return;
+  }
+
+  const handle = rawHandle.trim().replace(/^@/, '');
+  const data = await window.islySupabase.getProfileByHandle(handle);
+
+  if (!data) {
+    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
+    return;
+  }
+
+  if (typeof initVisualEffect === 'function') {
+    initVisualEffect(data.visual_effect || 'none');
+  }
+
+  if (data.is_banned) {
+    document.querySelector('.container').innerHTML = `
+      <div class="error-box" style="border: 1px solid #f8717144; background: #f8717112; border-radius: 18px; padding: 40px;">
+        <h2>⚠️ Conta Suspensa</h2>
+        <p>Este perfil foi suspenso por violação dos termos de uso da comunidade.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let currentViews = (data.views_count || 0) + 1;
+  document.getElementById('publicViewsCount').textContent = currentViews;
+  try {
+    await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
+  } catch (e) {
+    console.warn("Analytics Error:", e);
+  }
+
+  const hypeCountEl = document.getElementById('hypeCount');
+  if (hypeCountEl) {
+    hypeCountEl.textContent = data.hypes || 0;
+  }
+
+  const statsContainer = document.getElementById('statsContainer');
+  const alignment = data.card_alignment || 'center';
+  if (statsContainer) {
+    statsContainer.classList.remove('align-center', 'align-left');
+    statsContainer.classList.add('align-' + alignment);
+  }
+
+  document.body.style.backgroundColor = data.bg_color || '#080812';
+  if (data.custom_cursor) {
+    document.body.style.cursor = `url('${data.custom_cursor}'), auto`;
+  }
+
+  const card = document.getElementById('profileCard');
+  if (card) {
+    const cardStyleType = data.card_style || 'opaque';
+    card.classList.remove('card-style-opaque', 'card-style-glass');
+    
+    if (cardStyleType === 'glass') {
+      card.classList.add('card-style-glass');
+      card.style.backgroundColor = '';
+    } else {
+      card.classList.add('card-style-opaque');
+      card.style.backgroundColor = data.card_bg || '#11111f';
+    }
+
+    if (data.wallpaper_url) {
+      document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.75), rgba(8, 8, 18, 0.75)), url('${data.wallpaper_url}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundAttachment = 'fixed';
+    }
+
+    card.style.border = 'none';
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xc = rect.width / 2;
+      const yc = rect.height / 2;
+      const dx = (x - xc) / xc;
+      const dy = (y - yc) / yc;
+      card.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
     });
   }
 
-  function loop(timestamp) {
-    const w = canvas.width;
-    const h = canvas.height;
-    if (effectType === 'stellar_dust') {
-      ctx.clearRect(0, 0, w, h);
-      for (const p of particles) {
-        const flicker = 0.35 + Math.abs(Math.sin(timestamp * 0.001 + p.phase)) * 0.65;
-        ctx.fillStyle = `rgba(255,255,255,${flicker * 0.65})`;
-        ctx.fillRect(p.x, p.y, p.size, p.size);
-      }
-    } else if (effectType === 'neon_snowfall') {
-      ctx.clearRect(0, 0, w, h);
-      for (const p of particles) {
-        p.y += p.speed;
-        p.x += Math.sin(p.y * 0.012) * 0.35;
-        if (p.y > h) { p.y = -3; p.x = Math.random() * w; }
-        ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    } else if (effectType === 'matrix_glitch') {
-      ctx.clearRect(0, 0, w, h);
-      if (Math.random() < 0.045) {
-        const y = Math.random() * h;
-        const width = 10 + Math.random() * w * 0.35;
-        const x = Math.random() * (w - width);
-        ctx.fillStyle = `rgba(255,255,255,${0.15 + Math.random() * 0.4})`;
-        ctx.fillRect(x, y, width, 1 + Math.random() * 2);
-      }
-    } else {
-      ctx.clearRect(0, 0, w, h);
-      return;
+  const nameEl = document.getElementById('name');
+  if (nameEl) {
+    nameEl.style.color = data.title_color || '#ffffff';
+    if (data.name_effect === 'glow') {
+      nameEl.classList.add('text-effect-glow');
     }
-    requestAnimationFrame(loop);
-  }
-  if (effectType && effectType !== 'none') requestAnimationFrame(loop);
-}
-
-async function loadPublicProfile() {
-  let retries = 0;
-  while ((!window.islySupabase || typeof window.islySupabase.getProfileByHandle !== 'function') && retries < 20) {
-    await new Promise(r => setTimeout(r, 100));
-    retries++;
   }
 
-  const params = new URLSearchParams(window.location.search);
-  let handle = params.get('u') || window.location.pathname.split('/').pop().replace('sly-', '');
+  const activeTextColor = data.text_color || '#f6f4ff';
+  const bioEl = document.getElementById('bio');
+  if (bioEl) bioEl.style.color = activeTextColor;
 
-  if (!handle) {
-    document.getElementById('pubName').textContent = 'Perfil não encontrado';
-    return;
+  const handleEl = document.getElementById('handle');
+  if (handleEl) handleEl.style.color = activeTextColor;
+
+  document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
+  nameEl.textContent = data.name || 'Sem nome';
+  handleEl.textContent = '@' + data.handle;
+
+  const roleBadge = document.getElementById('roleBadge');
+  if (roleBadge) {
+    const r = data.role || 'Membro';
+    roleBadge.innerHTML = r === 'Fundador' ? '💎 Fundador' : r === 'Suporte' ? '🛡️ Suporte' : r === 'Apoiador' ? '⭐ Apoiador' : '👾 Membro';
   }
 
-  let profile = null;
-  try {
-    profile = await window.islySupabase.getProfileByHandle(handle);
-  } catch (e) {
-    console.warn("Erro ao buscar perfil:", e);
-  }
+  bioEl.textContent = data.bio || '';
+  document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
+  document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
 
-  if (!profile) {
-    document.getElementById('pubName').textContent = 'Usuário não encontrado';
-    document.getElementById('pubHandle').textContent = '@' + handle;
-    return;
-  }
-
-  document.getElementById('pageTitle').textContent = `${profile.name || handle} — ISLY.ME`;
-
-  const nameEl = document.getElementById('pubName');
-  nameEl.textContent = profile.name || 'Sem Nome';
-  if (profile.name_effect === 'glow') {
-    nameEl.classList.add('text-effect-glow');
-  } else if (profile.title_color) {
-    nameEl.style.color = profile.title_color;
-  }
-
-  document.getElementById('pubHandle').textContent = '@' + (profile.handle || handle);
-  document.getElementById('pubBio').textContent = profile.bio || '';
-  
-  const textColor = profile.text_color || '#f6f4ff';
-  document.getElementById('pubBio').style.color = textColor;
-  document.getElementById('pubHandle').style.color = textColor;
-
-  const avatarEl = document.getElementById('pubAvatar');
-  if (profile.avatar_url) {
-    avatarEl.innerHTML = `<img src="${profile.avatar_url}" alt="Avatar">`;
+  const avatarEl = document.getElementById('avatar');
+  if (data.avatar_url) {
+    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
   } else {
     avatarEl.textContent = '⌬';
   }
 
-  document.getElementById('pubStatusEmoji').textContent = profile.status_emoji || '🎮';
-  document.getElementById('pubStatusText').textContent = `${profile.status_label || 'Jogando'} · ${profile.activity || 'Atividade'}`;
+  const frameEl = document.getElementById('avatarFrame');
+  const frameType = data.avatar_frame || 'none';
+  frameEl.className = 'avatar-frame';
+  if (frameType === 'neon-white') frameEl.classList.add('frame-neon-white');
+  else if (frameType === 'vip') frameEl.classList.add('frame-vip');
 
-  const card = document.getElementById('profileCard');
-  if (profile.card_style === 'glass') {
-    card.classList.add('card-style-glass');
-  } else {
-    card.classList.add('card-style-opaque');
-    if (profile.card_bg) card.style.backgroundColor = profile.card_bg;
-  }
-
-  if (profile.wallpaper_url) {
-    document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.8), rgba(8, 8, 18, 0.8)), url('${profile.wallpaper_url}')`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    document.body.style.backgroundAttachment = 'fixed';
-  } else if (profile.bg_color) {
-    document.body.style.backgroundColor = profile.bg_color;
-  }
-
-  if (profile.visual_effect) {
-    initVisualEffect(profile.visual_effect);
-  }
-
-  // Emblemas
-  const emPreview = document.getElementById('pubEmblems');
-  if (Array.isArray(profile.emblems)) {
-    emPreview.innerHTML = profile.emblems.map(id => {
+  const emblemsEl = document.getElementById('emblems');
+  if (emblemsEl) {
+    emblemsEl.innerHTML = (data.emblems || []).map(id => {
       const cleanId = String(id).toLowerCase().trim();
       const emoji = emblemEmojis[cleanId] || '✨';
       const name = emblemNames[cleanId] || cleanId;
@@ -462,47 +937,422 @@ async function loadPublicProfile() {
     }).join('');
   }
 
-  // Redes Sociais com as logos oficiais atualizadas
-  const socPreview = document.getElementById('pubSocials');
-  let socHTML = '';
-  if (profile.socials && typeof profile.socials === 'object') {
+  const socialsBar = document.getElementById('socialsBar');
+  if (socialsBar && data.socials) {
+    let sHTML = '';
     Object.keys(socialLogos).forEach(key => {
-      const val = profile.socials[key];
-      if (val) {
-        socHTML += `
-         <a class="preview-social-icon" title="${key}" href="#" onclick="return false;">
-          <img src="${socialLogos[key]}" alt="${key}">
-         </a>`;
+      const val = data.socials[key];
+      if (val && socialUrls[key]) {
+        const url = socialUrls[key](val);
+        const logoUrl = socialLogos[key];
+        sHTML += `<a class="social-icon-btn" href="${url}" target="_blank" rel="noopener" title="${key}"><img src="${logoUrl}" alt="${key}"></a>`;
+      }
+    });
+    socialsBar.innerHTML = sHTML;
+  }
+
+  const embedsBar = document.getElementById('embedsBar');
+  if (embedsBar) {
+    let eHTML = '';
+    eHTML += getSpotifyEmbed(data.embed_spotify);
+    eHTML += getYoutubeEmbed(data.embed_youtube);
+    eHTML += getInstagramEmbed(data.embed_instagram);
+    embedsBar.innerHTML = eHTML;
+  }
+
+  const pubWrapper = document.getElementById('publicFriendshipsWrapper');
+  const pubFriends = document.getElementById('publicFriendships');
+
+  if (pubWrapper && pubFriends) {
+    if (data.friendships && data.friendships.length > 0) {
+      pubWrapper.style.display = 'flex';
+      
+      Promise.all(data.friendships.map(async (f) => {
+        let avatarUrl = null;
+        try {
+          if (window.islySupabase && window.islySupabase.getProfileByHandle) {
+            const friendProfile = await window.islySupabase.getProfileByHandle(f);
+            if (friendProfile && friendProfile.avatar_url) {
+              avatarUrl = friendProfile.avatar_url;
+            }
+          }
+        } catch (e) {
+          console.warn("Erro ao carregar avatar do amigo:", e);
+        }
+
+        const innerContent = avatarUrl 
+          ? `<img src="${avatarUrl}" alt="@${f}">` 
+          : `@${f.substring(0,2).toUpperCase()}`;
+
+        return `
+          <a href="/sly-${f}" target="_blank" style="text-decoration: none;" title="@${f}">
+            <div class="preview-friend-bubble">
+              ${innerContent}
+            </div>
+          </a>
+        `;
+      })).then(htmlList => {
+        pubFriends.innerHTML = htmlList.join('');
+      });
+
+    } else {
+      pubWrapper.style.display = 'none';
+    }
+  }
+
+  const splashScreen = document.getElementById('splashScreen');
+  const splashTextDisplay = document.getElementById('splashTextDisplay');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const trackStatus = document.getElementById('trackStatus');
+  const timeDisplay = document.getElementById('timeDisplay');
+  const muteBtn = document.getElementById('muteBtn');
+  const volumeIcon = document.getElementById('volumeIcon');
+
+  const playerSection = document.getElementById('playerSection');
+
+  if (data.soundtrack && data.soundtrack.trim() !== '') {
+    if (playerSection) playerSection.style.display = 'block';
+
+    const ytId = getYoutubeAudioId(data.soundtrack);
+    if (ytId) {
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+
+      window.onYouTubeIframeAPIReady = function() {
+        ytPlayer = new YT.Player('youtubePlayerContainer', {
+          height: '0',
+          width: '0',
+          videoId: ytId,
+          playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': ytId },
+          events: {
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      };
+    }
+  } else {
+    if (playerSection) playerSection.style.display = 'none';
+  }
+
+  function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+      updatePlayerUI(true);
+      isYtPlaying = true;
+    } else {
+      updatePlayerUI(false);
+      isYtPlaying = false;
+    }
+  }
+
+  function updatePlayerUI(isPlaying) {
+    if (isPlaying) {
+      playIcon.classList.add('hidden');
+      pauseIcon.classList.remove('hidden');
+      trackStatus.classList.remove('bg-neutral-600');
+      trackStatus.classList.add('bg-white', 'shadow-[0_0_8px_#fff]');
+    } else {
+      playIcon.classList.remove('hidden');
+      pauseIcon.classList.add('hidden');
+      trackStatus.classList.remove('bg-white', 'shadow-[0_0_8px_#fff]');
+      trackStatus.classList.add('bg-neutral-600');
+    }
+  }
+
+  function togglePlayAudio() {
+    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+      const state = ytPlayer.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        ytPlayer.pauseVideo();
+      } else {
+        ytPlayer.playVideo();
+      }
+    }
+  }
+
+  if (playPauseBtn) {
+    playPauseBtn.addEventListener('click', togglePlayAudio);
+  }
+
+  if (muteBtn && ytPlayer) {
+    let isMuted = false;
+    muteBtn.addEventListener('click', () => {
+      if (isMuted) {
+        ytPlayer.unMute();
+        volumeIcon.className = 'fa-solid fa-volume-high text-[11px] text-neutral-400';
+        isMuted = false;
+      } else {
+        ytPlayer.mute();
+        volumeIcon.className = 'fa-solid fa-volume-xmark text-[11px] text-neutral-600';
+        isMuted = true;
       }
     });
   }
-  socPreview.innerHTML = socHTML;
 
-  // Embeds
-  const embedsPreview = document.getElementById('pubEmbeds');
-  let embedsHTML = '';
-  embedsHTML += getSpotifyEmbed(profile.embed_spotify);
-  embedsHTML += getYoutubeEmbed(profile.embed_youtube);
-  embedsHTML += getInstagramEmbed(profile.embed_instagram);
-  embedsPreview.innerHTML = embedsHTML;
+  setInterval(() => {
+    if (ytPlayer && isYtPlaying && typeof ytPlayer.getCurrentTime === 'function') {
+      const currentTime = ytPlayer.getCurrentTime();
+      const minutes = Math.floor(currentTime / 60);
+      const seconds = Math.floor(currentTime % 60);
+      if (timeDisplay) {
+        timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+    }
+  }, 1000);
 
-  // Friendships
-  const previewWrapperEl = document.getElementById('pubFriendshipsWrapper');
-  const previewFriendsEl = document.getElementById('pubFriendships');
-  if (previewWrapperEl && previewFriendsEl && Array.isArray(profile.friendships) && profile.friendships.length > 0) {
-    previewWrapperEl.style.display = 'flex';
-    previewFriendsEl.innerHTML = profile.friendships.map(f => `
-      <div class="preview-friend-bubble" title="@${f}">@${f.substring(0,2).toUpperCase()}</div>
-    `).join('');
+  // --- LÓGICA DEFINITIVA DA SPLASH SCREEN ---
+  const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
+
+  const cardElement = document.getElementById('profileCard');
+
+  if (hasSplashText && splashScreen && splashTextDisplay) {
+    splashTextDisplay.textContent = data.splash_text;
+    splashScreen.classList.remove('hidden'); // Mantém a splash cobrindo tudo
+
+    const handleSplashUnlock = (e) => {
+      e.stopPropagation();
+      splashScreen.classList.add('hidden');
+      
+      // Revela o card suavemente apenas após o clique na estrela
+      if (cardElement) {
+        cardElement.style.opacity = '1';
+      }
+      
+      const tryPlay = () => {
+        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+          try {
+            ytPlayer.playVideo();
+          } catch (err) {
+            setTimeout(tryPlay, 300);
+          }
+        } else {
+          setTimeout(tryPlay, 300);
+        }
+      };
+      tryPlay();
+    };
+
+    splashScreen.addEventListener('click', handleSplashUnlock);
+    const starBtn = document.getElementById('splashStarBtn');
+    if (starBtn) {
+      starBtn.addEventListener('click', handleSplashUnlock);
+    }
+  } else {
+    // Se não tiver texto na splash, esconde ela imediatamente e revela o card direto
+    if (splashScreen) {
+      splashScreen.classList.add('hidden');
+    }
+    if (cardElement) {
+      cardElement.style.opacity = '1';
+    }
   }
-}
 
-if (window.__islySdkReadyFired) {
-  loadPublicProfile();
-} else {
-  window.addEventListener('isly-sdk-ready', loadPublicProfile);
-  document.addEventListener('DOMContentLoaded', loadPublicProfile);
-}
+  const canvas = document.getElementById('visualizer');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+
+  function resizeCanvas() {
+    if (canvas) {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function drawVisualizer() {
+    requestAnimationFrame(drawVisualizer);
+    if (!canvas || !ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const bars = 20;
+    const barWidth = 2;
+    const gap = (canvas.width - (bars * barWidth)) / (bars - 1);
+
+    for (let i = 0; i < bars; i++) {
+      let barHeight = 2;
+
+      if (isYtPlaying) {
+        const randomFactor = Math.sin(Date.now() / 150 + i) * 0.5 + 0.5;
+        barHeight = Math.max(4, randomFactor * canvas.height * 0.8);
+      }
+
+      const x = i * (barWidth + gap);
+      const y = (canvas.height - barHeight) / 2;
+
+      ctx.fillStyle = isYtPlaying ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.15)';
+      ctx.fillRect(x, y, barWidth, barHeight);
+    }
+  }
+  drawVisualizer();
+
+  const hypeBtn = document.getElementById('hypeBtn');
+  const iconWrapper = document.getElementById('iconWrapper');
+
+  if (hypeBtn && hypeCountEl && iconWrapper) {
+    const storageKey = `isly_hyped_${data.id || handle}`;
+    
+    if (localStorage.getItem(storageKey) === 'true') {
+      hypeBtn.classList.add('hyped');
+    }
+
+    hypeBtn.addEventListener('click', async () => {
+      if (localStorage.getItem(storageKey) === 'true') {
+        return; 
+      }
+
+      let current = parseInt(hypeCountEl.innerText, 10) || 0;
+      let newCount = current + 1;
+      
+      localStorage.setItem(storageKey, 'true');
+      hypeBtn.classList.add('hyped', 'animate-flash');
+
+      hypeCountEl.innerText = newCount;
+      createNeonBurst(iconWrapper);
+
+      try {
+        if (window.islySupabase && typeof window.islySupabase.incrementHype === 'function') {
+          await window.islySupabase.incrementHype(data.id, current);
+        } else {
+          await window.islySupabase.saveProfile({ id: data.id, hypes: newCount });
+        }
+      } catch (err) {
+        console.warn("Erro ao salvar hype:", err);
+      }
+    });
+  }
+
+  function createNeonBurst(targetContainer) {
+    const particleCount = 10; 
+    const rect = targetContainer.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('span');
+      particle.classList.add('particle');
+
+      const size = Math.random() * 2 + 2;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${centerX}px`;
+      particle.style.top = `${centerY}px`;
+
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = Math.random() * 30 + 15;
+      const tx = Math.cos(angle) * velocity;
+      const ty = Math.sin(angle) * velocity;
+
+      particle.style.setProperty('--tx', `${tx}px`);
+      particle.style.setProperty('--ty', `${ty}px`);
+
+      targetContainer.appendChild(particle);
+      setTimeout(() => particle.remove(), 500);
+    }
+  }
+});
+</script>
+
+<!-- Proteção SLY.ME isolada -->
+<script>
+(() => {
+  const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
+  const assinatura = "P.S: Diel — SLY.ME";
+
+  if (window.__slyProtecaoInicializada) return;
+  window.__slyProtecaoInicializada = true;
+
+  function mostrarTelaHacker() {
+    let tela = document.getElementById("sly-terminal-aviso");
+    if (tela) return;
+
+    tela = document.createElement("div");
+    tela.id = "sly-terminal-aviso";
+
+    Object.assign(tela.style, {
+      position: "fixed",
+      inset: "0",
+      zIndex: "2147483647",
+      background: "#000",
+      color: "#39ff78",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "28px",
+      fontFamily: 'Consolas, "Courier New", monospace'
+    });
+
+    const terminal = document.createElement("div");
+    Object.assign(terminal.style, {
+      width: "100%",
+      maxWidth: "760px"
+    });
+
+    const cabecalho = document.createElement("div");
+    cabecalho.textContent = "SLY.ME // ACESSO OBSERVADO";
+    Object.assign(cabecalho.style, {
+      color: "#238c48",
+      fontSize: "12px",
+      letterSpacing: "2px",
+      marginBottom: "32px"
+    });
+
+    const texto = document.createElement("div");
+    Object.assign(texto.style, {
+      fontSize: "clamp(19px, 4vw, 30px)",
+      lineHeight: "1.6",
+      overflowWrap: "anywhere",
+      textShadow: "0 0 12px #00ff5944"
+    });
+
+    const assinaturaEl = document.createElement("div");
+    assinaturaEl.textContent = assinatura;
+    Object.assign(assinaturaEl.style, {
+      marginTop: "36px",
+      fontSize: "14px",
+      color: "#168b42",
+      opacity: "0",
+      transition: "opacity .8s ease"
+    });
+
+    terminal.append(cabecalho, texto, assinaturaEl);
+    tela.appendChild(terminal);
+    document.body.appendChild(tela);
+
+    let i = 0;
+    function digitar() {
+      if (!tela.isConnected) return;
+      if (i < mensagem.length) {
+        texto.textContent += mensagem.charAt(i++);
+        setTimeout(digitar, 48);
+      } else {
+        assinaturaEl.style.opacity = "1";
+      }
+    }
+    digitar();
+  }
+
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    mostrarTelaHacker();
+  }, true);
+
+  document.addEventListener("keydown", (e) => {
+    const tecla = e.key.toLowerCase();
+    const atalho =
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(tecla)) ||
+      (e.ctrlKey && tecla === "u");
+
+    if (atalho) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      mostrarTelaHacker();
+    }
+  }, true);
+})();
 </script>
 </body>
 </html>
