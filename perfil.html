@@ -942,13 +942,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }).join('');
   }
 
-  // --- RENDERIZAÇÃO DAS REDES SOCIAIS LOCAIS ---
+ // --- RENDERIZAÇÃO DAS REDES SOCIAIS LOCAIS ---
   const socialsBar = document.getElementById('socialsBar');
   if (socialsBar && data.socials) {
     let sHTML = '';
     Object.keys(socialLogos).forEach(key => {
       const val = data.socials[key];
-      if (val && socialUrls[key]) {
+      // Verifica se o valor existe, não é nulo, não é vazio e nem apenas espaços em branco
+      if (val !== undefined && val !== null && String(val).trim() !== '' && socialUrls[key]) {
         const url = socialUrls[key](val);
         const logoUrl = socialLogos[key];
         sHTML += `<a class="social-icon-btn" href="${url}" target="_blank" rel="noopener" title="${key}"><img src="${logoUrl}" alt="${key}"></a>`;
