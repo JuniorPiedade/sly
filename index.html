@@ -398,6 +398,9 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
 #panel-appearance .field input[type="color"]:hover{border-color:#b39ad2!important;box-shadow:0 0 0 3px #a78bfa12!important;transform:scale(1.04)}
 #panel-appearance .field input[type="color"]:focus-visible{outline:2px solid #a78bfa;outline-offset:3px}
 </style>
+  <!-- Arquivo das Redes Sociais -->
+<script src="js/redes-sociais.js"></script>
+  
 <script>
 (function(){
  const sources=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2','https://unpkg.com/@supabase/supabase-js@2'];
@@ -1370,7 +1373,7 @@ async function initEditor(userId) {
    const val = document.getElementById('soc_' + key)?.value.trim();
    if (val) {
     socHTML += `
-     <a class="preview-social-icon" title="${key}" href="#" onclick="return false;">
+     <a class="preview-social-icon" title="${key}" href="#" onclick="return false;" style="display:grid; place-items:center; padding:6px;">
       <img src="${socialLogos[key]}" alt="${key}">
      </a>`;
    }
