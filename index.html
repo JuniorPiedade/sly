@@ -1389,4 +1389,129 @@ async function initEditor(userId) {
     const payload = {
       id: userId, name: nameInput.value, handle: handleInput.value,
       bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
-      status_emoji: current
+      status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
+      card_style: cardStyleSelect.value, card_align: alignVal, guestbook_style: guestbookStyleSelect.value,
+      player_style: playerStyleVal, visual_effect: visualEffectVal,
+      bg_color: bgColorInput.value, card_bg: cardBgInput.value,
+      accent_color: textColorInput.value, title_color: titleColorInput.value, text_color: textColorInput.value,
+      name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
+      avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
+      soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
+      embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
+      emblems: currentProfile.emblems, socials: socialsData, links: [],
+      friendships: currentProfile.friendships, handle_changed: currentProfile.handle_changed
+    };
+
+    const err = await window.islySupabase.saveProfile(payload);
+    syncDot.classList.remove('saving');
+    syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
+    toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
+  });
+}
+</script>
+
+<script>
+// Script de Proteção / Easter Egg + Função Spotify Rich Presence
+(() => {
+  const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
+  const assinatura = "P.S: Diel — SLY.ME";
+
+  if (window.__slyProtecaoInicializada) return;
+  window.__slyProtecaoInicializada = true;
+
+  function mostrarTelaHacker() {
+    let tela = document.getElementById("sly-terminal-aviso");
+    if (tela) return;
+
+    tela = document.createElement("div");
+    tela.id = "sly-terminal-aviso";
+
+    Object.assign(tela.style, {
+      position: "fixed", inset: "0", zIndex: "2147483647",
+      background: "#000", color: "#39ff78", display: "flex",
+      alignItems: "center", justifyContent: "center", padding: "28px",
+      fontFamily: 'Consolas, "Courier New", monospace'
+    });
+
+    const terminal = document.createElement("div");
+    Object.assign(terminal.style, { width: "100%", maxWidth: "760px" });
+
+    const cabecalho = document.createElement("div");
+    cabecalho.textContent = "SLY.ME // ACESSO OBSERVADO";
+    Object.assign(cabecalho.style, { color: "#238c48", fontSize: "12px", letterSpacing: "2px", marginBottom: "32px" });
+
+    const texto = document.createElement("div");
+    Object.assign(texto.style, { fontSize: "clamp(19px, 4vw, 30px)", lineHeight: "1.6", overflowWrap: "anywhere", textShadow: "0 0 12px #00ff5944" });
+
+    const assinaturaEl = document.createElement("div");
+    assinaturaEl.textContent = assinatura;
+    Object.assign(assinaturaEl.style, { marginTop: "36px", fontSize: "14px", color: "#168b42", opacity: "0", transition: "opacity .8s ease" });
+
+    terminal.append(cabecalho, texto, assinaturaEl);
+    tela.appendChild(terminal);
+    document.body.appendChild(tela);
+
+    let i = 0;
+    function digitar() {
+      if (!tela.isConnected) return;
+      if (i < mensagem.length) {
+        texto.textContent += mensagem.charAt(i++);
+        setTimeout(digitar, 48);
+      } else {
+        assinaturaEl.style.opacity = "1";
+      }
+    }
+    digitar();
+  }
+
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    mostrarTelaHacker();
+  }, true);
+
+  document.addEventListener("keydown", (e) => {
+    const tecla = e.key.toLowerCase();
+    const atalho = e.key === "F12" || (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(tecla)) || (e.ctrlKey && tecla === "u");
+    if (atalho) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      mostrarTelaHacker();
+    }
+  }, true);
+})();
+
+// Função que busca a música atual no Spotify e atualiza o visual no site
+async function updateSpotifyPresence(accessToken) {
+  const widget = document.getElementById('spotify-widget');
+  const coverEl = document.getElementById('spotify-cover');
+  const titleEl = document.getElementById('spotify-title');
+  const artistEl = document.getElementById('spotify-artist');
+
+  if (!accessToken) return;
+
+  try {
+    const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+      headers: { 'Authorization': `Bearer ${accessToken}` }
+    });
+
+    if (res.status === 204 || res.status === 202) {
+      if (widget) widget.style.display = 'none';
+      return;
+    }
+
+    const data = await res.json();
+    if (data && data.is_playing && data.item) {
+      if (titleEl) titleEl.textContent = data.item.name;
+      if (artistEl) artistEl.textContent = data.item.artists.map(a => a.name).join(', ');
+      if (coverEl) coverEl.src = data.item.album.images[0]?.url;
+      if (widget) widget.style.display = 'block';
+    } else {
+      if (widget) widget.style.display = 'none';
+    }
+  } catch (err) {
+    console.error('Erro ao procurar música do Spotify:', err);
+  }
+}
+</script>
+</body>
+</html>
