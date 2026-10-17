@@ -670,13 +670,7 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
     <input type="hidden" id="wallpaperUrl" value="">
    </section>
 
-   <section class="panel" id="panel-links">
-    <div class="panel-head"><div><h2>↗ Meus links extras</h2><p>Até 6 links personalizados.</p></div><span class="muted">08 / 09</span></div>
-    <div id="linksList"></div>
-    <button type="button" class="add" id="addLinkBtn">＋ Adicionar link</button>
-   </section>
-
-   <section class="panel" id="panel-friendships">
+      <section class="panel" id="panel-friendships">
     <div class="panel-head"><div><h2>🤝 Friendships</h2><p>Conecte até 3 amigos em destaque no seu perfil.</p></div><span class="muted">09 / 09</span></div>
     <label class="field">
      <span>Adicionar aliado (@handle)</span>
@@ -1265,21 +1259,7 @@ async function initEditor(userId) {
  guestbookStyleSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
  if (playerStyleSelect) playerStyleSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
 
- function moveLink(fromIdx, toIdx) {
-  if (toIdx < 0 || toIdx >= currentProfile.links.length) return;
-  const item = currentProfile.links.splice(fromIdx, 1)[0];
-  currentProfile.links.splice(toIdx, 0, item);
-  renderLinksEditor(); updatePreview(); triggerAutoSave();
- }
-
- function renderLinksEditor() {
-  const container = document.getElementById('linksList');
-  container.innerHTML = '';
-  currentProfile.links.forEach((link, idx) => {
-   const row = document.createElement('div');
-   row.className = 'link-row';
-   row.innerHTML = `
-    <div class="reorder-btns">
+      <div class="reorder-btns">
      <button type="button" class="reorder-btn move-up" ${idx === 0 ? 'disabled' : ''}>▲</button>
      <button type="button" class="reorder-btn move-down" ${idx === currentProfile.links.length - 1 ? 'disabled' : ''}>▼</button>
     </div>
@@ -1287,27 +1267,7 @@ async function initEditor(userId) {
     <input type="text" value="${link.title || ''}" placeholder="Título do link" class="link-title">
     <input type="text" value="${link.url || ''}" placeholder="https://..." class="link-url">
     <button type="button" class="remove">✕</button>
-   `;
-   row.querySelector('.move-up').addEventListener('click', () => moveLink(idx, idx - 1));
-   row.querySelector('.move-down').addEventListener('click', () => moveLink(idx, idx + 1));
-   row.querySelector('.link-emoji').addEventListener('input', e => { currentProfile.links[idx].emoji = e.target.value; updatePreview(); triggerAutoSave(); });
-   row.querySelector('.link-title').addEventListener('input', e => { currentProfile.links[idx].title = e.target.value; updatePreview(); triggerAutoSave(); });
-   row.querySelector('.link-url').addEventListener('input', e => { currentProfile.links[idx].url = e.target.value; updatePreview(); triggerAutoSave(); });
-   row.querySelector('.remove').addEventListener('click', () => {
-    currentProfile.links.splice(idx, 1); renderLinksEditor(); updatePreview(); triggerAutoSave();
-   });
-   container.appendChild(row);
-  });
- }
-
- document.getElementById('addLinkBtn').addEventListener('click', () => {
-  if (currentProfile.links.length >= 6) { toast('Máximo de 6 links permitidos.'); return; }
-  currentProfile.links.push({ emoji: '↗', title: '', url: '' });
-  renderLinksEditor(); updatePreview(); triggerAutoSave();
- });
-
- renderLinksEditor();
-
+ 
  function renderFriendshipsEditor() {
   const container = document.getElementById('friendshipsListEdit');
   if (!container) return;
