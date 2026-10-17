@@ -874,7 +874,28 @@ if (profile && profile.spotify_connected) {
   if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
   if (disconnectSpotifyBtn) disconnectSpotifyBtn.style.display = 'inline-flex';
 }
-
+if (typeof currentUserId !== 'undefined' && currentUserId) {
+  const SUPABASE_URL = 'https://hmnuafaihsbvzejqsakt.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
+  
+  // Cria o cliente se ainda não existir na janela
+  const checkClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  
+  if (checkClient) {
+    checkClient
+      .from('profiles')
+      .select('spotify_connected')
+      .eq('id', currentUserId)
+      .single()
+      .then(({ data }) => {
+        if (data && data.spotify_connected) {
+          if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
+          if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
+          if (disconnectSpotifyBtn) disconnectSpotifyBtn.style.display = 'inline-flex';
+        }
+      });
+  }
+}
 connectSpotifyBtn?.addEventListener('click', () => {
   const scopes = 'user-read-playback-state user-read-currently-playing';
   const authUrl = `https://accounts.spotify.com/authorize?client_id=${encodeURIComponent(SPOTIFY_CLIENT_ID)}&response_type=code&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(scopes)}`;
