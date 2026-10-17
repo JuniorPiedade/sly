@@ -1561,31 +1561,29 @@ async function initEditor(userId) {
   }, true);
 })();
 <script>
-// Script automático universal para salvar e carregar as redes sociais no painel
+// Script de correção forçada para incluir X e Privacy no salvamento
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
-    // 1. Interceta a função de salvamento global para garantir que recolhe o 'x' e o 'privacy'
-    const originalSave = window.collectProfileData || window.saveProfile;
-    
-    // Sobrescrevemos ou criamos a rotina de recolha dos inputs sociais
-    window.getSocialsData = function() {
-      const socials = {};
-      document.querySelectorAll('input[id^="soc_"]').forEach(input => {
-        const key = input.id.replace('soc_', '');
-        socials[key] = input.value.trim();
-      });
-      return socials;
-    };
-
-    // 2. Preenche automaticamente os inputs quando o painel carrega os dados
-    if (window.currentProfile && window.currentProfile.socials) {
-      Object.keys(window.currentProfile.socials).forEach(key => {
-        const input = document.getElementById(`soc_${key}`);
-        if (input) {
-          input.value = window.currentProfile.socials[key] || '';
+    // Interceta qualquer tentativa de clique no botão de salvar ou função de guardar
+    const saveButtons = document.querySelectorAll('button, .save-btn, #saveBtn');
+    saveButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window.currentProfile && window.currentProfile.socials) {
+          window.currentProfile.socials.x = document.getElementById('soc_x')?.value.trim() || '';
+          window.currentProfile.socials.privacy = document.getElementById('soc_privacy')?.value.trim() || '';
         }
-      });
-    }
+      }, true);
+    });
+
+    // Se o template usar um objeto global de dados, injeta diretamente lá também
+    setInterval(() => {
+      if (window.currentProfile && window.currentProfile.socials) {
+        const xVal = document.getElementById('soc_x')?.value.trim();
+        const privVal = document.getElementById('soc_privacy')?.value.trim();
+        if (xVal !== undefined) window.currentProfile.socials.x = xVal;
+        if (privVal !== undefined) window.currentProfile.socials.privacy = privVal;
+      }
+    }, 500);
   }, 1000);
 });
 </script>
