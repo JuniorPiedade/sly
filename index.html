@@ -907,6 +907,13 @@ async function initEditor(userId) {
     toast('Autenticando com o Spotify...');
 
     try {
+      // Certifica-te de que o userId está definido (podes usar profile?.id se a variável do perfil já existir)
+      const currentUserId = window.currentUserId || (typeof profile !== 'undefined' ? profile.id : null);
+      
+      if (!currentUserId) {
+        throw new Error('ID do utilizador não encontrado na sessão.');
+      }
+
       const clientSecret = '38acb3a4b6da44f483d5f4d4ea984214';
       const credentials = btoa(SPOTIFY_CLIENT_ID + ":" + clientSecret);
 
@@ -928,7 +935,7 @@ async function initEditor(userId) {
       if (tokenResponse.ok && tokenData.access_token) {
         const expiresAt = Date.now() + (tokenData.expires_in * 1000);
         const payload = {
-          id: userId,
+          id: currentUserId, // Usando a variável validada
           spotify_connected: true,
           spotify_access_token: tokenData.access_token,
           spotify_refresh_token: tokenData.refresh_token || null,
