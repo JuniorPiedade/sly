@@ -1517,6 +1517,8 @@ async function updateSpotifyPresence(accessToken) {
     }
   } catch (err) {
     console.error('Erro ao procurar música do Spotify:', err);
+    console.error("Erro ao processar callback do Spotify:", err);
+      alert("Erro detalhado: " + err.message); // Alerta visual para sabermos o motivo exato
   }
 }
 </script>
