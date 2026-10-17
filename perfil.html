@@ -719,9 +719,9 @@ const socialUrls = {
   youtube: val => `https://youtube.com/${val.startsWith('@') ? val : '@' + val}`,
   discord: val => `https://discord.com/users/${val}`,
   instagram: val => `https://instagram.com/${val.replace(/^@/, '')}`,
-  twitter: val => `https://twitter.com/${val.replace(/^@/, '')}`,
+  x: val => `https://twitter.com/${val.replace(/^@/, '')}`,
+  privacy: val => `https://privacy.com.br/@${val.replace(/^@/, '')}`,
   letterboxd: val => `https://letterboxd.com/${val}`,
-  onlyfans: val => `https://onlyfans.com/${val.replace(/^@/, '')}`,
   behance: val => `https://behance.net/${val}`,
   pinterest: val => `https://pinterest.com/${val}`,
   tumblr: val => `https://${val}.tumblr.com`,
@@ -730,16 +730,16 @@ const socialUrls = {
   valorant: val => `https://tracker.gg/valorant/profile/riot/${val}`
 };
 
-// Dicionário interno de assets/logos/
+// Assests/logos
 const socialLogos = {
   steam: 'assets/logos/steam.png',
   spotify: 'assets/logos/spotify.png',
   youtube: 'assets/logos/youtube.png',
   discord: 'assets/logos/discord.png',
   instagram: 'assets/logos/instagram.png',
-  twitter: 'assets/logos/twitter.png',
+  x: 'assets/logos/x.png',
+  privacy: 'assets/logos/privacy.png',
   letterboxd: 'assets/logos/letterboxd.png',
-  onlyfans: 'assets/logos/onlyfans.png',
   behance: 'assets/logos/behance.png',
   pinterest: 'assets/logos/pinterest.png',
   tumblr: 'assets/logos/tumblr.png',
