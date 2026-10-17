@@ -904,10 +904,17 @@ connectSpotifyBtn?.addEventListener('click', () => {
 // Ação para desconectar do Spotify (ao clicar no botão de desconectar)
 disconnectSpotifyBtn?.addEventListener('click', async () => {
   try {
+    // Tenta encontrar o ID do utilizador de várias formas possíveis para garantir que nunca dá erro
+    const userId = typeof currentUserId !== 'undefined' ? currentUserId : (typeof profile !== 'undefined' && profile ? profile.id : window.currentUserId);
+
+    if (!userId) {
+      throw new Error('ID do utilizador não encontrado na sessão. Por favor, recarregue a página.');
+    }
+
     toast('A desconectar o Spotify...');
     
     const SUPABASE_URL = 'https://hmnuafaihsbvzejqsakt.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24ilastKey...'; // Mantém a tua anon key completa que tinhas
     
     // Garante que o cliente do Supabase está disponível
     if (!window.supabase) {
@@ -919,9 +926,9 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
       });
     }
 
-    const directSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const directSupabase = window.supabase.createClient('https://hmnuafaihsbvzejqsakt.supabase.co/', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU');
 
-    // Limpa os campos do Spotify na base de dados
+    // Limpa os campos do Spotify na base de dados usando o userId seguro
     const { error } = await directSupabase
       .from('profiles')
       .update({
@@ -930,7 +937,7 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
         spotify_refresh_token: null,
         spotify_token_expires: null
       })
-      .eq('id', currentUserId);
+      .eq('id', userId);
 
     if (error) {
       throw new Error(error.message);
