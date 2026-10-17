@@ -1,4 +1,3 @@
-// Mapeamento das logos locais coloridas dentro da pasta assets/logos/
 const socialLogos = {
   steam: 'assets/logos/steam.png',
   spotify: 'assets/logos/spotify.png',
@@ -16,7 +15,6 @@ const socialLogos = {
   valorant: 'assets/logos/valorant.png'
 };
 
-// URLs de redirecionamento para cada rede
 const socialUrls = {
   steam: val => `https://steamcommunity.com/id/${val}`,
   spotify: val => `https://open.spotify.com/user/${val}`,
