@@ -861,7 +861,7 @@ async function initEditor(userId) {
     console.warn("Erro ao buscar perfil real:", e);
   }
 
-  // --- LÓGICA DE INTEGRAÇÃO DO SPOTIFY ---
+// --- LÓGICA DE INTEGRAÇÃO DO SPOTIFY ---
 const SPOTIFY_CLIENT_ID = '90048528b8ed4e25ab7762740275ef07';
 const SPOTIFY_REDIRECT_URI = 'https://sly-inky.vercel.app/';
 
@@ -917,28 +917,41 @@ if (code) {
     if (tokenResponse.ok && tokenData.access_token) {
       const expiresAt = Date.now() + (tokenData.expires_in * 1000);
 
-     // Gravação utilizando o método nativo do projeto
-      const payload = {
-        id: currentUserId,
-        spotify_connected: true,
-        spotify_access_token: tokenData.access_token,
-        spotify_refresh_token: tokenData.refresh_token || null,
-        spotify_token_expires: expiresAt
-      };
+      // 1. Carrega dinamicamente o cliente oficial do Supabase se já não estiver carregado
+      if (!window.supabase && typeof createClient === 'undefined') {
+        await new Promise((resolve) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+          script.onload = resolve;
+          document.head.appendChild(script);
+        });
+      }
 
-      // Se a função saveProfile existir, chamamo-la
-      if (window.islySupabase && typeof window.islySupabase.saveProfile === 'function') {
-        const result = await window.islySupabase.saveProfile(payload);
-        console.log("Resultado do saveProfile:", result);
-      } else {
-        throw new Error('Função saveProfile não está disponível.');
+      // 2. Inicializa o cliente direto
+      const SUPABASE_URL = 'https://hmnuafaihsbvzejqsakt.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
+      
+      const directSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      // 3. Gravação direta livre de filtros
+      const { error: sbError } = await directSupabase
+        .from('profiles')
+        .update({
+          spotify_connected: true,
+          spotify_access_token: tokenData.access_token,
+          spotify_refresh_token: tokenData.refresh_token || null,
+          spotify_token_expires: expiresAt
+        })
+        .eq('id', currentUserId);
+
+      if (sbError) {
+        throw new Error("Erro direto do Supabase: " + sbError.message);
       }
 
       if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
       if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
       if (disconnectSpotifyBtn) disconnectSpotifyBtn.style.display = 'inline-flex';
       toast('Spotify conectado com sucesso! ✓');
-      
     } else {
       throw new Error(tokenData.error_description || JSON.stringify(tokenData) || 'Falha ao obter tokens.');
     }
@@ -947,7 +960,6 @@ if (code) {
     alert("Erro detalhado: " + err.message);
   }
 }
-
   if (!profile) {
     profile = {
       id: userId, name: 'Seu Nome', handle: 'usuario',
