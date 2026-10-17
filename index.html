@@ -1036,17 +1036,15 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
     alert("Erro detalhado: " + err.message);
   }
 }
-  if (!profile) {
-    profile = {
-      id: userId, name: 'Seu Nome', handle: 'usuario',
-      bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', card_align: 'left', accent_color: '#c084fc',
-      title_color: '#ffffff', text_color: '#f6f4ff',
-      name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack: '', player_style: 'default', splash_text: 'clica aê', avatar_frame: 'none', bio: '', activity: '',
-      status_emoji: '🎮', status_label: 'Jogando', emblems: [], socials: {},
-      embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
-      guestbook_style: 'vintage', friendships: [], visual_effect: 'none'
-    };
-  }
+ 
+if (!profile) {
+  alert(
+    'Não foi possível carregar seu perfil salvo. ' +
+    'Seus dados não foram apagados. Atualize a página e tente novamente.'
+  );
+  return;
+}
+
 
   let currentProfile = { ...profile };
   if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
