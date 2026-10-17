@@ -915,6 +915,7 @@ let isYtPlaying = false;
     document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
     return;
   }
+  
 // --- LÓGICA DE RICH PRESENCE DO SPOTIFY NO PERFIL PÚBLICO ---
   async function updateSpotifyPresence(accessToken) {
     const widget = document.getElementById('spotify-widget');
@@ -1241,7 +1242,7 @@ let isYtPlaying = false;
     }
   }, 1000);
 
-  const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
+ const hasSplashText = data.splash_text && data.splash_text.trim() !== '';
   const cardElement = document.getElementById('profileCard');
 
   if (hasSplashText && splashScreen && splashTextDisplay) {
