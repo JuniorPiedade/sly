@@ -862,106 +862,88 @@ async function initEditor(userId) {
   }
 
   // --- LÓGICA DE INTEGRAÇÃO DO SPOTIFY ---
-  const SPOTIFY_CLIENT_ID = '90048528b8ed4e25ab7762740275ef07';
-  const SPOTIFY_REDIRECT_URI = 'https://sly-inky.vercel.app/';
+const SPOTIFY_CLIENT_ID = '90048528b8ed4e25ab7762740275ef07';
+const SPOTIFY_REDIRECT_URI = 'https://sly-inky.vercel.app/';
 
-  const connectSpotifyBtn = document.getElementById('connectSpotifyBtn');
-  const disconnectSpotifyBtn = document.getElementById('disconnectSpotifyBtn');
-  const spotifyConnectedBadge = document.getElementById('spotifyConnectedBadge');
+const connectSpotifyBtn = document.getElementById('connectSpotifyBtn');
+const disconnectSpotifyBtn = document.getElementById('disconnectSpotifyBtn');
+const spotifyConnectedBadge = document.getElementById('spotifyConnectedBadge');
 
-  if (profile && profile.spotify_connected) {
-    if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
-    if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
-  }
+if (profile && profile.spotify_connected) {
+  if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
+  if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
+  if (disconnectSpotifyBtn) disconnectSpotifyBtn.style.display = 'inline-flex';
+}
 
-  connectSpotifyBtn?.addEventListener('click', () => {
-    const scopes = 'user-read-playback-state user-read-currently-playing';
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${encodeURIComponent(SPOTIFY_CLIENT_ID)}&response_type=code&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(scopes)}`;
-    window.location.href = authUrl;
-  });
+connectSpotifyBtn?.addEventListener('click', () => {
+  const scopes = 'user-read-playback-state user-read-currently-playing';
+  const authUrl = `https://accounts.spotify.com/authorize?client_id=${encodeURIComponent(SPOTIFY_CLIENT_ID)}&response_type=code&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(scopes)}`;
+  window.location.href = authUrl;
+});
 
-  disconnectSpotifyBtn?.addEventListener('click', async () => {
-    if (!confirm('Tens a certeza que pretendes desconectar o Spotify?')) return;
-    try {
-      const payload = {
-        id: userId,
-        spotify_connected: false,
-        spotify_access_token: null,
-        spotify_refresh_token: null
-      };
-      const saveResult = await window.islySupabase.saveProfile(payload);
-        
-        // Se a função devolver algum erro, vamos obrigá-la a aparecer no ecrã
-        if (saveResult && saveResult.error) {
-          throw new Error(JSON.stringify(saveResult.error));
-        }
+// Processar o retorno do Spotify
+const urlParams = new URLSearchParams(window.location.search);
+const code = urlParams.get('code');
 
-        await window.islySupabase.saveProfile(payload);
-        if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
-        if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
-        toast('Spotify conectado com sucesso! ✓');
-    } catch (err) {
-      console.error("Erro ao desconectar Spotify:", err);
-      toast('Erro ao desconectar a conta.');
+if (code) {
+  window.history.replaceState({}, document.title, window.location.pathname);
+  toast('Autenticando com o Spotify...');
+
+  try {
+    const currentUserId = window.currentUserId || (typeof profile !== 'undefined' ? profile.id : null);
+    
+    if (!currentUserId) {
+      throw new Error('ID do utilizador não encontrado na sessão.');
     }
-  });
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get('code');
+    const clientSecret = '38acb3a4b6da44f483d5f4d4ea984214';
+    const credentials = btoa(SPOTIFY_CLIENT_ID + ":" + clientSecret);
 
-  if (code) {
-    window.history.replaceState({}, document.title, window.location.pathname);
-    toast('Autenticando com o Spotify...');
+    const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + credentials
+      },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: SPOTIFY_REDIRECT_URI
+      })
+    });
 
-    try {
-      // Certifica-te de que o userId está definido (podes usar profile?.id se a variável do perfil já existir)
-      const currentUserId = window.currentUserId || (typeof profile !== 'undefined' ? profile.id : null);
-      
-      if (!currentUserId) {
-        throw new Error('ID do utilizador não encontrado na sessão.');
-      }
+    const tokenData = await tokenResponse.json();
 
-      const clientSecret = '38acb3a4b6da44f483d5f4d4ea984214';
-      const credentials = btoa(SPOTIFY_CLIENT_ID + ":" + clientSecret);
+    if (tokenResponse.ok && tokenData.access_token) {
+      const expiresAt = Date.now() + (tokenData.expires_in * 1000);
 
-      const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + credentials
-        },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          code: code,
-          redirect_uri: SPOTIFY_REDIRECT_URI
-        })
-      });
-
-      const tokenData = await tokenResponse.json();
-
-      if (tokenResponse.ok && tokenData.access_token) {
-        const expiresAt = Date.now() + (tokenData.expires_in * 1000);
-        const payload = {
-          id: currentUserId, // Usando a variável validada
+      // Gravação direta no Supabase
+      const { error: sbError } = await window.supabaseClient
+        .from('profiles')
+        .update({
           spotify_connected: true,
           spotify_access_token: tokenData.access_token,
           spotify_refresh_token: tokenData.refresh_token || null,
           spotify_token_expires: expiresAt
-        };
+        })
+        .eq('id', currentUserId);
 
-        await window.islySupabase.saveProfile(payload);
-        if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
-        if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
-        toast('Spotify conectado com sucesso! ✓');
-      } else {
-        throw new Error(tokenData.error_description || JSON.stringify(tokenData) || 'Falha ao obter tokens.');
+      if (sbError) {
+        throw new Error("Erro direto do Supabase: " + sbError.message);
       }
-    } catch (err) {
-      console.error("Erro ao processar callback do Spotify:", err);
-      toast('Erro ao autenticar com o Spotify.');
+
+      if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
+      if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
+      if (disconnectSpotifyBtn) disconnectSpotifyBtn.style.display = 'inline-flex';
+      toast('Spotify conectado com sucesso! ✓');
+    } else {
+      throw new Error(tokenData.error_description || JSON.stringify(tokenData) || 'Falha ao obter tokens.');
     }
+  } catch (err) {
+    console.error("Erro ao processar callback do Spotify:", err);
+    alert("Erro detalhado: " + err.message);
   }
-  // --- FIM DA LÓGICA DO SPOTIFY ---
+}
 
   if (!profile) {
     profile = {
