@@ -1373,11 +1373,11 @@ async function initEditor(userId) {
    avatarEl.textContent = '⌬';
   }
 
-  const frameEl = document.getElementById('previewFrame');
-  const frameType = avatarFrameSelect.value;
-  frameEl.className = 'avatar-frame';
-  if (frameType === 'neon-white') frameEl.classList.add('frame-neon-white');
-  else if (frameType === 'vip') frameEl.classList.add('frame-vip');
+  // Molduras removidas permanentemente
+  const frameEl = document.getElementById('avatarFrame');
+  if (frameEl) {
+    frameEl.style.display = 'none';
+  }
 
   document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
   document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
