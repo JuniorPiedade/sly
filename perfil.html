@@ -725,22 +725,27 @@ const socialUrls = {
   behance: val => `https://behance.net/${val}`,
   pinterest: val => `https://pinterest.com/${val}`,
   tumblr: val => `https://${val}.tumblr.com`,
-  vercel: val => `https://${val}.vercel.app`
+  vercel: val => `https://${val}.vercel.app`,
+  dribbble: val => `https://dribbble.com/${val}`,
+  valorant: val => `https://tracker.gg/valorant/profile/riot/${val}`
 };
 
+// Dicionário interno atualizado com as logos locais
 const socialLogos = {
- steam: 'https://cdn.simpleicons.org/steam/white',
- spotify: 'https://cdn.simpleicons.org/spotify/1DB954',
- youtube: 'https://cdn.simpleicons.org/youtube/FF0000',
- discord: 'https://cdn.simpleicons.org/discord/5865F2',
- instagram: 'https://cdn.simpleicons.org/instagram/E4405F',
- twitter: 'https://cdn.simpleicons.org/x/white',
- letterboxd: 'https://cdn.simpleicons.org/letterboxd/00D735',
- onlyfans: 'https://cdn.simpleicons.org/onlyfans/00AFF0',
- behance: 'https://cdn.simpleicons.org/behance/1769FF',
- pinterest: 'https://cdn.simpleicons.org/pinterest/BD081C',
- tumblr: 'https://cdn.simpleicons.org/tumblr/36465D',
- vercel: 'https://cdn.simpleicons.org/vercel/white'
+  steam: 'assets/socials/steam.png',
+  spotify: 'assets/socials/spotify.png',
+  youtube: 'assets/socials/youtube.png',
+  discord: 'assets/socials/discord.png',
+  instagram: 'assets/socials/instagram.png',
+  twitter: 'assets/socials/twitter.png',
+  letterboxd: 'assets/socials/letterboxd.png',
+  onlyfans: 'assets/socials/onlyfans.png',
+  behance: 'assets/socials/behance.png',
+  pinterest: 'assets/socials/pinterest.png',
+  tumblr: 'assets/socials/tumblr.png',
+  vercel: 'assets/socials/vercel.png',
+  dribbble: 'assets/socials/dribbble.png',
+  valorant: 'assets/socials/valorant.png'
 };
 
 function getSpotifyEmbed(url) {
@@ -937,6 +942,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }).join('');
   }
 
+  // --- RENDERIZAÇÃO DAS REDES SOCIAIS LOCAIS ---
   const socialsBar = document.getElementById('socialsBar');
   if (socialsBar && data.socials) {
     let sHTML = '';
