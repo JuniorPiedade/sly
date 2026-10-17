@@ -926,16 +926,19 @@ if (code) {
         spotify_token_expires: expiresAt
       };
 
+      // Se a função saveProfile existir, chamamo-la
       if (window.islySupabase && typeof window.islySupabase.saveProfile === 'function') {
-        await window.islySupabase.saveProfile(payload);
+        const result = await window.islySupabase.saveProfile(payload);
+        console.log("Resultado do saveProfile:", result);
       } else {
-        throw new Error('Função de salvamento do perfil não encontrada.');
+        throw new Error('Função saveProfile não está disponível.');
       }
 
       if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
       if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
       if (disconnectSpotifyBtn) disconnectSpotifyBtn.style.display = 'inline-flex';
       toast('Spotify conectado com sucesso! ✓');
+      
     } else {
       throw new Error(tokenData.error_description || JSON.stringify(tokenData) || 'Falha ao obter tokens.');
     }
