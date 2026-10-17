@@ -1560,24 +1560,33 @@ async function initEditor(userId) {
     }
   }, true);
 })();
-</script>
-  <script>
-// Script universal para ligar os novos inputs ao sistema de salvamento do painel
+<script>
+// Script automático universal para salvar e carregar as redes sociais no painel
 document.addEventListener("DOMContentLoaded", () => {
-  // Se existir uma função de carregamento global, escutamos por ela ou injetamos nos inputs
-  const inputsSociais = ['steam', 'spotify', 'youtube', 'discord', 'instagram', 'x', 'privacy', 'letterboxd', 'behance', 'pinterest', 'tumblr', 'vercel'];
-  
-  // Garante que o objeto global que envia para o Supabase recolha o 'x' e o 'privacy'
-  if (typeof window.getSocialsData !== 'function') {
+  setTimeout(() => {
+    // 1. Interceta a função de salvamento global para garantir que recolhe o 'x' e o 'privacy'
+    const originalSave = window.collectProfileData || window.saveProfile;
+    
+    // Sobrescrevemos ou criamos a rotina de recolha dos inputs sociais
     window.getSocialsData = function() {
       const socials = {};
-      inputsSociais.forEach(key => {
-        const el = document.getElementById(`soc_${key}`);
-        if (el) socials[key] = el.value.trim();
+      document.querySelectorAll('input[id^="soc_"]').forEach(input => {
+        const key = input.id.replace('soc_', '');
+        socials[key] = input.value.trim();
       });
       return socials;
     };
-  }
+
+    // 2. Preenche automaticamente os inputs quando o painel carrega os dados
+    if (window.currentProfile && window.currentProfile.socials) {
+      Object.keys(window.currentProfile.socials).forEach(key => {
+        const input = document.getElementById(`soc_${key}`);
+        if (input) {
+          input.value = window.currentProfile.socials[key] || '';
+        }
+      });
+    }
+  }, 1000);
 });
 </script>
 </body>
