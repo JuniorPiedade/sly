@@ -114,6 +114,71 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   transition:transform 0.15s ease-out, border-color .2s, box-shadow .2s;
 }
 .profile-card:before{
+  /* --- ESTILOS DE ALINHAMENTO DO CARTÃO (ESQUERDO E CENTRO) --- */
+.profile-card.align-left {
+  text-align: left;
+  display: grid;
+  grid-template-columns: minmax(110px, .65fr) minmax(0, 1.35fr);
+  grid-template-rows: auto;
+  align-items: start;
+  gap: 10px 18px;
+}
+.profile-card.align-left .profile-header-row {
+  grid-column: 1;
+  grid-row: 1 / span 7;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding: 2px 0 0;
+}
+.profile-card.align-left .bio-preview,
+.profile-card.align-left .live-status,
+.profile-card.align-left .preview-emblems,
+.profile-card.align-left .preview-socials,
+.profile-card.align-left .embeds-container,
+.profile-card.align-left .preview-friendships-wrapper,
+.profile-card.align-left .stats-container,
+.profile-card.align-left .profile-foot {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.profile-card.align-center {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+.profile-card.align-center .profile-header-row {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+.profile-card.align-center .profile-info {
+  align-items: center !important;
+  text-align: center !important;
+}
+.profile-card.align-center h3 {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+.profile-card.align-center .live-status,
+.profile-card.align-center .preview-emblems,
+.profile-card.align-center .preview-socials,
+.profile-card.align-center .preview-friendships-wrapper,
+.profile-card.align-center .stats-container {
+  justify-content: center !important;
+  width: 100% !important;
+}
+.profile-card.align-center .preview-emblems,
+.profile-card.align-center .preview-socials {
+  justify-content: center !important;
+}
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
   background:linear-gradient(125deg,#ffffff06,transparent 35%,#8b5cf608);
 }
@@ -1334,6 +1399,14 @@ async function initEditor(userId) {
 
   const card = document.getElementById('profileCard');
   card.className = 'profile-card';
+
+  // Aplica dinamicamente a classe de alinhamento correta na prévia
+  const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
+  if (alignVal === 'center') {
+    card.classList.add('align-center');
+  } else {
+    card.classList.add('align-left');
+  }
 
   // Lógica do alinhamento centralizado ou esquerdo
   const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
