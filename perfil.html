@@ -60,7 +60,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   align-items: center;
   gap: 16px;
   text-align: center;
-  pointer-events: none; /* Deixa o clique passar para o overlay principal */
+  pointer-events: none;
 }
 .splash-star-wrapper {
   width: 68px;
@@ -884,7 +884,7 @@ const socialSvgs = {
   twitter: '<svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.6 7.5L22 22h-6l-4.7-6.1L5.8 22H3l7.1-8.1L3 2h6.1l4.2 5.5L18.2 2zm-1 18h1.6L8 3.9H6.3L17.2 20z"/></svg>',
   letterboxd: '<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="12" r="5"/></svg>',
   onlyfans: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5z"/></svg>',
-  behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1z"/></svg>',
+  behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm-1.8 6.5c0-1.7-1.3-2.7-3.2-2.7h-4v6h4c2 0 3.2-1 3.2-3.3zm-7.2-5.5H3v10h10V8zm-2.8 7H5.8v-1.5h3.4c1 0 1.4.3 1.4 1.1 0 .7-.4 1-1.4 1.4zm0-4.5H5.8V11h3.2c.9 0 1.3.3 1.3 1s-.4 1-1.3 1 z"/></svg>',
   pinterest: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.7 19.3c-.1-.8-.2-2 .03-2.9l.7-3.1s-.2-.4-.2-1c0-1 .6-1.7 1.3-1.7.6 0 .9.5.9 1.1 0 .7-.4 1.7-.6 2.6-.2.8.4 1.5 1.2 1.5 1.4 0 2.5-1.5 2.5-3.6 0-1.9-1.4-3.2-3.4-3.2-2.3 0-3.7 1.7-3.7 3.5 0 .7.3 1.4.6 1.8l-.2.8c-.1 0-.3-.1-.4-.2-1.5-.7-2.4-2.8-2.4-4.5 0-3.7 2.7-7.1 7.8-7.1 4.1 0 7.3 2.9 7.3 6.8 0 4.1-2.6 7.4-6.2 7.4-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-1.1 2.5-1.6 3.4A10 10 0 1 0 12 2z"/></svg>',
   tumblr: '<svg viewBox="0 0 24 24"><path d="M14.5 16.5c-1 0-1.5-.5-1.5-1.5V9h4V6h-4V2h-3v4H7v3h2v6.2c0 2.3 1.2 3.8 3.5 3.8 1 0 1.8-.2 2-.3v-2.7c-.4.1-.8.2-1 .2z"/></svg>'
 };
@@ -1184,11 +1184,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     splashTextDisplay.textContent = data.splash_text || 'clica aê';
   }
 
-const playerSection = document.getElementById('playerSection');
+  const playerSection = document.getElementById('playerSection');
 
-  // Verifica se existe trilha sonora preenchida no banco de dados e se não está vazia
   if (data.soundtrack && data.soundtrack.trim() !== '') {
-    // Exibe o player na tela
     if (playerSection) playerSection.style.display = 'block';
 
     const ytId = getYoutubeAudioId(data.soundtrack);
@@ -1210,22 +1208,7 @@ const playerSection = document.getElementById('playerSection');
       };
     }
   } else {
-    // Se não tem trilha sonora, mantém o player oculto
     if (playerSection) playerSection.style.display = 'none';
-  }
-
-      window.onYouTubeIframeAPIReady = function() {
-        ytPlayer = new YT.Player('youtubePlayerContainer', {
-          height: '0',
-          width: '0',
-          videoId: ytId,
-          playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': ytId },
-          events: {
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      };
-    }
   }
 
   function onPlayerStateChange(event) {
@@ -1293,7 +1276,6 @@ const playerSection = document.getElementById('playerSection');
     }
   }, 1000);
 
-  // --- CORREÇÃO DO GATILHO DA SPLASH SCREEN ---
   if (splashScreen) {
     const handleSplashUnlock = (e) => {
       e.stopPropagation();
