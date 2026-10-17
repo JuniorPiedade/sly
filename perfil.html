@@ -162,13 +162,23 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .profile-card.align-left .preview-emblems,
 .profile-card.align-left .public-socials,
 .profile-card.align-left .embeds-container,
+.profile-card.align-left #spotify-widget,
 .profile-card.align-left .preview-friendships-wrapper,
 .profile-card.align-left .stats-container,
 .profile-card.align-left .profile-foot {
   grid-column: 2;
   min-width: 0;
 }
-
+<!-- Widget de Rich Presence do Spotify no Perfil -->
+<div id="spotify-widget" class="spotify-card animate-item delay-4" style="display: none; margin-top: 12px; width: 100%;">
+  <div class="spotify-body" style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+    <img id="spotify-cover" src="" alt="Capa" style="width: 48px; height: 48px; border-radius: 6px; object-fit: cover;" />
+    <div style="overflow: hidden;">
+      <div id="spotify-title" style="font-weight: bold; font-size: 14px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">A carregar música...</div>
+      <div id="spotify-artist" style="font-size: 12px; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">...</div>
+    </div>
+  </div>
+</div>
 .profile-card.align-center {
   text-align: center;
   display: flex;
@@ -646,6 +656,17 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
       <div class="public-socials animate-item delay-3" id="socialsBar"></div>
       <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
       
+      <!-- Widget de Rich Presence do Spotify no Perfil -->
+      <div id="spotify-widget" class="spotify-card animate-item delay-4" style="display: none; margin-top: 12px; width: 100%;">
+        <div class="spotify-body" style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+          <img id="spotify-cover" src="" alt="Capa" style="width: 48px; height: 48px; border-radius: 6px; object-fit: cover;" />
+          <div style="overflow: hidden;">
+            <div id="spotify-title" style="font-weight: bold; font-size: 14px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">A carregar música...</div>
+            <div id="spotify-artist" style="font-size: 12px; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">...</div>
+          </div>
+        </div>
+      </div>
+      
       <!-- Seção de Amigos Próximos / Friendships -->
       <div class="preview-friendships-wrapper" id="publicFriendshipsWrapper" style="display: none;">
         <div class="preview-friendships-title">AMIGOS PRÓXIMOS</div>
@@ -873,6 +894,51 @@ let ytPlayer = null;
 let isYtPlaying = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // --- LÓGICA DE RICH PRESENCE DO SPOTIFY NO PERFIL PÚBLICO ---
+  async function updateSpotifyPresence(accessToken) {
+    const widget = document.getElementById('spotify-widget');
+    const coverEl = document.getElementById('spotify-cover');
+    const titleEl = document.getElementById('spotify-title');
+    const artistEl = document.getElementById('spotify-artist');
+
+    if (!accessToken) return;
+
+    try {
+      const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+      });
+
+      if (res.status === 204 || res.status === 202) {
+        if (widget) widget.style.display = 'none';
+        return;
+      }
+
+      const spotifyData = await res.json();
+      if (spotifyData && spotifyData.is_playing && spotifyData.item) {
+        if (titleEl) titleEl.textContent = spotifyData.item.name;
+        if (artistEl) artistEl.textContent = spotifyData.item.artists.map(a => a.name).join(', ');
+        if (coverEl) coverEl.src = spotifyData.item.album.images[0]?.url;
+        if (widget) widget.style.display = 'block';
+      } else {
+        if (widget) widget.style.display = 'none';
+      }
+    } catch (err) {
+      console.error('Erro ao procurar música do Spotify:', err);
+    }
+  }
+if (data.spotify_access_token) {
+    updateSpotifyPresence(data.spotify_access_token);
+    setInterval(() => {
+      updateSpotifyPresence(data.spotify_access_token);
+    }, 15000);
+  }
+  // Verifica se o perfil do Supabase tem o token gravado e ativa a verificação a cada 15s
+  if (data.spotify_access_token) {
+    updateSpotifyPresence(data.spotify_access_token);
+    setInterval(() => {
+      updateSpotifyPresence(data.spotify_access_token);
+    }, 15000);
+  }
   const urlParams = new URLSearchParams(window.location.search);
   let rawHandle = urlParams.get('u') || urlParams.get('user');
 
