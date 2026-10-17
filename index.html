@@ -171,17 +171,10 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   border-radius: inherit !important;
 }
 
+/* Molduras removidas permanentemente */
 .avatar-frame {
-  position: absolute;
-  inset: -6px;
-  pointer-events: none;
-  z-index: 2;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  display: none !important;
 }
-.frame-neon-white { border: 2px solid #ffffff; border-radius: 22px; box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.4); }
-.frame-vip { border: 2px solid var(--purple); border-radius: 22px; box-shadow: 0 0 16px var(--purple), 0 0 30px var(--blue); }
 
 .profile-info{width:100%;min-width:0;overflow:visible!important}
 .profile-card h3{
@@ -489,19 +482,11 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
  <div class="editor-grid">
   <div>
    <section class="panel active-panel" id="panel-identity">
-    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio estendida, moldura e uploads de foto e wallpaper.</p></div><span class="muted">01 / 09</span></div>
+    <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio estendida e uploads de foto e wallpaper.</p></div><span class="muted">01 / 09</span></div>
     <div class="two">
      <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
      <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
     </div>
-    <label class="field">
-     <span>🖼️ Moldura do Avatar</span>
-     <select id="avatarFrameSelect">
-      <option value="none">Nenhuma (Padrão)</option>
-      <option value="neon-white">Neon Branco Simples</option>
-      <option value="vip">VIP Customizada (Exclusivo)</option>
-     </select>
-    </label>
     <label class="field"><span>Bio curta (máx. 240 caracteres)</span><textarea id="bio" maxlength="240" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/240</small></label>
     <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
     <label class="field">
@@ -955,7 +940,7 @@ async function initEditor(userId) {
    id: userId, name: 'Seu Nome', handle: 'usuario',
    bg_color: '#080812', card_bg: '#11111f', card_style: 'opaque', accent_color: '#c084fc',
    title_color: '#ffffff', text_color: '#f6f4ff',
-   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack: '', player_style: 'default', splash_text: 'clica aê', avatar_frame: 'none', bio: '', activity: '',
+   name_effect: 'none', custom_cursor: '', avatar_url: '', wallpaper_url: '', soundtrack: '', player_style: 'default', splash_text: 'clica aê', bio: '', activity: '',
    status_emoji: '🎮', status_label: 'Jogando', emblems: [], socials: {},
    embed_spotify: '', embed_youtube: '', embed_instagram: '', links: [], views_count: 0, clicks_count: 0, handle_changed: false,
    guestbook_style: 'vintage', friendships: [], visual_effect: 'none'
@@ -975,7 +960,6 @@ async function initEditor(userId) {
  const handleInput = document.getElementById('handle');
  const bioInput = document.getElementById('bio');
  const bioCount = document.getElementById('bioCount');
- const avatarFrameSelect = document.getElementById('avatarFrameSelect');
  const activityInput = document.getElementById('activity');
  const shareUrlInput = document.getElementById('shareUrl');
 
@@ -1022,7 +1006,6 @@ async function initEditor(userId) {
 
  bioInput.value = currentProfile.bio || '';
  bioCount.textContent = (currentProfile.bio || '').length;
- avatarFrameSelect.value = currentProfile.avatar_frame || 'none';
  activityInput.value = currentProfile.activity || '';
 
  cardStyleSelect.value = currentProfile.card_style || 'opaque';
@@ -1188,7 +1171,7 @@ async function initEditor(userId) {
 
    const payload = {
     id: userId, name: nameInput.value, handle: handleInput.value,
-    bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
+    bio: bioInput.value, activity: activityInput.value,
     status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
     card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
     player_style: playerStyleVal,
@@ -1254,14 +1237,13 @@ async function initEditor(userId) {
   document.getElementById('soc_' + key)?.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
  });
 
- [cardStyleSelect, guestbookStyleSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+ [cardStyleSelect, guestbookStyleSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
   if (input) {
     input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
     input.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
   }
  });
 
- avatarFrameSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
  guestbookStyleSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
  if (playerStyleSelect) playerStyleSelect.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
 
@@ -1371,12 +1353,6 @@ async function initEditor(userId) {
    avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
   } else {
    avatarEl.textContent = '⌬';
-  }
-
-  // Molduras removidas permanentemente
-  const frameEl = document.getElementById('avatarFrame');
-  if (frameEl) {
-    frameEl.style.display = 'none';
   }
 
   document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
@@ -1497,7 +1473,7 @@ async function initEditor(userId) {
 
   const payload = {
    id: userId, name: nameInput.value, handle: handleInput.value,
-   bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
+   bio: bioInput.value, activity: activityInput.value,
    status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
    card_style: cardStyleSelect.value, guestbook_style: guestbookStyleSelect.value,
    player_style: playerStyleVal,
