@@ -889,10 +889,17 @@ async function initEditor(userId) {
         spotify_access_token: null,
         spotify_refresh_token: null
       };
-      await window.islySupabase.saveProfile(payload);
-      if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'inline-flex';
-      if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'none';
-      toast('Conta do Spotify desconectada com sucesso.');
+      const saveResult = await window.islySupabase.saveProfile(payload);
+        
+        // Se a função devolver algum erro, vamos obrigá-la a aparecer no ecrã
+        if (saveResult && saveResult.error) {
+          throw new Error(JSON.stringify(saveResult.error));
+        }
+
+        await window.islySupabase.saveProfile(payload);
+        if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
+        if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
+        toast('Spotify conectado com sucesso! ✓');
     } catch (err) {
       console.error("Erro ao desconectar Spotify:", err);
       toast('Erro ao desconectar a conta.');
