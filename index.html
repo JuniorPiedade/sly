@@ -2118,13 +2118,20 @@ let rawUrl = urlField?.value?.trim() || '';
       currentProfile.links = [];
     }
 
-    if (currentProfile.links.length >= 3) {
-      alert(
-        'O perfil já possui ' + currentProfile.links.length +
-        ' links cadastrados. Remova um da lista antes de adicionar outro.'
-      );
-      return;
-    }
+    const linksAtuais = Array.isArray(currentProfile.links)
+  ? currentProfile.links
+  : [];
+
+if (linksAtuais.length >= 3) {
+  alert(
+    'Diagnóstico de links:\n\n' +
+    'Total no estado do perfil: ' + linksAtuais.length + '\n' +
+    'Links exibidos na lista: ' +
+    (customLinksList?.children.length || 0) + '\n\n' +
+    'Nenhum dado foi apagado.'
+  );
+  return;
+}
 
     if (!/^https?:\/\//i.test(rawUrl)) {
       rawUrl = 'https://' + rawUrl;
