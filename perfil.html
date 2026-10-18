@@ -942,13 +942,25 @@ function getSpotifyEmbed(url) {
   return '';
 }
 
+
 function getYoutubeEmbed(url) {
   if (!url) return '';
+
   let id = '';
-  if (url.in
-      ncrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+
+  if (url.includes('youtu.be/')) {
+    id = url.split('youtu.be/')[1].split(/[?&]/)[0];
+  } else if (url.includes('youtube.com/watch')) {
+    id = new URL(url).searchParams.get('v') || '';
+  } else if (url.includes('youtube.com/embed/')) {
+    id = url.split('youtube.com/embed/')[1].split(/[?&]/)[0];
+  } else if (url.includes('youtube.com/shorts/')) {
+    id = url.split('youtube.com/shorts/')[1].split(/[?&]/)[0];
   }
-  return '';
+
+  if (!id) return '';
+
+  return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="200" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
 }
 
 function getInstagramEmbed(url) {
@@ -1191,8 +1203,7 @@ if (data.avatar_url) {
   avatarEl.textContent = '⌬';
 }
 
-
-  const emblemsEl = document.getElementById('emblems');
+ const emblemsEl = document.getElementById('emblems');
   if (emblemsEl) {
     emblemsEl.innerHTML = (data.emblems || []).map(id => {
       const cleanId = String(id).toLowerCase().trim();
