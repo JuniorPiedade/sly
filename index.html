@@ -2099,7 +2099,11 @@ let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
     if (!Array.isArray(currentProfile.links)) {
       currentProfile.links = [];
     }
-
+console.log('DIAGNÓSTICO SLYE', {
+  linksNoPerfil: currentProfile.links,
+  quantidadeNoPerfil: currentProfile.links.length,
+  quantidadeNaTela: customLinksList.children.length
+});
    if (currentProfile.links.length >= 3) {
   alert(
     'Diagnóstico de links:\n' +
