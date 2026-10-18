@@ -1711,12 +1711,8 @@ if (data.avatar_url) {
   }
 
 // Proteção de clique direito temporariamente desativada para diagnóstico.
-  document.addEventListener("keydown", (e) => {
-    const tecla = e.key.toLowerCase();
-    const atalho = e.key === "F12" || (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(tecla)) || (e.ctrlKey && tecla === "u");
-    if (atalho) { e.preventDefault(); e.stopImmediatePropagation(); mostrarTelaHacker(); }
-  }, true);
-})();
+// Gatilho de teclado temporariamente desativado para diagnóstico.
+  
 </script>
 <style>
 /* ... CSS original do seu perfil permanece aqui ... */
