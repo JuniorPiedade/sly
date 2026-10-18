@@ -2150,10 +2150,19 @@ console.log('[SLYE] Tentativa de adicionar link:', {
   totalValido: validLinks.length,
   links: currentProfile.links
 });
+console.log('[SLYE] Links encontrados antes de adicionar:', {
+  total: currentProfile.links.length,
+  validos: validLinks.length,
+  lista: currentProfile.links.map(link => ({
+    title: link?.title,
+    url: link?.url
+  }))
+});
 
 if (validLinks.length >= 3) {
   alert('Você atingiu o limite máximo de 3 links personalizados.');
   return;
+}urn;
 }
       if (!/^https?:\/\//i.test(rawUrl)) {
         rawUrl = 'https://' + rawUrl;
