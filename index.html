@@ -266,18 +266,6 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   display: block !important;
   border-radius: inherit !important;
 }
-.avatar-frame {
-  position: absolute;
-  inset: -6px;
-  pointer-events: none;
-  z-index: 2;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.frame-neon-white { border: 2px solid #ffffff; border-radius: 22px; box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.4); }
-.frame-vip { border: 2px solid var(--purple); border-radius: 22px; box-shadow: 0 0 16px var(--purple), 0 0 30px var(--blue); }
-
 .profile-info{width:100%;min-width:0;overflow:visible!important}
 .profile-card h3{
   font-size:clamp(19px,2vw,25px);font-weight:800;line-height:1.2;
@@ -2111,25 +2099,6 @@ if (avatarImg) {
     isCircle ? '50%' : '20px',
     'important'
   );
-}
-
-    const frameEl = document.getElementById('previewFrame');
-const frameType = avatarFrameSelect?.value || 'none';
-
-if (frameEl) {
-  // Limpa classes e estilos anteriores
-  frameEl.className = 'avatar-frame';
-  frameEl.style.removeProperty('display');
-
-  if (frameType === 'neon-white') {
-    frameEl.classList.add('frame-neon-white');
-    frameEl.style.display = 'block';
-  } else if (frameType === 'vip') {
-    frameEl.classList.add('frame-vip');
-    frameEl.style.display = 'block';
-  } else {
-    frameEl.style.display = 'none';
-  }
 }
     document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
     document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
