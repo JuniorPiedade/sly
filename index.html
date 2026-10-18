@@ -1311,6 +1311,7 @@ a.brand > span:last-child .dot {
     <div class="two">
      <label class="field"><span>Cor do Título do Nome</span><input type="color" id="titleColor" value="#ffffff"></label>
      <label class="field"><span>Cor dos Demais Textos</span><input type="color" id="textColor" value="#f6f4ff"></label>
+    <label class="field"><span>Cor dos Links</span><input type="color" id="linkColor" value="#a855f7"></label>
     </div>
     <label class="field">
      <span>✨ Efeito Especial no Nome</span>
@@ -1998,6 +1999,7 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   const bgColorInput = document.getElementById('bgColor');
   const cardBgInput = document.getElementById('cardBg');
   const titleColorInput = document.getElementById('titleColor');
+  const linkColorInput = document.getElementById('linkColor');
   const textColorInput = document.getElementById('textColor');
   const nameEffectSelect = document.getElementById('nameEffect');
   const customCursorInput = document.getElementById('customCursor');
@@ -2043,10 +2045,15 @@ if (profileAlignSelect) {
   if (visualEffectSelect) visualEffectSelect.value = currentProfile.visual_effect || 'none';
   initVisualEffect(currentProfile.visual_effect || 'none');
 
-  bgColorInput.value = currentProfile.bg_color || '#080812';
-  cardBgInput.value = currentProfile.card_bg || '#11111f';
-  titleColorInput.value = currentProfile.title_color || '#ffffff';
-  textColorInput.value = currentProfile.text_color || '#f6f4ff';
+bgColorInput.value = currentProfile.bg_color || '#080812';
+cardBgInput.value = currentProfile.card_bg || '#11111f';
+titleColorInput.value = currentProfile.title_color || '#ffffff';
+textColorInput.value = currentProfile.text_color || '#f6f4ff';
+
+if (linkColorInput) {
+  linkColorInput.value = currentProfile.accent_color || '#a855f7';
+}
+
   nameEffectSelect.value = currentProfile.name_effect || 'none';
   customCursorInput.value = currentProfile.custom_cursor || '';
   avatarUrlInput.value = currentProfile.avatar_url || '';
@@ -2202,7 +2209,7 @@ activity: activityInput.value,
         card_style: cardStyleSelect.value, card_align: alignVal,
         player_style: playerStyleVal, visual_effect: visualEffectVal, perspective_effect: perspectiveEffectVal,
         bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-        accent_color: textColorInput.value, title_color: titleColorInput.value, text_color: textColorInput.value,
+        accent_color: linkColorInput ? linkColorInput.value : '#a855f7', title_color: titleColorInput.value, text_color: textColorInput.value,
         name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
         avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
         soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
