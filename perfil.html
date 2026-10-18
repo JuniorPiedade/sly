@@ -95,6 +95,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   stroke: #c084fc;
   filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.9));
 }
+
 .splash-text {
   font-size: 13px;
   font-weight: 600;
@@ -102,7 +103,18 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   color: #c9c5e2;
   text-transform: lowercase;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+  user-select: none;
 }
+
+.splash-text:hover {
+  color: #ffffff;
+  text-shadow:
+    0 0 8px rgba(168, 85, 247, 0.65),
+    0 0 18px rgba(168, 85, 247, 0.3);
+}
+
 @keyframes splashPulse {
   0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(168, 85, 247, 0.2); }
   50% { transform: scale(1.06); box-shadow: 0 0 40px rgba(168, 85, 247, 0.4); }
@@ -675,17 +687,13 @@ body {
     </div>
 </header>
 
-<!-- TELA DE ENTRADA (SPLASH SCREEN) - Inicia visível por padrão para proteger o card -->
+<!-- TELA DE ENTRADA (SPLASH SCREEN) -->
 <div class="splash-overlay" id="splashScreen">
   <div class="splash-content">
-    <div class="splash-star-wrapper" id="splashStarBtn">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="splash-neon-star">
-        <path d="M24 10L26.7634 19.4674L33.7128 20.1456L28.4724 24.8454L30.043 31.6786L24 28.02L17.957 31.6786L19.5276 24.8454L14.2872 20.1456L21.2366 19.4674L24 10Z" />
-      </svg>
-    </div>
     <div class="splash-text" id="splashTextDisplay"></div>
   </div>
 </div>
+
 
 <div class="page-wrapper">
   <div class="container">
@@ -1350,8 +1358,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     splashScreen.addEventListener('click', handleSplashUnlock);
-    const starBtn = document.getElementById('splashStarBtn');
-    if (starBtn) starBtn.addEventListener('click', handleSplashUnlock);
+    
   } else {
     if (splashScreen) splashScreen.classList.add('hidden');
     if (cardElement) cardElement.style.opacity = '1';
