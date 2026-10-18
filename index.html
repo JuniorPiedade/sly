@@ -2106,10 +2106,21 @@ if (addCustomLinkBtn) {
       currentProfile.links = [];
     }
 
-    if (currentProfile.links.length >= 3) {
-      alert('Você pode adicionar até 3 links personalizados.');
-      return;
-    }
+    currentProfile.links = currentProfile.links.filter(link =>
+  link &&
+  typeof link.title === 'string' &&
+  link.title.trim() &&
+  typeof link.url === 'string' &&
+  link.url.trim()
+);
+
+if (currentProfile.links.length >= 3) {
+  alert(
+    'Você já possui 3 links cadastrados.\n' +
+    'Remova um deles na lista antes de adicionar outro.'
+  );
+  return;
+}
 
     if (!/^https?:\/\//i.test(rawUrl)) {
       rawUrl = 'https://' + rawUrl;
