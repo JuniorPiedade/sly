@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080812">
-<meta name="description" content="ISLYE.ME — sua identidade digital gamer e geek">
-<title>Painel de edição — ISLYE.ME</title>
+<meta name="description" content="SLYE.ME — sua identidade digital gamer e geek">
+<title>Painel de edição — SLYE.ME</title>
 <style>
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
 *{box-sizing:border-box}
@@ -725,7 +725,13 @@ a:focus-visible {
     width: 35px;
     height: 35px;
   }
-
+.brand-logo {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
   .actions {
     gap: 6px;
     flex-wrap: wrap;
@@ -853,6 +859,7 @@ a:focus-visible {
   }
 }
 
+
 /* SLYE — Sistema tipográfico premium */
 
 body,
@@ -875,7 +882,26 @@ h4,
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
   font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.8px;
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+.brand .dot {
+  color: #c4b5fd;
 }
 
 .heading h1 {
@@ -931,7 +957,7 @@ textarea {
 
 <div id="appRoot">
 <header class="wrap topbar">
- <a class="brand" href="landing.html"><span class="brand-mark">⌬</span><span>isly<span class="dot">.me</span></span></a>
+<a class="brand" href="landing.html"><img class="brand-logo" src="assets/slye.png" alt="SLYE.ME"><span>SLYE<span class="dot">.ME</span></span></a>
  <div class="actions">
   <div class="sync-badge" id="syncBadge">
     <span class="sync-dot" id="syncDot"></span>
