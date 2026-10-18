@@ -2070,12 +2070,19 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
     const avatarVal = avatarUrlInput.value.trim();
     if (avatarVal) avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
     else avatarEl.textContent = '⌬';
-    const avatarShape = avatarShapeSelect?.value || 'rounded';
+   
+const avatarShape = avatarShapeSelect?.value || 'rounded';
+const isCircle = avatarShape === 'circle';
 
-avatarEl.classList.remove(
-  'avatar-shape-rounded',
-  'avatar-shape-circle'
-);
+avatarEl.style.borderRadius = isCircle ? '50%' : '20px';
+avatarEl.style.overflow = 'hidden';
+
+const avatarImg = avatarEl.querySelector('img');
+
+if (avatarImg) {
+  avatarImg.style.borderRadius = isCircle ? '50%' : 'inherit';
+}
+
 
 avatarEl.classList.add(
   avatarShape === 'circle'
