@@ -1241,10 +1241,31 @@ a.brand > span:last-child .dot {
           <button type="button" id="disconnectSpotifyBtn" class="btn" style="padding: 4px 10px; font-size: 11px; color: #f87171; border-color: #7f1d1d; background: rgba(239, 68, 68, 0.1);">Desconectar</button>
         </div>
       </div>
+     
       <small>Permite exibir o que estás a ouvir no Spotify em tempo real no teu perfil.</small>
     </div>
-   </section>
 
+    <div class="field" style="margin-top: 24px; border-top: 1px solid var(--line); padding-top: 18px;">
+      <span>🔗 Links personalizados do perfil</span>
+      <small>Adicione links que aparecerão como textos clicáveis no seu perfil público.</small>
+
+      <label class="field" style="margin-top: 12px;">
+        <span>Nome do link</span>
+        <input id="customLinkTitle" type="text" maxlength="50" placeholder="Ex.: Meu canal">
+      </label>
+
+      <label class="field" style="margin-top: 10px;">
+        <span>Endereço do link</span>
+        <input id="customLinkUrl" type="url" placeholder="https://exemplo.com">
+      </label>
+
+      <button type="button" id="addCustomLinkBtn" class="btn primary" style="margin-top: 10px;">
+        + Adicionar link
+      </button>
+
+      <div id="customLinksList" style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;"></div>
+    </div>
+   </section>
    <section class="panel" id="panel-soundtrack">
     <div class="panel-head">
         <div>
@@ -2011,6 +2032,103 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   const embedSpotifyInput = document.getElementById('embedSpotify');
   const embedYoutubeInput = document.getElementById('embedYoutube');
   const embedInstagramInput = document.getElementById('embedInstagram');
+  const customLinkTitleInput = document.getElementById('customLinkTitle');
+  const customLinkUrlInput = document.getElementById('customLinkUrl');
+  const addCustomLinkBtn = document.getElementById('addCustomLinkBtn');
+  const customLinksList = document.getElementById('customLinksList');
+  
+function renderCustomLinks() {
+  if (!customLinksList) return;
+
+  customLinksList.replaceChildren();
+
+  const links = Array.isArray(currentProfile.links)
+    ? currentProfile.links
+    : [];
+
+  links.forEach((link, index) => {
+    const item = document.createElement('div');
+    item.style.cssText =
+      'display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border:1px solid var(--line);border-radius:8px;';
+
+    const info = document.createElement('div');
+    info.style.cssText = 'min-width:0;flex:1;';
+
+    const title = document.createElement('strong');
+    title.textContent = link.title || 'Link personalizado';
+    title.style.cssText =
+      'display:block;font-size:13px;overflow-wrap:anywhere;';
+
+    const url = document.createElement('small');
+    url.textContent = link.url || '';
+    url.style.cssText =
+      'display:block;opacity:.65;font-size:11px;overflow-wrap:anywhere;';
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.textContent = 'Remover';
+    removeBtn.className = 'btn';
+    removeBtn.style.cssText = 'flex-shrink:0;';
+    removeBtn.addEventListener('click', () => {
+      currentProfile.links.splice(index, 1);
+      renderCustomLinks();
+      updatePreview();
+      triggerAutoSave();
+    });
+
+    info.append(title, url);
+    item.append(info, removeBtn);
+    customLinksList.appendChild(item);
+  });
+}
+
+if (addCustomLinkBtn) {
+  addCustomLinkBtn.addEventListener('click', () => {
+    const title = customLinkTitleInput?.value.trim() || '';
+    let rawUrl = customLinkUrlInput?.value.trim() || '';
+
+    if (!title || !rawUrl) {
+      alert('Preencha o nome e o endereço do link.');
+      return;
+    }
+
+    if (currentProfile.links.length >= 10) {
+      alert('Você pode adicionar até 10 links personalizados.');
+      return;
+    }
+
+    if (!/^https?:\/\//i.test(rawUrl)) {
+      rawUrl = 'https://' + rawUrl;
+    }
+
+    let parsedUrl;
+
+    try {
+      parsedUrl = new URL(rawUrl);
+    } catch {
+      alert('Digite um endereço de link válido.');
+      return;
+    }
+
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+      alert('Use um endereço iniciado com http:// ou https://.');
+      return;
+    }
+
+    currentProfile.links.push({
+      title: title.slice(0, 50),
+      url: parsedUrl.href
+    });
+
+    customLinkTitleInput.value = '';
+    customLinkUrlInput.value = '';
+
+    renderCustomLinks();
+    updatePreview();
+    triggerAutoSave();
+  });
+}
+
 
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
@@ -2052,6 +2170,7 @@ textColorInput.value = currentProfile.text_color || '#f6f4ff';
 
 if (linkColorInput) {
   linkColorInput.value = currentProfile.accent_color || '#a855f7';
+  renderCustomLinks();
 }
 
   nameEffectSelect.value = currentProfile.name_effect || 'none';
@@ -2209,7 +2328,7 @@ activity: activityInput.value,
         card_style: cardStyleSelect.value, card_align: alignVal,
         player_style: playerStyleVal, visual_effect: visualEffectVal, perspective_effect: perspectiveEffectVal,
         bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-        accent_color: linkColorInput ? linkColorInput.value : '#a855f7', title_color: titleColorInput.value, text_color: textColorInput.value,
+        accent_color: linkColorInput ? linkColorInput.value : '#a855f7', title_color: titleColorInput.value, text_color: textColorInput.value, linkColorInput
         name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
         avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
         soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
@@ -2397,9 +2516,23 @@ if (avatarImg) {
     if (fx === 'none') nameEl.style.color = titleColorInput.value;
     else nameEl.style.color = '';
 
-    const activeTextColor = textColorInput.value;
-    document.getElementById('previewBio').style.color = activeTextColor;
-    document.getElementById('previewHandle').style.color = activeTextColor;
+ 
+const activeTextColor = textColorInput.value;
+
+const previewBioEl = document.getElementById('previewBio');
+if (previewBioEl) previewBioEl.style.color = activeTextColor;
+
+const previewHandleEl = document.getElementById('previewHandle');
+if (previewHandleEl) previewHandleEl.style.color = activeTextColor;
+
+const previewStatusEmojiEl = document.getElementById('previewStatusEmoji');
+const previewStatusTextEl = document.getElementById('previewStatusText');
+if (previewStatusEmojiEl) previewStatusEmojiEl.style.color = activeTextColor;
+if (previewStatusTextEl) previewStatusTextEl.style.color = activeTextColor;
+
+const previewEmblemsEl = document.getElementById('previewEmblems');
+if (previewEmblemsEl) previewEmblemsEl.style.color = activeTextColor;
+
 
     const emPreview = document.getElementById('previewEmblems');
     emPreview.innerHTML = (currentProfile.emblems || []).map(id => {
@@ -2486,12 +2619,17 @@ activity: activityInput.value,      status_emoji: currentProfile.status_emoji, s
 visual_effect: visualEffectVal,
 perspective_effect: perspectiveEffectVal,
       bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-      accent_color: textColorInput.value, title_color: titleColorInput.value, text_color: textColorInput.value,
+      
+accent_color: linkColorInput ? linkColorInput.value : '#a855f7',
+title_color: titleColorInput.value,
+text_color: textColorInput.value,
+
       name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
       avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
       soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
       embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
-      emblems: currentProfile.emblems, socials: socialsData, links: [],
+      emblems: currentProfile.emblems, socials: socialsData, links: Array.isArray(currentProfile.links) ? currentProfile.links : [],
+
       friendships: currentProfile.friendships, handle_changed: currentProfile.handle_changed
     };
 
