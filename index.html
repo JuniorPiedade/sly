@@ -2087,16 +2087,18 @@ function renderCustomLinks() {
 
 
 
+
 if (addCustomLinkBtn) {
   addCustomLinkBtn.addEventListener('click', () => {
-    const titleInput = document.getElementById('customLinkTitle');
-    const urlInput = document.getElementById('customLinkUrl');
-
-    const title = titleInput?.value.trim() || '';
-    let rawUrl = urlInput?.value.trim() || '';
+    const title = customLinkTitleInput.value.trim();
+    let rawUrl = customLinkUrlInput.value.trim();
 
     if (!title || !rawUrl) {
-      alert('Preencha o nome e o endereço do link.');
+      alert(
+        'Preencha o nome e o endereço do link.\n\n' +
+        'Nome preenchido: ' + (title ? 'Sim' : 'Não') + '\n' +
+        'Endereço preenchido: ' + (rawUrl ? 'Sim' : 'Não')
+      );
       return;
     }
 
@@ -2135,14 +2137,17 @@ if (addCustomLinkBtn) {
       url: parsedUrl.href
     });
 
-    titleInput.value = '';
-    urlInput.value = '';
+    customLinkTitleInput.value = '';
+    customLinkUrlInput.value = '';
 
     renderCustomLinks();
     updatePreview();
     triggerAutoSave();
+
+    toast('Link adicionado! ✓');
   });
 }
+
 
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
