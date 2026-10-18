@@ -2086,10 +2086,14 @@ function renderCustomLinks() {
 }
 
 
+
 if (addCustomLinkBtn) {
   addCustomLinkBtn.addEventListener('click', () => {
-    const title = document.getElementById('customLinkTitle')?.value.trim() || '';
-let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
+    const titleInput = document.getElementById('customLinkTitle');
+    const urlInput = document.getElementById('customLinkUrl');
+
+    const title = titleInput?.value.trim() || '';
+    let rawUrl = urlInput?.value.trim() || '';
 
     if (!title || !rawUrl) {
       alert('Preencha o nome e o endereço do link.');
@@ -2099,19 +2103,11 @@ let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
     if (!Array.isArray(currentProfile.links)) {
       currentProfile.links = [];
     }
-console.log('DIAGNÓSTICO SLYE', {
-  linksNoPerfil: currentProfile.links,
-  quantidadeNoPerfil: currentProfile.links.length,
-  quantidadeNaTela: customLinksList.children.length
-});
-   if (currentProfile.links.length >= 3) {
-  alert(
-    'Diagnóstico de links:\n' +
-    'Quantidade: ' + currentProfile.links.length + '\n' +
-    'Links: ' + JSON.stringify(currentProfile.links, null, 2)
-  );
-  return;
-}
+
+    if (currentProfile.links.length >= 3) {
+      alert('Você pode adicionar até 3 links personalizados.');
+      return;
+    }
 
     if (!/^https?:\/\//i.test(rawUrl)) {
       rawUrl = 'https://' + rawUrl;
@@ -2139,15 +2135,14 @@ console.log('DIAGNÓSTICO SLYE', {
       url: parsedUrl.href
     });
 
-    customLinkTitleInput.value = '';
-    customLinkUrlInput.value = '';
+    titleInput.value = '';
+    urlInput.value = '';
 
     renderCustomLinks();
     updatePreview();
     triggerAutoSave();
   });
 }
-
 
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
