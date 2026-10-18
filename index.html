@@ -2329,9 +2329,8 @@ async function initEditor(userId) {
       const err = await window.islySupabase.saveProfile(payload);
       syncDot.classList.remove('saving');
       syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
-    }, 1200);
-  }
-}
+    });
+    
   document.querySelectorAll('.sidebar .navbtn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sidebar .navbtn').forEach(b => b.classList.remove('active'));
@@ -2617,6 +2616,7 @@ async function initEditor(userId) {
     syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
     toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
   });
+  
  // Inicializa a galeria de forma assíncrona segura
   initGalleryEditor(userId).catch(err => {
     console.error('Erro ao iniciar galeria:', err);
