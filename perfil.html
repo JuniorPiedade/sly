@@ -284,6 +284,20 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border-radius: inherit !important;
 }
 
+/* Formato padrão: quadrado com cantos arredondados */
+.avatar.avatar-shape-rounded {
+  border-radius: 20px !important;
+}
+
+/* Formato circular */
+.avatar.avatar-shape-circle {
+  border-radius: 50% !important;
+}
+
+.avatar.avatar-shape-circle img {
+  border-radius: 50% !important;
+}
+
 .avatar-frame {
   position: absolute;
   inset: -6px;
@@ -1171,11 +1185,29 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
 
   const avatarEl = document.getElementById('avatar');
-  if (data.avatar_url) {
-    avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
-  } else {
-    avatarEl.textContent = '⌬';
-  }
+  const avatarShape = data.avatar_shape || 'rounded';
+  avatarEl.classList.remove(
+  'avatar-shape-rounded',
+  'avatar-shape-circle'
+);
+
+avatarEl.classList.add(
+  avatarShape === 'circle'
+    ? 'avatar-shape-circle'
+    : 'avatar-shape-rounded'
+);
+
+avatarEl.classList.remove('avatar-shape-rounded', 'avatar-shape-circle');
+avatarEl.classList.add(
+  avatarShape === 'circle' ? 'avatar-shape-circle' : 'avatar-shape-rounded'
+);
+
+if (data.avatar_url) {
+  avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
+} else {
+  avatarEl.textContent = '⌬';
+}
+
 
   const frameEl = document.getElementById('avatarFrame');
   const frameType = data.avatar_frame || 'none';
