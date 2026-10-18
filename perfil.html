@@ -1727,31 +1727,5 @@ if (data.avatar_url) {
   }
 }
 </style>
-  <script>
-(() => {
-  const ativarGaleria = () => {
-    const botao = document.getElementById('profile-gallery-trigger');
-    const painel = document.getElementById('profile-gallery-panel');
-
-    if (!botao || !painel || botao.dataset.galleryClickReady) return;
-
-    botao.dataset.galleryClickReady = 'true';
-
-    botao.addEventListener('click', (event) => {
-      event.preventDefault();
-
-      const vaiAbrir = painel.hidden;
-      painel.hidden = !vaiAbrir;
-      botao.setAttribute('aria-expanded', String(vaiAbrir));
-    });
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', ativarGaleria);
-  } else {
-    ativarGaleria();
-  }
-})();
-</script>
-  </body>
+</body>
 </html>
