@@ -7,6 +7,20 @@
 <meta name="description" content="SLYE.ME — sua identidade digital gamer e geek">
 <title>Painel de edição — SLYE.ME</title>
 <style>
+  /* Formatos do avatar na prévia do editor SLYE */
+#previewAvatar.avatar-shape-rounded {
+  border-radius: 20px !important;
+  overflow: hidden;
+}
+
+#previewAvatar.avatar-shape-circle {
+  border-radius: 50% !important;
+  overflow: hidden;
+}
+
+#previewAvatar.avatar-shape-circle img {
+  border-radius: 50% !important;
+}
 :root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.6}
@@ -204,17 +218,32 @@ h1{font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-1.5px;margin:8
   display: block;
 }
 
+
 .avatar {
   width: 100% !important;
   height: 100% !important;
   border-radius: 20px;
   background: linear-gradient(145deg, #8b5cf6, #4c1d95);
-  overflow: visible;
+  overflow: hidden;
   position: relative;
   z-index: 1;
   display: block;
   padding: 0 !important;
   margin: 0 !important;
+}
+
+.avatar.avatar-shape-rounded {
+  border-radius: 20px !important;
+  overflow: hidden;
+}
+
+.avatar.avatar-shape-circle {
+  border-radius: 50% !important;
+  overflow: hidden;
+}
+
+.avatar.avatar-shape-circle img {
+  border-radius: 50% !important;
 }
 
 .avatar img {
