@@ -1946,7 +1946,10 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
 
       const payload = {
         id: userId, name: nameInput.value, handle: handleInput.value,
-        bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
+        bio: bioInput.value,
+avatar_frame: avatarFrameSelect.value,
+avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
+activity: activityInput.value,
         status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
         card_style: cardStyleSelect.value, card_align: alignVal,
         player_style: playerStyleVal, visual_effect: visualEffectVal, perspective_effect: perspectiveEffectVal,
