@@ -2145,10 +2145,16 @@ console.log('[SLYE] Tentativa de adicionar link:', {
         link.url.trim() !== ''
       );
 
-      if (validLinks.length >= 3) {
-        alert('Você atingiu o limite máximo de 3 links personalizados.');
-        return;
-      }
+      console.log('[SLYE] Diagnóstico dos links:', {
+  totalArmazenado: currentProfile.links.length,
+  totalValido: validLinks.length,
+  links: currentProfile.links
+});
+
+if (validLinks.length >= 3) {
+  alert('Você atingiu o limite máximo de 3 links personalizados.');
+  return;
+}
       if (!/^https?:\/\//i.test(rawUrl)) {
         rawUrl = 'https://' + rawUrl;
       }
