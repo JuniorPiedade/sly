@@ -915,11 +915,23 @@ async function callSpotifyFunction(action) {
     body: { action }
   });
 
-  if (error) {
-    console.error('Erro da função Spotify:', error);
-    throw new Error('Não foi possível concluir a operação. Verifique sua conexão e tente novamente.');
+ 
+if (error) {
+  console.error('Erro detalhado da função Spotify:', error);
+
+  let detalhe = error.message || 'Erro desconhecido';
+
+  if (error.context instanceof Response) {
+    try {
+      const resposta = await error.context.clone().text();
+      detalhe = `HTTP ${error.context.status}: ${resposta || detalhe}`;
+    } catch (_) {
+      detalhe = `HTTP ${error.context.status}: ${detalhe}`;
+    }
   }
 
+  throw new Error(detalhe);
+}
   return data;
 }
 
