@@ -1195,23 +1195,26 @@ if (profileAlignSelect) {
     toast('Wallpaper removido! ✓');
   });
 
+  
+  perspectiveEffectSelect?.addEventListener('change', () => {
+    currentProfile.perspective_effect = perspectiveEffectSelect.value;
+
+    if (perspectiveEffectSelect.value === 'off' && previewCard) {
+      previewCard.style.transform = 'none';
+    }
+
+    updatePreview();
+    triggerAutoSave();
+  });
+
   visualEffectSelect?.addEventListener('change', () => {
-    perspectiveEffectSelect?.addEventListener('change', () => {
-  currentProfile.perspective_effect = perspectiveEffectSelect.value;
-
-  if (perspectiveEffectSelect.value === 'off') {
-    previewCard.style.transform = 'none';
-  }
-
-  updatePreview();
-  triggerAutoSave();
-});
     const val = visualEffectSelect.value;
     currentProfile.visual_effect = val;
     initVisualEffect(val);
     triggerAutoSave();
   });
 
+  
   let saveTimer = null;
   function triggerAutoSave() {
     syncDot.classList.add('saving');
