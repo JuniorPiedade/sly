@@ -1011,27 +1011,30 @@ let isYtPlaying = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
-  let rawHandle = urlParams.get('u') || urlParams.get('user');
+  
+let rawHandle = urlParams.get('u') || urlParams.get('user');
 
-  if (!rawHandle) {
-    const pathSegments = window.location.pathname.split('-');
-    if (pathSegments.length > 1 && window.location.pathname.startsWith('/sly-')) {
-      rawHandle = pathSegments[pathSegments.length - 1];
-    }
+if (!rawHandle) {
+  const pathname = window.location.pathname;
+
+  if (pathname.startsWith('/sly-')) {
+    rawHandle = pathname.slice('/sly-'.length);
   }
+}
 
-  if (!rawHandle || !window.islySupabase) {
-    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
-    return;
-  }
+if (!rawHandle || !window.islySupabase) {
+  document.querySelector('.container').innerHTML =
+    '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+  return;
+}
 
-  const handle = rawHandle.trim().replace(/^@/, '');
-  const data = await window.islySupabase.getProfileByHandle(handle);
+const handle = decodeURIComponent(rawHandle).trim().replace(/^@/, '');
+const data = await window.islySupabase.getProfileByHandle(handle);
 
-  if (!data) {
-    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
-    return;
-  }
+if (!data) {
+  document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
+  return;
+}
 
   // --- SPOTIFY RICH PRESENCE: PERFIL PÚBLICO ---
   (() => {
@@ -1112,7 +1115,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
     return;
   }
- 
+ const data = await window.islySupabase.getProfileByHandle(handle);
   // --- GALERIA PÚBLICA SLYE ---
   const galleryTrigger = document.getElementById('profile-gallery-trigger');
   const galleryPanel = document.getElementById('profile-gallery-panel');
