@@ -1169,9 +1169,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
   document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
 
-  const avatarEl = document.getElementById('avatar');
-  const avatarShape = data.avatar_shape || 'rounded';
-  avatarEl.classList.remove(
+  
+const avatarEl = document.getElementById('avatar');
+const avatarShape = data.avatar_shape || 'rounded';
+
+avatarEl.classList.remove(
   'avatar-shape-rounded',
   'avatar-shape-circle'
 );
@@ -1182,10 +1184,6 @@ avatarEl.classList.add(
     : 'avatar-shape-rounded'
 );
 
-avatarEl.classList.remove('avatar-shape-rounded', 'avatar-shape-circle');
-avatarEl.classList.add(
-  avatarShape === 'circle' ? 'avatar-shape-circle' : 'avatar-shape-rounded'
-);
 
 if (data.avatar_url) {
   avatarEl.innerHTML = `<img src="${data.avatar_url}" alt="${data.name || 'Avatar'}">`;
