@@ -2077,25 +2077,35 @@ activity: activityInput.value,
 const avatarShape = avatarShapeSelect?.value || 'rounded';
 const isCircle = avatarShape === 'circle';
 
+// Limpa os formatos anteriores
+avatarEl.classList.remove(
+  'avatar-shape-circle',
+  'avatar-shape-rounded'
+);
+
+// Aplica o formato selecionado
+avatarEl.classList.add(
+  isCircle ? 'avatar-shape-circle' : 'avatar-shape-rounded'
+);
+
 avatarEl.style.setProperty(
   'border-radius',
   isCircle ? '50%' : '20px',
   'important'
 );
-avatarEl.style.overflow = 'hidden';
 
+avatarEl.style.setProperty('overflow', 'hidden', 'important');
+
+// Aplica o formato também à imagem
 const avatarImg = avatarEl.querySelector('img');
 
 if (avatarImg) {
-  avatarImg.style.borderRadius = isCircle ? '50%' : 'inherit';
+  avatarImg.style.setProperty(
+    'border-radius',
+    isCircle ? '50%' : '20px',
+    'important'
+  );
 }
-
-
-avatarEl.classList.add(
-  avatarShape === 'circle'
-    ? 'avatar-shape-circle'
-    : 'avatar-shape-rounded'
-);
 
     const frameEl = document.getElementById('previewFrame');
     const frameType = avatarFrameSelect ? avatarFrameSelect.value : 'none';
