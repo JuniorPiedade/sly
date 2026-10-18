@@ -2030,60 +2030,6 @@ async function initEditor(userId) {
   const embedSpotifyInput = document.getElementById('embedSpotify');
   const embedYoutubeInput = document.getElementById('embedYoutube');
   const embedInstagramInput = document.getElementById('embedInstagram');
-  
-
-  function renderCustomLinks() {
-    if (!customLinksList) return;
-
-    customLinksList.replaceChildren();
-
-    const links = (Array.isArray(currentProfile.links)
-  ? currentProfile.links
-  : []
-).filter(link =>
-  link &&
-  typeof link.title === 'string' &&
-  link.title.trim() !== '' &&
-  typeof link.url === 'string' &&
-  link.url.trim() !== ''
-);
-
-    links.forEach((link, index) => {
-      const item = document.createElement('div');
-      item.style.cssText =
-        'display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border:1px solid var(--line);border-radius:8px;';
-
-      const info = document.createElement('div');
-      info.style.cssText = 'min-width:0;flex:1;';
-
-      const titleEl = document.createElement('strong');
-      titleEl.textContent = link.title || 'Link personalizado';
-      titleEl.style.cssText =
-        'display:block;font-size:13px;overflow-wrap:anywhere;';
-
-      const urlEl = document.createElement('small');
-      urlEl.textContent = link.url || '';
-      urlEl.style.cssText =
-        'display:block;opacity:.65;font-size:11px;overflow-wrap:anywhere;';
-
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.textContent = 'Remover';
-      removeBtn.className = 'btn';
-
-      removeBtn.addEventListener('click', () => {
-        currentProfile.links.splice(index, 1);
-        renderCustomLinks();
-        updatePreview();
-        triggerAutoSave();
-      });
-
-      info.append(titleEl, urlEl);
-      item.append(info, removeBtn);
-      customLinksList.appendChild(item);
-    });
-  }
-
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
 
@@ -2126,7 +2072,6 @@ async function initEditor(userId) {
   linkColorInput.value = currentProfile.accent_color || '#a855f7';
 }
 
-renderCustomLinks();
 
   nameEffectSelect.value = currentProfile.name_effect || 'none';
   customCursorInput.value = currentProfile.custom_cursor || '';
