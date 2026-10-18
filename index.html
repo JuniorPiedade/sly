@@ -2571,7 +2571,7 @@ async function initEditor(userId) {
 
   updatePreview();
 
-  document.getElementById('saveBtn').addEventListener('click', async () => {
+ document.getElementById('saveBtn').addEventListener('click', async () => {
     clearTimeout(saveTimer);
     syncDot.classList.add('saving');
     syncText.textContent = 'Salvando...';
@@ -2594,7 +2594,7 @@ async function initEditor(userId) {
       id: userId, name: nameInput.value, handle: handleInput.value,
       bio: bioInput.value,
       avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
-      activity: activityInput.value,      status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
+      activity: activityInput.value, status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
       card_style: cardStyleSelect.value, card_align: alignVal,
       player_style: playerStyleVal,
       visual_effect: visualEffectVal,
@@ -2616,12 +2616,13 @@ async function initEditor(userId) {
     syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
     toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
   });
-  
- // Inicializa a galeria de forma assíncrona segura
+
+  // Inicializa a galeria de forma assíncrona segura
   initGalleryEditor(userId).catch(err => {
     console.error('Erro ao iniciar galeria:', err);
   });
-}
+
+} // <--- Fecho correto e único da função async function initEditor(userId)
 </script>
 <script>
 (() => {
