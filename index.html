@@ -2100,9 +2100,11 @@ function renderCustomLinks() {
 
 if (addCustomLinkBtn) {
   addCustomLinkBtn.addEventListener('click', () => {
-    const title = customLinkTitleInput?.value?.trim() || '';
-    let rawUrl = customLinkUrlInput?.value?.trim() || '';
+   const titleField = document.getElementById('customLinkTitle');
+const urlField = document.getElementById('customLinkUrl');
 
+const title = titleField?.value?.trim() || '';
+let rawUrl = urlField?.value?.trim() || '';
     if (!title || !rawUrl) {
       alert(
         'Preencha o nome e o endereço do link.\n\n' +
@@ -2150,8 +2152,8 @@ if (addCustomLinkBtn) {
       url: parsedUrl.href
     });
 
-    customLinkTitleInput.value = '';
-    customLinkUrlInput.value = '';
+    titleField.value = '';
+urlField.value = '';
 
     renderCustomLinks();
     updatePreview();
