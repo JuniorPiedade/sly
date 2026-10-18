@@ -2095,7 +2095,11 @@ if (addCustomLinkBtn) {
       return;
     }
 
-    if (currentProfile.links.length >= 3) {
+   currentProfile.links = Array.isArray(currentProfile.links)
+  ? currentProfile.links
+  : [];
+
+if (currentProfile.links.length >= 3) {
   alert('Você já atingiu o limite de 3 links personalizados.');
   return;
 }
