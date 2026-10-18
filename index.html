@@ -853,14 +853,31 @@ function getInstagramEmbed(url) {
   return '';
 }
 
+
 async function initEditor(userId) {
   let profile = null;
+
   try {
     profile = await window.islySupabase.getProfileById(userId);
-  } catch (e) {
-    console.warn("Erro ao buscar perfil real:", e);
+  } catch (error) {
+    console.error('Erro ao buscar perfil real:', error);
   }
 
+  if (!profile || !profile.id || profile.id !== userId) {
+    console.error(
+      'SLYE: perfil ausente ou incompatível com o usuário autenticado.',
+      { userId, profile }
+    );
+
+    alert(
+      'Não foi possível carregar seu perfil salvo no SLYE. ' +
+      'O editor foi interrompido para proteger seus dados.'
+    );
+
+    return;
+  }
+
+  let currentProfile = { ...profile };
 
  // --- LÓGICA DE INTEGRAÇÃO DO SPOTIFY ---
 
@@ -962,97 +979,7 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   }
 });
 
-  window.history.replaceState({}, document.title, window.location.pathname);
-  toast('Autenticando com o Spotify...');
-
-  try {
-    const currentUserId = window.currentUserId || (typeof profile !== 'undefined' ? profile.id : null);
-    
-    if (!currentUserId) {
-      throw new Error('ID do utilizador não encontrado na sessão.');
-    }
-
-    const clientSecret = '38acb3a4b6da44f483d5f4d4ea984214';
-    const credentials = btoa(SPOTIFY_CLIENT_ID + ":" + clientSecret);
-
-    const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + credentials
-      },
-      body: new URLSearchParams({
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: SPOTIFY_REDIRECT_URI
-      })
-    });
-
-    const tokenData = await tokenResponse.json();
-
-    if (tokenResponse.ok && tokenData.access_token) {
-      const expiresAt = Date.now() + (tokenData.expires_in * 1000);
-
-      // 1. Carrega dinamicamente o cliente oficial do Supabase se já não estiver carregado
-      if (!window.supabase && typeof createClient === 'undefined') {
-        await new Promise((resolve) => {
-          const script = document.createElement('script');
-          script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-          script.onload = resolve;
-          document.head.appendChild(script);
-        });
-      }
-
-      // 2. Inicializa o cliente direto
-      const SUPABASE_URL = 'https://hmnuafaihsbvzejqsakt.supabase.co';
-      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtbnVhZmFpaHNidnplanFzYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjIzODEsImV4cCI6MjEwNzIzODM4MX0.N83_jt4K0ypcls6zW8_J8tLzwFmKuGxshqMsagwszcU';
-      
-      const directSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-      // 3. Gravação direta livre de filtros
-      const { error: sbError } = await directSupabase
-        .from('profiles')
-        .update({
-          spotify_connected: true,
-          spotify_access_token: tokenData.access_token,
-          spotify_refresh_token: tokenData.refresh_token || null,
-          spotify_token_expires: expiresAt
-        })
-        .eq('id', currentUserId);
-
-      if (sbError) {
-        throw new Error("Erro direto do Supabase: " + sbError.message);
-      }
-
-      if (connectSpotifyBtn) connectSpotifyBtn.style.display = 'none';
-      if (spotifyConnectedBadge) spotifyConnectedBadge.style.display = 'inline-flex';
-      if (disconnectSpotifyBtn) disconnectSpotifyBtn.style.display = 'inline-flex';
-      toast('Spotify conectado com sucesso! ✓');
-    } else {
-      throw new Error(tokenData.error_description || JSON.stringify(tokenData) || 'Falha ao obter tokens.');
-    }
-  } catch (err) {
-    console.error("Erro ao processar callback do Spotify:", err);
-    alert("Erro detalhado: " + err.message);
-  }
-}
- 
-if (!profile) {
-  alert(
-    'Não foi possível carregar seu perfil salvo. ' +
-    'Seus dados não foram apagados. Atualize a página e tente novamente.'
-  );
-  return;
-}
-
-if (!profile) {
-  alert(
-    'O SLYE não conseguiu carregar seu perfil salvo. ' +
-    'A inicialização do editor foi interrompida para proteger seus dados.'
-  );
-  return;
-}
-  let currentProfile = { ...profile };
+  
   if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
   if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
   if (!Array.isArray(currentProfile.friendships)) currentProfile.friendships = [];
