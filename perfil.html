@@ -1309,9 +1309,27 @@ if (!fotos || fotos.length === 0) {
     }
   }
 
-  const activeTextColor = data.text_color || '#f6f4ff';
-  const bioEl = document.getElementById('bio');
-  if (bioEl) bioEl.style.color = activeTextColor;
+  
+
+const activeTextColor = data.text_color || '#f6f4ff';
+const activeLinkColor = data.accent_color || '#a855f7';
+
+const bioEl = document.getElementById('bio');
+if (bioEl) bioEl.style.color = activeTextColor;
+
+const statusBox = document.getElementById('statusBox');
+if (statusBox) statusBox.style.color = activeTextColor;
+
+const statusText = document.getElementById('statusText');
+if (statusText) statusText.style.color = activeTextColor;
+
+const emblemsEl = document.getElementById('emblems');
+if (emblemsEl) emblemsEl.style.color = activeTextColor;
+
+const profileFoot = document.querySelector('.profile-foot');
+if (profileFoot) profileFoot.style.color = activeTextColor;
+
+
 
   const handleEl = document.getElementById('handle');
   if (handleEl) handleEl.style.color = activeTextColor;
