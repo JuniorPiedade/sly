@@ -571,6 +571,12 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
      </select>
     </label>
     <label class="field">
+  <span>🖱️ Efeito de Perspectiva 3D</span>
+  <select id="perspectiveEffectSelect">
+    <option value="on">Ativado</option>
+    <option value="off">Desativado</option>
+  </select>
+</label>
      <span>🗂️ Estilo do Mural de Recados (Guestbook)</span>
      <select id="guestbookStyleSelect">
       <option value="vintage">Vintage (Pedaço de Papel Envelhecido)</option>
@@ -1009,6 +1015,7 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   const shareUrlInput = document.getElementById('shareUrl');
 
   const cardStyleSelect = document.getElementById('cardStyle');
+  const perspectiveEffectSelect = document.getElementById('perspectiveEffectSelect');
   const profileAlignSelect = document.getElementById('profileAlignSelect');
   const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
   const playerStyleSelect = document.getElementById('playerStyleSelect');
@@ -1046,7 +1053,15 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   activityInput.value = currentProfile.activity || '';
 
   cardStyleSelect.value = currentProfile.card_style || 'opaque';
-  if (profileAlignSelect) profileAlignSelect.value = currentProfile.card_align || 'left';
+
+if (perspectiveEffectSelect) {
+  perspectiveEffectSelect.value =
+    currentProfile.perspective_effect === 'off' ? 'off' : 'on';
+}
+
+if (profileAlignSelect) {
+  profileAlignSelect.value = currentProfile.card_align || 'left';
+}
   guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
   if (playerStyleSelect) playerStyleSelect.value = currentProfile.player_style || 'default';
   if (visualEffectSelect) visualEffectSelect.value = currentProfile.visual_effect || 'none';
@@ -1078,20 +1093,53 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
     shareUrlInput.value = `${window.location.origin}/sly-${currentProfile.handle}`;
   }
 
-  const previewCard = document.getElementById('profileCard');
   previewCard.addEventListener('mousemove', (e) => {
-    const rect = previewCard.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const xc = rect.width / 2;
-    const yc = rect.height / 2;
-    const dx = (x - xc) / xc;
-    const dy = (y - yc) / yc;
-    previewCard.style.transform = `perspective(1200px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) translateY(-2px)`;
-  });
-  previewCard.addEventListener('mouseleave', () => {
-    previewCard.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
-  });
+  if (perspectiveEffectSelect?.value === 'off') {
+    previewCard.style.transform = 'none';
+    return;
+  }
+
+  const rect = previewCard.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const xc = rect.width / 2;
+  const yc = rect.height / 2;
+  const dx = (x - xc) / xc;
+  const dy = (y - yc) / yc;
+
+  previewCard.style.transform =
+    `perspective(1200px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) translateY(-2px)`;
+});
+
+  
+  const previewCard = document.getElementById('profileCard');
+
+  if (previewCard) {
+    previewCard.addEventListener('mousemove', (e) => {
+      if (perspectiveEffectSelect?.value === 'off') {
+        previewCard.style.transform = 'none';
+        return;
+      }
+
+      const rect = previewCard.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xc = rect.width / 2;
+      const yc = rect.height / 2;
+      const dx = (x - xc) / xc;
+      const dy = (y - yc) / yc;
+
+      previewCard.style.transform =
+        `perspective(1200px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) translateY(-2px)`;
+    });
+
+    previewCard.addEventListener('mouseleave', () => {
+      previewCard.style.transform =
+        perspectiveEffectSelect?.value === 'off'
+          ? 'none'
+          : 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+    });
+  }
 
   document.getElementById('avatarFile')?.addEventListener('change', async (e) => {
     const file = e.target.files[0];
@@ -1148,6 +1196,16 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   });
 
   visualEffectSelect?.addEventListener('change', () => {
+    perspectiveEffectSelect?.addEventListener('change', () => {
+  currentProfile.perspective_effect = perspectiveEffectSelect.value;
+
+  if (perspectiveEffectSelect.value === 'off') {
+    previewCard.style.transform = 'none';
+  }
+
+  updatePreview();
+  triggerAutoSave();
+});
     const val = visualEffectSelect.value;
     currentProfile.visual_effect = val;
     initVisualEffect(val);
@@ -1168,17 +1226,19 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
         });
       }
 
-      const soundtrackVal = soundtrackUrlInput.value.trim();
       const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
-      const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
-      const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
+const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
+const perspectiveEffectVal = perspectiveEffectSelect
+  ? perspectiveEffectSelect.value
+  : 'on';
+const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
 
       const payload = {
         id: userId, name: nameInput.value, handle: handleInput.value,
         bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
         status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
         card_style: cardStyleSelect.value, card_align: alignVal, guestbook_style: guestbookStyleSelect.value,
-        player_style: playerStyleVal, visual_effect: visualEffectVal,
+        player_style: playerStyleVal, visual_effect: visualEffectVal, perspective_effect: perspectiveEffectVal,
         bg_color: bgColorInput.value, card_bg: cardBgInput.value,
         accent_color: textColorInput.value, title_color: titleColorInput.value, text_color: textColorInput.value,
         name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
@@ -1239,7 +1299,7 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
     });
   }
 
-  [cardStyleSelect, profileAlignSelect, guestbookStyleSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+  [cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, guestbookStyleSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
     if (input) {
       input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
       input.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
@@ -1413,15 +1473,20 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
 
     const soundtrackVal = soundtrackUrlInput.value.trim();
     const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
-    const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
-    const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
+const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
+const perspectiveEffectVal = perspectiveEffectSelect
+  ? perspectiveEffectSelect.value
+  : 'on';
+const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
 
     const payload = {
       id: userId, name: nameInput.value, handle: handleInput.value,
       bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
       status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
       card_style: cardStyleSelect.value, card_align: alignVal, guestbook_style: guestbookStyleSelect.value,
-      player_style: playerStyleVal, visual_effect: visualEffectVal,
+      player_style: playerStyleVal,
+visual_effect: visualEffectVal,
+perspective_effect: perspectiveEffectVal,
       bg_color: bgColorInput.value, card_bg: cardBgInput.value,
       accent_color: textColorInput.value, title_color: titleColorInput.value, text_color: textColorInput.value,
       name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
