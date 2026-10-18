@@ -1125,6 +1125,11 @@ a.brand > span:last-child .dot {
     </label>
     <label class="field"><span>Bio curta (máx. 240 caracteres)</span><textarea id="bio" maxlength="240" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/240</small></label>
     <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
+     <label class="field"><span>Formato da foto de perfil</span><select id="avatarShapeSelect"><option value="rounded">Padrão — Cantos arredondados</option>
+    <option value="circle">Circular</option>
+  </select>
+  <small>Escolha o formato da foto, sem adicionar moldura.</small>
+</label>
     <label class="field">
      <span>Wallpaper do cartão (Upload)</span>
      <div style="display: flex; gap: 8px; align-items: center;">
@@ -1702,6 +1707,7 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   const bioInput = document.getElementById('bio');
   const bioCount = document.getElementById('bioCount');
   const avatarFrameSelect = document.getElementById('avatarFrameSelect');
+  const avatarShapeSelect = document.getElementById('avatarShapeSelect');
   const activityInput = document.getElementById('activity');
   const shareUrlInput = document.getElementById('shareUrl');
 
@@ -1740,6 +1746,9 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   bioInput.value = currentProfile.bio || '';
   bioCount.textContent = (currentProfile.bio || '').length;
   avatarFrameSelect.value = currentProfile.avatar_frame || 'none';
+  if (avatarShapeSelect) {
+  avatarShapeSelect.value = currentProfile.avatar_shape || 'rounded';
+}
   activityInput.value = currentProfile.activity || '';
 
   cardStyleSelect.value = currentProfile.card_style || 'opaque';
@@ -1972,7 +1981,7 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
     });
   }
 
-[cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+[cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, avatarShapeSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
   if (input) {
       input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
       input.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
@@ -2032,6 +2041,18 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
     const avatarVal = avatarUrlInput.value.trim();
     if (avatarVal) avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
     else avatarEl.textContent = '⌬';
+    const avatarShape = avatarShapeSelect?.value || 'rounded';
+
+avatarEl.classList.remove(
+  'avatar-shape-rounded',
+  'avatar-shape-circle'
+);
+
+avatarEl.classList.add(
+  avatarShape === 'circle'
+    ? 'avatar-shape-circle'
+    : 'avatar-shape-rounded'
+);
 
     const frameEl = document.getElementById('previewFrame');
     const frameType = avatarFrameSelect ? avatarFrameSelect.value : 'none';
@@ -2154,8 +2175,10 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
 
     const payload = {
       id: userId, name: nameInput.value, handle: handleInput.value,
-      bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
-      status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
+bio: bioInput.value,
+avatar_frame: avatarFrameSelect.value,
+avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
+activity: activityInput.value,      status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
       card_style: cardStyleSelect.value, card_align: alignVal,
       player_style: playerStyleVal,
 visual_effect: visualEffectVal,
