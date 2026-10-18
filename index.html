@@ -2112,6 +2112,12 @@ async function initEditor(userId) {
 
   if (addCustomLinkBtn) {
     addCustomLinkBtn.addEventListener('click', () => {
+      console.log('[SLYE DEBUG] Clique recebido', {
+  titleDireto: document.getElementById('customLinkTitle')?.value,
+  urlDireta: document.getElementById('customLinkUrl')?.value,
+  titleInputMesmo: customLinkTitleInput?.value,
+  urlInputMesmo: customLinkUrlInput?.value
+});
       const titleInput = document.getElementById('customLinkTitle');
 const urlInput = document.getElementById('customLinkUrl');
 
