@@ -2087,8 +2087,11 @@ function renderCustomLinks() {
 
 if (addCustomLinkBtn) {
   addCustomLinkBtn.addEventListener('click', () => {
-    const title = customLinkTitleInput.value.trim();
-    let rawUrl = customLinkUrlInput.value.trim();
+   const titleField = document.getElementById('customLinkTitle');
+const urlField = document.getElementById('customLinkUrl');
+
+const title = titleField ? titleField.value.trim() : '';
+let rawUrl = urlField ? urlField.value.trim() : '';
 
     
 if (!title || !rawUrl) {
@@ -2099,7 +2102,6 @@ if (!title || !rawUrl) {
   );
   return;
 }
-
 
    currentProfile.links = Array.isArray(currentProfile.links)
   ? currentProfile.links
