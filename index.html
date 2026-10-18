@@ -1262,7 +1262,9 @@ a.brand > span:last-child .dot {
       <button type="button" id="addCustomLinkBtn" class="btn primary" style="margin-top: 10px;">
         + Adicionar link
       </button>
-
+<small style="display:block; margin-top:6px; font-size:11px; opacity:0.65;">
+  Você pode adicionar até 3 links personalizados.
+</small>
       <div id="customLinksList" style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;"></div>
     </div>
    </section>
@@ -2094,9 +2096,9 @@ if (addCustomLinkBtn) {
     }
 
     if (currentProfile.links.length >= 3) {
-      alert('Você pode adicionar até 3 links personalizados.');
-      return;
-    }
+  alert('Você já atingiu o limite de 3 links personalizados.');
+  return;
+}
 
     if (!/^https?:\/\//i.test(rawUrl)) {
       rawUrl = 'https://' + rawUrl;
