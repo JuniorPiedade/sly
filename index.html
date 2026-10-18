@@ -2330,7 +2330,7 @@ async function initEditor(userId) {
       syncDot.classList.remove('saving');
       syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
     });
-    
+    }
   document.querySelectorAll('.sidebar .navbtn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sidebar .navbtn').forEach(b => b.classList.remove('active'));
