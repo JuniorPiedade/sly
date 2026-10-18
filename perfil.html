@@ -932,6 +932,7 @@ const socialLogos = {
   valorant: 'assets/logos/valorant.png'
 };
 
+
 function getSpotifyEmbed(url) {
   if (!url) return '';
 
@@ -965,7 +966,6 @@ function getYoutubeEmbed(url) {
 
   return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="200" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
 }
-
   function getInstagramEmbed(url) {
   if (!url) return '';
   const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
