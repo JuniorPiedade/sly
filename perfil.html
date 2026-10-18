@@ -264,7 +264,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   width: 100% !important;
   height: 100% !important;
   border-radius: 20px;
-  background: linear-gradient(145deg, #8b5cf6, #4c1d95);
+  background: transparent;
   overflow: hidden;
   position: relative;
   z-index: 1;
@@ -937,17 +937,16 @@ function getSpotifyEmbed(url) {
   const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
   if (match) {
     return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
-  }
+
+  
   return '';
 }
 
 function getYoutubeEmbed(url) {
   if (!url) return '';
   let id = '';
-  if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
-  else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
-  if (id) {
-    return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+  if (url.in
+      ncrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
   }
   return '';
 }
