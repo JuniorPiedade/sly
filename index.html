@@ -314,6 +314,230 @@ footer{border-top:1px solid #ffffff12;color:#8e849f;padding:26px 0;font-size:11p
   .two,.social-grid{grid-template-columns:1fr}
   .analytics-grid{grid-template-columns:1fr}
 }
+  
+/* ==========================================
+   SLYE — EDITOR PREMIUM MINIMALISTA
+   Apenas visual: sem alterar a lógica do app
+   ========================================== */
+
+:root {
+  --bg: #000000;
+  --panel: #09090d;
+  --panel2: #101014;
+  --line: #27272f;
+  --text: #f5f5f7;
+  --muted: #a1a1aa;
+  --purple: #a78bfa;
+  --blue: #d4d4d8;
+  --pink: #e4e4e7;
+  --green: #d4d4d8;
+}
+
+body {
+  background-color: #000;
+  color: #f5f5f7;
+}
+
+.topbar {
+  border-bottom: 1px solid #202024;
+}
+
+.brand {
+  color: #fff;
+  letter-spacing: -0.7px;
+}
+
+.brand-mark {
+  background: #0b0b0f;
+  color: #fff;
+  border: 1px solid #373740;
+  box-shadow: 0 0 14px rgba(255,255,255,0.035);
+}
+
+.dot,
+.eyebrow {
+  color: #c4b5fd;
+}
+
+.sidebar,
+.panel {
+  background: #08080b;
+  border: 1px solid #25252c;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
+
+.sidebar {
+  border-radius: 16px;
+}
+
+.panel {
+  border-radius: 16px;
+}
+
+.navbtn {
+  color: #a1a1aa;
+  border: 1px solid transparent;
+  transition: background .2s ease,
+              color .2s ease,
+              border-color .2s ease;
+}
+
+.navbtn:hover {
+  color: #fff;
+  background: #111114;
+  border-color: #292930;
+}
+
+.navbtn.active {
+  color: #fff;
+  background: #141419;
+  border-color: #45404f;
+  box-shadow: inset 2px 0 0 #c4b5fd;
+}
+
+.heading h1,
+.panel h2,
+.panel h3 {
+  color: #fff;
+  letter-spacing: -0.4px;
+}
+
+.heading p,
+.panel-head p {
+  color: #a1a1aa;
+}
+
+.panel-head {
+  border-bottom-color: #24242b;
+}
+
+.pill,
+.sync-badge {
+  background: #0c0c10;
+  color: #e4e4e7;
+  border: 1px solid #303038;
+}
+
+.btn {
+  background: #0c0c10;
+  color: #f4f4f5;
+  border: 1px solid #34343d;
+  border-radius: 10px;
+  transition: background .2s ease,
+              border-color .2s ease,
+              box-shadow .2s ease,
+              transform .2s ease;
+}
+
+.btn:hover {
+  background: #17171d;
+  border-color: #66616f;
+  box-shadow: 0 0 14px rgba(255,255,255,0.045);
+}
+
+.btn.primary {
+  background: #f4f4f5;
+  color: #09090b;
+  border-color: #f4f4f5;
+  font-weight: 700;
+}
+
+.btn.primary:hover {
+  background: #fff;
+  border-color: #fff;
+  box-shadow: 0 0 18px rgba(255,255,255,0.12);
+}
+
+.stat-card {
+  background: #08080b;
+  border: 1px solid #24242b;
+  box-shadow: none;
+}
+
+.stat-icon {
+  background: #121217;
+  border: 1px solid #292930;
+}
+
+.field > span,
+.field label {
+  color: #e4e4e7;
+}
+
+input,
+select,
+textarea {
+  background-color: #050507;
+  color: #f5f5f7;
+  border-color: #303038;
+  border-radius: 10px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #666670;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #a78bfa;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(167,139,250,0.09);
+}
+
+.choice,
+.emblem {
+  background: #09090d;
+  border: 1px solid #292930;
+  transition: background .2s ease,
+              border-color .2s ease,
+              box-shadow .2s ease;
+}
+
+.choice:hover,
+.emblem:hover {
+  background: #131318;
+  border-color: #55515f;
+}
+
+.choice.active,
+.emblem.selected {
+  background: #17131f;
+  border-color: #a78bfa;
+  box-shadow: 0 0 12px rgba(167,139,250,0.08);
+}
+
+.preview-label,
+.share label {
+  color: #e4e4e7;
+}
+
+.share-row input {
+  background: #070709;
+}
+
+footer {
+  color: #777780;
+  border-top: 1px solid #202024;
+}
+
+.toast {
+  border: 1px solid #3b3547;
+  background: #101014;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .navbtn,
+  .choice,
+  .emblem {
+    transition: none;
+  }
+}
+
 </style>
 
 <script src="js/redes-sociais.js"></script>
