@@ -2083,12 +2083,22 @@ function renderCustomLinks() {
 }
 
 if (addCustomLinkBtn) {
-  addCustomLinkBtn.addEventListener('click', () => {
-  const title = document.getElementById('customLinkTitle')?.value.trim() || '';
+
+const title = document.getElementById('customLinkTitle')?.value.trim() || '';
 let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
 
+console.log('Teste dos links personalizados:', {
+  titulo: title,
+  endereco: rawUrl
+});
+
 if (!title || !rawUrl) {
-  alert('Preencha o nome e o endereço do link.');
+  alert(
+    'Campo lido vazio. Título: ' +
+    JSON.stringify(title) +
+    ' | Endereço: ' +
+    JSON.stringify(rawUrl)
+  );
   return;
 }
 
