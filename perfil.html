@@ -1112,20 +1112,135 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
     return;
   }
+ 
+  // --- GALERIA PÚBLICA SLYE ---
+  const galleryTrigger = document.getElementById('profile-gallery-trigger');
+  const galleryPanel = document.getElementById('profile-gallery-panel');
+  const galleryGrid = document.getElementById('profile-gallery-grid');
+  const galleryStatus = document.getElementById('profile-gallery-status');
 
+  if (galleryTrigger && galleryPanel && galleryGrid && galleryStatus) {
+    const sb = window.islySupabase?.client;
+
+    galleryTrigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      const abrir = galleryPanel.hidden;
+      galleryPanel.hidden = !abrir;
+      galleryTrigger.setAttribute('aria-expanded', String(abrir));
+    });
+
+    try {
+      if (!sb) throw new Error('Supabase indisponível.');
+
+      galleryStatus.textContent = 'Carregando fotos...';
+
+      const { data: fotos, error } = await sb
+        .from('profile_gallery_photos')
+        .select('id, storage_path, caption, created_at')
+        .eq('profile_id', data.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      galleryGrid.replaceChildren();
+
+      if (!fotos || fotos.length === 0) {
+        galleryStatus.textContent = 'Esta galeria ainda não tem fotos.';
+      } else {
+        galleryStatus.textContent = '';
+
+        fotos.forEach((foto, index) => {
+          const url = window.islySupabase.getPublicUrl(foto.storage_path);
+
+          const item = document.createElement('button');
+          item.type = 'button';
+          item.className = 'profile-gallery-photo';
+          item.setAttribute('aria-label', foto.caption || `Ampliar foto ${index + 1}`);
+
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = foto.caption || `Foto ${index + 1}`;
+          img.loading = 'lazy';
+
+          img.addEventListener('error', () => {
+            img.alt = 'Não foi possível carregar esta foto';
+            item.classList.add('gallery-image-error');
+          });
+
+          item.appendChild(img);
+
+          if (foto.caption && foto.caption.trim()) {
+            const legenda = document.createElement('span');
+            legenda.className = 'profile-gallery-caption';
+            legenda.textContent = foto.caption;
+            item.appendChild(legenda);
+          }
+
+          item.addEventListener('click', () => {
+            const lightbox = document.createElement('div');
+            lightbox.className = 'profile-gallery-lightbox';
+            lightbox.setAttribute('role', 'dialog');
+            lightbox.setAttribute('aria-modal', 'true');
+
+            const imagemGrande = document.createElement('img');
+            imagemGrande.src = url;
+            imagemGrande.alt = img.alt;
+
+            const fechar = document.createElement('button');
+            fechar.type = 'button';
+            fechar.className = 'profile-gallery-lightbox-close';
+            fechar.textContent = '×';
+            fechar.setAttribute('aria-label', 'Fechar foto');
+
+            const fecharLightbox = () => {
+              lightbox.remove();
+              document.removeEventListener('keydown', escape);
+            };
+
+            const escape = (e) => {
+              if (e.key === 'Escape') fecharLightbox();
+            };
+
+            fechar.addEventListener('click', fecharLightbox);
+
+            lightbox.addEventListener('click', (e) => {
+              if (e.target === lightbox) fecharLightbox();
+            });
+
+            document.addEventListener('keydown', escape);
+            lightbox.append(fechar, imagemGrande);
+            document.body.appendChild(lightbox);
+            fechar.focus();
+          });
+
+          galleryGrid.appendChild(item);
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao carregar galeria pública:', error);
+      galleryGrid.replaceChildren();
+      galleryStatus.textContent = 'Não foi possível carregar a galeria.';
+    }
+  }
+
+  // --- CONTADOR DE VISUALIZAÇÕES ---
   let currentViews = (data.views_count || 0) + 1;
   document.getElementById('publicViewsCount').textContent = currentViews;
+
   try {
-    await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
+    await window.islySupabase.saveProfile({
+      id: data.id,
+      views_count: currentViews
+    });
   } catch (e) {
     console.warn("Analytics Error:", e);
   }
 
+  // --- CONTADOR DE HYPE ---
   const hypeCountEl = document.getElementById('hypeCount');
   if (hypeCountEl) {
     hypeCountEl.textContent = data.hypes || 0;
   }
-
   const card = document.getElementById('profileCard');
   if (card) {
     const alignment = data.card_align || 'left';
