@@ -1030,7 +1030,7 @@ if (!rawHandle || !window.islySupabase) {
 
 const handle = decodeURIComponent(rawHandle).trim().replace(/^@/, '');
 const data = await window.islySupabase.getProfileByHandle(handle);
-
+console.log('[SLYE DEBUG] Perfil carregado:', data?.handle, data?.name);
 if (!data) {
   document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
   return;
@@ -1719,7 +1719,6 @@ if (data.avatar_url) {
 })();
 </script>
 <style>
-  
 /* ... CSS original do seu perfil permanece aqui ... */
 
 #profile-gallery-trigger {
