@@ -2085,32 +2085,25 @@ function renderCustomLinks() {
   });
 }
 
+
 if (addCustomLinkBtn) {
   addCustomLinkBtn.addEventListener('click', () => {
-   const titleField = document.getElementById('customLinkTitle');
-const urlField = document.getElementById('customLinkUrl');
+    const title = customLinkTitleInput?.value.trim() || '';
+    let rawUrl = customLinkUrlInput?.value.trim() || '';
 
-const title = titleField ? titleField.value.trim() : '';
-let rawUrl = urlField ? urlField.value.trim() : '';
+    if (!title || !rawUrl) {
+      alert('Preencha o nome e o endereço do link.');
+      return;
+    }
 
-    
-if (!title || !rawUrl) {
-  alert(
-    'Leitura dos campos:\n' +
-    'Nome: ' + JSON.stringify(title) + '\n' +
-    'Endereço: ' + JSON.stringify(rawUrl)
-  );
-  return;
-}
+    if (!Array.isArray(currentProfile.links)) {
+      currentProfile.links = [];
+    }
 
-   currentProfile.links = Array.isArray(currentProfile.links)
-  ? currentProfile.links
-  : [];
-
-if (currentProfile.links.length >= 3) {
-  alert('Você já atingiu o limite de 3 links personalizados.');
-  return;
-}
+    if (currentProfile.links.length >= 3) {
+      alert('Você já atingiu o limite de 3 links personalizados.');
+      return;
+    }
 
     if (!/^https?:\/\//i.test(rawUrl)) {
       rawUrl = 'https://' + rawUrl;
@@ -2125,8 +2118,10 @@ if (currentProfile.links.length >= 3) {
       return;
     }
 
-    if (!['http:', 'https:'].includes(parsedUrl.protocol) ||
-        !parsedUrl.hostname.includes('.')) {
+    if (
+      !['http:', 'https:'].includes(parsedUrl.protocol) ||
+      !parsedUrl.hostname.includes('.')
+    ) {
       alert('Digite um endereço válido, como https://youtube.com.');
       return;
     }
