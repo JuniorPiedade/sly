@@ -2122,14 +2122,23 @@ if (avatarImg) {
 }
 
     const frameEl = document.getElementById('previewFrame');
-    const frameType = avatarFrameSelect ? avatarFrameSelect.value : 'none';
-    if (frameEl) {
-      frameEl.className = 'avatar-frame';
-      if (frameType === 'neon-white') { frameEl.classList.add('frame-neon-white'); frameEl.style.display = 'block'; }
-      else if (frameType === 'vip') { frameEl.classList.add('frame-vip'); frameEl.style.display = 'block'; }
-      else frameEl.style.display = 'none';
-    }
+const frameType = avatarFrameSelect?.value || 'none';
 
+if (frameEl) {
+  // Limpa classes e estilos anteriores
+  frameEl.className = 'avatar-frame';
+  frameEl.style.removeProperty('display');
+
+  if (frameType === 'neon-white') {
+    frameEl.classList.add('frame-neon-white');
+    frameEl.style.display = 'block';
+  } else if (frameType === 'vip') {
+    frameEl.classList.add('frame-vip');
+    frameEl.style.display = 'block';
+  } else {
+    frameEl.style.display = 'none';
+  }
+}
     document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
     document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
 
