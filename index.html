@@ -1045,7 +1045,13 @@ if (!profile) {
   return;
 }
 
-
+if (!profile) {
+  alert(
+    'O SLYE não conseguiu carregar seu perfil salvo. ' +
+    'A inicialização do editor foi interrompida para proteger seus dados.'
+  );
+  return;
+}
   let currentProfile = { ...profile };
   if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
   if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
