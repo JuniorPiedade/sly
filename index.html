@@ -2327,13 +2327,21 @@ activity: activityInput.value,
         status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
         card_style: cardStyleSelect.value, card_align: alignVal,
         player_style: playerStyleVal, visual_effect: visualEffectVal, perspective_effect: perspectiveEffectVal,
-        bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-        accent_color: linkColorInput ? linkColorInput.value : '#a855f7', title_color: titleColorInput.value, text_color: textColorInput.value, linkColorInput
-        name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
+       
+bg_color: bgColorInput.value,
+card_bg: cardBgInput.value,
+accent_color: linkColorInput ? linkColorInput.value : '#a855f7',
+title_color: titleColorInput.value,
+text_color: textColorInput.value,
+name_effect: nameEffectSelect.value,
+custom_cursor: customCursorInput.value,
+
         avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
         soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
         embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
-        emblems: currentProfile.emblems, socials: socialsData, links: [],
+        emblems: currentProfile.emblems,
+socials: socialsData,
+links: Array.isArray(currentProfile.links) ? currentProfile.links : [],
         friendships: currentProfile.friendships, handle_changed: currentProfile.handle_changed
       };
 
