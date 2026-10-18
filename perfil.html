@@ -770,6 +770,24 @@ body {
   <div id="profile-gallery-grid" class="profile-gallery-grid"></div>
   <p id="profile-gallery-status" class="profile-gallery-status"></p>
 </div>
+<svg
+    viewBox="0 0 24 24"
+    width="13"
+    height="13"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3" y="3" width="18" height="18" rx="4"/>
+    <circle cx="8.5" cy="8.5" r="1.5"/>
+    <path d="m21 15-5-5L5 21"/>
+  </svg>
+  <span>GALERIA</span>
+</button>
+
       <!-- Seção de Amigos Próximos / Friendships -->
       <div class="preview-friendships-wrapper" id="publicFriendshipsWrapper" style="display: none;">
         <div class="preview-friendships-title">AMIGOS PRÓXIMOS</div>
@@ -1011,30 +1029,27 @@ let isYtPlaying = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
-  
-let rawHandle = urlParams.get('u') || urlParams.get('user');
+  let rawHandle = urlParams.get('u') || urlParams.get('user');
 
-if (!rawHandle) {
-  const pathname = window.location.pathname;
-
-  if (pathname.startsWith('/sly-')) {
-    rawHandle = pathname.slice('/sly-'.length);
+  if (!rawHandle) {
+    const pathSegments = window.location.pathname.split('-');
+    if (pathSegments.length > 1 && window.location.pathname.startsWith('/sly-')) {
+      rawHandle = pathSegments[pathSegments.length - 1];
+    }
   }
-}
 
-if (!rawHandle || !window.islySupabase) {
-  document.querySelector('.container').innerHTML =
-    '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
-  return;
-}
+  if (!rawHandle || !window.islySupabase) {
+    document.querySelector('.container').innerHTML = '<div class="error-box"><h2>Perfil não especificado.</h2><p>Verifique o endereço acessado.</p></div>';
+    return;
+  }
 
-const handle = decodeURIComponent(rawHandle).trim().replace(/^@/, '');
-const data = await window.islySupabase.getProfileByHandle(handle);
-console.log('[SLYE DEBUG] Perfil carregado:', data?.handle, data?.name);
-if (!data) {
-  document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
-  return;
-}
+  const handle = rawHandle.trim().replace(/^@/, '');
+  const data = await window.islySupabase.getProfileByHandle(handle);
+
+  if (!data) {
+    document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
+    return;
+  }
 
   // --- SPOTIFY RICH PRESENCE: PERFIL PÚBLICO ---
   (() => {
@@ -1115,144 +1130,20 @@ if (!data) {
     `;
     return;
   }
-   // --- GALERIA PÚBLICA SLYE ---
-  const galleryTrigger = document.getElementById('profile-gallery-trigger');
-  const galleryPanel = document.getElementById('profile-gallery-panel');
-  const galleryGrid = document.getElementById('profile-gallery-grid');
-  const galleryStatus = document.getElementById('profile-gallery-status');
-  
-  if (galleryTrigger) {
-    galleryTrigger.hidden = true;
-  }
 
-
-  if (galleryTrigger && galleryPanel && galleryGrid && galleryStatus) {
-    const sb = window.islySupabase?.client;
-
-    galleryTrigger.addEventListener('click', (event) => {
-      event.preventDefault();
-      const abrir = galleryPanel.hidden;
-      galleryPanel.hidden = !abrir;
-      galleryTrigger.setAttribute('aria-expanded', String(abrir));
-    });
-
-    try {
-      if (!sb) throw new Error('Supabase indisponível.');
-
-      galleryStatus.textContent = 'Carregando fotos...';
-
-      const { data: fotos, error } = await sb
-        .from('profile_gallery_photos')
-        .select('id, storage_path, caption, created_at')
-        .eq('profile_id', data.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      galleryGrid.replaceChildren();
-
-      
-if (!fotos || fotos.length === 0) {
-  galleryTrigger.hidden = true;
-  galleryPanel.hidden = true;
-  galleryStatus.textContent = '';
-} else {
-  galleryTrigger.hidden = false;
-  galleryStatus.textContent = '';
-
-
-        fotos.forEach((foto, index) => {
-          const url = window.islySupabase.getPublicUrl(foto.storage_path);
-
-          const item = document.createElement('button');
-          item.type = 'button';
-          item.className = 'profile-gallery-photo';
-          item.setAttribute('aria-label', foto.caption || `Ampliar foto ${index + 1}`);
-
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = foto.caption || `Foto ${index + 1}`;
-          img.loading = 'lazy';
-
-          img.addEventListener('error', () => {
-            img.alt = 'Não foi possível carregar esta foto';
-            item.classList.add('gallery-image-error');
-          });
-
-          item.appendChild(img);
-
-          if (foto.caption && foto.caption.trim()) {
-            const legenda = document.createElement('span');
-            legenda.className = 'profile-gallery-caption';
-            legenda.textContent = foto.caption;
-            item.appendChild(legenda);
-          }
-
-          item.addEventListener('click', () => {
-            const lightbox = document.createElement('div');
-            lightbox.className = 'profile-gallery-lightbox';
-            lightbox.setAttribute('role', 'dialog');
-            lightbox.setAttribute('aria-modal', 'true');
-
-            const imagemGrande = document.createElement('img');
-            imagemGrande.src = url;
-            imagemGrande.alt = img.alt;
-
-            const fechar = document.createElement('button');
-            fechar.type = 'button';
-            fechar.className = 'profile-gallery-lightbox-close';
-            fechar.textContent = '×';
-            fechar.setAttribute('aria-label', 'Fechar foto');
-
-            const fecharLightbox = () => {
-              lightbox.remove();
-              document.removeEventListener('keydown', escape);
-            };
-
-            const escape = (e) => {
-              if (e.key === 'Escape') fecharLightbox();
-            };
-
-            fechar.addEventListener('click', fecharLightbox);
-
-            lightbox.addEventListener('click', (e) => {
-              if (e.target === lightbox) fecharLightbox();
-            });
-
-            document.addEventListener('keydown', escape);
-            lightbox.append(fechar, imagemGrande);
-            document.body.appendChild(lightbox);
-            fechar.focus();
-          });
-
-          galleryGrid.appendChild(item);
-        });
-      }
-    } catch (error) {
-      console.error('Erro ao carregar galeria pública:', error);
-      galleryGrid.replaceChildren();
-      galleryStatus.textContent = 'Não foi possível carregar a galeria.';
-    }
-  }
-
-  // --- CONTADOR DE VISUALIZAÇÕES ---
   let currentViews = (data.views_count || 0) + 1;
   document.getElementById('publicViewsCount').textContent = currentViews;
-
   try {
-    await window.islySupabase.saveProfile({
-      id: data.id,
-      views_count: currentViews
-    });
+    await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
   } catch (e) {
     console.warn("Analytics Error:", e);
   }
 
-  // --- CONTADOR DE HYPE ---
   const hypeCountEl = document.getElementById('hypeCount');
   if (hypeCountEl) {
     hypeCountEl.textContent = data.hypes || 0;
   }
+
   const card = document.getElementById('profileCard');
   if (card) {
     const alignment = data.card_align || 'left';
@@ -1311,27 +1202,9 @@ if (!fotos || fotos.length === 0) {
     }
   }
 
-  
-
-const activeTextColor = data.text_color || '#f6f4ff';
-const activeLinkColor = data.accent_color || '#a855f7';
-
-const bioEl = document.getElementById('bio');
-if (bioEl) bioEl.style.color = activeTextColor;
-
-const statusBox = document.getElementById('statusBox');
-if (statusBox) statusBox.style.color = activeTextColor;
-
-const statusText = document.getElementById('statusText');
-if (statusText) statusText.style.color = activeTextColor;
-
-const emblemsEl = document.getElementById('emblems');
-if (emblemsEl) emblemsEl.style.color = activeTextColor;
-
-const profileFoot = document.querySelector('.profile-foot');
-if (profileFoot) profileFoot.style.color = activeTextColor;
-
-
+  const activeTextColor = data.text_color || '#f6f4ff';
+  const bioEl = document.getElementById('bio');
+  if (bioEl) bioEl.style.color = activeTextColor;
 
   const handleEl = document.getElementById('handle');
   if (handleEl) handleEl.style.color = activeTextColor;
@@ -1688,7 +1561,7 @@ if (data.avatar_url) {
     Object.assign(terminal.style, { width: "100%", maxWidth: "760px" });
     const cabecalho = document.createElement("div");
     cabecalho.textContent = "SLY.ME // ACESSO OBSERVADO";
-    Object.assign(cabecalho.style, { color: "#238c48", fontSize: "12px", letterSpacing: "2px", marginBottom: "32px" });
+    Object.assign(cabecalnoStyle = { color: "#238c48", fontSize: "12px", letterSpacing: "2px", marginBottom: "32px" });
     const texto = document.createElement("div");
     Object.assign(texto.style, { fontSize: "clamp(19px, 4vw, 30px)", lineHeight: "1.6", overflowWrap: "anywhere", textShadow: "0 0 12px #00ff5944" });
     const assinaturaEl = document.createElement("div");
@@ -1710,11 +1583,16 @@ if (data.avatar_url) {
     digitar();
   }
 
-// Proteção de clique direito temporariamente desativada para diagnóstico.
-// Gatilho de teclado temporariamente desativado para diagnóstico.
+  document.addEventListener("contextmenu", (e) => { e.preventDefault(); mostrarTelaHacker(); }, true);
+  document.addEventListener("keydown", (e) => {
+    const tecla = e.key.toLowerCase();
+    const atalho = e.key === "F12" || (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(tecla)) || (e.ctrlKey && tecla === "u");
+    if (atalho) { e.preventDefault(); e.stopImmediatePropagation(); mostrarTelaHacker(); }
+  }, true);
 })();
 </script>
 <style>
+  
 /* ... CSS original do seu perfil permanece aqui ... */
 
 #profile-gallery-trigger {
@@ -1829,32 +1707,18 @@ if (data.avatar_url) {
   border-radius: 10px;
 }
 
-
-
 .profile-gallery-lightbox-close {
   position: absolute;
-  top: 14px;
+  top: 16px;
   right: 18px;
   width: 38px;
   height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  color: rgba(255, 255, 255, .8);
-  font-size: 32px;
-  font-weight: 300;
-  line-height: 1;
-  cursor: pointer;
-  transition: color .2s ease, transform .2s ease;
-}
-
-.profile-gallery-lightbox-close:hover {
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 50%;
+  background: #17172a;
   color: #fff;
-  transform: scale(1.12);
+  font-size: 26px;
+  cursor: pointer;
 }
 
 @media (max-width: 380px) {
@@ -1862,11 +1726,6 @@ if (data.avatar_url) {
     gap: 5px;
   }
 }
-  
-#profile-gallery-trigger[hidden] {
-  display: none !important;
-}
-
 </style>
-</body>
+  </body>
 </html>
