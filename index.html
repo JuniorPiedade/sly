@@ -2100,10 +2100,14 @@ if (addCustomLinkBtn) {
       currentProfile.links = [];
     }
 
-    if (currentProfile.links.length >= 3) {
-      alert('Você já atingiu o limite de 3 links personalizados.');
-      return;
-    }
+   if (currentProfile.links.length >= 3) {
+  alert(
+    'Diagnóstico de links:\n' +
+    'Quantidade: ' + currentProfile.links.length + '\n' +
+    'Links: ' + JSON.stringify(currentProfile.links, null, 2)
+  );
+  return;
+}
 
     if (!/^https?:\/\//i.test(rawUrl)) {
       rawUrl = 'https://' + rawUrl;
