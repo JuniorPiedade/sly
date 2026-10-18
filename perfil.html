@@ -1562,8 +1562,7 @@ if (data.avatar_url) {
     const db = api?.client;
 
     if (!db || typeof db.from !== 'function') {
-      console.error('[SLYE SPACE] Cliente Supabase indisponível.');
-      return;
+        return;
     }
 
     const friendshipWrapper =
@@ -1605,30 +1604,11 @@ if (data.avatar_url) {
     }
 
     const entry = document.createElement('button');
-    entry.id = 'slye-space-entry';
-    entry.type = 'button';
-    entry.textContent = '✦  SLYE SPACE';
-    entry.setAttribute('aria-expanded', 'false');
-
     const panel = document.createElement('section');
-    panel.id = 'slye-space';
-    panel.setAttribute('aria-label', 'SLYE SPACE');
+    
 
     panel.innerHTML = `
       <div class="space-heading">
-        <div class="space-title">SLYE SPACE</div>
-        <button class="space-btn" type="button" data-action="close"
-          aria-label="Fechar SLYE SPACE">FECHAR ×</button>
-      </div>
-      <p class="space-muted">Um espaço para palavras, ideias e momentos.</p>
-      <div data-owner-form></div>
-      <div class="space-section-title">PENSAMENTOS & ESCRITOS</div>
-      <div class="space-list" data-notes>
-        <p class="space-muted">Carregando publicações...</p>
-      </div>
-      <div class="space-section-title">GALERIA · ATÉ 4 FOTOS</div>
-      <div class="space-gallery" data-photos></div>
-      <p class="space-muted" data-photo-count></p>
       <div data-photo-form></div>
       <div class="space-status" role="status" aria-live="polite"></div>
     `;
