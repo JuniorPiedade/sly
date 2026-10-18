@@ -907,45 +907,72 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // --- LÓGICA DE RICH PRESENCE DO SPOTIFY NO PERFIL PÚBLICO ---
-  async function updateSpotifyPresence(accessToken) {
-    const widget = document.getElementById('spotify-widget');
-    const coverEl = document.getElementById('spotify-cover');
-    const titleEl = document.getElementById('spotify-title');
-    const artistEl = document.getElementById('spotify-artist');
+  
+  // --- SPOTIFY RICH PRESENCE: PERFIL PÚBLICO ---
+  (() => {
+    const widget = document.getElementById("spotify-widget");
+    const cover = document.getElementById("spotify-cover");
+    const title = document.getElementById("spotify-title");
+    const artist = document.getElementById("spotify-artist");
 
-    if (!accessToken) return;
+    if (!widget || !cover || !title || !artist) return;
 
-    try {
-      const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-      });
+    const client = window.islySupabase?.client;
+    const supabaseUrl = client?.supabaseUrl;
+    const publicKey = client?.supabaseKey;
 
-      if (res.status === 204 || res.status === 202) {
-        if (widget) widget.style.display = 'none';
-        return;
+    let requestInProgress = false;
+
+    async function refreshSpotify() {
+      if (requestInProgress || !supabaseUrl || !publicKey) return;
+
+      requestInProgress = true;
+
+      try {
+        const endpoint =
+          `${supabaseUrl}/functions/v1/spotify-auth` +
+          `?action=now-playing&handle=${encodeURIComponent(handle)}`;
+
+        const response = await fetch(endpoint, {
+          headers: { apikey: publicKey },
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          console.warn("Erro ao consultar Spotify:", response.status);
+          return;
+        }
+
+        const track = await response.json();
+
+        if (!track.playing || !track.title) {
+          widget.style.display = "none";
+          return;
+        }
+
+        title.textContent = track.title;
+        artist.textContent = track.artist || "Artista desconhecido";
+
+        if (track.cover) {
+          cover.src = track.cover;
+          cover.alt = `Capa do álbum ${track.album || ""}`;
+        } else {
+          cover.removeAttribute("src");
+          cover.alt = "Capa indisponível";
+        }
+
+        widget.style.display = "block";
+      } catch (error) {
+        console.warn("Erro ao atualizar Spotify:", error);
+      } finally {
+        requestInProgress = false;
       }
-
-      const spotifyData = await res.json();
-      if (spotifyData && spotifyData.is_playing && spotifyData.item) {
-        if (titleEl) titleEl.textContent = spotifyData.item.name;
-        if (artistEl) artistEl.textContent = spotifyData.item.artists.map(a => a.name).join(', ');
-        if (coverEl) coverEl.src = spotifyData.item.album.images[0]?.url;
-        if (widget) widget.style.display = 'block';
-      } else {
-        if (widget) widget.style.display = 'none';
-      }
-    } catch (err) {
-      console.error('Erro ao procurar música do Spotify:', err);
     }
-  }
 
-  if (data.spotify_access_token) {
-    updateSpotifyPresence(data.spotify_access_token);
-    setInterval(() => {
-      updateSpotifyPresence(data.spotify_access_token);
-    }, 15000);
-  }
+    widget.style.display = "none";
+    refreshSpotify();
+    setInterval(refreshSpotify, 15000);
+  })();
 
   if (typeof initVisualEffect === 'function') {
     initVisualEffect(data.visual_effect || 'none');
