@@ -2077,7 +2077,11 @@ activity: activityInput.value,
 const avatarShape = avatarShapeSelect?.value || 'rounded';
 const isCircle = avatarShape === 'circle';
 
-avatarEl.style.borderRadius = isCircle ? '50%' : '20px';
+avatarEl.style.setProperty(
+  'border-radius',
+  isCircle ? '50%' : '20px',
+  'important'
+);
 avatarEl.style.overflow = 'hidden';
 
 const avatarImg = avatarEl.querySelector('img');
