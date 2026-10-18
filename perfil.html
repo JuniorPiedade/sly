@@ -308,9 +308,8 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   background-position: center;
 }
 .frame-neon-white { border: 2px solid #ffffff; border-radius: 22px; box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.4); }
-.frame-vip { border: 2px solid var(--purple); border-radius: 22px; box-shadow: 0 0 16px var(--purple), 0 0 30px var(--blue); }
 
-.profile-info {
+  .profile-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1208,12 +1207,6 @@ if (data.avatar_url) {
   avatarEl.textContent = '⌬';
 }
 
-
-  const frameEl = document.getElementById('avatarFrame');
-  const frameType = data.avatar_frame || 'none';
-  frameEl.className = 'avatar-frame';
-  if (frameType === 'neon-white') frameEl.classList.add('frame-neon-white');
-  else if (frameType === 'vip') frameEl.classList.add('frame-vip');
 
   const emblemsEl = document.getElementById('emblems');
   if (emblemsEl) {
