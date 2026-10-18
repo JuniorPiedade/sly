@@ -2072,8 +2072,13 @@ activity: activityInput.value,
     
     const avatarEl = document.getElementById('previewAvatar');
     const avatarVal = avatarUrlInput.value.trim();
-    if (avatarVal) avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
-    else avatarEl.textContent = '⌬';
+    if (avatarVal) {
+  avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
+  avatarEl.style.setProperty('background', 'transparent', 'important');
+} else {
+  avatarEl.textContent = '⌬';
+  avatarEl.style.removeProperty('background');
+}
    
 const avatarShape = avatarShapeSelect?.value || 'rounded';
 const isCircle = avatarShape === 'circle';
