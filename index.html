@@ -2132,62 +2132,6 @@ if (addCustomLinkBtn) {
 }
 
 
-const title = document.getElementById('customLinkTitle')?.value.trim() || '';
-let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
-
-console.log('Teste dos links personalizados:', {
-  titulo: title,
-  endereco: rawUrl
-});
-
-if (!title || !rawUrl) {
-  alert(
-    'Campo lido vazio. Título: ' +
-    JSON.stringify(title) +
-    ' | Endereço: ' +
-    JSON.stringify(rawUrl)
-  );
-  return;
-}
-
-    if (currentProfile.links.length >= 10) {
-      alert('Você pode adicionar até 10 links personalizados.');
-      return;
-    }
-
-    if (!/^https?:\/\//i.test(rawUrl)) {
-      rawUrl = 'https://' + rawUrl;
-    }
-
-    let parsedUrl;
-
-    try {
-      parsedUrl = new URL(rawUrl);
-    } catch {
-      alert('Digite um endereço de link válido.');
-      return;
-    }
-
-    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
-      alert('Use um endereço iniciado com http:// ou https://.');
-      return;
-    }
-
-    currentProfile.links.push({
-      title: title.slice(0, 50),
-      url: parsedUrl.href
-    });
-
-    customLinkTitleInput.value = '';
-    customLinkUrlInput.value = '';
-
-    renderCustomLinks();
-    updatePreview();
-    triggerAutoSave();
-  });
-}
-
-
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
 
