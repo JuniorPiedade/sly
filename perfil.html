@@ -934,14 +934,15 @@ const socialLogos = {
   
 function getSpotifyEmbed(url) {
   if (!url) return '';
+
   const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
+
   if (match) {
     return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
+  }
 
-  
   return '';
 }
-
 
 function getYoutubeEmbed(url) {
   if (!url) return '';
