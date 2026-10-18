@@ -1086,6 +1086,7 @@ a.brand > span:last-child .dot {
  <button type="button" class="navbtn" data-sec="soundtrack">🎵 Trilha Sonora</button>
  <button type="button" class="navbtn" data-sec="appearance">🎨 Cores & Efeitos</button>
  <button type="button" class="navbtn" data-sec="friendships">🤝 Friendships</button>
+ <button type="button" class="navbtn" data-sec="gallery">📸 Galeria</button>
  <div class="side-note">Sincronizado automaticamente com o Supabase.</div>
   
   <!-- Widget do Spotify para a Rich Presence -->
@@ -1105,7 +1106,6 @@ a.brand > span:last-child .dot {
    </a>
  </div>
 </aside>
-
 <section class="content">
  <div class="heading">
   <div>
@@ -1157,7 +1157,6 @@ a.brand > span:last-child .dot {
      <small>Máx. 2MB</small>
     </label>
    </section>
-
    <section class="panel" id="panel-status">
     <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 08</span></div>
     <div class="options" id="statusOptions" style="display:flex; flex-wrap:wrap; gap:6px;">
@@ -1220,7 +1219,6 @@ a.brand > span:last-child .dot {
        <label class="field"><span>▲ Vercel</span><input id="soc_vercel" placeholder="ex: usuario"></label>
       </div>
    </section>
-
    <section class="panel" id="panel-embeds">
     <div class="panel-head"><div><h2>🎬 Mídias Embed</h2><p>Cole o link completo da música, vídeo ou post.</p></div><span class="muted">05 / 08</span></div>
     <label class="field">
@@ -1340,6 +1338,42 @@ a.brand > span:last-child .dot {
      </div>
     </label>
     <div id="friendshipsListEdit" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;"></div>
+   </section>
+      <section class="panel" id="panel-gallery">
+    <div class="panel-head">
+     <div>
+      <h2>📸 Galeria do perfil</h2>
+      <p>Adicione até 5 fotos à sua galeria pública.</p>
+     </div>
+     <span class="muted">09 / 09</span>
+    </div>
+
+    <label class="field">
+     <span>Selecionar foto</span>
+     <input
+      id="galleryPhotoInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp,image/gif"
+     >
+     <small>Formatos aceitos: JPG, PNG, WebP e GIF. Máximo de 8 MB por foto.</small>
+    </label>
+
+    <label class="field">
+     <span>Legenda (opcional)</span>
+     <input
+      id="galleryCaptionInput"
+      type="text"
+      maxlength="120"
+      placeholder="Escreva uma legenda..."
+     >
+    </label>
+
+    <button type="button" id="galleryUploadBtn" class="btn primary">
+     Enviar foto
+    </button>
+
+    <p id="galleryEditorStatus" class="muted" role="status"></p>
+    <div id="galleryEditorList"></div>
    </section>
   </div>
 
@@ -1572,6 +1606,231 @@ function getInstagramEmbed(url) {
   return '';
 }
 
+
+async function initGalleryEditor(userId) {
+  const sb = window.islySupabase?.client;
+
+  const fileInput = document.getElementById('galleryPhotoInput');
+  const captionInput = document.getElementById('galleryCaptionInput');
+  const uploadBtn = document.getElementById('galleryUploadBtn');
+  const statusEl = document.getElementById('galleryEditorStatus');
+  const listEl = document.getElementById('galleryEditorList');
+
+  if (!sb || !fileInput || !captionInput || !uploadBtn || !statusEl || !listEl) {
+    console.error('SLYE: elementos da galeria não encontrados.');
+    return;
+  }
+
+  let photos = [];
+
+  function setStatus(message, isError = false) {
+    statusEl.textContent = message;
+    statusEl.style.color = isError ? '#f87171' : '';
+  }
+
+  function updateUploadState() {
+    const limitReached = photos.length >= 5;
+    uploadBtn.disabled = limitReached;
+
+    fileInput.disabled = limitReached;
+
+    uploadBtn.textContent = limitReached
+      ? 'Galeria completa (5/5)'
+      : `Enviar foto (${photos.length}/5)`;
+
+    uploadBtn.style.opacity = limitReached ? '0.6' : '';
+    uploadBtn.style.cursor = limitReached ? 'not-allowed' : '';
+  }
+
+  function renderPhotos() {
+    listEl.replaceChildren();
+
+    if (photos.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'muted';
+      empty.textContent = 'Sua galeria ainda não tem fotos.';
+      listEl.appendChild(empty);
+    }
+
+    photos.forEach((photo, index) => {
+      const item = document.createElement('div');
+
+      item.style.cssText =
+        'display:flex;align-items:center;gap:12px;' +
+        'padding:12px 0;border-bottom:1px solid rgba(255,255,255,.1);';
+
+      const image = document.createElement('img');
+      image.src = window.islySupabase.getPublicUrl(photo.storage_path);
+      image.alt = photo.caption || `Foto ${index + 1} da galeria`;
+      image.loading = 'lazy';
+      image.style.cssText =
+        'width:76px;height:76px;object-fit:cover;border-radius:10px;flex-shrink:0;';
+
+      const details = document.createElement('div');
+      details.style.cssText = 'flex:1;min-width:0;';
+
+      const caption = document.createElement('p');
+      caption.textContent = photo.caption || 'Sem legenda';
+      caption.style.cssText = 'margin:0 0 8px;overflow-wrap:anywhere;';
+
+      const number = document.createElement('small');
+      number.className = 'muted';
+      number.textContent = `Foto ${index + 1} de ${photos.length}`;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.type = 'button';
+      deleteBtn.className = 'btn';
+      deleteBtn.textContent = 'Excluir';
+      deleteBtn.style.cssText = 'color:#f87171;flex-shrink:0;';
+
+      deleteBtn.addEventListener('click', async () => {
+        if (!confirm('Deseja excluir esta foto da galeria?')) return;
+
+        deleteBtn.disabled = true;
+        setStatus('Excluindo foto...');
+
+        try {
+          const { error } = await sb
+            .from('profile_gallery_photos')
+            .delete()
+            .eq('id', photo.id)
+            .eq('profile_id', userId);
+
+          if (error) throw error;
+
+          photos = photos.filter(item => item.id !== photo.id);
+          renderPhotos();
+          updateUploadState();
+
+          const { error: storageError } = await sb.storage
+            .from('media')
+            .remove([photo.storage_path]);
+
+          if (storageError) {
+            console.error('Foto removida do banco, mas o arquivo permaneceu no Storage:', storageError);
+            setStatus('Foto excluída da galeria. O arquivo no Storage não pôde ser removido.');
+          } else {
+            setStatus('Foto excluída com sucesso!');
+          }
+        } catch (error) {
+          console.error('Erro ao excluir foto da galeria:', error);
+          setStatus(error.message || 'Não foi possível excluir a foto.', true);
+          deleteBtn.disabled = false;
+        }
+      });
+
+      details.append(caption, number);
+      item.append(image, details, deleteBtn);
+      listEl.appendChild(item);
+    });
+
+    updateUploadState();
+  }
+
+  async function loadPhotos() {
+    setStatus('Carregando galeria...');
+
+    const { data, error } = await sb
+      .from('profile_gallery_photos')
+      .select('id, profile_id, storage_path, caption, created_at')
+      .eq('profile_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    photos = data || [];
+    renderPhotos();
+    setStatus(`${photos.length} de 5 fotos cadastradas.`);
+  }
+
+  uploadBtn.addEventListener('click', async () => {
+    const file = fileInput.files?.[0];
+
+    if (!file) {
+      setStatus('Selecione uma foto primeiro.', true);
+      return;
+    }
+
+    if (photos.length >= 5) {
+      setStatus('Você já atingiu o limite de 5 fotos.', true);
+      return;
+    }
+
+    const allowedTypes = {
+      'image/jpeg': 'jpg',
+      'image/png': 'png',
+      'image/webp': 'webp',
+      'image/gif': 'gif'
+    };
+
+    if (!allowedTypes[file.type]) {
+      setStatus('Formato inválido. Use JPG, PNG, WebP ou GIF.', true);
+      return;
+    }
+
+    if (file.size > 8 * 1024 * 1024) {
+      setStatus('A foto deve ter no máximo 8 MB.', true);
+      return;
+    }
+
+    uploadBtn.disabled = true;
+    fileInput.disabled = true;
+    setStatus('Enviando foto...');
+
+    const storagePath =
+      `${userId}/gallery/${Date.now()}-${Math.random().toString(36).slice(2)}.${allowedTypes[file.type]}`;
+
+    try {
+      const uploadError = await window.islySupabase.uploadMedia(storagePath, file);
+
+      if (uploadError) {
+        throw new Error(
+          typeof uploadError === 'string'
+            ? uploadError
+            : 'Não foi possível enviar o arquivo.'
+        );
+      }
+
+      const { error: insertError } = await sb
+        .from('profile_gallery_photos')
+        .insert({
+          profile_id: userId,
+          storage_path: storagePath,
+          caption: captionInput.value.trim()
+        });
+
+      if (insertError) {
+        await sb.storage.from('media').remove([storagePath]);
+        throw insertError;
+      }
+
+      fileInput.value = '';
+      captionInput.value = '';
+
+      await loadPhotos();
+      setStatus('Foto adicionada à galeria!');
+
+    } catch (error) {
+      console.error('Erro ao enviar foto para a galeria:', error);
+      setStatus(
+        error.message || 'Não foi possível enviar a foto. Verifique as permissões do Supabase.',
+        true
+      );
+    } finally {
+      updateUploadState();
+    }
+  });
+
+  try {
+    await loadPhotos();
+  } catch (error) {
+    console.error('Erro ao carregar galeria:', error);
+    setStatus(
+      error.message || 'Não foi possível carregar as fotos da galeria.',
+      true
+    );
+  }
+}
 
 async function initEditor(userId) {
   let profile = null;
@@ -2225,14 +2484,17 @@ perspective_effect: perspectiveEffectVal,
       friendships: currentProfile.friendships, handle_changed: currentProfile.handle_changed
     };
 
+    
     const err = await window.islySupabase.saveProfile(payload);
     syncDot.classList.remove('saving');
     syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
     toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
   });
+
+ // Inicializa a galeria do perfil
+  await initGalleryEditor(userId);
 }
 </script>
-
 <script>
 // Script de Proteção / Easter Egg + Função Spotify Rich Presence
 (() => {
