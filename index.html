@@ -1092,26 +1092,7 @@ if (profileAlignSelect) {
   if (currentProfile.handle) {
     shareUrlInput.value = `${window.location.origin}/sly-${currentProfile.handle}`;
   }
-
-  previewCard.addEventListener('mousemove', (e) => {
-  if (perspectiveEffectSelect?.value === 'off') {
-    previewCard.style.transform = 'none';
-    return;
-  }
-
-  const rect = previewCard.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const xc = rect.width / 2;
-  const yc = rect.height / 2;
-  const dx = (x - xc) / xc;
-  const dy = (y - yc) / yc;
-
-  previewCard.style.transform =
-    `perspective(1200px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) translateY(-2px)`;
-});
-
-  
+ 
   const previewCard = document.getElementById('profileCard');
 
   if (previewCard) {
