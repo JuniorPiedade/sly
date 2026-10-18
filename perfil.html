@@ -1577,6 +1577,8 @@ if (data.avatar_url) {
 </script>
 <style>
   
+/* ... CSS original do seu perfil permanece aqui ... */
+
 #profile-gallery-trigger {
   display: inline-flex;
   align-items: center;
@@ -1584,566 +1586,130 @@ if (data.avatar_url) {
   gap: 7px;
   margin: 0 0 12px;
   padding: 7px 10px;
-  border: 1px solid rgba(168, 85, 247, 0.28);
+  border: 1px solid rgba(168, 85, 247, .28);
   border-radius: 9px;
-  background: rgba(168, 85, 247, 0.045);
+  background: rgba(168, 85, 247, .045);
   color: #c4b5fd;
-  font-family: Inter, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
+  font: 600 10px Inter, sans-serif;
   letter-spacing: 1.3px;
-  line-height: 1.2;
   cursor: pointer;
-  transition: border-color .2s ease, color .2s ease, background .2s ease;
+  transition: .2s ease;
 }
 
 #profile-gallery-trigger:hover {
-  border-color: rgba(168, 85, 247, .6);
-  background: rgba(168, 85, 247, .08);
+  border-color: rgba(168, 85, 247, .65);
+  background: rgba(168, 85, 247, .09);
   color: #e9d5ff;
 }
 
 #profile-gallery-trigger svg {
-  flex: 0 0 auto;
-  opacity: .85;
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-</style>
-<script>
-(() => {
-  'use strict';
-
-  const start = async () => {
-    const api = window.islySupabase;
-    const db = api?.client;
-
-    if (!db || typeof db.from !== 'function') {
-        return;
-    }
-
-    const friendshipWrapper =
-      document.getElementById('publicFriendshipsWrapper');
-
-    if (!friendshipWrapper || document.getElementById('slye-space-entry')) {
-      return;
-    }
-
-    const params = new URLSearchParams(location.search);
-    let handle = params.get('u') || params.get('user') || '';
-
-    if (!handle) {
-      const match = location.pathname.match(/\/sly-([^/]+)/i);
-      if (match) handle = match[1];
-    }
-
-    if (!handle && !/perfil\.html$/i.test(location.pathname)) {
-      const last = location.pathname.split('/').filter(Boolean).pop() || '';
-      if (last && !['index.html', ''].includes(last)) handle = last;
-    }
-
-    handle = handle.replace(/^@/, '').trim();
-
-    if (!handle) {
-      console.warn('[SLYE SPACE] Não foi possível identificar o perfil pela URL.');
-      return;
-    }
-
-    const { data: profile, error: profileError } = await db
-      .from('profiles')
-      .select('id, handle')
-      .eq('handle', handle)
-      .maybeSingle();
-
-    if (profileError || !profile) {
-      console.error('[SLYE SPACE] Não foi possível localizar o perfil.', profileError);
-      return;
-    }
-
-    const entry = document.createElement('button');
-    const panel = document.createElement('section');
-    
-
-    panel.innerHTML = `
-      <div class="space-heading">
-      <div data-photo-form></div>
-      <div class="space-status" role="status" aria-live="polite"></div>
-    `;
-
-    friendshipWrapper.parentNode.insertBefore(entry, friendshipWrapper);
-    friendshipWrapper.parentNode.insertBefore(panel, friendshipWrapper);
-
-    const $ = (selector) => panel.querySelector(selector);
-    const notesEl = $('[data-notes]');
-    const photosEl = $('[data-photos]');
-    const ownerForm = $('[data-owner-form]');
-    const photoForm = $('[data-photo-form]');
-    const statusEl = $('.space-status');
-    const countEl = $('[data-photo-count]');
-
-    let user = null;
-    try {
-      const result = await db.auth.getUser();
-      user = result.data?.user || null;
-    } catch (error) {
-      console.warn('[SLYE SPACE] Não foi possível verificar a sessão.', error);
-    }
-
-    const isOwner = Boolean(user && user.id === profile.id);
-
-    const setStatus = (message) => {
-      statusEl.textContent = message;
-    };
-
-    const makeButton = (label, action, extraClass = '') => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = `space-btn ${extraClass}`.trim();
-      button.textContent = label;
-      button.dataset.action = action;
-      return button;
-    };
-
-    const makeInput = (placeholder, name, maxLength) => {
-      const input = document.createElement('input');
-      input.name = name;
-      input.placeholder = placeholder;
-      input.maxLength = maxLength;
-      input.autocomplete = 'off';
-      return input;
-    };
-
-    const makeTextarea = (placeholder, name, maxLength) => {
-      const textarea = document.createElement('textarea');
-      textarea.name = name;
-      textarea.placeholder = placeholder;
-      textarea.maxLength = maxLength;
-      return textarea;
-    };
-
-    const loadNotes = async () => {
-      notesEl.replaceChildren();
-
-      const { data, error } = await db
-        .from('profile_space_notes')
-        .select('id, profile_id, title, body, created_at, updated_at')
-        .eq('profile_id', profile.id)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        notesEl.textContent = 'Não foi possível carregar os escritos.';
-        console.error('[SLYE SPACE] Erro ao carregar escritos.', error);
-        return;
-      }
-
-      if (!data?.length) {
-        const empty = document.createElement('p');
-        empty.className = 'space-muted';
-        empty.textContent = 'Ainda não há escritos publicados.';
-        notesEl.appendChild(empty);
-        return;
-      }
-
-      for (const note of data) {
-        const card = document.createElement('article');
-        card.className = 'space-note';
-
-        if (note.title) {
-          const title = document.createElement('h4');
-          title.textContent = note.title;
-          card.appendChild(title);
-        }
-
-        const body = document.createElement('div');
-        body.className = 'space-note-body';
-        body.textContent = note.body;
-        card.appendChild(body);
-
-        if (isOwner) {
-          const actions = document.createElement('div');
-          actions.className = 'space-actions';
-          actions.append(
-            makeButton('EDITAR', 'edit-note'),
-            makeButton('EXCLUIR', 'delete-note')
-          );
-          actions.dataset.noteId = note.id;
-          actions.dataset.noteTitle = note.title || '';
-          card.appendChild(actions);
-        }
-
-        notesEl.appendChild(card);
-      }
-    };
-
-    const loadPhotos = async () => {
-      photosEl.replaceChildren();
-
-      const { data, error } = await db
-        .from('profile_space_photos')
-        .select('id, profile_id, storage_path, caption, created_at')
-        .eq('profile_id', profile.id)
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        photosEl.textContent = 'Não foi possível carregar a galeria.';
-        console.error('[SLYE SPACE] Erro ao carregar fotos.', error);
-        return;
-      }
-
-      const photos = data || [];
-      countEl.textContent = `${photos.length} de 4 fotos`;
-
-      if (!photos.length) {
-        const empty = document.createElement('p');
-        empty.className = 'space-muted';
-        empty.textContent = 'Nenhuma foto publicada ainda.';
-        photosEl.appendChild(empty);
-        return;
-      }
-
-      for (const photo of photos) {
-        const card = document.createElement('article');
-        card.className = 'space-photo';
-
-        const { data: publicData } = db.storage
-          .from('media')
-          .getPublicUrl(photo.storage_path);
-
-        const img = document.createElement('img');
-        img.src = publicData.publicUrl;
-        img.alt = photo.caption || 'Foto do SLYE SPACE';
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        img.referrerPolicy = 'no-referrer';
-        img.addEventListener('error', () => {
-          img.alt = 'Não foi possível carregar esta foto.';
-        });
-
-        card.appendChild(img);
-
-        if (photo.caption) {
-          const caption = document.createElement('div');
-          caption.className = 'space-caption';
-          caption.textContent = photo.caption;
-          card.appendChild(caption);
-        }
-
-        if (isOwner) {
-          const actions = document.createElement('div');
-          actions.className = 'space-actions';
-          actions.style.padding = '0 8px 8px';
-          actions.append(makeButton('LEGENDA', 'edit-caption'));
-          actions.append(makeButton('EXCLUIR', 'delete-photo'));
-          actions.dataset.photoId = photo.id;
-          actions.dataset.storagePath = photo.storage_path;
-          actions.dataset.caption = photo.caption || '';
-          card.appendChild(actions);
-        }
-
-        photosEl.appendChild(card);
-      }
-    };
-
-    if (isOwner) {
-      const form = document.createElement('form');
-      form.className = 'space-form';
-
-      const title = makeInput('Título (opcional)', 'title', 100);
-      const body = makeTextarea('Escreva um pensamento, poema ou citação...', 'body', 5000);
-      const submit = document.createElement('button');
-      submit.className = 'space-btn space-primary';
-      submit.type = 'submit';
-      submit.textContent = 'PUBLICAR ESCRITO';
-
-      form.append(title, body, submit);
-      ownerForm.appendChild(form);
-
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const noteBody = body.value.trim();
-        if (!noteBody) {
-          setStatus('Escreva algum conteúdo antes de publicar.');
-          return;
-        }
-
-        submit.disabled = true;
-        setStatus('Publicando...');
-
-        const { error } = await db.from('profile_space_notes').insert({
-          profile_id: profile.id,
-          title: title.value.trim(),
-          body: noteBody
-        });
-
-        submit.disabled = false;
-
-        if (error) {
-          console.error('[SLYE SPACE] Erro ao publicar.', error);
-          setStatus('Não foi possível publicar. Verifique a sessão e as políticas do banco.');
-          return;
-        }
-
-        title.value = '';
-        body.value = '';
-        setStatus('Escrito publicado!');
-        await loadNotes();
-      });
-
-      const photoUpload = document.createElement('form');
-      photoUpload.className = 'space-form';
-
-      const file = document.createElement('input');
-      file.type = 'file';
-      file.name = 'photo';
-      file.accept = 'image/jpeg,image/png,image/webp,image/gif';
-      file.setAttribute('aria-label', 'Escolher foto');
-
-      const caption = makeInput('Legenda da foto (opcional)', 'caption', 300);
-
-      const uploadButton = document.createElement('button');
-      uploadButton.type = 'submit';
-      uploadButton.className = 'space-btn space-primary';
-      uploadButton.textContent = 'ENVIAR FOTO';
-
-      photoUpload.append(file, caption, uploadButton);
-      photoForm.appendChild(photoUpload);
-
-      photoUpload.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const selected = file.files?.[0];
-        if (!selected) {
-          setStatus('Escolha uma foto primeiro.');
-          return;
-        }
-
-        if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(selected.type)) {
-          setStatus('Use uma imagem JPG, PNG, WebP ou GIF.');
-          return;
-        }
-
-        if (selected.size > 5 * 1024 * 1024) {
-          setStatus('A foto deve ter no máximo 5 MB.');
-          return;
-        }
-
-        uploadButton.disabled = true;
-        setStatus('Verificando espaço disponível...');
-
-        const { count, error: countError } = await db
-          .from('profile_space_photos')
-          .select('id', { count: 'exact', head: true })
-          .eq('profile_id', profile.id);
-
-        if (countError || count >= 4) {
-          uploadButton.disabled = false;
-          setStatus(countError
-            ? 'Não foi possível verificar o limite de fotos.'
-            : 'Você já atingiu o limite de quatro fotos.');
-          return;
-        }
-
-        const extByType = {
-          'image/jpeg': 'jpg',
-          'image/png': 'png',
-          'image/webp': 'webp',
-          'image/gif': 'gif'
-        };
-
-        const extension = extByType[selected.type];
-        const storagePath = `space/${user.id}/${crypto.randomUUID()}.${extension}`;
-
-        setStatus('Enviando foto...');
-
-        const { error: uploadError } = await db.storage
-          .from('media')
-          .upload(storagePath, selected, {
-            cacheControl: '3600',
-            upsert: false,
-            contentType: selected.type
-          });
-
-        if (uploadError) {
-          console.error('[SLYE SPACE] Erro no upload.', uploadError);
-          uploadButton.disabled = false;
-          setStatus('Upload não autorizado ou indisponível. Verifique as políticas do Storage.');
-          return;
-        }
-
-        const { error: insertError } = await db
-          .from('profile_space_photos')
-          .insert({
-            profile_id: profile.id,
-            storage_path: storagePath,
-            caption: caption.value.trim()
-          });
-
-        if (insertError) {
-          console.error('[SLYE SPACE] Erro ao registrar foto.', insertError);
-
-          // Limpa o objeto enviado se o registro no banco falhar.
-          const { error: cleanupError } = await db.storage
-            .from('media')
-            .remove([storagePath]);
-
-          if (cleanupError) {
-            console.error('[SLYE SPACE] Falha ao limpar upload órfão.', cleanupError);
-          }
-
-          uploadButton.disabled = false;
-          setStatus('A foto foi enviada, mas não pôde ser registrada. Verifique as permissões.');
-          return;
-        }
-
-        file.value = '';
-        caption.value = '';
-        uploadButton.disabled = false;
-        setStatus('Foto publicada!');
-        await loadPhotos();
-      });
-    }
-
-    panel.addEventListener('click', async (event) => {
-      const button = event.target.closest('button[data-action]');
-      if (!button) return;
-
-      const action = button.dataset.action;
-
-      if (action === 'close') {
-        panel.classList.remove('open');
-        entry.setAttribute('aria-expanded', 'false');
-        return;
-      }
-
-      if (!isOwner) return;
-
-      if (action === 'edit-note' || action === 'delete-note') {
-        const actions = button.closest('[data-note-id]');
-        const id = actions?.dataset.noteId;
-        if (!id) return;
-
-        if (action === 'delete-note') {
-          if (!confirm('Excluir este escrito permanentemente?')) return;
-
-          const { error } = await db
-            .from('profile_space_notes')
-            .delete()
-            .eq('id', id)
-            .eq('profile_id', profile.id);
-
-          if (error) {
-            console.error(error);
-            setStatus('Não foi possível excluir o escrito.');
-          } else {
-            setStatus('Escrito excluído.');
-            await loadNotes();
-          }
-          return;
-        }
-
-        const currentTitle = actions.dataset.noteTitle || '';
-        const title = prompt('Editar título:', currentTitle);
-        if (title === null) return;
-
-        const card = actions.closest('.space-note');
-        const currentBody = card?.querySelector('.space-note-body')?.textContent || '';
-        const body = prompt('Editar texto:', currentBody);
-        if (body === null || !body.trim()) return;
-
-        const { error } = await db
-          .from('profile_space_notes')
-          .update({
-            title: title.trim(),
-            body: body.trim(),
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', id)
-          .eq('profile_id', profile.id);
-
-        if (error) {
-          console.error(error);
-          setStatus('Não foi possível editar o escrito.');
-        } else {
-          setStatus('Escrito atualizado.');
-          await loadNotes();
-        }
-        return;
-      }
-
-      const photoActions = button.closest('[data-photo-id]');
-      if (!photoActions) return;
-
-      const photoId = photoActions.dataset.photoId;
-      const storagePath = photoActions.dataset.storagePath;
-
-      if (action === 'edit-caption') {
-        const caption = prompt('Editar legenda:', photoActions.dataset.caption || '');
-        if (caption === null) return;
-
-        const { error } = await db
-          .from('profile_space_photos')
-          .update({ caption: caption.trim() })
-          .eq('id', photoId)
-          .eq('profile_id', profile.id);
-
-        if (error) {
-          console.error(error);
-          setStatus('Não foi possível atualizar a legenda.');
-        } else {
-          setStatus('Legenda atualizada.');
-          await loadPhotos();
-        }
-        return;
-      }
-
-      if (action === 'delete-photo') {
-        if (!confirm('Excluir esta foto permanentemente?')) return;
-
-        const { error: rowError } = await db
-          .from('profile_space_photos')
-          .delete()
-          .eq('id', photoId)
-          .eq('profile_id', profile.id);
-
-        if (rowError) {
-          console.error(rowError);
-          setStatus('Não foi possível excluir o registro da foto.');
-          return;
-        }
-
-        const { error: storageError } = await db.storage
-          .from('media')
-          .remove([storagePath]);
-
-        if (storageError) {
-          console.error('[SLYE SPACE] Registro excluído, mas o arquivo não foi removido.', storageError);
-          setStatus('Registro removido, mas o arquivo ainda precisa ser limpo no Storage.');
-        } else {
-          setStatus('Foto excluída.');
-        }
-
-        await loadPhotos();
-      }
-    });
-
-    entry.addEventListener('click', async () => {
-      const opening = !panel.classList.contains('open');
-      panel.classList.toggle('open', opening);
-      entry.setAttribute('aria-expanded', String(opening));
-
-      if (opening) {
-        await Promise.all([loadNotes(), loadPhotos()]);
-        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    });
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start, { once: true });
-  } else {
-    start();
+#profile-gallery-panel {
+  width: 100%;
+  margin: 0 0 14px;
+}
+
+#profile-gallery-panel[hidden] {
+  display: none !important;
+}
+
+.profile-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.profile-gallery-photo {
+  position: relative;
+  display: block;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(168, 85, 247, .18);
+  border-radius: 9px;
+  background: #11111f;
+  cursor: pointer;
+  aspect-ratio: 1;
+}
+
+.profile-gallery-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .25s ease;
+}
+
+.profile-gallery-photo:hover img {
+  transform: scale(1.04);
+}
+
+.profile-gallery-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 16px 6px 6px;
+  overflow-wrap: anywhere;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .8));
+  color: #fff;
+  font: 10px Inter, sans-serif;
+  text-align: left;
+}
+
+.profile-gallery-status {
+  margin: 9px 0 0;
+  color: #9ca3af;
+  font: 10px Inter, sans-serif;
+  text-align: center;
+}
+
+.profile-gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, .9);
+}
+
+.profile-gallery-lightbox > img {
+  display: block;
+  max-width: min(900px, 100%);
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.profile-gallery-lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 50%;
+  background: #17172a;
+  color: #fff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+@media (max-width: 380px) {
+  .profile-gallery-grid {
+    gap: 5px;
   }
-})();
-</script>
-</body>
+}
+</style>
+  </body>
 </html>
