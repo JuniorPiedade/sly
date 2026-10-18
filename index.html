@@ -2030,10 +2030,7 @@ async function initEditor(userId) {
   const embedSpotifyInput = document.getElementById('embedSpotify');
   const embedYoutubeInput = document.getElementById('embedYoutube');
   const embedInstagramInput = document.getElementById('embedInstagram');
-  const customLinkTitleInput = document.getElementById('customLinkTitle');
-  const customLinkUrlInput = document.getElementById('customLinkUrl');
-  const addCustomLinkBtn = document.getElementById('addCustomLinkBtn');
-  const customLinksList = document.getElementById('customLinksList');
+  
 
   function renderCustomLinks() {
     if (!customLinksList) return;
@@ -2084,94 +2081,6 @@ async function initEditor(userId) {
       info.append(titleEl, urlEl);
       item.append(info, removeBtn);
       customLinksList.appendChild(item);
-    });
-  }
-
-       if (addCustomLinkBtn) {
-  addCustomLinkBtn.addEventListener('click', () => {
-      const titleInput = document.getElementById('customLinkTitle');
-const urlInput = document.getElementById('customLinkUrl');
-
-const title = titleInput ? titleInput.value.trim() : '';
-let rawUrl = urlInput ? urlInput.value.trim() : '';
-
-console.log('[SLYE] Tentativa de adicionar link:', {
-  title,
-  rawUrl,
-  titleInputExiste: !!titleInput,
-  urlInputExiste: !!urlInput
-});
-
-      if (!title || !rawUrl) {
-        alert('Preencha o nome e o endereço do link.');
-        return;
-      }
-
-      if (!Array.isArray(currentProfile.links)) {
-        currentProfile.links = [];
-      }
-       // Conta apenas links com título e URL válidos
-      const validLinks = (Array.isArray(currentProfile.links)
-        ? currentProfile.links
-        : []
-      ).filter(link =>
-        link &&
-        typeof link.title === 'string' &&
-        link.title.trim() !== '' &&
-        typeof link.url === 'string' &&
-        link.url.trim() !== ''
-      );
-
-      console.log('[SLYE] Diagnóstico dos links:', {
-  totalArmazenado: currentProfile.links.length,
-  totalValido: validLinks.length,
-  links: currentProfile.links
-});
-console.log('[SLYE] Links encontrados antes de adicionar:', {
-  total: currentProfile.links.length,
-  validos: validLinks.length,
-  lista: currentProfile.links.map(link => ({
-    title: link?.title,
-    url: link?.url
-  }))
-});
-
-if (validLinks.length >= 3) {
-  alert('Você atingiu o limite máximo de 3 links personalizados.');
-  return;
-}
-
-if (!/^https?:\/\//i.test(rawUrl)) {
-  rawUrl = 'https://' + rawUrl;
-}
-      let parsedUrl;
-
-      try {
-        parsedUrl = new URL(rawUrl);
-      } catch {
-        alert('Digite um endereço de link válido.');
-        return;
-      }
-
-      if (
-        !['http:', 'https:'].includes(parsedUrl.protocol) ||
-        !parsedUrl.hostname.includes('.')
-      ) {
-        alert('Digite um endereço válido, como https://youtube.com.');
-        return;
-      }
-
-      currentProfile.links.push({
-        title: title.slice(0, 50),
-        url: parsedUrl.href
-      });
-
-      customLinkTitleInput.value = '';
-      customLinkUrlInput.value = '';
-
-      renderCustomLinks();
-      updatePreview();
-      triggerAutoSave();
     });
   }
 
