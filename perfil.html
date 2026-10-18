@@ -1131,7 +1131,118 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+ 
+  // --- GALERIA PÚBLICA SLYE ---
+  const galleryTrigger = document.getElementById('profile-gallery-trigger');
+  const galleryPanel = document.getElementById('profile-gallery-panel');
+  const galleryGrid = document.getElementById('profile-gallery-grid');
+  const galleryStatus = document.getElementById('profile-gallery-status');
+
+  if (galleryTrigger && galleryPanel && galleryGrid && galleryStatus) {
+    const sb = window.islySupabase?.client;
+
+    galleryTrigger.addEventListener('click', () => {
+      const opening = galleryPanel.hidden;
+      galleryPanel.hidden = !opening;
+      galleryTrigger.setAttribute('aria-expanded', String(opening));
+    });
+
+    try {
+      if (!sb) throw new Error('Conexão com o Supabase indisponível.');
+
+      const { data: galleryPhotos, error } = await sb
+        .from('profile_gallery_photos')
+        .select('id, profile_id, storage_path, caption, created_at')
+        .eq('profile_id', data.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      galleryGrid.replaceChildren();
+
+      if (!galleryPhotos || galleryPhotos.length === 0) {
+        galleryStatus.textContent = 'Esta galeria ainda não tem fotos.';
+      } else {
+        galleryStatus.textContent = '';
+
+        galleryPhotos.forEach((photo, index) => {
+          const imageUrl = window.islySupabase.getPublicUrl(
+            photo.storage_path
+          );
+
+          const photoButton = document.createElement('button');
+          photoButton.type = 'button';
+          photoButton.className = 'profile-gallery-photo';
+          photoButton.setAttribute(
+            'aria-label',
+            photo.caption || `Ampliar foto ${index + 1}`
+          );
+
+          const img = document.createElement('img');
+          img.src = imageUrl;
+          img.alt = photo.caption || `Foto ${index + 1} da galeria`;
+          img.loading = 'lazy';
+
+          photoButton.appendChild(img);
+
+          if (photo.caption && photo.caption.trim()) {
+            const caption = document.createElement('span');
+            caption.className = 'profile-gallery-caption';
+            caption.textContent = photo.caption;
+            photoButton.appendChild(caption);
+          }
+
+          photoButton.addEventListener('click', () => {
+            const lightbox = document.createElement('div');
+            lightbox.className = 'profile-gallery-lightbox';
+            lightbox.setAttribute('role', 'dialog');
+            lightbox.setAttribute('aria-modal', 'true');
+            lightbox.setAttribute('aria-label', 'Foto ampliada');
+
+            const largeImage = document.createElement('img');
+            largeImage.src = imageUrl;
+            largeImage.alt = img.alt;
+
+            const closeButton = document.createElement('button');
+            closeButton.type = 'button';
+            closeButton.className = 'profile-gallery-lightbox-close';
+            closeButton.textContent = '×';
+            closeButton.setAttribute('aria-label', 'Fechar foto');
+
+            const closeLightbox = () => {
+              lightbox.remove();
+              document.removeEventListener('keydown', onEscape);
+            };
+
+            const onEscape = (event) => {
+              if (event.key === 'Escape') closeLightbox();
+            };
+
+            closeButton.addEventListener('click', closeLightbox);
+
+            lightbox.addEventListener('click', (event) => {
+              if (event.target === lightbox) closeLightbox();
+            });
+
+            document.addEventListener('keydown', onEscape);
+
+            lightbox.append(closeButton, largeImage);
+            document.body.appendChild(lightbox);
+            closeButton.focus();
+          });
+
+          galleryGrid.appendChild(photoButton);
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao carregar galeria pública:', error);
+      galleryGrid.replaceChildren();
+      galleryStatus.textContent = 'Não foi possível carregar a galeria.';
+    }
+  }
+
   let currentViews = (data.views_count || 0) + 1;
+
   document.getElementById('publicViewsCount').textContent = currentViews;
   try {
     await window.islySupabase.saveProfile({ id: data.id, views_count: currentViews });
