@@ -1088,21 +1088,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     card.style.border = 'none';
 
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const xc = rect.width / 2;
-      const yc = rect.height / 2;
-      const dx = (x - xc) / xc;
-      const dy = (y - yc) / yc;
-      card.style.transform = `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
-    });
-  }
+    
+    if (data.perspective_effect !== 'off') {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const xc = rect.width / 2;
+        const yc = rect.height / 2;
+        const dx = (x - xc) / xc;
+        const dy = (y - yc) / yc;
 
+        card.style.transform =
+          `perspective(1200px) rotateY(${dx * 4}deg) rotateX(${-dy * 4}deg) translateY(-2px)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform =
+          'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+      });
+    } else {
+      card.style.transform = 'none';
+    }
+   }
   const nameEl = document.getElementById('name');
   if (nameEl) {
     nameEl.style.color = data.title_color || '#ffffff';
