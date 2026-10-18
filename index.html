@@ -2112,8 +2112,18 @@ async function initEditor(userId) {
 
   if (addCustomLinkBtn) {
     addCustomLinkBtn.addEventListener('click', () => {
-      const title = document.getElementById('customLinkTitle')?.value.trim() || '';
-      let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
+      const titleInput = document.getElementById('customLinkTitle');
+const urlInput = document.getElementById('customLinkUrl');
+
+const title = titleInput ? titleInput.value.trim() : '';
+let rawUrl = urlInput ? urlInput.value.trim() : '';
+
+console.log('[SLYE] Tentativa de adicionar link:', {
+  title,
+  rawUrl,
+  titleInputExiste: !!titleInput,
+  urlInputExiste: !!urlInput
+});
 
       if (!title || !rawUrl) {
         alert('Preencha o nome e o endereço do link.');
