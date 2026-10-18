@@ -748,6 +748,7 @@ body {
         </div>
       </div>
       
+
 <button
   id="profile-gallery-trigger"
   type="button"
@@ -755,6 +756,21 @@ body {
   aria-expanded="false"
 >
   <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+    <path d="m21 15-5-5L5 21"></path>
+  </svg>
+  <span>GALERIA</span>
+</button>
+
+<div id="profile-gallery-panel" hidden>
+  <div id="profile-gallery-grid" class="profile-gallery-grid"></div>
+  <p id="profile-gallery-status" class="profile-gallery-status"></p>
+</div>
+<svg
     viewBox="0 0 24 24"
     width="13"
     height="13"
