@@ -2329,8 +2329,9 @@ async function initEditor(userId) {
       const err = await window.islySupabase.saveProfile(payload);
       syncDot.classList.remove('saving');
       syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
-    });
-    }
+    }, 800);
+  }
+
   document.querySelectorAll('.sidebar .navbtn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sidebar .navbtn').forEach(b => b.classList.remove('active'));
