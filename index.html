@@ -2617,8 +2617,10 @@ async function initEditor(userId) {
     syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
     toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
   });
-
-  await initGalleryEditor(userId);
+ // Inicializa a galeria de forma assíncrona segura
+  initGalleryEditor(userId).catch(err => {
+    console.error('Erro ao iniciar galeria:', err);
+  });
 }
 </script>
 <script>
