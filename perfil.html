@@ -1118,6 +1118,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const galleryPanel = document.getElementById('profile-gallery-panel');
   const galleryGrid = document.getElementById('profile-gallery-grid');
   const galleryStatus = document.getElementById('profile-gallery-status');
+  
+  if (galleryTrigger) {
+    galleryTrigger.hidden = true;
+  }
+
 
   if (galleryTrigger && galleryPanel && galleryGrid && galleryStatus) {
     const sb = window.islySupabase?.client;
@@ -1144,10 +1149,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       galleryGrid.replaceChildren();
 
-      if (!fotos || fotos.length === 0) {
-        galleryStatus.textContent = 'Esta galeria ainda não tem fotos.';
-      } else {
-        galleryStatus.textContent = '';
+      
+if (!fotos || fotos.length === 0) {
+  galleryTrigger.hidden = true;
+  galleryPanel.hidden = true;
+  galleryStatus.textContent = '';
+} else {
+  galleryTrigger.hidden = false;
+  galleryStatus.textContent = '';
+
 
         fotos.forEach((foto, index) => {
           const url = window.islySupabase.getPublicUrl(foto.storage_path);
@@ -1837,6 +1847,11 @@ if (data.avatar_url) {
     gap: 5px;
   }
 }
+  
+#profile-gallery-trigger[hidden] {
+  display: none !important;
+}
+
 </style>
 </body>
 </html>
