@@ -2090,10 +2090,16 @@ if (addCustomLinkBtn) {
     const title = customLinkTitleInput.value.trim();
     let rawUrl = customLinkUrlInput.value.trim();
 
-    if (!title || !rawUrl) {
-      alert('Preencha o nome e o endereço do link.');
-      return;
-    }
+    
+if (!title || !rawUrl) {
+  alert(
+    'Leitura dos campos:\n' +
+    'Nome: ' + JSON.stringify(title) + '\n' +
+    'Endereço: ' + JSON.stringify(rawUrl)
+  );
+  return;
+}
+
 
    currentProfile.links = Array.isArray(currentProfile.links)
   ? currentProfile.links
