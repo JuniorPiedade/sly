@@ -1,11 +1,16 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080812">
-<meta name="description" content="isly.me — sua identidade digital gamer e geek. Um só link para o seu universo.">
-<title>isly.me — Seu universo, um só link</title>
+<meta name="theme-color" content="#080809">
+<meta name="description" content="SLYE — sua identidade digital. Reúna seus links, projetos e redes em um único lugar.">
+<title>SLYE — Sua identidade digital</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -15,130 +20,1306 @@ if (typeof supabase === 'undefined') {
 </script>
 
 <style>
-:root{color-scheme:dark;--bg:#080812;--panel:#11111f;--panel2:#17172a;--line:#292944;--text:#f6f4ff;--muted:#a6a4c4;--purple:#a855f7;--blue:#22d3ee;--pink:#f472b6;--green:#86efac}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;color:inherit}
-.app{min-height:100vh;background:radial-gradient(ellipse at 50% -10%,rgba(124,58,237,.28),transparent 45%),var(--bg);display:flex;flex-direction:column;justify-content:space-between}
-.wrap{width:min(1100px,calc(100% - 36px));margin:auto}
-.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:850;letter-spacing:-1.3px}
-.brand-mark{height:34px;width:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#090914;box-shadow:0 0 25px #9333ea44}
-.dot{color:var(--blue)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:11px 18px;background:#ffffff08;color:var(--text);font-weight:700;font-size:13px;transition:.2s}
-.btn:hover{transform:translateY(-1px);border-color:#8b5cf6}
-.btn.primary{border:0;background:linear-gradient(105deg,#7c3aed,#9333ea 58%,#2563eb);box-shadow:0 8px 30px #7c3aed38}
-.hero{padding:40px 0 70px;text-align:center}
-.pill-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:1px solid #a855f736;background:#a855f70d;color:#d8b4fe;font-size:11px;font-weight:750;margin-bottom:22px}
-.dot-live{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80}
-.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.1;letter-spacing:-.04em;margin:0 auto 16px;max-width:800px}
-.hero h1 span{background:linear-gradient(135deg,#c084fc,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero>p{color:var(--muted);font-size:clamp(14px,2vw,16px);max-width:540px;margin:0 auto 34px;line-height:1.6}
-.auth-box{max-width:440px;margin:0 auto;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#141422,#0d0d18);padding:30px;box-shadow:0 20px 50px #0008;text-align:left}
-.auth-box h3{margin:0 0 6px;font-size:18px;letter-spacing:-.02em}
-.auth-box>p{color:var(--muted);font-size:12px;margin:0 0 20px}
-.field{display:block;margin-bottom:16px}
-.field span{display:block;font-size:11px;color:#c7c4dd;margin-bottom:7px;font-weight:650}
-.field input{width:100%;border:1px solid #35334e;border-radius:11px;padding:12px 14px;background:#0a0a14;color:#fff;outline:none;font-size:13px}
-.field input:focus{border-color:#a855f7;box-shadow:0 0 0 3px #a855f71b}
-.auth-btn{width:100%;padding:13px;border:0;border-radius:11px;background:linear-gradient(105deg,#7c3aed,#9333ea 58%,#2563eb);color:#fff;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 8px 25px #7c3aed38;transition:.2s}
-.auth-btn:hover{transform:translateY(-1px);opacity:.95}
-.auth-btn:disabled{opacity:.65;cursor:wait;transform:none}
-.auth-links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:18px;font-size:12px;color:#c4b5fd}
-.auth-links button{background:none;border:0;padding:0;color:#c4b5fd;font-size:12px;text-decoration:underline;text-underline-offset:3px}
-.auth-links button:hover{color:#fff}
-.password-note{font-size:11px!important;line-height:1.5;color:var(--muted)!important;margin:12px 0 0!important}
-.info-section{padding:50px 0 80px;border-top:1px solid #a78bfa1f}
-.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.info-card{border:1px solid var(--line);border-radius:18px;background:#11111f88;padding:24px;text-align:left;transition:.2s}
-.info-card:hover{border-color:#8b5cf666;transform:translateY(-2px)}
-.info-icon{font-size:26px;margin-bottom:12px;display:block}
-.info-card h4{font-size:15px;margin:0 0 8px;letter-spacing:-.01em}
-.info-card p{color:var(--muted);font-size:12px;margin:0;line-height:1.6}
-.footer{border-top:1px solid #24243a;padding:24px 0;color:#8f8da9;font-size:11px;text-align:center}
-@media(max-width:850px){.info-grid{grid-template-columns:1fr}.auth-box{padding:20px}}
-.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:50;background:#1c1b2d;border:1px solid #514174;color:#f5f3ff;border-radius:12px;padding:11px 15px;font-size:12px;box-shadow:0 10px 40px #0008;transition:.25s;max-width:calc(100% - 28px);text-align:center}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+:root {
+  color-scheme: dark;
+  --bg: #080809;
+  --panel: #111113;
+  --panel2: #171719;
+  --white: #f7f7fa;
+  --muted: #92929d;
+  --line: rgba(255,255,255,.10);
+  --purple: #a78bfa;
+  --blue: #67d5f5;
+  --mono: 'DM Mono', monospace;
+  --font: 'Space Grotesk', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+body, button, input {
+  font-family: var(--font);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  color: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--purple);
+  outline-offset: 4px;
+}
+
+.site {
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 78% 12%,rgba(255,255,255,.045),transparent 32%),
+    radial-gradient(ellipse at 18% 56%,rgba(167,139,250,.035),transparent 32%),
+    var(--bg);
+}
+
+.site::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .13;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size: 50px 50px;
+  mask-image: linear-gradient(to bottom,#000,transparent 85%);
+}
+
+.wrap {
+  width: min(1120px,84%);
+  margin-inline: auto;
+  position: relative;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #a0a0aa;
+  font: 10px var(--mono);
+  letter-spacing: 1.5px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: #d9d9e0;
+  box-shadow: 0 0 10px rgba(255,255,255,.4);
+}
+
+/* NAVEGAÇÃO */
+
+header {
+  height: 82px;
+  padding: 0 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  z-index: 10;
+  background: rgba(8,8,9,.72);
+  backdrop-filter: blur(16px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.logo {
+  width: 39px;
+  height: 39px;
+  border: 1px solid #36363d;
+  border-radius: 10px;
+  background: linear-gradient(145deg,#242429,#0b0b0d);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: .3s ease;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  object-fit: contain;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: filter .3s,opacity .3s;
+}
+
+.logo .placeholder {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  text-shadow: 0 0 15px rgba(255,255,255,.25);
+}
+
+.brand:hover .logo {
+  border-color: #888891;
+  box-shadow: 0 0 20px rgba(167,139,250,.12);
+  transform: translateY(-2px);
+}
+
+.brand-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.brand-name span,
+.footer-brand span {
+  color: #85858f;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+nav a,
+.login-link {
+  color: #9999a3;
+  font-size: 12px;
+  transition: color .2s;
+}
+
+nav a:hover,
+.login-link:hover {
+  color: white;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 11px 15px;
+  border: 1px solid #39393f;
+  font-size: 12px;
+  transition: .25s;
+}
+
+.nav-button:hover {
+  color: #080809;
+  background: white;
+  border-color: white;
+  box-shadow: 0 0 22px rgba(255,255,255,.10);
+}
+
+/* BOTÕES */
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  padding: 15px 18px;
+  color: #080809;
+  background: var(--white);
+  border: 1px solid var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  transition: .25s;
+}
+
+.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(255,255,255,.13);
+}
+
+.primary span {
+  font-size: 17px;
+}
+
+.secondary {
+  color: #a0a0aa;
+  font-size: 11px;
+  transition: color .2s;
+}
+
+.secondary:hover {
+  color: white;
+}
+
+/* HERO */
+
+.hero {
+  width: min(1120px,84%);
+  min-height: 660px;
+  margin: auto;
+  padding: 85px 0 100px;
+  display: grid;
+  grid-template-columns: 1fr .86fr;
+  align-items: center;
+  gap: 8%;
+  position: relative;
+}
+
+.hero-copy {
+  min-width: 0;
+}
+
+.hero h1 {
+  font-size: clamp(60px,7.1vw,91px);
+  font-weight: 600;
+  letter-spacing: -5.5px;
+  line-height: .98;
+  margin: 32px 0 25px;
+}
+
+.hero h1 span {
+  color: #777780;
+  transition: color .3s,text-shadow .3s;
+}
+
+.hero h1:hover span {
+  color: #c8c8d2;
+  text-shadow: 0 0 30px rgba(255,255,255,.10);
+}
+
+.hero-copy > p {
+  max-width: 390px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.note {
+  margin-top: 46px;
+  color: #73737e;
+  font: 10px var(--mono);
+}
+
+.note span {
+  color: var(--purple);
+  margin-right: 8px;
+}
+
+/* AUTENTICAÇÃO */
+
+.auth-box {
+  position: relative;
+  padding: 27px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 6px;
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(167,139,250,.07),transparent 44%),
+    linear-gradient(145deg,#171719,#0d0d0f);
+  box-shadow: 0 25px 75px rgba(0,0,0,.38);
+  transition: border-color .3s,transform .3s;
+  min-width: 0;
+}
+
+.auth-box:hover {
+  border-color: rgba(255,255,255,.24);
+}
+
+.auth-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 19px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+  color: #85858f;
+  font: 9px var(--mono);
+  letter-spacing: .7px;
+}
+
+.auth-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.auth-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a5d6bd;
+  box-shadow: 0 0 9px rgba(134,239,172,.35);
+}
+
+.auth-box h3 {
+  margin: 0 0 7px;
+  font-size: 23px;
+  line-height: 1.2;
+  letter-spacing: -.8px;
+  font-weight: 600;
+}
+
+.auth-box > p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 0 0 23px;
+}
+
+.field {
+  display: block;
+  margin-bottom: 17px;
+}
+
+.field > span {
+  display: block;
+  font-size: 11px;
+  color: #c5c5ce;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.field input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #35353c;
+  border-radius: 3px;
+  padding: 13px 14px;
+  background: #0b0b0d;
+  color: #fff;
+  outline: none;
+  font-size: 12px;
+  transition: border-color .2s,box-shadow .2s;
+}
+
+.field input::placeholder {
+  color: #62626d;
+}
+
+.field input:focus {
+  border-color: #8d7ac4;
+  box-shadow: 0 0 0 3px rgba(167,139,250,.09);
+}
+
+.auth-btn {
+  width: 100%;
+  min-height: 46px;
+  padding: 13px 15px;
+  border: 1px solid #e5e5eb;
+  border-radius: 3px;
+  background: #f4f4f7;
+  color: #09090b;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.auth-btn:hover {
+  background: white;
+  box-shadow: 0 0 25px rgba(255,255,255,.10);
+  transform: translateY(-1px);
+}
+
+.auth-btn:disabled {
+  opacity: .6;
+  cursor: wait;
+  transform: none;
+}
+
+.auth-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 19px;
+  font-size: 11px;
+  color: #aaaab5;
+}
+
+.auth-links button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: 11px;
+  text-decoration: underline;
+  text-decoration-color: #555560;
+  text-underline-offset: 4px;
+  transition: color .2s;
+}
+
+.auth-links button:hover {
+  color: white;
+}
+
+.password-note {
+  font-size: 10px !important;
+  line-height: 1.7 !important;
+  color: #777780 !important;
+  margin: 12px 0 0 !important;
+}
+
+.auth-bottom {
+  margin-top: 22px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #6f6f79;
+  font: 8px var(--mono);
+  letter-spacing: .5px;
+}
+
+/* DETALHES DECORATIVOS */
+
+.floating {
+  position: absolute;
+  z-index: 2;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(20,20,23,.96);
+  border: 1px solid #34343a;
+  box-shadow: 0 10px 35px rgba(0,0,0,.35);
+  animation: float 5s ease-in-out infinite;
+}
+
+.floating strong {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.floating small {
+  display: block;
+  color: #85858e;
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+.floating-top {
+  top: 105px;
+  right: -28px;
+}
+
+.floating-bottom {
+  bottom: 72px;
+  left: -33px;
+  animation-delay: -2s;
+}
+
+.floating-icon {
+  font-size: 21px;
+  color: var(--purple);
+}
+
+.floating-dot {
+  width: 7px;
+  height: 7px;
+  background: #a5d6bd;
+  border-radius: 50%;
+  box-shadow: 0 0 9px rgba(134,239,172,.45);
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* FAIXA ANIMADA */
+
+.ticker {
+  padding: 21px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  position: relative;
+}
+
+.ticker-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 40px;
+  width: max-content;
+  min-width: 200%;
+  animation: slide 32s linear infinite;
+}
+
+.ticker span {
+  color: #92929d;
+  white-space: nowrap;
+  font: 10px var(--mono);
+  letter-spacing: 2px;
+}
+
+.ticker b {
+  color: var(--purple);
+  font-weight: 400;
+}
+
+@keyframes slide {
+  to { transform: translateX(-50%); }
+}
+
+/* RECURSOS */
+
+.features {
+  width: min(1120px,84%);
+  margin: auto;
+  padding: 110px 0;
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 35px;
+  margin-bottom: 43px;
+}
+
+.section-head h2 {
+  margin-top: 22px;
+  font-size: clamp(38px,5vw,56px);
+  font-weight: 500;
+  letter-spacing: -3px;
+  line-height: 1.1;
+}
+
+.section-head h2 span {
+  color: #777780;
+}
+
+.section-head > p {
+  max-width: 300px;
+  color: #92929d;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 15px;
+}
+
+.feature {
+  min-width: 0;
+  padding: 22px 20px;
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg,#141416,#0b0b0d);
+  transition: .3s;
+}
+
+.feature:hover {
+  transform: translateY(-4px);
+  border-color: #4b4b52;
+}
+
+.feature-label {
+  color: #777780;
+  font: 9px var(--mono);
+  letter-spacing: .7px;
+}
+
+.art {
+  height: 150px;
+  margin: 20px 0;
+  border: 1px solid rgba(255,255,255,.045);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse,rgba(255,255,255,.055),transparent 70%);
+}
+
+.art-core {
+  width: 57px;
+  height: 57px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #777780;
+  border-radius: 14px;
+  background: linear-gradient(145deg,#39393f,#111113);
+  box-shadow: 0 0 25px rgba(255,255,255,.08);
+  font-size: 27px;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.orbit {
+  position: absolute;
+  width: 120px;
+  height: 90px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 50%;
+  transform: rotate(40deg);
+}
+
+.orbit.two {
+  width: 90px;
+  height: 130px;
+  transform: rotate(-35deg);
+  border-color: rgba(167,139,250,.22);
+}
+
+.feature h3 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -.4px;
+}
+
+.feature > p {
+  min-height: 58px;
+  margin-top: 12px;
+  color: #92929d;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.feature-foot {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: #777780;
+  font: 8px var(--mono);
+}
+
+/* MANIFESTO */
+
+.manifesto {
+  padding: 100px 24px;
+  text-align: center;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: radial-gradient(ellipse at center,rgba(167,139,250,.045),transparent 65%);
+}
+
+.quote {
+  color: #777780;
+  font: 65px Georgia,serif;
+  line-height: 1;
+}
+
+.manifesto h2 {
+  max-width: 800px;
+  margin: 10px auto 25px;
+  font-size: clamp(30px,5vw,52px);
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: -2px;
+}
+
+.manifesto h2 span {
+  color: #85858f;
+}
+
+.manifesto small {
+  color: #777780;
+  font: 9px var(--mono);
+  letter-spacing: 1.4px;
+}
+
+/* CTA FINAL */
+
+.final {
+  text-align: center;
+  padding: 115px 20px;
+  position: relative;
+  background: radial-gradient(ellipse at center 55%,rgba(255,255,255,.045),transparent 50%);
+}
+
+.final-kicker {
+  color: #9999a3;
+  font: 9px var(--mono);
+  letter-spacing: 2px;
+}
+
+.final h2 {
+  margin: 25px 0 20px;
+  font-size: clamp(55px,8vw,88px);
+  line-height: .98;
+  font-weight: 500;
+  letter-spacing: -5px;
+}
+
+.final h2 span {
+  color: #777780;
+}
+
+.final p {
+  color: #92929d;
+  font-size: 13px;
+}
+
+.final .primary {
+  margin-top: 30px;
+}
+
+.final-note {
+  display: block;
+  margin-top: 25px;
+  color: #73737e;
+  font: 8px var(--mono);
+  letter-spacing: 1px;
+}
+
+/* RODAPÉ */
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 27px 7%;
+  border-top: 1px solid var(--line);
+  position: relative;
+}
+
+.footer-brand {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+footer small {
+  color: #73737e;
+  font: 8px var(--mono);
+  letter-spacing: .6px;
+}
+
+/* NOTIFICAÇÕES */
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translate(-50%,20px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: #171719;
+  border: 1px solid #44414f;
+  color: #f5f5fa;
+  padding: 12px 16px;
+  font-size: 12px;
+  box-shadow: 0 10px 40px #0008;
+  transition: opacity .25s,transform .25s;
+  max-width: calc(100% - 28px);
+  width: max-content;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%,0);
+}
+
+/* RESPONSIVIDADE */
+
+@media(max-width:1000px) {
+  .wrap,
+  .hero,
+  .features {
+    width: 88%;
+  }
+
+  header {
+    padding-inline: 5%;
+  }
+
+  nav {
+    gap: 17px;
+  }
+
+  .hero {
+    gap: 5%;
+  }
+
+  .hero h1 {
+    font-size: clamp(55px,6.5vw,75px);
+    letter-spacing: -4px;
+  }
+
+  .auth-box {
+    padding: 22px;
+  }
+
+  .floating-top {
+    right: -12px;
+  }
+
+  .floating-bottom {
+    left: -12px;
+  }
+
+  .grid {
+    gap: 10px;
+  }
+
+  .feature {
+    padding: 18px 13px;
+  }
+}
+
+@media(max-width:720px) {
+  header {
+    height: 72px;
+    padding: 0 20px;
+  }
+
+  nav {
+    display: none;
+  }
+
+  .brand-name {
+    font-size: 18px;
+  }
+
+  .actions {
+    gap: 0;
+  }
+
+  .login-link {
+    display: none;
+  }
+
+  .nav-button {
+    padding: 10px 12px;
+  }
+
+  .hero {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 55px;
+    padding: 70px 23px 75px;
+  }
+
+  .hero h1 {
+    font-size: clamp(58px,12.5vw,82px);
+    letter-spacing: -4px;
+  }
+
+  .hero-copy > p {
+    font-size: 13px;
+  }
+
+  .hero-buttons {
+    gap: 18px;
+  }
+
+  .note {
+    margin-top: 32px;
+  }
+
+  .auth-box {
+    width: 100%;
+    max-width: 460px;
+    margin: auto;
+    padding: 22px 20px;
+  }
+
+  .floating {
+    padding: 9px 10px;
+  }
+
+  .floating-top {
+    top: -19px;
+    right: -6px;
+  }
+
+  .floating-bottom {
+    bottom: -22px;
+    left: -6px;
+  }
+
+  .floating strong {
+    font-size: 9px;
+  }
+
+  .floating small {
+    font-size: 8px;
+  }
+
+  .features {
+    width: auto;
+    padding: 80px 22px;
+  }
+
+  .section-head {
+    display: block;
+    margin-bottom: 30px;
+  }
+
+  .section-head h2 {
+    font-size: 43px;
+  }
+
+  .section-head > p {
+    margin-top: 20px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .feature {
+    padding: 21px;
+  }
+
+  .art {
+    height: 155px;
+  }
+
+  .feature > p {
+    min-height: 0;
+  }
+
+  .manifesto {
+    padding: 80px 23px;
+  }
+
+  .manifesto h2 {
+    font-size: 34px;
+  }
+
+  .final {
+    padding: 90px 20px;
+  }
+
+  .final h2 {
+    font-size: clamp(52px,11.5vw,76px);
+    letter-spacing: -3px;
+  }
+
+  footer {
+    padding: 25px 22px;
+    flex-wrap: wrap;
+  }
+
+  footer small:nth-child(2) {
+    order: 3;
+    width: 100%;
+  }
+}
+
+@media(max-width:380px) {
+  .brand {
+    gap: 8px;
+  }
+
+  .logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand-name {
+    font-size: 16px;
+  }
+
+  .nav-button {
+    font-size: 10px;
+    padding: 9px;
+  }
+
+  .hero h1 {
+    font-size: 55px;
+  }
+
+  .auth-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
 </style>
 </head>
 
 <body>
-<div class="app">
-  <header class="wrap topbar">
-    <a class="brand" href="#" aria-label="isly.me">
-      <span class="brand-mark">⌬</span>
-      <span>isly<span class="dot">.me</span></span>
-    </a>
-    <div><a href="index.html" class="btn">Acessar Editor ↗</a></div>
-  </header>
+<div class="site">
 
-  <main class="wrap hero">
-    <div class="pill-badge"><span class="dot-live"></span> Sua identidade digital na nuvem</div>
-    <h1>Seu universo, <span>um só link.</span></h1>
-    <p>O hub de links definitivo para gamers, criadores e geeks. Monte sua identidade, exiba seu status de jogo e conecte sua comunidade.</p>
-
-    <div class="auth-box" id="authBoxContainer">
-      <h3 id="formTitle">Entre na sua conta</h3>
-      <p id="formDescription">Acesse seu universo com e-mail e senha.</p>
-
-      <form id="authForm">
-        <div class="field">
-          <span>Seu e-mail</span>
-          <input type="email" id="emailInput" placeholder="voce@exemplo.com" required autocomplete="email">
-        </div>
-
-        <div class="field" id="passwordField">
-          <span>Senha</span>
-          <input type="password" id="passwordInput" placeholder="Sua senha" required autocomplete="current-password" minlength="8">
-        </div>
-
-        <div class="field" id="confirmPasswordField" hidden>
-          <span>Confirme sua senha</span>
-          <input type="password" id="confirmPasswordInput" placeholder="Digite a senha novamente" autocomplete="new-password" minlength="8" disabled>
-        </div>
-
-        <button type="submit" class="auth-btn" id="submitBtn">Entrar</button>
-      </form>
-
-      <p class="password-note" id="passwordNote">Use sua senha cadastrada no ISLY.ME.</p>
-
-      <div class="auth-links">
-        <button type="button" id="forgotBtn">Esqueci minha senha</button>
-        <button type="button" id="signupBtn">Criar conta</button>
-        <button type="button" id="loginBtn" hidden>Já tenho conta</button>
-      </div>
+<header>
+  <a href="#inicio" class="brand" aria-label="SLYE — página inicial">
+    <div class="logo">
+      <img src="" alt="Logo SLYE" id="brandLogo">
+      <span class="placeholder" id="logoPlaceholder">S</span>
     </div>
-  </main>
+    <span class="brand-name">SLYE<span>.</span></span>
+  </a>
 
-  <section class="wrap info-section">
-    <div class="info-grid">
-      <div class="info-card">
-        <span class="info-icon">🎮</span>
-        <h4>Status Vivo de Jogo</h4>
-        <p>Mostre para o seu público exatamente o que você está jogando, assistindo ou criando em tempo real.</p>
-      </div>
-      <div class="info-card">
-        <span class="info-icon">✦</span>
-        <h4>Emblemas & Temas</h4>
-        <p>Personalize seu espaço com temas Cyber Neon, Sakura.exe ou Matrix Core e conquiste emblemas exclusivos.</p>
-      </div>
-      <div class="info-card">
-        <span class="info-icon">🚀</span>
-        <h4>Sincronizado na Nuvem</h4>
-        <p>Seus links e identidade protegidos no Supabase e publicados com alta performance na Vercel.</p>
-      </div>
+  <nav aria-label="Navegação principal">
+    <a href="#inicio">Universo</a>
+    <a href="#recursos">Recursos</a>
+    <a href="#sobre">Sobre</a>
+  </nav>
+
+  <div class="actions">
+    <a href="#entrar" class="login-link">Entrar</a>
+    <a href="#entrar" class="nav-button">Criar perfil ↗</a>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="inicio">
+
+  <div class="hero-copy">
+    <div class="eyebrow">
+      <span class="dot"></span>
+      SUA IDENTIDADE DIGITAL
     </div>
-  </section>
 
-  <footer class="footer">
-    <span>⌬ isly.me — Seu universo. Um só link. · © <span id="year"></span></span>
-  </footer>
+    <h1>Não seja<br>apenas mais<br><span>um link.</span></h1>
+
+    <p>
+      Seu espaço. Sua identidade. Suas regras.
+      Reúna seus links, projetos e redes em um único lugar.
+      Construa uma presença digital com a sua personalidade.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#entrar" class="primary">Criar meu SLYE <span>↗</span></a>
+      <a href="#recursos" class="secondary">Explorar a plataforma →</a>
+    </div>
+
+    <div class="note"><span>✳</span> Mais que um perfil. Sua presença digital.</div>
+  </div>
+
+  <div class="auth-box" id="entrar">
+    <div class="auth-top">
+      <span>SLYE / ACCESS</span>
+      <span class="auth-status">SISTEMA ONLINE</span>
+    </div>
+
+    <h3 id="formTitle">Entre na sua conta</h3>
+    <p id="formDescription">Acesse seu universo com e-mail e senha.</p>
+
+    <form id="authForm">
+      <label class="field">
+        <span>Seu e-mail</span>
+        <input type="email" id="emailInput" placeholder="voce@exemplo.com" required autocomplete="email">
+      </label>
+
+      <label class="field" id="passwordField">
+        <span>Senha</span>
+        <input type="password" id="passwordInput" placeholder="Sua senha" required autocomplete="current-password" minlength="8">
+      </label>
+
+      <label class="field" id="confirmPasswordField" hidden>
+        <span>Confirme sua senha</span>
+        <input type="password" id="confirmPasswordInput" placeholder="Digite a senha novamente" autocomplete="new-password" minlength="8" disabled>
+      </label>
+
+      <button type="submit" class="auth-btn" id="submitBtn">Entrar</button>
+    </form>
+
+    <p class="password-note" id="passwordNote">Use sua senha cadastrada no SLYE.</p>
+
+    <div class="auth-links">
+      <button type="button" id="forgotBtn">Esqueci minha senha</button>
+      <button type="button" id="signupBtn">Criar conta</button>
+      <button type="button" id="loginBtn" hidden>Já tenho conta</button>
+    </div>
+
+    <div class="auth-bottom">
+      <span>ACESSO SEGURO</span>
+      <span>SUA IDENTIDADE, SUAS REGRAS</span>
+    </div>
+  </div>
+
+  <div class="floating floating-top" aria-hidden="true">
+    <span class="floating-icon">✧</span>
+    <span>
+      <strong>Seu universo</strong>
+      <small>Em um só lugar</small>
+    </span>
+  </div>
+
+  <div class="floating floating-bottom" aria-hidden="true">
+    <span class="floating-dot"></span>
+    <span>
+      <strong>Seu perfil, suas regras.</strong>
+      <small>Uma identidade só sua.</small>
+    </span>
+  </div>
+
+</section>
+
+<div class="ticker" aria-label="Sua identidade, seu universo, sua presença">
+  <div class="ticker-inner" aria-hidden="true">
+    <span>SUA IDENTIDADE</span><b>✳</b>
+    <span>SEU UNIVERSO</span><b>✳</b>
+    <span>SUA PRESENÇA</span><b>✳</b>
+    <span>SEM LIMITES</span><b>✳</b>
+    <span>SUA IDENTIDADE</span><b>✳</b>
+    <span>SEU UNIVERSO</span><b>✳</b>
+    <span>SUA PRESENÇA</span><b>✳</b>
+    <span>SEM LIMITES</span><b>✳</b>
+  </div>
+</div>
+
+<section class="features" id="recursos">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> FEITO PARA SER SEU</div>
+      <h2>Seu mundo.<br><span>Suas possibilidades.</span></h2>
+    </div>
+
+    <p>
+      Não é só sobre compartilhar links.
+      É sobre construir uma presença digital que tenha a sua cara.
+    </p>
+  </div>
+
+  <div class="grid">
+    <article class="feature">
+      <div class="feature-label">01 / IDENTIDADE</div>
+      <div class="art" aria-hidden="true">
+        <div class="orbit"></div>
+        <div class="orbit two"></div>
+        <div class="art-core">S</div>
+      </div>
+      <h3>Não seja genérico.</h3>
+      <p>Personalize seu perfil com sua identidade, seus links e seu estilo.</p>
+      <div class="feature-foot">PERSONALIDADE EM CADA DETALHE ↗</div>
+    </article>
+
+    <article class="feature">
+      <div class="feature-label">02 / CONEXÕES</div>
+      <div class="art" aria-hidden="true">
+        <div class="orbit"></div>
+        <div class="orbit two"></div>
+        <div class="art-core">⌘</div>
+      </div>
+      <h3>Tudo conectado.</h3>
+      <p>Seus projetos, redes sociais e conteúdos reunidos em um só espaço.</p>
+      <div class="feature-foot">UM LUGAR. SEU UNIVERSO. ↗</div>
+    </article>
+
+    <article class="feature">
+      <div class="feature-label">03 / EXPRESSÃO</div>
+      <div class="art" aria-hidden="true">
+        <div class="orbit"></div>
+        <div class="orbit two"></div>
+        <div class="art-core">✧</div>
+      </div>
+      <h3>Presença marcante.</h3>
+      <p>Uma experiência visual pensada para destacar quem você é.</p>
+      <div class="feature-foot">SUA MARCA NO DIGITAL ↗</div>
+    </article>
+  </div>
+</section>
+
+<section class="manifesto" id="sobre">
+  <div class="quote" aria-hidden="true">“</div>
+  <h2>
+    A internet não precisa de mais do mesmo.<br>
+    Precisa de <span>mais identidade.</span>
+  </h2>
+  <small>SLYE — SUA PRESENÇA, SUA ASSINATURA.</small>
+</section>
+
+<section class="final">
+  <div class="final-kicker">O PRÓXIMO PASSO É SEU</div>
+  <h2>Seu universo<br>começa <span>aqui.</span></h2>
+  <p>Crie seu espaço. Mostre quem você é.</p>
+  <a href="#entrar" class="primary">Quero meu SLYE <span>↗</span></a>
+  <small class="final-note">SUA IDENTIDADE DIGITAL, DO SEU JEITO.</small>
+</section>
+</main>
+
+<footer>
+  <a href="#inicio" class="footer-brand">SLYE<span>.</span></a>
+  <small>FEITO PARA QUEM NÃO SEGUE O PADRÃO.</small>
+  <a href="#inicio"><small>VOLTAR AO TOPO ↑</small></a>
+</footer>
+
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/js/supabase.js"></script>
 <script>
+const logo = document.getElementById('brandLogo');
+const placeholder = document.getElementById('logoPlaceholder');
+
+function checkLogo() {
+  if (!logo || !placeholder) return;
+
+  const src = logo.getAttribute('src')?.trim();
+
+  if (!src) {
+    logo.style.opacity = '0';
+    placeholder.style.display = 'grid';
+    return;
+  }
+
+  logo.onload = () => {
+    logo.style.opacity = '1';
+    placeholder.style.display = 'none';
+  };
+
+  logo.onerror = () => {
+    logo.style.opacity = '0';
+    placeholder.style.display = 'grid';
+  };
+
+  if (logo.complete && logo.naturalWidth > 0) {
+    logo.style.opacity = '1';
+    placeholder.style.display = 'none';
+  }
+}
+
+checkLogo();
+
 document.addEventListener('DOMContentLoaded', async () => {
-  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('year')?.textContent;
+  const year = document.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
 
   const form = document.getElementById('authForm');
   const title = document.getElementById('formTitle');
@@ -185,7 +1366,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       title.textContent = 'Entre na sua conta';
       description.textContent = 'Acesse seu universo com e-mail e senha.';
       submit.textContent = 'Entrar';
-      note.textContent = 'Use sua senha cadastrada no ISLY.ME.';
+      note.textContent = 'Use sua senha cadastrada no SLYE.';
       password.autocomplete = 'current-password';
     } else if (mode === 'signup') {
       title.textContent = 'Crie sua conta';
@@ -303,5 +1484,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 </script>
+
 </body>
 </html>
