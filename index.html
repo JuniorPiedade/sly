@@ -1605,23 +1605,8 @@ function getSpotifyEmbed(url) {
   if (!url) return '';
   const match = url.match(/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/);
   if (match) {
-    return `<div class="embed-wrapper"><iframe src="https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0" height="80" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
-  }
-  return '';
-}
-
-function getYoutubeEmbed(url) {
-  if (!url) return '';
-  let id = '';
-  if (url.includes('v=')) id = url.split('v=')[1]?.split('&')[0];
-  else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1]?.split('?')[0];
-  if (id) {
-    return `<div class="embed-wrapper"><iframe src="https://www.youtube.com/embed/${id}" height="180" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
-  }
-  return '';
-}
-
-function getInstagramEmbed(url) {
+    return `<div class="embed-wrapper"><iframe
+    function getInstagramEmbed(url) {
   if (!url) return '';
   const match = url.match(/instagram\.com\/(p|reel)\/([a-zA-Z0-9_-]+)/);
   if (match) {
@@ -1629,8 +1614,6 @@ function getInstagramEmbed(url) {
   }
   return '';
 }
-
-
 async function initGalleryEditor(userId) {
   const sb = window.islySupabase?.client;
 
@@ -1655,17 +1638,13 @@ async function initGalleryEditor(userId) {
   function updateUploadState() {
     const limitReached = photos.length >= 5;
     uploadBtn.disabled = limitReached;
-
     fileInput.disabled = limitReached;
-
     uploadBtn.textContent = limitReached
       ? 'Galeria completa (5/5)'
       : `Enviar foto (${photos.length}/5)`;
-
     uploadBtn.style.opacity = limitReached ? '0.6' : '';
     uploadBtn.style.cursor = limitReached ? 'not-allowed' : '';
   }
-
   function renderPhotos() {
     listEl.replaceChildren();
 
@@ -1678,7 +1657,6 @@ async function initGalleryEditor(userId) {
 
     photos.forEach((photo, index) => {
       const item = document.createElement('div');
-
       item.style.cssText =
         'display:flex;align-items:center;gap:12px;' +
         'padding:12px 0;border-bottom:1px solid rgba(255,255,255,.1);';
@@ -1768,18 +1746,20 @@ async function initGalleryEditor(userId) {
   }
 
   uploadBtn.addEventListener('click', async () => {
-  if (uploadBtn.dataset.uploading === 'true') return;
-  uploadBtn.dataset.uploading = 'true';
+    if (uploadBtn.dataset.uploading === 'true') return;
+    uploadBtn.dataset.uploading = 'true';
 
-  const file = fileInput.files?.[0];
+    const file = fileInput.files?.[0];
 
     if (!file) {
       setStatus('Selecione uma foto primeiro.', true);
+      uploadBtn.dataset.uploading = 'false';
       return;
     }
 
     if (photos.length >= 5) {
       setStatus('Você já atingiu o limite de 5 fotos.', true);
+      uploadBtn.dataset.uploading = 'false';
       return;
     }
 
@@ -1792,11 +1772,13 @@ async function initGalleryEditor(userId) {
 
     if (!allowedTypes[file.type]) {
       setStatus('Formato inválido. Use JPG, PNG, WebP ou GIF.', true);
+      uploadBtn.dataset.uploading = 'false';
       return;
     }
 
     if (file.size > 8 * 1024 * 1024) {
       setStatus('A foto deve ter no máximo 8 MB.', true);
+      uploadBtn.dataset.uploading = 'false';
       return;
     }
 
@@ -1844,9 +1826,9 @@ async function initGalleryEditor(userId) {
         true
       );
     } finally {
-  uploadBtn.dataset.uploading = 'false';
-  updateUploadState();
-}
+      uploadBtn.dataset.uploading = 'false';
+      updateUploadState();
+    }
   });
 
   try {
@@ -1885,119 +1867,113 @@ async function initEditor(userId) {
 
   let currentProfile = { ...profile };
 
- // --- LÓGICA DE INTEGRAÇÃO DO SPOTIFY ---
+  const connectSpotifyBtn = document.getElementById('connectSpotifyBtn');
+  const disconnectSpotifyBtn = document.getElementById('disconnectSpotifyBtn');
+  const spotifyConnectedBadge = document.getElementById('spotifyConnectedBadge');
 
-const connectSpotifyBtn = document.getElementById('connectSpotifyBtn');
-const disconnectSpotifyBtn = document.getElementById('disconnectSpotifyBtn');
-const spotifyConnectedBadge = document.getElementById('spotifyConnectedBadge');
-
-function updateSpotifyButtons(connected) {
-  if (connectSpotifyBtn) {
-    connectSpotifyBtn.style.display = connected ? 'none' : 'inline-flex';
-  }
-  if (spotifyConnectedBadge) {
-    spotifyConnectedBadge.style.display = connected ? 'inline-flex' : 'none';
-  }
-  if (disconnectSpotifyBtn) {
-    disconnectSpotifyBtn.style.display = connected ? 'inline-flex' : 'none';
-  }
-}
-
-async function callSpotifyFunction(action) {
-  const sb = window.islySupabase?.client;
-
-  if (!sb) {
-    throw new Error('Não foi possível carregar a sessão do SLYE. Recarregue a página.');
+  function updateSpotifyButtons(connected) {
+    if (connectSpotifyBtn) {
+      connectSpotifyBtn.style.display = connected ? 'none' : 'inline-flex';
+    }
+    if (spotifyConnectedBadge) {
+      spotifyConnectedBadge.style.display = connected ? 'inline-flex' : 'none';
+    }
+    if (disconnectSpotifyBtn) {
+      disconnectSpotifyBtn.style.display = connected ? 'inline-flex' : 'none';
+    }
   }
 
-  const { data: sessionData, error: sessionError } =
-    await sb.auth.getSession();
+  async function callSpotifyFunction(action) {
+    const sb = window.islySupabase?.client;
 
-  if (sessionError || !sessionData?.session?.access_token) {
-    throw new Error('Sua sessão expirou. Entre novamente no SLYE.');
+    if (!sb) {
+      throw new Error('Não foi possível carregar a sessão do SLYE. Recarregue a página.');
+    }
+
+    const { data: sessionData, error: sessionError } =
+      await sb.auth.getSession();
+
+    if (sessionError || !sessionData?.session?.access_token) {
+      throw new Error('Sua sessão expirou. Entre novamente no SLYE.');
+    }
+
+    const { data, error } = await sb.functions.invoke('spotify-auth', {
+      body: { action }
+    });
+
+    if (error) {
+      console.error('Erro detalhado da função Spotify:', error);
+
+      let detalhe = error.message || 'Erro desconhecido';
+
+      if (error.context instanceof Response) {
+        try {
+          const resposta = await error.context.clone().text();
+          detalhe = `HTTP ${error.context.status}: ${resposta || detalhe}`;
+        } catch (_) {
+          detalhe = `HTTP ${error.context.status}: ${detalhe}`;
+        }
+      }
+
+      throw new Error(detalhe);
+    }
+    return data;
   }
 
-  const { data, error } = await sb.functions.invoke('spotify-auth', {
-    body: { action }
+  updateSpotifyButtons(
+    typeof profile !== 'undefined' && Boolean(profile?.spotify_connected)
+  );
+
+  const spotifyStatus = new URLSearchParams(window.location.search).get('spotify');
+
+  if (spotifyStatus) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+
+    if (spotifyStatus === 'connected') {
+      updateSpotifyButtons(true);
+      if (typeof toast === 'function') {
+        toast('Spotify conectado com sucesso! ✓');
+      }
+    } else {
+      if (typeof toast === 'function') {
+        toast('Não foi possível conectar ao Spotify. Tente novamente.');
+      }
+    }
+  }
+
+  connectSpotifyBtn?.addEventListener('click', async () => {
+    try {
+      if (typeof toast === 'function') toast('Abrindo o Spotify...');
+
+      const result = await callSpotifyFunction('start');
+
+      if (!result?.url) {
+        throw new Error('O servidor não retornou o endereço de autorização.');
+      }
+
+      window.location.assign(result.url);
+    } catch (error) {
+      console.error('Erro ao iniciar conexão Spotify:', error);
+      alert(error.message || 'Erro ao conectar ao Spotify.');
+    }
   });
 
- 
-if (error) {
-  console.error('Erro detalhado da função Spotify:', error);
-
-  let detalhe = error.message || 'Erro desconhecido';
-
-  if (error.context instanceof Response) {
+  disconnectSpotifyBtn?.addEventListener('click', async () => {
     try {
-      const resposta = await error.context.clone().text();
-      detalhe = `HTTP ${error.context.status}: ${resposta || detalhe}`;
-    } catch (_) {
-      detalhe = `HTTP ${error.context.status}: ${detalhe}`;
+      if (typeof toast === 'function') toast('Desconectando o Spotify...');
+
+      await callSpotifyFunction('disconnect');
+      updateSpotifyButtons(false);
+
+      if (typeof toast === 'function') {
+        toast('Spotify desconectado com sucesso! ✓');
+      }
+    } catch (error) {
+      console.error('Erro ao desconectar Spotify:', error);
+      alert(error.message || 'Erro ao desconectar o Spotify.');
     }
-  }
+  });
 
-  throw new Error(detalhe);
-}
-  return data;
-}
-
-// Estado inicial baseado no perfil carregado pelo painel.
-updateSpotifyButtons(
-  typeof profile !== 'undefined' && Boolean(profile?.spotify_connected)
-);
-
-// Trata o retorno da autorização Spotify.
-const spotifyStatus = new URLSearchParams(window.location.search).get('spotify');
-
-if (spotifyStatus) {
-  window.history.replaceState({}, document.title, window.location.pathname);
-
-  if (spotifyStatus === 'connected') {
-    updateSpotifyButtons(true);
-    if (typeof toast === 'function') {
-      toast('Spotify conectado com sucesso! ✓');
-    }
-  } else {
-    if (typeof toast === 'function') {
-      toast('Não foi possível conectar ao Spotify. Tente novamente.');
-    }
-  }
-}
-
-connectSpotifyBtn?.addEventListener('click', async () => {
-  try {
-    if (typeof toast === 'function') toast('Abrindo o Spotify...');
-
-    const result = await callSpotifyFunction('start');
-
-    if (!result?.url) {
-      throw new Error('O servidor não retornou o endereço de autorização.');
-    }
-
-    window.location.assign(result.url);
-  } catch (error) {
-    console.error('Erro ao iniciar conexão Spotify:', error);
-    alert(error.message || 'Erro ao conectar ao Spotify.');
-  }
-});
-
-disconnectSpotifyBtn?.addEventListener('click', async () => {
-  try {
-    if (typeof toast === 'function') toast('Desconectando o Spotify...');
-
-    await callSpotifyFunction('disconnect');
-    updateSpotifyButtons(false);
-
-    if (typeof toast === 'function') {
-      toast('Spotify desconectado com sucesso! ✓');
-    }
-  } catch (error) {
-    console.error('Erro ao desconectar Spotify:', error);
-    alert(error.message || 'Erro ao desconectar o Spotify.');
-  }
-});
-
-  
   if (!Array.isArray(currentProfile.emblems)) currentProfile.emblems = [];
   if (!Array.isArray(currentProfile.links)) currentProfile.links = [];
   if (!Array.isArray(currentProfile.friendships)) currentProfile.friendships = [];
@@ -2038,112 +2014,106 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   const customLinkUrlInput = document.getElementById('customLinkUrl');
   const addCustomLinkBtn = document.getElementById('addCustomLinkBtn');
   const customLinksList = document.getElementById('customLinksList');
-  
 
-function renderCustomLinks() {
-  if (!customLinksList) return;
+  function renderCustomLinks() {
+    if (!customLinksList) return;
 
-  customLinksList.replaceChildren();
+    customLinksList.replaceChildren();
 
-  const links = Array.isArray(currentProfile.links)
-    ? currentProfile.links
-    : [];
+    const links = Array.isArray(currentProfile.links)
+      ? currentProfile.links
+      : [];
 
-  links.forEach((link, index) => {
-    const item = document.createElement('div');
-    item.style.cssText =
-      'display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border:1px solid var(--line);border-radius:8px;';
+    links.forEach((link, index) => {
+      const item = document.createElement('div');
+      item.style.cssText =
+        'display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border:1px solid var(--line);border-radius:8px;';
 
-    const info = document.createElement('div');
-    info.style.cssText = 'min-width:0;flex:1;';
+      const info = document.createElement('div');
+      info.style.cssText = 'min-width:0;flex:1;';
 
-    const titleEl = document.createElement('strong');
-    titleEl.textContent = link.title || 'Link personalizado';
-    titleEl.style.cssText =
-      'display:block;font-size:13px;overflow-wrap:anywhere;';
+      const titleEl = document.createElement('strong');
+      titleEl.textContent = link.title || 'Link personalizado';
+      titleEl.style.cssText =
+        'display:block;font-size:13px;overflow-wrap:anywhere;';
 
-    const urlEl = document.createElement('small');
-    urlEl.textContent = link.url || '';
-    urlEl.style.cssText =
-      'display:block;opacity:.65;font-size:11px;overflow-wrap:anywhere;';
+      const urlEl = document.createElement('small');
+      urlEl.textContent = link.url || '';
+      urlEl.style.cssText =
+        'display:block;opacity:.65;font-size:11px;overflow-wrap:anywhere;';
 
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.textContent = 'Remover';
-    removeBtn.className = 'btn';
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.textContent = 'Remover';
+      removeBtn.className = 'btn';
 
-    removeBtn.addEventListener('click', () => {
-      currentProfile.links.splice(index, 1);
+      removeBtn.addEventListener('click', () => {
+        currentProfile.links.splice(index, 1);
+        renderCustomLinks();
+        updatePreview();
+        triggerAutoSave();
+      });
+
+      info.append(titleEl, urlEl);
+      item.append(info, removeBtn);
+      customLinksList.appendChild(item);
+    });
+  }
+
+  if (addCustomLinkBtn) {
+    addCustomLinkBtn.addEventListener('click', () => {
+      const title = document.getElementById('customLinkTitle')?.value.trim() || '';
+      let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
+
+      if (!title || !rawUrl) {
+        alert('Preencha o nome e o endereço do link.');
+        return;
+      }
+
+      if (!Array.isArray(currentProfile.links)) {
+        currentProfile.links = [];
+      }
+
+      // CORREÇÃO: Limite de 3 links limpo, sem JSON de debug feio
+      if (currentProfile.links.length >= 3) {
+        alert('Você atingiu o limite máximo de 3 links personalizados.');
+        return;
+      }
+
+      if (!/^https?:\/\//i.test(rawUrl)) {
+        rawUrl = 'https://' + rawUrl;
+      }
+
+      let parsedUrl;
+
+      try {
+        parsedUrl = new URL(rawUrl);
+      } catch {
+        alert('Digite um endereço de link válido.');
+        return;
+      }
+
+      if (
+        !['http:', 'https:'].includes(parsedUrl.protocol) ||
+        !parsedUrl.hostname.includes('.')
+      ) {
+        alert('Digite um endereço válido, como https://youtube.com.');
+        return;
+      }
+
+      currentProfile.links.push({
+        title: title.slice(0, 50),
+        url: parsedUrl.href
+      });
+
+      customLinkTitleInput.value = '';
+      customLinkUrlInput.value = '';
+
       renderCustomLinks();
       updatePreview();
       triggerAutoSave();
     });
-
-    info.append(titleEl, urlEl);
-    item.append(info, removeBtn);
-    customLinksList.appendChild(item);
-  });
-}
-
-
-if (addCustomLinkBtn) {
-  addCustomLinkBtn.addEventListener('click', () => {
-    const title = document.getElementById('customLinkTitle')?.value.trim() || '';
-let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
-
-    if (!title || !rawUrl) {
-      alert('Preencha o nome e o endereço do link.');
-      return;
-    }
-
-    if (!Array.isArray(currentProfile.links)) {
-      currentProfile.links = [];
-    }
-
-   if (currentProfile.links.length >= 3) {
-  alert(
-    'Diagnóstico de links:\n' +
-    'Quantidade: ' + currentProfile.links.length + '\n' +
-    'Links: ' + JSON.stringify(currentProfile.links, null, 2)
-  );
-  return;
-}
-
-    if (!/^https?:\/\//i.test(rawUrl)) {
-      rawUrl = 'https://' + rawUrl;
-    }
-
-    let parsedUrl;
-
-    try {
-      parsedUrl = new URL(rawUrl);
-    } catch {
-      alert('Digite um endereço de link válido.');
-      return;
-    }
-
-    if (
-      !['http:', 'https:'].includes(parsedUrl.protocol) ||
-      !parsedUrl.hostname.includes('.')
-    ) {
-      alert('Digite um endereço válido, como https://youtube.com.');
-      return;
-    }
-
-    currentProfile.links.push({
-      title: title.slice(0, 50),
-      url: parsedUrl.href
-    });
-
-    customLinkTitleInput.value = '';
-    customLinkUrlInput.value = '';
-
-    renderCustomLinks();
-    updatePreview();
-    triggerAutoSave();
-  });
-}
-
+  }
 
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
@@ -2160,33 +2130,33 @@ let rawUrl = document.getElementById('customLinkUrl')?.value.trim() || '';
   bioInput.value = currentProfile.bio || '';
   bioCount.textContent = (currentProfile.bio || '').length;
   if (avatarShapeSelect) {
-  avatarShapeSelect.value = currentProfile.avatar_shape || 'rounded';
-}
+    avatarShapeSelect.value = currentProfile.avatar_shape || 'rounded';
+  }
   activityInput.value = currentProfile.activity || '';
 
   cardStyleSelect.value = currentProfile.card_style || 'opaque';
 
-if (perspectiveEffectSelect) {
-  perspectiveEffectSelect.value =
-    currentProfile.perspective_effect === 'off' ? 'off' : 'on';
-}
+  if (perspectiveEffectSelect) {
+    perspectiveEffectSelect.value =
+      currentProfile.perspective_effect === 'off' ? 'off' : 'on';
+  }
 
-if (profileAlignSelect) {
-  profileAlignSelect.value = currentProfile.card_align || 'left';
-}
+  if (profileAlignSelect) {
+    profileAlignSelect.value = currentProfile.card_align || 'left';
+  }
   if (playerStyleSelect) playerStyleSelect.value = currentProfile.player_style || 'default';
   if (visualEffectSelect) visualEffectSelect.value = currentProfile.visual_effect || 'none';
   initVisualEffect(currentProfile.visual_effect || 'none');
 
-bgColorInput.value = currentProfile.bg_color || '#080812';
-cardBgInput.value = currentProfile.card_bg || '#11111f';
-titleColorInput.value = currentProfile.title_color || '#ffffff';
-textColorInput.value = currentProfile.text_color || '#f6f4ff';
+  bgColorInput.value = currentProfile.bg_color || '#080812';
+  cardBgInput.value = currentProfile.card_bg || '#11111f';
+  titleColorInput.value = currentProfile.title_color || '#ffffff';
+  textColorInput.value = currentProfile.text_color || '#f6f4ff';
 
-if (linkColorInput) {
-  linkColorInput.value = currentProfile.accent_color || '#a855f7';
-  renderCustomLinks();
-}
+  if (linkColorInput) {
+    linkColorInput.value = currentProfile.accent_color || '#a855f7';
+    renderCustomLinks();
+  }
 
   nameEffectSelect.value = currentProfile.name_effect || 'none';
   customCursorInput.value = currentProfile.custom_cursor || '';
@@ -2293,7 +2263,6 @@ if (linkColorInput) {
     toast('Wallpaper removido! ✓');
   });
 
-  
   perspectiveEffectSelect?.addEventListener('change', () => {
     currentProfile.perspective_effect = perspectiveEffectSelect.value;
 
@@ -2312,7 +2281,6 @@ if (linkColorInput) {
     triggerAutoSave();
   });
 
-  
   let saveTimer = null;
   function triggerAutoSave() {
     syncDot.classList.add('saving');
@@ -2326,37 +2294,33 @@ if (linkColorInput) {
           if (val) socialsData[key] = val;
         });
       }
-const soundtrackVal = soundtrackUrlInput.value.trim();
+      const soundtrackVal = soundtrackUrlInput.value.trim();
       const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
-const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
-const perspectiveEffectVal = perspectiveEffectSelect
-  ? perspectiveEffectSelect.value
-  : 'on';
-const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
+      const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
+      const perspectiveEffectVal = perspectiveEffectSelect ? perspectiveEffectSelect.value : 'on';
+      const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
 
       const payload = {
         id: userId, name: nameInput.value, handle: handleInput.value,
         bio: bioInput.value,
-avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
-activity: activityInput.value,
+        avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
+        activity: activityInput.value,
         status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
         card_style: cardStyleSelect.value, card_align: alignVal,
         player_style: playerStyleVal, visual_effect: visualEffectVal, perspective_effect: perspectiveEffectVal,
-       
-bg_color: bgColorInput.value,
-card_bg: cardBgInput.value,
-accent_color: linkColorInput ? linkColorInput.value : '#a855f7',
-title_color: titleColorInput.value,
-text_color: textColorInput.value,
-name_effect: nameEffectSelect.value,
-custom_cursor: customCursorInput.value,
-
+        bg_color: bgColorInput.value,
+        card_bg: cardBgInput.value,
+        accent_color: linkColorInput ? linkColorInput.value : '#a855f7',
+        title_color: titleColorInput.value,
+        text_color: textColorInput.value,
+        name_effect: nameEffectSelect.value,
+        custom_cursor: customCursorInput.value,
         avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
         soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
         embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
         emblems: currentProfile.emblems,
-socials: socialsData,
-links: Array.isArray(currentProfile.links) ? currentProfile.links : [],
+        socials: socialsData,
+        links: Array.isArray(currentProfile.links) ? currentProfile.links : [],
         friendships: currentProfile.friendships, handle_changed: currentProfile.handle_changed
       };
 
@@ -2410,8 +2374,8 @@ links: Array.isArray(currentProfile.links) ? currentProfile.links : [],
     });
   }
 
-[cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarShapeSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
-  if (input) {
+  [cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarShapeSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+    if (input) {
       input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
       input.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
     }
@@ -2469,45 +2433,42 @@ links: Array.isArray(currentProfile.links) ? currentProfile.links : [],
     const avatarEl = document.getElementById('previewAvatar');
     const avatarVal = avatarUrlInput.value.trim();
     if (avatarVal) {
-  avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
-  avatarEl.style.setProperty('background', 'transparent', 'important');
-} else {
-  avatarEl.textContent = '⌬';
-  avatarEl.style.removeProperty('background');
-}
+      avatarEl.innerHTML = `<img src="${avatarVal}" alt="Avatar">`;
+      avatarEl.style.setProperty('background', 'transparent', 'important');
+    } else {
+      avatarEl.textContent = '⌬';
+      avatarEl.style.removeProperty('background');
+    }
    
-const avatarShape = avatarShapeSelect?.value || 'rounded';
-const isCircle = avatarShape === 'circle';
+    const avatarShape = avatarShapeSelect?.value || 'rounded';
+    const isCircle = avatarShape === 'circle';
 
-// Limpa os formatos anteriores
-avatarEl.classList.remove(
-  'avatar-shape-circle',
-  'avatar-shape-rounded'
-);
+    avatarEl.classList.remove(
+      'avatar-shape-circle',
+      'avatar-shape-rounded'
+    );
 
-// Aplica o formato selecionado
-avatarEl.classList.add(
-  isCircle ? 'avatar-shape-circle' : 'avatar-shape-rounded'
-);
+    avatarEl.classList.add(
+      isCircle ? 'avatar-shape-circle' : 'avatar-shape-rounded'
+    );
 
-avatarEl.style.setProperty(
-  'border-radius',
-  isCircle ? '50%' : '20px',
-  'important'
-);
+    avatarEl.style.setProperty(
+      'border-radius',
+      isCircle ? '50%' : '20px',
+      'important'
+    );
 
-avatarEl.style.setProperty('overflow', 'hidden', 'important');
+    avatarEl.style.setProperty('overflow', 'hidden', 'important');
 
-// Aplica o formato também à imagem
-const avatarImg = avatarEl.querySelector('img');
+    const avatarImg = avatarEl.querySelector('img');
 
-if (avatarImg) {
-  avatarImg.style.setProperty(
-    'border-radius',
-    isCircle ? '50%' : '20px',
-    'important'
-  );
-}
+    if (avatarImg) {
+      avatarImg.style.setProperty(
+        'border-radius',
+        isCircle ? '50%' : '20px',
+        'important'
+      );
+    }
     document.getElementById('previewStatusEmoji').textContent = currentProfile.status_emoji || '🎮';
     document.getElementById('previewStatusText').textContent = `${currentProfile.status_label || 'Jogando'} · ${activityInput.value || 'Atividade'}`;
 
@@ -2539,23 +2500,21 @@ if (avatarImg) {
     if (fx === 'none') nameEl.style.color = titleColorInput.value;
     else nameEl.style.color = '';
 
- 
-const activeTextColor = textColorInput.value;
+    const activeTextColor = textColorInput.value;
 
-const previewBioEl = document.getElementById('previewBio');
-if (previewBioEl) previewBioEl.style.color = activeTextColor;
+    const previewBioEl = document.getElementById('previewBio');
+    if (previewBioEl) previewBioEl.style.color = activeTextColor;
 
-const previewHandleEl = document.getElementById('previewHandle');
-if (previewHandleEl) previewHandleEl.style.color = activeTextColor;
+    const previewHandleEl = document.getElementById('previewHandle');
+    if (previewHandleEl) previewHandleEl.style.color = activeTextColor;
 
-const previewStatusEmojiEl = document.getElementById('previewStatusEmoji');
-const previewStatusTextEl = document.getElementById('previewStatusText');
-if (previewStatusEmojiEl) previewStatusEmojiEl.style.color = activeTextColor;
-if (previewStatusTextEl) previewStatusTextEl.style.color = activeTextColor;
+    const previewStatusEmojiEl = document.getElementById('previewStatusEmoji');
+    const previewStatusTextEl = document.getElementById('previewStatusText');
+    if (previewStatusEmojiEl) previewStatusEmojiEl.style.color = activeTextColor;
+    if (previewStatusTextEl) previewStatusTextEl.style.color = activeTextColor;
 
-const previewEmblemsEl = document.getElementById('previewEmblems');
-if (previewEmblemsEl) previewEmblemsEl.style.color = activeTextColor;
-
+    const previewEmblemsEl = document.getElementById('previewEmblems');
+    if (previewEmblemsEl) previewEmblemsEl.style.color = activeTextColor;
 
     const emPreview = document.getElementById('previewEmblems');
     emPreview.innerHTML = (currentProfile.emblems || []).map(id => {
@@ -2626,49 +2585,41 @@ if (previewEmblemsEl) previewEmblemsEl.style.color = activeTextColor;
 
     const soundtrackVal = soundtrackUrlInput.value.trim();
     const playerStyleVal = playerStyleSelect ? playerStyleSelect.value : 'default';
-const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
-const perspectiveEffectVal = perspectiveEffectSelect
-  ? perspectiveEffectSelect.value
-  : 'on';
-const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
+    const visualEffectVal = visualEffectSelect ? visualEffectSelect.value : 'none';
+    const perspectiveEffectVal = perspectiveEffectSelect ? perspectiveEffectSelect.value : 'on';
+    const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
 
     const payload = {
       id: userId, name: nameInput.value, handle: handleInput.value,
-bio: bioInput.value,
-avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
-activity: activityInput.value,      status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
+      bio: bioInput.value,
+      avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
+      activity: activityInput.value,      status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
       card_style: cardStyleSelect.value, card_align: alignVal,
       player_style: playerStyleVal,
-visual_effect: visualEffectVal,
-perspective_effect: perspectiveEffectVal,
+      visual_effect: visualEffectVal,
+      perspective_effect: perspectiveEffectVal,
       bg_color: bgColorInput.value, card_bg: cardBgInput.value,
-      
-accent_color: linkColorInput ? linkColorInput.value : '#a855f7',
-title_color: titleColorInput.value,
-text_color: textColorInput.value,
-
+      accent_color: linkColorInput ? linkColorInput.value : '#a855f7',
+      title_color: titleColorInput.value,
+      text_color: textColorInput.value,
       name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
       avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
       soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
       embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
       emblems: currentProfile.emblems, socials: socialsData, links: Array.isArray(currentProfile.links) ? currentProfile.links : [],
-
       friendships: currentProfile.friendships, handle_changed: currentProfile.handle_changed
     };
 
-    
     const err = await window.islySupabase.saveProfile(payload);
     syncDot.classList.remove('saving');
     syncText.textContent = err ? 'Erro ao salvar' : 'Sincronizado';
     toast(err ? 'Erro ao salvar.' : 'Configurações salvas! ✓');
   });
 
- // Inicializa a galeria do perfil
   await initGalleryEditor(userId);
 }
 </script>
 <script>
-// Script de Proteção / Easter Egg + Função Spotify Rich Presence
 (() => {
   const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
   const assinatura = "P.S: Diel — SLY.ME";
@@ -2737,7 +2688,6 @@ text_color: textColorInput.value,
   }, true);
 })();
 
-// Função que busca a música atual no Spotify e atualiza o visual no site
 async function updateSpotifyPresence(accessToken) {
   const widget = document.getElementById('spotify-widget');
   const coverEl = document.getElementById('spotify-cover');
@@ -2767,8 +2717,6 @@ async function updateSpotifyPresence(accessToken) {
     }
   } catch (err) {
     console.error('Erro ao procurar música do Spotify:', err);
-    console.error("Erro ao processar callback do Spotify:", err);
-      alert("Erro detalhado: " + err.message); // Alerta visual para sabermos o motivo exato
   }
 }
 </script>
