@@ -1349,7 +1349,6 @@ a.brand > span:last-child .dot {
     <div class="profile-header-row">
      <div class="avatar-container">
       <div class="avatar" id="previewAvatar">⌬</div>
-      <div id="previewFrame" class="avatar-frame"></div>
      </div>
      <div class="profile-info">
       <h3 id="previewName">Carregando...</h3>
@@ -1724,7 +1723,6 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   const handleInput = document.getElementById('handle');
   const bioInput = document.getElementById('bio');
   const bioCount = document.getElementById('bioCount');
-  const avatarFrameSelect = document.getElementById('avatarFrameSelect');
   const avatarShapeSelect = document.getElementById('avatarShapeSelect');
   const activityInput = document.getElementById('activity');
   const shareUrlInput = document.getElementById('shareUrl');
@@ -1763,7 +1761,6 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
 
   bioInput.value = currentProfile.bio || '';
   bioCount.textContent = (currentProfile.bio || '').length;
-  avatarFrameSelect.value = currentProfile.avatar_frame || 'none';
   if (avatarShapeSelect) {
   avatarShapeSelect.value = currentProfile.avatar_shape || 'rounded';
 }
@@ -1936,7 +1933,6 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
       const payload = {
         id: userId, name: nameInput.value, handle: handleInput.value,
         bio: bioInput.value,
-avatar_frame: avatarFrameSelect.value,
 avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
 activity: activityInput.value,
         status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
@@ -2002,7 +1998,7 @@ activity: activityInput.value,
     });
   }
 
-[cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, avatarShapeSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+[cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarShapeSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
   if (input) {
       input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
       input.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
@@ -2213,7 +2209,6 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
     const payload = {
       id: userId, name: nameInput.value, handle: handleInput.value,
 bio: bioInput.value,
-avatar_frame: avatarFrameSelect.value,
 avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
 activity: activityInput.value,      status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
       card_style: cardStyleSelect.value, card_align: alignVal,
