@@ -1017,7 +1017,6 @@ disconnectSpotifyBtn?.addEventListener('click', async () => {
   const cardStyleSelect = document.getElementById('cardStyle');
   const perspectiveEffectSelect = document.getElementById('perspectiveEffectSelect');
   const profileAlignSelect = document.getElementById('profileAlignSelect');
-  const guestbookStyleSelect = document.getElementById('guestbookStyleSelect');
   const playerStyleSelect = document.getElementById('playerStyleSelect');
   const visualEffectSelect = document.getElementById('visualEffectSelect');
   const bgColorInput = document.getElementById('bgColor');
@@ -1062,7 +1061,6 @@ if (perspectiveEffectSelect) {
 if (profileAlignSelect) {
   profileAlignSelect.value = currentProfile.card_align || 'left';
 }
-  guestbookStyleSelect.value = currentProfile.guestbook_style || 'vintage';
   if (playerStyleSelect) playerStyleSelect.value = currentProfile.player_style || 'default';
   if (visualEffectSelect) visualEffectSelect.value = currentProfile.visual_effect || 'none';
   initVisualEffect(currentProfile.visual_effect || 'none');
@@ -1221,7 +1219,7 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
         id: userId, name: nameInput.value, handle: handleInput.value,
         bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
         status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-        card_style: cardStyleSelect.value, card_align: alignVal, guestbook_style: guestbookStyleSelect.value,
+        card_style: cardStyleSelect.value, card_align: alignVal,
         player_style: playerStyleVal, visual_effect: visualEffectVal, perspective_effect: perspectiveEffectVal,
         bg_color: bgColorInput.value, card_bg: cardBgInput.value,
         accent_color: textColorInput.value, title_color: titleColorInput.value, text_color: textColorInput.value,
@@ -1283,8 +1281,8 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
     });
   }
 
-  [cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, guestbookStyleSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
-    if (input) {
+[cardStyleSelect, perspectiveEffectSelect, profileAlignSelect, playerStyleSelect, visualEffectSelect, bgColorInput, cardBgInput, titleColorInput, textColorInput, nameEffectSelect, avatarFrameSelect, customCursorInput, avatarUrlInput, wallpaperUrlInput, soundtrackUrlInput, splashTextInput, embedSpotifyInput, embedYoutubeInput, embedInstagramInput].forEach(input => {
+  if (input) {
       input.addEventListener('input', () => { updatePreview(); triggerAutoSave(); });
       input.addEventListener('change', () => { updatePreview(); triggerAutoSave(); });
     }
@@ -1467,7 +1465,7 @@ const alignVal = profileAlignSelect ? profileAlignSelect.value : 'left';
       id: userId, name: nameInput.value, handle: handleInput.value,
       bio: bioInput.value, avatar_frame: avatarFrameSelect.value, activity: activityInput.value,
       status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
-      card_style: cardStyleSelect.value, card_align: alignVal, guestbook_style: guestbookStyleSelect.value,
+      card_style: cardStyleSelect.value, card_align: alignVal,
       player_style: playerStyleVal,
 visual_effect: visualEffectVal,
 perspective_effect: perspectiveEffectVal,
