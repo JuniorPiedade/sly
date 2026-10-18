@@ -1744,7 +1744,10 @@ async function initGalleryEditor(userId) {
   }
 
   uploadBtn.addEventListener('click', async () => {
-    const file = fileInput.files?.[0];
+  if (uploadBtn.dataset.uploading === 'true') return;
+  uploadBtn.dataset.uploading = 'true';
+
+  const file = fileInput.files?.[0];
 
     if (!file) {
       setStatus('Selecione uma foto primeiro.', true);
@@ -1817,8 +1820,9 @@ async function initGalleryEditor(userId) {
         true
       );
     } finally {
-      updateUploadState();
-    }
+  uploadBtn.dataset.uploading = 'false';
+  updateUploadState();
+}
   });
 
   try {
