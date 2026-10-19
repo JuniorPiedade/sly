@@ -174,8 +174,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border: none !important;
 }
 
-
-/* SLYE — layout do perfil alinhado à esquerda */
+  /* SLYE — layout do perfil */
 .profile-card.align-left {
   text-align: left;
   display: grid;
@@ -184,7 +183,18 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   gap: 12px 18px;
 }
 
-/* Topo: foto à esquerda, informações ao lado */
+
+/* SLYE — layout do perfil alinhado à esquerda */
+.profile-card.align-left {
+  position: relative;
+  text-align: left;
+  display: grid;
+  grid-template-columns: minmax(110px, 0.65fr) minmax(0, 1.35fr);
+  align-items: start;
+  gap: 12px 18px;
+}
+
+/* Cabeçalho: foto, nome, usuário e cargo */
 .profile-card.align-left .profile-header-row {
   grid-column: 1 / -1;
   grid-row: 1;
@@ -195,7 +205,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   gap: 14px;
   width: 100%;
   min-width: 0;
-  padding: 2px 0 0;
+  padding: 2px 125px 0 0;
   box-sizing: border-box;
 }
 
@@ -227,26 +237,34 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   overflow-wrap: anywhere;
 }
 
-/* Segunda linha: redes sociais à esquerda, bio à direita */
+/* Redes sociais no canto superior direito */
 .profile-card.align-left .public-socials {
-  grid-column: 1;
-  grid-row: 2;
-  justify-content: flex-start;
-  align-content: flex-start;
-  width: 100%;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  max-width: 120px;
   min-width: 0;
+  z-index: 2;
 }
 
+/* Bio ocupa o lugar anteriormente usado pelas redes sociais */
 .profile-card.align-left .bio-preview {
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 2;
   width: 100%;
   min-width: 0;
+  margin: 0;
   text-align: left;
   overflow-wrap: anywhere;
 }
 
-/* Conteúdo abaixo das duas colunas */
+/* Conteúdo abaixo do cabeçalho */
 .profile-card.align-left #youtubeEmbedBar {
   grid-column: 1 / -1;
   grid-row: 3;
@@ -261,19 +279,21 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   min-width: 0;
 }
 
-.profile-card.align-left .live-status {
-  grid-column: 1 / -1;
-  grid-row: 5;
-  width: fit-content;
-  max-width: 100%;
-}
-
+/* Tags primeiro, status logo depois */
 .profile-card.align-left .preview-emblems {
   grid-column: 1 / -1;
-  grid-row: 6;
+  grid-row: 5;
   width: 100%;
   min-width: 0;
   justify-content: flex-start;
+}
+
+.profile-card.align-left .live-status {
+  grid-column: 1 / -1;
+  grid-row: 6;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 0;
 }
 
 .profile-card.align-left #spotify-widget {
