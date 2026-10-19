@@ -2170,16 +2170,17 @@ if (data.avatar_url) {
   background: rgba(168, 85, 247, 0.12);
 }
   
-/* SLYE — correção definitiva do posicionamento do player */
+
+/* SLYE — player centralizado e acima do perfil */
 #playerSection {
   position: fixed !important;
   left: 50% !important;
   right: auto !important;
-  top: auto !important;
-  bottom: 14px !important;
+  top: 14px !important;
+  bottom: auto !important;
   transform: translateX(-50%) !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
 }
 </style>
   </body>
