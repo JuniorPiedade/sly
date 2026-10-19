@@ -909,6 +909,19 @@ body {
 <div class="page-wrapper">
   <div class="container">
     <div class="profile-card card-style-opaque" id="profileCard">
+    <div id="profileBanner" aria-label="Banner do perfil" style="
+        display: none;
+        width: 100%;
+        height: 180px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px 16px 0 0;
+        margin-bottom: 16px;
+        background-position: 50% 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
+      "></div>
+
       <div class="profile-header-row animate-item delay-1">
         <div class="avatar-container">
           <div class="avatar" id="avatar">⌬</div>
@@ -1618,6 +1631,23 @@ try {
       document.body.style.backgroundPosition = 'center';
       document.body.style.backgroundRepeat = 'no-repeat';
       document.body.style.backgroundAttachment = 'fixed';
+    }
+
+    const profileBanner = document.getElementById('profileBanner');
+
+    if (profileBanner && data.banner_url) {
+      const bannerX = Number(data.banner_position_x ?? 50);
+      const bannerY = Number(data.banner_position_y ?? 50);
+      const bannerZoom = Number(data.banner_zoom ?? 100);
+
+      profileBanner.style.display = 'block';
+      profileBanner.style.backgroundImage = `url("${data.banner_url}")`;
+      profileBanner.style.backgroundPosition = `${bannerX}% ${bannerY}%`;
+      profileBanner.style.backgroundSize = `${bannerZoom}% auto`;
+      profileBanner.style.backgroundRepeat = 'no-repeat';
+    } else if (profileBanner) {
+      profileBanner.style.display = 'none';
+      profileBanner.style.backgroundImage = 'none';
     }
 
     card.style.border = 'none';
