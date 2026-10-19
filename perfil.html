@@ -750,6 +750,7 @@ body {
       
 <button
   id="profile-gallery-trigger"
+  hidden
   type="button"
   aria-label="Abrir galeria de fotos"
   aria-expanded="false"
@@ -1033,6 +1034,42 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!data) {
     document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
     return;
+  }
+
+  // --- GALERIA: MOSTRAR O BOTÃO SOMENTE SE HOUVER FOTOS ---
+  const galleryButton = document.getElementById('profile-gallery-trigger');
+
+  // Mantém a galeria escondida enquanto verificamos as fotos.
+  if (galleryButton) {
+    galleryButton.hidden = true;
+    galleryButton.setAttribute('aria-expanded', 'false');
+  }
+
+  try {
+    const supabaseClient = window.islySupabase?.client;
+
+    if (galleryButton && supabaseClient && data.id) {
+      const { data: photos, error } = await supabaseClient
+        .from('profile_gallery_photos')
+        .select('id, storage_path, caption, created_at')
+        .eq('profile_id', data.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (error) {
+        throw error;
+      }
+
+      // Só mostra o botão quando existir pelo menos uma foto.
+      galleryButton.hidden = !Array.isArray(photos) || photos.length === 0;
+    }
+  } catch (error) {
+    // Se a consulta falhar, não mostramos um botão vazio.
+    if (galleryButton) {
+      galleryButton.hidden = true;
+    }
+
+    console.warn('Não foi possível verificar a galeria:', error);
   }
 
   // --- SPOTIFY RICH PRESENCE: PERFIL PÚBLICO ---
@@ -1593,7 +1630,10 @@ if (data.avatar_url) {
 <style>
   
 /* ... CSS original do seu perfil permanece aqui ... */
-
+  
+#profile-gallery-trigger[hidden] {
+  display: none !important;
+}
 #profile-gallery-trigger {
   display: inline-flex;
   align-items: center;
