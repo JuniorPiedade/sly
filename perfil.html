@@ -655,16 +655,23 @@ body {
   letter-spacing: 1.2px;
 }
 
+
 @media (max-width: 600px) {
   .profile-card {
     border-radius: 21px;
   }
+}
 
-  #playerSection {
-    left: 50%;
-    bottom: 14px;
-    transform: translateX(-50%);
-  }
+  /* SLYE — player fixo no topo */
+#playerSection {
+  position: fixed !important;
+  top: 14px !important;
+  bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
 }
 </style>
 </head>
@@ -676,7 +683,8 @@ body {
 <!-- PLAYER ULTRA MINIMALISTA (FIXO NO CANTO INFERIOR ESQUERDO) -->
 
 
-<header id="playerSection" class="fixed z-50 w-[280px] max-w-[90vw]" style="display: none; left: 50%; bottom: 14px; transform: translateX(-50%);">
+
+<header id="playerSection" class="fixed z-50 w-[280px] max-w-[90vw]" style="display: none;">
     <div id="playerWrapper" class="glow-border bg-[#09090b]/90 rounded-full px-3 py-1.5 flex items-center justify-between transition-all duration-500 shadow-2xl">
         
         <!-- Botão Play/Pause -->
@@ -2170,14 +2178,13 @@ if (data.avatar_url) {
   background: rgba(168, 85, 247, 0.12);
 }
   
-
-/* SLYE — player centralizado e acima do perfil */
+/* SLYE — player fixo no topo, centralizado */
 #playerSection {
   position: fixed !important;
-  left: 50% !important;
-  right: auto !important;
   top: 14px !important;
   bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
   transform: translateX(-50%) !important;
   margin: 0 !important;
   z-index: 9999 !important;
