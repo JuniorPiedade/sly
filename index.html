@@ -1152,10 +1152,70 @@ a.brand > span:last-child .dot {
      <div style="display: flex; gap: 8px; align-items: center;">
       <input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp" style="flex:1;">
       <button type="button" id="removeWallpaperBtn" class="btn" style="padding: 10px 14px; color: #f87171; border-color: #7f1d1d; background: rgba(239, 68, 68, 0.1);" title="Remover Wallpaper">✕ Remover</button>
-     </div>
+      </div>
      <small>Máx. 2MB</small>
     </label>
    </section>
+    
+<div class="form-group" id="profileBannerEditor">
+  <label for="bannerFile">Banner do Perfil</label>
+  <p style="font-size:12px; color:#a1a1aa; margin:4px 0 10px;">
+    Imagem exibida somente na parte superior do seu perfil.
+  </p>
+
+  <input
+    id="bannerFile"
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+    style="width:100%;"
+  >
+
+  <div style="margin-top:14px;">
+    <label for="bannerPositionX">Posição horizontal</label>
+    <input
+      id="bannerPositionX"
+      type="range"
+      min="0"
+      max="100"
+      value="50"
+      style="width:100%;"
+    >
+  </div>
+
+  <div style="margin-top:12px;">
+    <label for="bannerPositionY">Posição vertical</label>
+    <input
+      id="bannerPositionY"
+      type="range"
+      min="0"
+      max="100"
+      value="50"
+      style="width:100%;"
+    >
+  </div>
+
+  <div style="margin-top:12px;">
+    <label for="bannerZoom">Zoom da imagem</label>
+    <input
+      id="bannerZoom"
+      type="range"
+      min="100"
+      max="200"
+      value="100"
+      step="1"
+      style="width:100%;"
+    >
+  </div>
+
+  <button
+    type="button"
+    id="removeBannerBtn"
+    class="btn"
+    style="margin-top:12px;"
+  >
+    ✕ Remover banner
+  </button>
+</div>
    <section class="panel" id="panel-status">
     <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 08</span></div>
     <div class="options" id="statusOptions" style="display:flex; flex-wrap:wrap; gap:6px;">
@@ -2233,7 +2293,8 @@ async function initEditor(userId) {
         text_color: textColorInput.value,
         name_effect: nameEffectSelect.value,
         custom_cursor: customCursorInput.value,
-        avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
+        avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value,
+        banner_url: currentProfile.banner_url || '', banner_position_x: Number(currentProfile.banner_position_x ?? 50), banner_position_y: Number(currentProfile.banner_position_y ?? 50), banner_zoom: Number(currentProfile.banner_zoom ?? 100),
         soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
         embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
         emblems: currentProfile.emblems,
@@ -2522,7 +2583,7 @@ async function initEditor(userId) {
       text_color: textColorInput.value,
       name_effect: nameEffectSelect.value, custom_cursor: customCursorInput.value,
       avatar_url: avatarUrlInput.value, wallpaper_url: wallpaperUrlInput.value, 
-      soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
+      banner_url: currentProfile.banner_url || '', banner_position_x: Number(currentProfile.banner_position_x ?? 50), banner_position_y: Number(currentProfile.banner_position_y ?? 50), banner_zoom: Number(currentProfile.banner_zoom ?? 100), soundtrack: soundtrackVal, soundtrack_url: soundtrackVal, splash_text: splashTextInput.value,
       embed_spotify: embedSpotifyInput.value, embed_youtube: embedYoutubeInput.value, embed_instagram: embedInstagramInput.value,
       emblems: currentProfile.emblems, socials: socialsData, links: Array.isArray(currentProfile.links) ? currentProfile.links : [],
       friendships: currentProfile.friendships, handle_changed: currentProfile.handle_changed
