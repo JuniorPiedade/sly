@@ -1134,89 +1134,85 @@ a.brand > span:last-child .dot {
 
  <div class="editor-grid">
   <div>
-   <section class="panel active-panel" id="panel-identity">
-   <div class="panel-head"><div><h2>◈ Identidade & Imagens</h2><p>Nome, bio, foto de perfil e wallpaper.</p></div><span class="muted">01 / 08</span></div>
-    <div class="two">
-     <label class="field"><span>Nome de exibição</span><input id="name" maxlength="36" placeholder="Seu nome"></label>
-     <label class="field"><span>Seu @ (endereço)</span><input id="handle" maxlength="24" placeholder="seunick"></label>
+   
+<section class="panel active-panel" id="panel-identity">
+  <div class="panel-head">
+    <div>
+      <h2>◈ Identidade & Imagens</h2>
+      <p>Nome, bio, foto de perfil e wallpaper.</p>
     </div>
-    <label class="field"><span>Bio curta (máx. 240 caracteres)</span><textarea id="bio" maxlength="240" placeholder="Conte sobre você..."></textarea><small><span id="bioCount">0</span>/240</small></label>
-    <label class="field"><span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Máx. 5MB para GIFs</small></label>
-     <label class="field"><span>Formato da foto de perfil</span><select id="avatarShapeSelect"><option value="rounded">Padrão — Cantos arredondados</option>
-    <option value="circle">Circular</option>
-  </select>
-  <small>Escolha o formato da foto, sem adicionar moldura.</small>
-</label>
+    <span class="muted">01 / 08</span>
+  </div>
+
+  <div class="two">
     <label class="field">
-     <span>Wallpaper do cartão (Upload)</span>
-     <div style="display: flex; gap: 8px; align-items: center;">
-      <input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp" style="flex:1;">
-      <button type="button" id="removeWallpaperBtn" class="btn" style="padding: 10px 14px; color: #f87171; border-color: #7f1d1d; background: rgba(239, 68, 68, 0.1);" title="Remover Wallpaper">✕ Remover</button>
-      </div>
-     <small>Máx. 2MB</small>
+      <span>Nome de exibição</span>
+      <input id="name" maxlength="36" placeholder="Seu nome">
     </label>
-   </section>
-    
-<div class="form-group" id="profileBannerEditor">
-  <label for="bannerFile">Banner do Perfil</label>
-  <p style="font-size:12px; color:#a1a1aa; margin:4px 0 10px;">
-    Imagem exibida somente na parte superior do seu perfil.
-  </p>
-
-  <input
-    id="bannerFile"
-    type="file"
-    accept="image/png,image/jpeg,image/webp"
-    style="width:100%;"
-  >
-
-  <div style="margin-top:14px;">
-    <label for="bannerPositionX">Posição horizontal</label>
-    <input
-      id="bannerPositionX"
-      type="range"
-      min="0"
-      max="100"
-      value="50"
-      style="width:100%;"
-    >
+    <label class="field">
+      <span>Seu @ (endereço)</span>
+      <input id="handle" maxlength="24" placeholder="seunick">
+    </label>
   </div>
 
-  <div style="margin-top:12px;">
-    <label for="bannerPositionY">Posição vertical</label>
-    <input
-      id="bannerPositionY"
-      type="range"
-      min="0"
-      max="100"
-      value="50"
-      style="width:100%;"
-    >
-  </div>
+  <label class="field">
+    <span>Bio curta (máx. 240 caracteres)</span>
+    <textarea id="bio" maxlength="240" placeholder="Conte sobre você..."></textarea>
+    <small><span id="bioCount">0</span>/240</small>
+  </label>
 
-  <div style="margin-top:12px;">
-    <label for="bannerZoom">Zoom da imagem</label>
-    <input
-      id="bannerZoom"
-      type="range"
-      min="100"
-      max="200"
-      value="100"
-      step="1"
-      style="width:100%;"
-    >
-  </div>
+  <label class="field">
+    <span>Foto de perfil (Upload PNG, JPG, WebP ou GIF VIP)</span>
+    <input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+    <small>Máx. 5MB para GIFs</small>
+  </label>
 
-  <button
-    type="button"
-    id="removeBannerBtn"
-    class="btn"
-    style="margin-top:12px;"
-  >
-    ✕ Remover banner
-  </button>
-</div>
-   <section class="panel" id="panel-status">
+  <label class="field">
+    <span>Formato da foto de perfil</span>
+    <select id="avatarShapeSelect">
+      <option value="rounded">Padrão — Cantos arredondados</option>
+      <option value="circle">Circular</option>
+    </select>
+    <small>Escolha o formato da foto, sem adicionar moldura.</small>
+  </label>
+
+  <label class="field">
+    <span>Wallpaper do cartão (Upload)</span>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <input id="wallpaperFile" type="file" accept="image/png,image/jpeg,image/webp" style="flex:1;">
+      <button type="button" id="removeWallpaperBtn" class="btn" style="padding:10px 14px; color:#f87171; border-color:#7f1d1d; background:rgba(239,68,68,0.1);" title="Remover Wallpaper">✕ Remover</button>
+    </div>
+    <small>Máx. 2MB</small>
+  </label>
+
+  <div class="form-group" id="profileBannerEditor">
+    <label for="bannerFile">Banner do Perfil</label>
+    <p style="font-size:12px; color:#a1a1aa; margin:4px 0 10px;">
+      Imagem exibida somente na parte superior do seu perfil.
+    </p>
+
+    <input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp" style="width:100%;">
+
+    <div style="margin-top:14px;">
+      <label for="bannerPositionX">Posição horizontal</label>
+      <input id="bannerPositionX" type="range" min="0" max="100" value="50" style="width:100%;">
+    </div>
+
+    <div style="margin-top:12px;">
+      <label for="bannerPositionY">Posição vertical</label>
+      <input id="bannerPositionY" type="range" min="0" max="100" value="50" style="width:100%;">
+    </div>
+
+    <div style="margin-top:12px;">
+      <label for="bannerZoom">Zoom da imagem</label>
+      <input id="bannerZoom" type="range" min="100" max="200" value="100" step="1" style="width:100%;">
+    </div>
+    <button type="button" id="removeBannerBtn" class="btn" style="margin-top:12px;">
+      ✕ Remover banner
+    </button>
+  </div>
+</section>
+<section class="panel" id="panel-status">
     <div class="panel-head"><div><h2>◉ Status vivo</h2><p>Atividade atual.</p></div><span class="muted">02 / 08</span></div>
     <div class="options" id="statusOptions" style="display:flex; flex-wrap:wrap; gap:6px;">
      <button type="button" class="choice active" data-emoji="🎮" data-label="Jogando">🎮 Jogando</button>
@@ -1233,9 +1229,8 @@ a.brand > span:last-child .dot {
      <button type="button" class="choice" data-emoji="🎵" data-label="Escutando música">🎵 Escutando música</button>
     </div>
     <label class="field" style="margin-top:14px"><span>Detalhe da atividade</span><input id="activity" maxlength="45" placeholder="Ex: Valorant"></label>
-   </section>
-
-   <section class="panel" id="panel-emblems">
+    </section>
+    <section class="panel" id="panel-emblems">
     <div class="panel-head"><div><h2>✦ Emblemas</h2><p>Escolha até 20 emblemas para exibir no seu perfil.</p></div><span class="muted">03 / 08</span></div>
     <div class="emblems" id="emblemGrid" style="grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px;">
      <button type="button" class="emblem" data-id="nerd"><span style="font-size:22px; display:block; margin-bottom:4px;">🤓</span>Nerd</button>
@@ -1260,7 +1255,6 @@ a.brand > span:last-child .dot {
      <button type="button" class="emblem" data-id="fundador"><span style="font-size:22px; display:block; margin-bottom:4px;">💎</span>Fundador</button>
     </div>
    </section>
-
    <section class="panel" id="panel-socials">
       <div class="panel-head"><div><h2>🌐 Redes Sociais por @</h2><p>Identificadores com logos oficiais originais locais.</p></div><span class="muted">04 / 08</span></div>
       <div class="social-grid">
@@ -1303,8 +1297,7 @@ a.brand > span:last-child .dot {
           <button type="button" id="disconnectSpotifyBtn" class="btn" style="padding: 4px 10px; font-size: 11px; color: #f87171; border-color: #7f1d1d; background: rgba(239, 68, 68, 0.1);">Desconectar</button>
         </div>
       </div>
-     
-      <small>Permite exibir o que estás a ouvir no Spotify em tempo real no teu perfil.</small>
+     <small>Permite exibir o que estás a ouvir no Spotify em tempo real no teu perfil.</small>
     </div>
    </section>
    <section class="panel" id="panel-soundtrack">
