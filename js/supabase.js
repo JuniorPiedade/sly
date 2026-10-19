@@ -336,7 +336,43 @@ async getProfileById(userId) {
       }
     },
 
-    getPublicUrl(filePath) {
+    async uploadProfileBanner(filePath, file) {
+      const sb = initSupabase();
+      if (!sb) return 'Cliente Supabase indisponível.';
+
+      try {
+        const { error } = await sb.storage
+          .from('profile-banners')
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: true
+          });
+
+        if (error) throw error;
+        return null;
+      } catch (error) {
+        console.error('Erro ao enviar banner:', error);
+        return error.message || 'Erro ao enviar banner.';
+      }
+    },
+
+    getProfileBannerPublicUrl(filePath) {
+      const sb = initSupabase();
+      if (!sb) return '';
+
+      try {
+        const { data } = sb.storage
+          .from('profile-banners')
+          .getPublicUrl(filePath);
+
+        return data?.publicUrl || '';
+      } catch (error) {
+        console.error('Erro ao obter URL do banner:', error);
+        return '';
+      }
+    },
+
+     getPublicUrl(filePath) {
       const sb = initSupabase();
       if (!sb) return '';
 
