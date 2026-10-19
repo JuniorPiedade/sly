@@ -2140,6 +2140,38 @@ async function initEditor(userId) {
   customCursorInput.value = currentProfile.custom_cursor || '';
   avatarUrlInput.value = currentProfile.avatar_url || '';
   wallpaperUrlInput.value = currentProfile.wallpaper_url || '';
+  
+    currentProfile.banner_url = currentProfile.banner_url || '';
+
+    currentProfile.banner_position_x = Number(
+      currentProfile.banner_position_x ?? 50
+    );
+
+    currentProfile.banner_position_y = Number(
+      currentProfile.banner_position_y ?? 50
+    );
+
+    currentProfile.banner_zoom = Number(
+      currentProfile.banner_zoom ?? 100
+    );
+
+    const bannerFileInput = document.getElementById('bannerFile');
+    const bannerPositionXInput = document.getElementById('bannerPositionX');
+    const bannerPositionYInput = document.getElementById('bannerPositionY');
+    const bannerZoomInput = document.getElementById('bannerZoom');
+
+    if (bannerPositionXInput) {
+      bannerPositionXInput.value = currentProfile.banner_position_x;
+    }
+
+    if (bannerPositionYInput) {
+      bannerPositionYInput.value = currentProfile.banner_position_y;
+    }
+
+    if (bannerZoomInput) {
+      bannerZoomInput.value = currentProfile.banner_zoom;
+    }
+
   soundtrackUrlInput.value = currentProfile.soundtrack || currentProfile.soundtrack_url || '';
   splashTextInput.value = currentProfile.splash_text || '';
 
