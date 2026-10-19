@@ -1565,14 +1565,22 @@ if (data.avatar_url) {
     socialsBar.innerHTML = sHTML;
   }
 
-  const embedsBar = document.getElementById('embedsBar');
-  if (embedsBar) {
-    let eHTML = '';
-    eHTML += getSpotifyEmbed(data.embed_spotify);
-    eHTML += getYoutubeEmbed(data.embed_youtube);
-    eHTML += getInstagramEmbed(data.embed_instagram);
-    embedsBar.innerHTML = eHTML;
-  }
+// SLYE EMBEDS — YouTube abaixo da apresentação
+const youtubeEmbedBar = document.getElementById('youtubeEmbedBar');
+
+if (youtubeEmbedBar) {
+  youtubeEmbedBar.innerHTML = getYoutubeEmbed(data.embed_youtube);
+}
+
+// Demais embeds — Spotify e Instagram
+const embedsBar = document.getElementById('embedsBar');
+
+if (embedsBar) {
+  let eHTML = '';
+  eHTML += getSpotifyEmbed(data.embed_spotify);
+  eHTML += getInstagramEmbed(data.embed_instagram);
+  embedsBar.innerHTML = eHTML;
+}
 
   const pubWrapper = document.getElementById('publicFriendshipsWrapper');
   const pubFriends = document.getElementById('publicFriendships');
