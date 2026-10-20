@@ -1729,14 +1729,19 @@ try {
       card.classList.add('card-style-opaque');
       card.style.backgroundColor = data.card_bg || '#11111f';
     }
-
-    if (data.wallpaper_url) {
-      document.body.style.backgroundImage = `linear-gradient(rgba(8, 8, 18, 0.75), rgba(8, 8, 18, 0.75)), url('${data.wallpaper_url}')`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundPosition = 'center';
-      document.body.style.backgroundRepeat = 'no-repeat';
-      document.body.style.backgroundAttachment = 'fixed';
-    }
+  
+if (data.wallpaper_url) {
+  document.body.style.backgroundColor = data.bg_color || '#080812';
+  document.body.style.backgroundImage =
+    `linear-gradient(rgba(8, 8, 18, 0.75), rgba(8, 8, 18, 0.75)), url('${data.wallpaper_url}')`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+  document.body.style.backgroundRepeat = 'no-repeat';
+  document.body.style.backgroundAttachment = 'fixed';
+} else {
+  document.body.style.backgroundImage = 'none';
+  document.body.style.background = data.bg_color || '#080812';
+}
 
     const profileBanner = document.getElementById('profileBanner');
 
