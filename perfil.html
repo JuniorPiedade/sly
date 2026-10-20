@@ -182,7 +182,14 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   align-items: start;
   gap: 12px 18px;
 }
-
+  
+/* SLYE — banner sempre no topo do perfil */
+.profile-card.align-left #profileBanner {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
 
 /* SLYE — layout do perfil alinhado à esquerda */
 .profile-card.align-left {
@@ -208,7 +215,50 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   padding: 2px 125px 0 0;
   box-sizing: border-box;
 }
+/* SLYE — reorganiza o perfil somente quando há banner */
+.profile-card.align-left #profileBanner[style*="display: block"] ~ .profile-header-row {
+  grid-row: 2;
+}
 
+.profile-card.align-left #profileBanner[style*="display: block"] ~ .bio-preview {
+  grid-row: 3;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ .preview-emblems {
+  grid-row: 4;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ .live-status {
+  grid-row: 5;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ #youtubeEmbedBar {
+  grid-row: 6;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ #embedsBar {
+  grid-row: 7;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ #spotify-widget {
+  grid-row: 8;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ #profile-gallery-trigger {
+  grid-row: 9;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ .preview-friendships-wrapper {
+  grid-row: 10;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ .stats-container {
+  grid-row: 11;
+}
+
+.profile-card.align-left #profileBanner[style*="display: block"] ~ .profile-foot {
+  grid-row: 12;
+}
 .profile-card.align-left .avatar-container {
   flex: 0 0 72px;
   width: 72px;
