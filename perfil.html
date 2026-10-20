@@ -183,14 +183,20 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   gap: 12px 18px;
 }
   
-/* SLYE — banner sempre no topo do perfil */
+/* SLYE — área visual do banner */
 .profile-card.align-left #profileBanner {
   grid-column: 1 / -1;
   grid-row: 1;
   width: 100%;
+  min-width: 0;
+  height: 180px;
+  margin: 0;
   box-sizing: border-box;
+  border-radius: 16px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
-
 /* SLYE — layout do perfil alinhado à esquerda */
 .profile-card.align-left {
   position: relative;
