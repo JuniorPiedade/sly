@@ -418,12 +418,19 @@ overflow-wrap: anywhere;
 }
 
 .profile-card.align-left .live-status {
-  grid-column: 1 / -1;
-  grid-row: 4;
+  grid-column: 2;
+  grid-row: 1;
   width: fit-content;
   max-width: 100%;
-  margin-top: 0;
+  margin-top: 4px;
   align-self: start;
+}
+
+.profile-card.align-left #roleBadge {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  justify-self: start;
+  margin-top: 0;
 }
 
 .profile-card.align-left #spotify-widget {
@@ -1053,17 +1060,20 @@ body {
         <div class="avatar-container">
           <div class="avatar" id="avatar">⌬</div>
           </div>
-        <div class="profile-info">
-          <h3 id="name">Carregando...</h3>
-          <div class="handle" id="handle">@...</div>
-          <div class="role-badge" id="roleBadge">👾 Membro</div>
-        </div>
-      </div>
+       <div class="profile-info">
+       <h3 id="name">Carregando...</h3>
+        <div class="handle" id="handle">@...</div>
+          <div class="live-status" id="statusBox">
+      <span id="statusEmoji">🎮</span>
+    <span id="statusText">Buscando universo...</span>
+  </div>
+</div>
+
      <p class="bio-preview animate-item delay-2" id="bio"></p>
+     <div class="role-badge" id="roleBadge">👾 Membro</div>
 <!-- SLYE EMBEDS: vídeo do YouTube abaixo da apresentação -->
 <div
   class="embeds-container animate-item delay-3" id="youtubeEmbedBar"></div>
-<div class="live-status animate-item delay-3" id="statusBox"><span id="statusEmoji">🎮</span><span id="statusText">Buscando universo...</span></div>
       <div class="preview-emblems animate-item delay-3" id="emblems"></div>
       <div class="public-socials animate-item delay-3" id="socialsBar"></div>
       <div class="embeds-container animate-item delay-4" id="embedsBar"></div>
