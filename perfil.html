@@ -525,25 +525,31 @@ overflow-wrap: anywhere;
   justify-content: center;
 }
 ```css
+
 /* SLYE — status e cargo lado a lado */
-.profile-card.align-left .profile-status-role {
-  display: flex;
-  flex-direction: row;
+.profile-card.align-left .profile-info .profile-status-role {
+  display: inline-flex !important;
+  flex-direction: row !important;
   align-items: center;
   justify-content: flex-start;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 8px;
-  width: 100%;
+  width: fit-content;
   max-width: 100%;
   min-width: 0;
 }
 
-.profile-card.align-left .profile-status-role .live-status {
+.profile-card.align-left .profile-info .profile-status-role #statusBox {
+  display: inline-flex;
   flex: 0 1 auto;
+  width: fit-content;
+  max-width: 100%;
   min-width: 0;
+  margin: 0;
   white-space: normal;
 }
-.profile-card.align-left .profile-status-role #roleBadge {
+
+.profile-card.align-left .profile-info .profile-status-role #roleBadge {
   display: inline-flex;
   flex: 0 0 auto;
   width: fit-content;
