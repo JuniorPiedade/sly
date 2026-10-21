@@ -416,12 +416,28 @@ overflow-wrap: anywhere;
   justify-content: flex-start;
   align-items: center;
 }
-  .profile-card.align-left .live-status {
+  
+.profile-card.align-left .live-status {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
   width: fit-content;
   max-width: 100%;
-  margin-top: 0;
+  min-width: 0;
+  min-height: 28px;
+  height: auto;
+  padding: 4px 11px;
+  box-sizing: border-box;
+  margin: 0;
   align-self: start;
+  justify-self: start;
+  line-height: 1.4;
+  white-space: normal;
+  flex-shrink: 0;
 }
+
 .profile-card.align-left #spotify-widget {
   grid-column: 1 / -1;
   grid-row: 7;
