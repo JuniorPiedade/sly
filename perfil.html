@@ -530,7 +530,25 @@ overflow-wrap: anywhere;
 .profile-card.align-center .public-socials {
   justify-content: center;
 }
+```css
+/* SLYE — status e cargo lado a lado */
+.profile-card.align-left .profile-status-role {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
 
+.profile-card.align-left .profile-status-role .live-status,
+.profile-card.align-left .profile-status-role .role-badge {
+  margin: 0;
+  flex: 0 0 auto;
+  align-self: center;
+}
 /* Status Compacto e Centralizado no modo Center */
 .profile-card.align-center .live-status {
   width: fit-content !important;
@@ -1074,7 +1092,6 @@ body {
         background-size: cover;
         background-repeat: no-repeat;
       "></div>
- ```html
 <div class="profile-header-row animate-item delay-1">
   <div class="avatar-container">
     <div class="avatar" id="avatar">⌬</div>
