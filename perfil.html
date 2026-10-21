@@ -512,8 +512,9 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 
 .avatar-container {
   position: relative;
-  width: 76px;
-  height: 76px;
+  width: 100px;
+  height: 100px;
+  aspect-ratio: 1 / 1;
   flex-shrink: 0;
   display: block;
 }
@@ -541,7 +542,17 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   display: block !important;
   border-radius: inherit !important;
 }
+/* SLYE — preserva o formato circular do avatar ampliado */
+.profile-card.align-left .avatar-container:has(.avatar-shape-circle),
+.profile-card.align-left .avatar-container:has(.avatar-shape-circle) .avatar {
+  border-radius: 50% !important;
+  overflow: hidden;
+}
 
+.profile-card.align-left .avatar-container:has(.avatar-shape-circle) .avatar img {
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
 /* Formato padrão: quadrado com cantos arredondados */
 .avatar.avatar-shape-rounded {
   border-radius: 20px !important;
