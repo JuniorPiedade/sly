@@ -183,7 +183,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   gap: 12px 18px;
 }
 
-
 /* SLYE — área visual do banner */
 .profile-card.align-left #profileBanner {
   grid-column: 1 / -1;
@@ -202,8 +201,18 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   background-size: cover;
   background-repeat: no-repeat;
 }
-
-
+  
+/* SLYE — tag de cargo na posição antiga do status */
+.profile-card.align-left > #roleBadge {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  justify-self: start;
+  align-self: start;
+  margin: 0;
+  max-width: 100%;
+  width: fit-content;
+  box-sizing: border-box;
+}
 /* SLYE — proteção de leitura do banner */
 .profile-card.align-left #profileBanner::after {
   content: "";
@@ -1071,15 +1080,14 @@ body {
   </div>
   <div class="profile-info">
     <h3 id="name">Carregando...</h3>
-    <div class="handle" id="handle">@...</div>
-    <div class="role-badge" id="roleBadge">👾 Membro</div>
+   <div class="handle" id="handle">@...</div>
+   <div class="live-status animate-item delay-3" id="statusBox">
+  <span id="statusEmoji">🎮</span>
+  <span id="statusText">Buscando universo...</span>
   </div>
 </div>
 <p class="bio-preview animate-item delay-2" id="bio"></p>
-<div class="live-status animate-item delay-3" id="statusBox">
-  <span id="statusEmoji">🎮</span>
-  <span id="statusText">Buscando universo...</span>
-</div>
+<div class="role-badge" id="roleBadge">👾 Membro</div>
 <!-- SLYE EMBEDS: vídeo do YouTube abaixo da apresentação -->
 <div
   class="embeds-container animate-item delay-3" id="youtubeEmbedBar"></div>
