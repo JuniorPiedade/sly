@@ -310,6 +310,17 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
 .profile-card.align-left #profileBanner[style*="display: block"] ~ .profile-foot {
   grid-row: 11;
 }
+  /* SLYE — tag de cargo na posição antiga do status */
+.profile-card.align-left #roleBadge {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  justify-self: start;
+  align-self: start;
+  margin: 0;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+}
 .profile-card.align-left .avatar-container {
   position: relative;
   flex: 0 0 100px;
@@ -1070,16 +1081,14 @@ body {
   <div class="profile-info">
     <h3 id="name">Carregando...</h3>
     <div class="handle" id="handle">@...</div>
-    <div class="role-badge" id="roleBadge">👾 Membro</div>
-    <div class="live-status animate-item delay-3" id="statusBox">
+     <div class="live-status animate-item delay-3" id="statusBox">
       <span id="statusEmoji">🎮</span>
       <span id="statusText">Buscando universo...</span>
     </div>
   </div>
 </div>
-
 <p class="bio-preview animate-item delay-2" id="bio"></p>
-
+<div class="role-badge" id="roleBadge">👾 Membro</div>
 <!-- SLYE EMBEDS: vídeo do YouTube abaixo da apresentação -->
 <div
   class="embeds-container animate-item delay-3" id="youtubeEmbedBar"></div>
