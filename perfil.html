@@ -526,17 +526,25 @@ overflow-wrap: anywhere;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   width: 100%;
+  max-width: 100%;
   min-width: 0;
 }
 
-.profile-card.align-left .profile-status-role .live-status,
-.profile-card.align-left .profile-status-role .role-badge {
-  margin: 0;
+.profile-card.align-left .profile-status-role .live-status {
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: normal;
+}
+.profile-card.align-left .profile-status-role #roleBadge {
+  display: inline-flex;
   flex: 0 0 auto;
-  align-self: center;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  align-items: center;
 }
 /* Status Compacto e Centralizado no modo Center */
 .profile-card.align-center .live-status {
