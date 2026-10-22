@@ -1870,19 +1870,13 @@ if (data.wallpaper_url) {
   document.body.style.background = data.bg_color || '#080812';
 }
 
-    const profileBanner = document.getElementById('profileBanner');
-
-  if (profileBanner && data.banner_url) {
-  const bannerX = Number(data.banner_position_x ?? 50);
-  const bannerY = Number(data.banner_position_y ?? 50);
-
-
-const bannerImage = document.getElementById('profileBannerImage');
+  
+const profileBanner = document.getElementById('profileBanner');
 
 if (profileBanner && data.banner_url) {
   profileBanner.style.display = 'block';
   profileBanner.style.backgroundImage = `url("${data.banner_url}")`;
-  profileBanner.style.backgroundPosition = `${bannerX}% ${bannerY}%`;
+  profileBanner.style.backgroundPosition = 'center';
   profileBanner.style.backgroundSize = 'cover';
   profileBanner.style.backgroundRepeat = 'no-repeat';
 } else if (profileBanner) {
@@ -2263,7 +2257,6 @@ if (embedsBar) {
   }
 });
 </script>
-
 <script>
 (() => {
   const mensagem = "Opa, perdeu alguma coisa no código, irmão?";
