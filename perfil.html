@@ -188,11 +188,26 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border-radius: 16px;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
   background-clip: padding-box;
-  border-radius: 16px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  clip-path: inset(0 round 16px);
+}
+
+/* SLYE — camada interna da imagem do banner */
+.profile-card #profileBannerImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: inherit;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  pointer-events: none;
 }
 
 /* SLYE — proteção de leitura do banner */
@@ -1869,19 +1884,26 @@ if (data.wallpaper_url) {
   document.body.style.backgroundImage = 'none';
   document.body.style.background = data.bg_color || '#080812';
 }
-
-  
 const profileBanner = document.getElementById('profileBanner');
+const bannerImage = document.getElementById('profileBannerImage');
 
 if (profileBanner && data.banner_url) {
   profileBanner.style.display = 'block';
-  profileBanner.style.backgroundImage = `url("${data.banner_url}")`;
-  profileBanner.style.backgroundPosition = 'center';
-  profileBanner.style.backgroundSize = 'cover';
-  profileBanner.style.backgroundRepeat = 'no-repeat';
+  profileBanner.style.backgroundImage = 'none';
+
+  if (bannerImage) {
+    bannerImage.style.backgroundImage = `url("${data.banner_url}")`;
+    bannerImage.style.backgroundPosition = 'center';
+    bannerImage.style.backgroundSize = 'cover';
+    bannerImage.style.backgroundRepeat = 'no-repeat';
+  }
 } else if (profileBanner) {
   profileBanner.style.display = 'none';
   profileBanner.style.backgroundImage = 'none';
+
+  if (bannerImage) {
+    bannerImage.style.backgroundImage = 'none';
+  }
 }
     card.style.border = 'none';
     if (data.perspective_effect !== 'off') {
