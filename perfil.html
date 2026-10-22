@@ -1879,21 +1879,15 @@ if (data.wallpaper_url) {
 
 const bannerImage = document.getElementById('profileBannerImage');
 
-if (profileBanner && bannerImage && data.banner_url) {
+if (profileBanner && data.banner_url) {
   profileBanner.style.display = 'block';
-  profileBanner.style.backgroundImage = 'none';
-
-  bannerImage.style.backgroundImage = `url("${data.banner_url}")`;
-  bannerImage.style.backgroundPosition = 'center';
-  bannerImage.style.backgroundSize = 'cover';
-  bannerImage.style.backgroundRepeat = 'no-repeat';
+  profileBanner.style.backgroundImage = `url("${data.banner_url}")`;
+  profileBanner.style.backgroundPosition = `${bannerX}% ${bannerY}%`;
+  profileBanner.style.backgroundSize = 'cover';
+  profileBanner.style.backgroundRepeat = 'no-repeat';
 } else if (profileBanner) {
   profileBanner.style.display = 'none';
   profileBanner.style.backgroundImage = 'none';
-
-  if (bannerImage) {
-    bannerImage.style.backgroundImage = 'none';
-  }
 }
     card.style.border = 'none';
     if (data.perspective_effect !== 'off') {
