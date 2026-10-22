@@ -504,10 +504,11 @@ overflow-wrap: anywhere;
   min-width: 0;
 }
 
+/* SLYE — Galeria alinhada à direita na linha de estatísticas */
 .profile-card.align-left #profile-gallery-trigger {
-  grid-column: 1 / -1;
-  grid-row: 8;
-  justify-self: start;
+  grid-column: auto;
+  grid-row: auto;
+  justify-self: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -515,12 +516,12 @@ overflow-wrap: anywhere;
   max-width: 100%;
   min-width: 0;
   padding: 7px 14px;
-  margin: 6px 0;
+  margin: 0 0 0 auto;
   box-sizing: border-box;
   line-height: 1.2;
   white-space: nowrap;
+  flex-shrink: 0;
 }
-
 .profile-card.align-left .preview-friendships-wrapper {
   grid-column: 1 / -1;
   grid-row: 9;
@@ -993,7 +994,6 @@ overflow-wrap: anywhere;
 .delay-4 { animation-delay: 0.24s; }
 .delay-5 { animation-delay: 0.30s; }
 .delay-6 { animation-delay: 0.36s; }
-  
 </style>
 <style>
   /* SLYE — modo preto absoluto */
@@ -1184,31 +1184,6 @@ body {
         </div>
       </div>
       
-<button
-  id="profile-gallery-trigger"
-  hidden
-  type="button"
-  aria-label="Abrir galeria de fotos"
-  aria-expanded="false"
->
-  <svg
-    viewBox="0 0 24 24"
-    width="13"
-    height="13"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.7"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <rect x="3" y="3" width="18" height="18" rx="4"/>
-    <circle cx="8.5" cy="8.5" r="1.5"/>
-    <path d="m21 15-5-5L5 21"/>
-  </svg>
-  <span>GALERIA</span>
-</button>
-
 <!-- JANELA DA GALERIA SLYE -->
 <div
   id="profile-gallery-modal"
