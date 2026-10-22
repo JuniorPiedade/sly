@@ -2422,9 +2422,8 @@ if (embedsBar) {
 </script>
 <style>
   
-/* ... CSS original do seu perfil permanece aqui ... */
-  
-#profile-gallery-trigger[hidden] {
+  /* ... CSS original do seu perfil permanece aqui ... */
+  #profile-gallery-trigger[hidden] {
   display: none !important;
 }
 #profile-gallery-trigger {
@@ -2748,6 +2747,14 @@ if (embedsBar) {
   margin: 0 !important;
   z-index: 9999 !important;
 }
+  
+/* SLYE — estabiliza a renderização do Spotify durante a rolagem */
+#embedsBar iframe[src*="spotify"] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  isolation: isolate;
+}
+
 </style>
   </body>
 </html>
