@@ -796,14 +796,28 @@ overflow-wrap: anywhere;
   border: 0;
 }
   
-/* SLYE — limitar a largura do player Spotify */
-.embed-wrapper:has(iframe[src*="spotify"]) {
-  width: 100%;
-  max-width: 400px;
+
+/* SLYE — Spotify com largura ampliada */
+.embeds-container .embed-wrapper:has(iframe[src*="spotify"]) {
+  width: 100% !important;
+  max-width: 420px !important;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+}
+
+.embeds-container .embed-wrapper:has(iframe[src*="spotify"]) iframe {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+}
+
+/* SLYE — centralizar player do YouTube */
+.embed-wrapper.embed-youtube {
   margin-left: auto;
   margin-right: auto;
 }
-
 /* Container de Amigos Próximos */
 .preview-friendships-wrapper {
   display: flex;
