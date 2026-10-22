@@ -174,16 +174,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   border: none !important;
 }
 
-  /* SLYE — layout do perfil */
-.profile-card.align-left {
-  text-align: left;
-  display: grid;
-  grid-template-columns: minmax(110px, 0.65fr) minmax(0, 1.35fr);
-  align-items: start;
-  gap: 12px 18px;
-}
-
-
 /* SLYE — área visual do banner */
 .profile-card.align-left #profileBanner {
   grid-column: 1 / -1;
@@ -204,7 +194,6 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   background-size: cover;
   background-repeat: no-repeat;
 }
-
 
 /* SLYE — proteção de leitura do banner */
 .profile-card.align-left #profileBanner::after {
@@ -1170,14 +1159,21 @@ body {
     pointer-events: none;
   "></div>
 </div>
+ 
+<div class="profile-header-row animate-item delay-1">
+  <div class="avatar-container">
+    <div class="avatar" id="avatar">⌬</div>
+  </div>
   <div class="profile-info">
     <h3 id="name">Carregando...</h3>
     <div class="handle" id="handle">@...</div>
+
     <div class="profile-status-role">
       <div class="live-status animate-item delay-3" id="statusBox">
         <span id="statusEmoji">🎮</span>
         <span id="statusText">Buscando universo...</span>
       </div>
+
       <div class="role-badge" id="roleBadge">👾 Membro</div>
     </div>
   </div>
