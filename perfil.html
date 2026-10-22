@@ -1155,13 +1155,12 @@ body {
         height: 180px;
         position: relative;
         overflow: hidden;
-        border-radius: 16px;
+        border-radius: 16px 16px 0 0;
         margin-bottom: 16px;
         background-position: 50% 50%;
         background-size: cover;
         background-repeat: no-repeat;
-        background-clip: padding-box;
-      ">
+      "></div>
   <div id="profileBannerImage" aria-hidden="true" style="
         position: absolute;
         inset: 4px;
@@ -1892,29 +1891,21 @@ if (data.wallpaper_url) {
       const bannerZoom = Number(data.banner_zoom ?? 100);
 
       
-const profileBannerImage = document.getElementById('profileBannerImage');
 
 if (profileBanner && data.banner_url) {
   const bannerX = Number(data.banner_position_x ?? 50);
   const bannerY = Number(data.banner_position_y ?? 50);
 
   profileBanner.style.display = 'block';
-  profileBanner.style.backgroundImage = 'none';
-
-  if (profileBannerImage) {
-    profileBannerImage.style.backgroundImage = `url("${data.banner_url}")`;
-    profileBannerImage.style.backgroundPosition = `${bannerX}% ${bannerY}%`;
-    profileBannerImage.style.backgroundSize = 'cover';
-    profileBannerImage.style.backgroundRepeat = 'no-repeat';
-  }
+  profileBanner.style.backgroundImage = `url("${data.banner_url}")`;
+  profileBanner.style.backgroundPosition = `${bannerX}% ${bannerY}%`;
+  profileBanner.style.backgroundSize = 'cover';
+  profileBanner.style.backgroundRepeat = 'no-repeat';
 } else if (profileBanner) {
   profileBanner.style.display = 'none';
   profileBanner.style.backgroundImage = 'none';
-
-  if (profileBannerImage) {
-    profileBannerImage.style.backgroundImage = 'none';
-  }
 }
+
     card.style.border = 'none';
     if (data.perspective_effect !== 'off') {
       card.addEventListener('mousemove', (e) => {
