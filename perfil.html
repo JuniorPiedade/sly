@@ -423,7 +423,7 @@ overflow-wrap: anywhere;
 .profile-card.align-left .bio-preview {
   grid-column: 1 / -1;
   grid-row: 2;
-  width: calc(100% - 150px);
+  width: calc(100% - 32px);
   max-width: 520px;
   min-width: 0;
   margin: -86px 0 16px 16px;
@@ -1941,7 +1941,7 @@ if (data.wallpaper_url) {
     roleBadge.innerHTML = r === 'Fundador' ? '💎 Fundador' : r === 'Suporte' ? '🛡️ Suporte' : r === 'Apoiador' ? '⭐ Apoiador' : '👾 Membro';
   }
 
-  bioEl.textContent = data.bio || '';
+  bioEl.textContent = (data.bio || '').slice(0, 160);
   document.getElementById('statusEmoji').textContent = data.status_emoji || '🎮';
   document.getElementById('statusText').textContent = (data.status_label || 'Jogando') + (data.activity ? ' · ' + data.activity : '');
 
