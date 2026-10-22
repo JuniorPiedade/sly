@@ -1202,11 +1202,6 @@ a.brand > span:last-child .dot {
       <label for="bannerPositionY">Posição vertical</label>
       <input id="bannerPositionY" type="range" min="0" max="100" value="50" style="width:100%;">
     </div>
-
-    <div style="margin-top:12px;">
-      <label for="bannerZoom">Zoom da imagem</label>
-      <input id="bannerZoom" type="range" min="100" max="200" value="100" step="1" style="width:100%;">
-    </div>
     <button type="button" id="removeBannerBtn" class="btn" style="margin-top:12px;">
       ✕ Remover banner
     </button>
@@ -2151,7 +2146,7 @@ async function initEditor(userId) {
     const bannerFileInput = document.getElementById('bannerFile');
     const bannerPositionXInput = document.getElementById('bannerPositionX');
     const bannerPositionYInput = document.getElementById('bannerPositionY');
-    const bannerZoomInput = document.getElementById('bannerZoom');
+    
 
     if (bannerPositionXInput) {
       bannerPositionXInput.value = currentProfile.banner_position_x;
@@ -2159,10 +2154,6 @@ async function initEditor(userId) {
 
     if (bannerPositionYInput) {
       bannerPositionYInput.value = currentProfile.banner_position_y;
-    }
-
-    if (bannerZoomInput) {
-      bannerZoomInput.value = currentProfile.banner_zoom;
     }
 
   soundtrackUrlInput.value = currentProfile.soundtrack || currentProfile.soundtrack_url || '';
@@ -2314,12 +2305,6 @@ async function initEditor(userId) {
     triggerAutoSave();
   });
 
-  document.getElementById('bannerZoom')?.addEventListener('input', (e) => {
-    currentProfile.banner_zoom = Number(e.target.value);
-    updatePreview();
-    triggerAutoSave();
-  });
-
   document.getElementById('removeBannerBtn')?.addEventListener('click', () => {
     currentProfile.banner_url = '';
     currentProfile.banner_position_x = 50;
@@ -2328,7 +2313,6 @@ async function initEditor(userId) {
 
     document.getElementById('bannerPositionX').value = 50;
     document.getElementById('bannerPositionY').value = 50;
-    document.getElementById('bannerZoom').value = 100;
     document.getElementById('bannerFile').value = '';
 
     updatePreview();
@@ -2549,8 +2533,7 @@ async function initEditor(userId) {
     const bannerUrl = currentProfile.banner_url || '';
     const bannerX = Number(currentProfile.banner_position_x ?? 50);
     const bannerY = Number(currentProfile.banner_position_y ?? 50);
-    const bannerZoom = Number(currentProfile.banner_zoom ?? 100);
-
+    
     let bannerArea = document.getElementById('profileBannerPreview');
 
     if (!bannerArea) {
@@ -2577,7 +2560,7 @@ async function initEditor(userId) {
       bannerArea.style.backgroundImage = bannerUrl
         ? `url("${bannerUrl}")`
         : 'none';
-      bannerArea.style.backgroundSize = `${bannerZoom}% auto`;
+      bannerArea.style.backgroundSize = 'cover';
       bannerArea.style.backgroundPosition = `${bannerX}% ${bannerY}%`;
       bannerArea.style.backgroundRepeat = 'no-repeat';
     }
