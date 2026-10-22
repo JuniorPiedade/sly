@@ -1148,22 +1148,30 @@ body {
 <div class="page-wrapper">
   <div class="container">
     <div class="profile-card card-style-opaque" id="profileCard">
-    <div id="profileBanner" aria-label="Banner do perfil" style="
+   
+<div id="profileBanner" aria-label="Banner do perfil" style="
         display: none;
         width: 100%;
         height: 180px;
         position: relative;
         overflow: hidden;
-        border-radius: 16px 16px 0 0;
+        border-radius: 16px;
         margin-bottom: 16px;
         background-position: 50% 50%;
         background-size: cover;
         background-repeat: no-repeat;
+        background-clip: padding-box;
+      ">
+  <div id="profileBannerImage" aria-hidden="true" style="
+        position: absolute;
+        inset: 4px;
+        border-radius: 10px;
+        background-position: inherit;
+        background-size: cover;
+        background-repeat: no-repeat;
+        pointer-events: none;
       "></div>
-<div class="profile-header-row animate-item delay-1">
-  <div class="avatar-container">
-    <div class="avatar" id="avatar">⌬</div>
-  </div>
+   </div>
   <div class="profile-info">
     <h3 id="name">Carregando...</h3>
     <div class="handle" id="handle">@...</div>
@@ -1883,19 +1891,31 @@ if (data.wallpaper_url) {
       const bannerY = Number(data.banner_position_y ?? 50);
       const bannerZoom = Number(data.banner_zoom ?? 100);
 
-      profileBanner.style.display = 'block';
-      profileBanner.style.backgroundImage = `url("${data.banner_url}")`;
-      profileBanner.style.backgroundPosition = `${bannerX}% ${bannerY}%`;
-      profileBanner.style.backgroundSize = 'cover';
-      profileBanner.style.backgroundRepeat = 'no-repeat';
-    } else if (profileBanner) {
-      profileBanner.style.display = 'none';
-      profileBanner.style.backgroundImage = 'none';
-    }
+      
+const profileBannerImage = document.getElementById('profileBannerImage');
 
+if (profileBanner && data.banner_url) {
+  const bannerX = Number(data.banner_position_x ?? 50);
+  const bannerY = Number(data.banner_position_y ?? 50);
+
+  profileBanner.style.display = 'block';
+  profileBanner.style.backgroundImage = 'none';
+
+  if (profileBannerImage) {
+    profileBannerImage.style.backgroundImage = `url("${data.banner_url}")`;
+    profileBannerImage.style.backgroundPosition = `${bannerX}% ${bannerY}%`;
+    profileBannerImage.style.backgroundSize = 'cover';
+    profileBannerImage.style.backgroundRepeat = 'no-repeat';
+  }
+} else if (profileBanner) {
+  profileBanner.style.display = 'none';
+  profileBanner.style.backgroundImage = 'none';
+
+  if (profileBannerImage) {
+    profileBannerImage.style.backgroundImage = 'none';
+  }
+}
     card.style.border = 'none';
-
-    
     if (data.perspective_effect !== 'off') {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
