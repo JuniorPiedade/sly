@@ -807,24 +807,31 @@ overflow-wrap: anywhere;
   border: 0;
 }
   
-/* SLYE — Spotify mais largo */
-#embedsBar .embed-wrapper.embed-spotify {
+/* SLYE — Spotify ocupa toda a largura disponível */
+.profile-card.align-left #embedsBar {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  justify-self: stretch;
+  box-sizing: border-box;
+}
+
+.profile-card.align-left #embedsBar .embed-wrapper.embed-spotify {
   display: block;
   width: 100%;
-  max-width: 480px;
+  max-width: 560px;
   min-width: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
-#embedsBar .embed-wrapper.embed-spotify iframe {
+.profile-card.align-left #embedsBar .embed-wrapper.embed-spotify iframe {
   display: block;
   width: 100%;
-  min-width: 0;
+  max-width: 100%;
   height: 152px;
   border: 0;
 }
-
 
 .embeds-container .embed-wrapper:has(iframe[src*="spotify"]) iframe {
   display: block;
