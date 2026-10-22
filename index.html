@@ -2098,8 +2098,8 @@ async function initEditor(userId) {
     handleInput.style.cursor = 'not-allowed';
   }
 
-  bioInput.value = currentProfile.bio || '';
-  bioCount.textContent = (currentProfile.bio || '').length;
+  bioInput.value = (currentProfile.bio || '').slice(0, 160);
+  bioCount.textContent = bioInput.value.length;
   if (avatarShapeSelect) {
     avatarShapeSelect.value = currentProfile.avatar_shape || 'rounded';
   }
@@ -2375,7 +2375,7 @@ async function initEditor(userId) {
 
       const payload = {
         id: userId, name: nameInput.value, handle: handleInput.value,
-        bio: bioInput.value,
+        bio: bioInput.value.slice(0, 160),
         avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
         activity: activityInput.value,
         status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
@@ -2701,7 +2701,7 @@ async function initEditor(userId) {
 
     const payload = {
       id: userId, name: nameInput.value, handle: handleInput.value,
-      bio: bioInput.value,
+      bio: bioInput.value.slice(0, 160),
       avatar_shape: avatarShapeSelect ? avatarShapeSelect.value : 'rounded',
       activity: activityInput.value, status_emoji: currentProfile.status_emoji, status_label: currentProfile.status_label,
       card_style: cardStyleSelect.value, card_align: alignVal,
