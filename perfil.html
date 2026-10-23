@@ -1074,16 +1074,6 @@ overflow-wrap: anywhere;
 <style>
 
 /* SLYE — nome e insígnias na mesma linha */
-.profile-info .profile-name-line {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 8px;
-  width: 100%;
-  min-width: 0;
-}
-
 .profile-info .profile-name-line #name {
   margin: 0;
   min-width: 0;
@@ -2966,37 +2956,47 @@ if (embedsBar) {
   z-index: 9999;
   transition: opacity .18s ease, transform .18s ease;
 }
-  /* SLYE — nome e insígnias na mesma linha */
-.profile-card.align-left .profile-name-line {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 8px;
-  width: 100%;
-  min-width: 0;
+ /* SLYE — nome e insígnias na mesma linha */
+.profile-card.align-left .profile-info .profile-name-line {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: visible !important;
 }
 
-.profile-card.align-left .profile-name-line #name {
-  flex: 0 1 auto;
-  min-width: 0;
-  max-width: 100%;
+.profile-card.align-left .profile-info .profile-name-line #name {
+  flex: 0 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
-.profile-card.align-left .profile-name-line .profile-insignias {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 6px;
-  margin: 0;
-  transform: none;
-  position: relative;
-  z-index: 2;
+.profile-card.align-left .profile-info .profile-name-line #profileInsignias {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: fit-content !important;
+  max-width: none !important;
+  margin: 0 !important;
+  position: relative !important;
+  transform: none !important;
+  z-index: 5;
 }
-.profile-card.align-left .profile-name-line .profile-insignias:empty {
-  display: none;
+.profile-card.align-left .profile-info .profile-name-line #profileInsignias:empty {
+  display: none !important;
 }
 .profile-info .slye-insignia:hover::after {
   opacity: 1;
