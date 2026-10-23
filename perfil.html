@@ -2917,6 +2917,37 @@ if (embedsBar) {
 #handle {
   display: none !important;
 }
+  
+/* SLYE — tooltip personalizado das insígnias */
+.profile-info .slye-insignia {
+  position: relative;
+}
+
+.profile-info .slye-insignia::after {
+  content: attr(aria-label);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 9px);
+  transform: translate(-50%, 4px);
+  padding: 6px 9px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 7px;
+  background: #0b0b0e;
+  color: #f4f4f5;
+  font: 500 11px/1.2 Inter, sans-serif;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.profile-info .slye-insignia:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
 </style>
   </body>
 </html>
