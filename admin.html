@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1388,7 +1387,7 @@ async function loadDashboard() {
     const { data, error } = await window.islySupabase.client
       .from('profiles')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('updated_at', { ascending: false })
 
     if (error) throw error;
 
