@@ -1140,6 +1140,32 @@ tbody tr:last-child td {
         <textarea id="editBio"></textarea>
       </div>
 
+<div class="modal-section-label">Insígnias do perfil</div>
+
+<div class="field">
+  <div class="checkbox-group">
+    <label class="checkbox-item" title="Fez parte da fase BETA do SLYE.ME.">
+      <input type="checkbox" name="badges" value="beta">
+      Membro BETA
+    </label>
+
+    <label class="checkbox-item" title="Faz parte da STAFF SLYE.ME.">
+      <input type="checkbox" name="badges" value="supporter">
+      Support
+    </label>
+
+    <label class="checkbox-item" title="Possui a insígnia Booster do SLYE.ME.">
+      <input type="checkbox" name="badges" value="booster">
+      Booster
+    </label>
+
+    <label class="checkbox-item" title="Possui a insígnia Influencer do SLYE.ME.">
+      <input type="checkbox" name="badges" value="influencer">
+      Influencer
+    </label>
+  </div>
+</div>
+
       <div class="modal-section-label">Molduras liberadas para a conta</div>
 
       <div class="field">
@@ -1482,7 +1508,13 @@ function openEditModal(userId) {
   document.querySelectorAll('input[name="frames"]').forEach(cb => {
     cb.checked = allowed.includes(cb.value);
   });
+const assignedBadges = Array.isArray(selectedUser.badges)
+  ? selectedUser.badges
+  : [];
 
+document.querySelectorAll('input[name="badges"]').forEach(cb => {
+  cb.checked = assignedBadges.includes(cb.value);
+});
   document.getElementById('editModal').classList.add('open');
 }
 
@@ -1492,14 +1524,18 @@ async function saveUserChanges() {
   const selectedFrames = Array.from(
     document.querySelectorAll('input[name="frames"]:checked')
   ).map(cb => cb.value);
-
+  
+const selectedBadges = Array.from(
+  document.querySelectorAll('input[name="badges"]:checked')
+).map(cb => cb.value);
   const payload = {
     id: selectedUser.id,
     name: document.getElementById('editName').value,
     handle: document.getElementById('editHandle').value.trim().replace(/^@/, ''),
     role: document.getElementById('editRole').value,
     bio: document.getElementById('editBio').value,
-    allowed_frames: selectedFrames
+   allowed_frames: selectedFrames,
+   badges: selectedBadges
   };
 
   const err = await window.islySupabase.saveProfile(payload);
