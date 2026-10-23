@@ -2937,13 +2937,28 @@ if (embedsBar) {
   max-width: 100% !important;
   overflow: visible !important;
 }
-
+/* SLYE — nickname e glow branco premium */
 .profile-card.align-left .profile-info .profile-name-line #name {
   flex: 0 1 auto !important;
   width: auto !important;
   min-width: 0 !important;
   max-width: none !important;
-  
+  padding: 0 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+
+  color: #ffffff !important;
+  text-shadow:
+    0 0 3px rgba(255, 255, 255, 0.75),
+    0 0 7px rgba(255, 255, 255, 0.55),
+    0 0 12px rgba(255, 255, 255, 0.30) !important;
+
+  -webkit-text-stroke: 0 transparent !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
   /* espaço para o text-shadow não ser recortado pelo overflow da truncagem */
   padding: 0 !important;
   margin: 0 !important;
@@ -2973,16 +2988,6 @@ if (embedsBar) {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
-}
-/* SLYE — neon suave no nickname */
-.profile-card.align-left .profile-info .profile-name-line #name {
-  color: #ffffff !important;
-  text-shadow:
-    0 0 2px rgba(255, 255, 255, 0.35),
-    0 0 5px rgba(181, 160, 255, 0.25) !important;
-  -webkit-text-stroke: 0 transparent !important;
-  filter: none !important;
-  box-shadow: none !important;
 }
 </style>
   </body>
