@@ -1,4 +1,4 @@
-/* SLYE.ME — Sistema central de insígnias */
+/* SLYE.ME — Catálogo oficial de insígnias */
 
 window.SLYEBadges = {
   beta: {
@@ -9,11 +9,11 @@ window.SLYEBadges = {
   },
 
   supporter: {
-  id: "supporter",
-  name: "Support",
-  description: "Faz parte da STAFF SLYE.ME.",
-  image: "/assets/badges/supporter.png"
-},
+    id: "supporter",
+    name: "Support",
+    description: "Faz parte da STAFF SLYE.ME.",
+    image: "/assets/badges/supporter.png"
+  },
 
   booster: {
     id: "booster",
