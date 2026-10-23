@@ -1354,6 +1354,7 @@ body {
       </div>
 
       <div class="role-badge" id="roleBadge">👾 Membro</div>
+      <div class="profile-insignias" id="profileInsignias"></div>
     </div>
   </div>
 </div>
@@ -1475,6 +1476,7 @@ body {
   </div>
 </div>
 <script src="js/supabase.js"></script>
+<script src="js/badges.js"></script>
 <script>
 // --- SISTEMA DE EFEITOS VISUAIS DE FUNDO (CANVAS) ---
 let currentEffectAnimId = null;
@@ -1741,7 +1743,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
     return;
   }
+// SLYE.ME — Carregar insígnias atribuídas ao perfil
+const insigniasContainer = document.getElementById('profileInsignias');
 
+if (insigniasContainer) {
+  insigniasContainer.replaceChildren();
+
+  const insignias = Array.isArray(data.badges) ? data.badges : [];
+
+  insignias.forEach((badgeId) => {
+    const badge = window.SLYEBadges?.[badgeId];
+
+    if (!badge) return;
+
+    const img = document.createElement('img');
+    img.className = 'slye-insignia';
+    img.src = badge.image;
+    img.alt = badge.name;
+    img.title = `${badge.name} — ${badge.description}`;
+    img.setAttribute('aria-label', `${badge.name}: ${badge.description}`);
+
+    insigniasContainer.appendChild(img);
+  });
+}
   // --- GALERIA: MOSTRAR O BOTÃO SOMENTE SE HOUVER FOTOS ---
   const galleryButton = document.getElementById('profile-gallery-trigger');
 
