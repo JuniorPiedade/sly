@@ -1,4 +1,3 @@
-
 /* SLYE.ME — Sistema central de insígnias */
 
 window.SLYEBadges = {
@@ -6,27 +5,27 @@ window.SLYEBadges = {
     id: "beta",
     name: "Membro BETA",
     description: "Fez parte da fase BETA do SLYE.ME.",
-    image: "/assets/badges/beta.svg"
+    image: "/assets/badges/beta.png"
   },
 
   supporter: {
     id: "supporter",
     name: "Apoiador",
     description: "Apoiou o desenvolvimento do SLYE.ME.",
-    image: "/assets/badges/supporter.svg"
+    image: "/assets/badges/supporter.png"
   },
 
   booster: {
     id: "booster",
     name: "Booster",
     description: "Possui a insígnia Booster do SLYE.ME.",
-    image: "/assets/badges/booster.svg"
+    image: "/assets/badges/booster.png"
   },
 
   influencer: {
     id: "influencer",
     name: "Influencer",
     description: "Possui a insígnia Influencer do SLYE.ME.",
-    image: "/assets/badges/influencer.svg"
+    image: "/assets/badges/influencer.png"
   }
 };
