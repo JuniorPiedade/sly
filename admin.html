@@ -1536,17 +1536,23 @@ const selectedBadges = Array.from(
    allowed_frames: selectedFrames,
    badges: selectedBadges
   };
+  
+const err = await window.islySupabase.saveProfile(payload);
 
-  const err = await window.islySupabase.saveProfile(payload);
+if (err) {
+  console.error('Erro detalhado ao salvar usuário:', err);
 
-  if (err) {
-    console.error('Erro ao salvar alterações:', err);
-    showToast('Erro ao salvar alterações. Verifique os dados.');
-  } else {
-    showToast('Perfil atualizado com sucesso.');
-    document.getElementById('editModal').classList.remove('open');
-    await loadDashboard();
-  }
+  showToast(
+    'Erro ao salvar: ' +
+    (typeof err === 'string'
+      ? err
+      : err.message || JSON.stringify(err))
+  );
+} else {
+  showToast('Perfil atualizado com sucesso.');
+  document.getElementById('editModal').classList.remove('open');
+  await loadDashboard();
+}
 }
 </script>
 </body>
