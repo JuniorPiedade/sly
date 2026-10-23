@@ -179,7 +179,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   grid-row: 1;
   width: 100%;
   min-width: 0;
-  height: auto;
+  height: auto !important;
   min-height: 150px;
   align-self: stretch;
   margin: 0;
@@ -273,7 +273,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   align-self: start;
   min-height: 180px;
   height: auto;
-  padding: 24px 125px 24px 0;
+  padding: 24px 125px 84px 0;
   margin: 0;
   box-sizing: border-box;
   align-items: center;
@@ -281,6 +281,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   /* SLYE — mantém a bio abaixo do banner */
 .profile-card.align-left #profileBanner[style*="display: block"] ~ .bio-preview {
   grid-row: 2;
+  margin: -73px 0 16px 16px;
 }
 .profile-card.align-left #profileBanner[style*="display: block"] ~ .preview-emblems {
  grid-row: 3;
@@ -405,7 +406,6 @@ overflow-wrap: anywhere;
   overflow-wrap: anywhere;
 }
   .profile-card.align-left .profile-status-role #roleBadge {
-  transform: translateY(6px);
   display: inline-flex;
   flex: 0 0 auto;
   width: fit-content;
@@ -428,6 +428,40 @@ overflow-wrap: anywhere;
   min-width: 0;
   z-index: 2;
 }
+@media (max-width: 520px) {
+  .profile-card.align-left .profile-header-row {
+    padding: 48px 12px 0 0;
+  }
+
+  .profile-card.align-left #profileBanner[style*="display: block"] ~ .profile-header-row {
+    padding: 56px 12px 84px 0;
+  }
+
+  .profile-card.align-left .avatar-container {
+    flex-basis: 72px;
+    width: 72px;
+    min-width: 72px;
+    height: 72px;
+  }
+}
+@media (max-width: 380px) {
+  .profile-card.align-left .profile-header-row,
+  .profile-card.align-left #profileBanner[style*="display: block"] ~ .profile-header-row {
+    gap: 8px;
+    padding-right: 4px;
+  }
+
+  .profile-card.align-left .avatar-container {
+    flex-basis: 60px;
+    width: 60px;
+    min-width: 60px;
+    height: 60px;
+  }
+
+  .profile-card.align-left .profile-info h3 {
+    font-size: 22px;
+  }
+}
 /* SLYE — bio minimalista dentro do banner */
 .profile-card.align-left .bio-preview {
   grid-column: 1 / -1;
@@ -435,7 +469,7 @@ overflow-wrap: anywhere;
   width: calc(100% - 32px);
   max-width: 520px;
   min-width: 0;
-  margin: -73px 0 16px 16px;
+  margin: 4px 0 24px 16px;
   min-height: 0;
   height: auto;
   padding: 4px 9px;
@@ -591,20 +625,6 @@ overflow-wrap: anywhere;
 .profile-card.align-center .public-socials {
   justify-content: center;
 }
-```css
-/* SLYE — status e cargo lado a lado */
-.profile-card.align-left .profile-info .profile-status-role {
-  display: inline-flex !important;
-  flex-direction: row !important;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 8px;
-  width: fit-content;
-  max-width: 100%;
-  min-width: 0;
-}
-
 .profile-card.align-left .profile-info .profile-status-role #statusBox {
   display: inline-flex;
   flex: 0 1 auto;
@@ -1095,8 +1115,8 @@ overflow-wrap: anywhere;
 }
 
 .profile-info .slye-insignia {
-  width: 46px !important;
-  height: 46px !important;
+  width: 24px !important;
+  height: 24px !important;
   max-width: none !important;
   max-height: none !important;
   object-fit: contain;
@@ -1125,8 +1145,8 @@ overflow-wrap: anywhere;
 /* SLYE — ajuste para celulares */
 @media (max-width: 600px) {
   .profile-info .slye-insignia {
-    width: 37.5px !important;
-    height: 37.5px !important;
+    width: 22px !important;
+    height: 22px !important;
   }
 }
 .profile-info .slye-insignia {
@@ -2161,57 +2181,6 @@ if (profileBanner && data.banner_url) {
   document.getElementById('pageTitle').textContent = (data.name || handle) + ' — isly.me';
   nameEl.textContent = data.name || 'Sem nome';
   handleEl.textContent = '@' + data.handle;
-
-  // SLYE — insígnias especiais do perfil fundador
-  const insigniasEl = document.getElementById('profile-insignias');
-
-  if (insigniasEl) {
-    const isFounderProfile =
-      String(data.handle || handle || '')
-        .replace(/^@/, '')
-        .toLowerCase() === 'dielsly';
-
-    const insignias = [
-      { id: 'beta', name: 'Membro BETA', symbol: '✦' },
-      { id: 'supporter', name: 'Apoiador', symbol: '★' },
-      { id: 'booster', name: 'Booster', symbol: 'ϟ' },
-      { id: 'influencer', name: 'Influencer', symbol: '✶' }
-    ];
-
-    insigniasEl.innerHTML = isFounderProfile
-      ? insignias.map(item => `
-          <span
-            class="slye-insignia slye-insignia-${item.id}"
-            title="${item.name}"
-            aria-label="${item.name}"
-            role="img"
-          >
-            <svg viewBox="0 0 32 32" aria-hidden="true">
-              <defs>
-                <linearGradient id="metal-${item.id}" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#ffffff"/>
-                  <stop offset="45%" stop-color="#c8c8d2"/>
-                  <stop offset="72%" stop-color="#777783"/>
-                  <stop offset="100%" stop-color="#f8f8ff"/>
-                </linearGradient>
-              </defs>
-              <circle cx="16" cy="16" r="12.5"
-                fill="none" stroke="url(#metal-${item.id})"
-                stroke-width="1" opacity=".7"/>
-              <path d="M16 4 L19.5 12 L28 13 L21.5 19 L23.5 28 L16 23.5 L8.5 28 L10.5 19 L4 13 L12.5 12 Z"
-                fill="url(#metal-${item.id})"
-                stroke="#ffffff" stroke-width=".7"
-                stroke-linejoin="round"/>
-              <text x="16" y="19.5"
-                text-anchor="middle"
-                font-size="10"
-                font-weight="900"
-                fill="#30303a">${item.symbol}</text>
-            </svg>
-          </span>
-        `).join('')
-      : '';
-  }
 
   const roleBadge = document.getElementById('roleBadge');
   if (roleBadge) {
