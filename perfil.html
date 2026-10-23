@@ -260,7 +260,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   gap: 12px;
   width: 100%;
   min-width: 0;
-  padding: 2px 125px 0 0;
+  padding: 2px 12px 0 0;
   margin: 0;
   box-sizing: border-box;
 }
@@ -273,10 +273,14 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   align-self: start;
   min-height: 180px;
   height: auto;
-  padding: 24px 125px 84px 0;
+  padding: 24px 12px 84px 0;
   margin: 0;
   box-sizing: border-box;
   align-items: center;
+}
+/* SLYE — só a linha do nome divide altura com os ícones sociais */
+.profile-card.align-left .profile-info .profile-name-line {
+  padding-right: 113px;
 }
   /* SLYE — mantém a bio abaixo do banner */
 .profile-card.align-left #profileBanner[style*="display: block"] ~ .bio-preview {
@@ -431,6 +435,10 @@ overflow-wrap: anywhere;
 @media (max-width: 520px) {
   .profile-card.align-left .profile-header-row {
     padding: 48px 12px 0 0;
+  }
+
+  .profile-card.align-left .profile-info .profile-name-line {
+    padding-right: 0;
   }
 
   .profile-card.align-left #profileBanner[style*="display: block"] ~ .profile-header-row {
@@ -2943,8 +2951,10 @@ if (embedsBar) {
   flex: 0 1 auto !important;
   width: auto !important;
   min-width: 0 !important;
-  max-width: 100% !important;
-  margin: 0 !important;
+  max-width: none !important;
+  /* espaço para o text-shadow não ser recortado pelo overflow da truncagem */
+  padding: 36px !important;
+  margin: -36px !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
