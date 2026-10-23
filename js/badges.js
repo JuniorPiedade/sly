@@ -9,11 +9,11 @@ window.SLYEBadges = {
   },
 
   supporter: {
-    id: "supporter",
-    name: "Apoiador",
-    description: "Apoiou o desenvolvimento do SLYE.ME.",
-    image: "/assets/badges/supporter.png"
-  },
+  id: "supporter",
+  name: "Support",
+  description: "Faz parte da STAFF SLYE.ME.",
+  image: "/assets/badges/supporter.png"
+},
 
   booster: {
     id: "booster",
