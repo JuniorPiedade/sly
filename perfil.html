@@ -657,6 +657,7 @@ overflow-wrap: anywhere;
 }
 
 .card-style-opaque { background-color: #11111f; }
+  
 .card-style-glass {
   background: rgba(13, 11, 20, 0.25) !important;
   backdrop-filter: blur(16px) !important;
@@ -2978,6 +2979,14 @@ if (embedsBar) {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
+}
+  /* SLYE — remove definitivamente o neon do nickname */
+.profile-card.align-left .profile-info .profile-name-line #name {
+  color: #ffffff !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 transparent !important;
+  filter: none !important;
+  box-shadow: none !important;
 }
 </style>
   </body>
