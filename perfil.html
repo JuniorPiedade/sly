@@ -1071,7 +1071,8 @@ overflow-wrap: anywhere;
 .delay-6 { animation-delay: 0.36s; }
 </style>
 <style>
-  /* SLYE — nome e insígnias na mesma linha */
+
+/* SLYE — nome e insígnias na mesma linha */
 .profile-info .profile-name-line {
   display: flex;
   align-items: center;
@@ -1087,11 +1088,13 @@ overflow-wrap: anywhere;
   min-width: 0;
 }
 
+/* SLYE — Insígnias metálicas premium */
 .profile-info .profile-insignias {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0px;
+  gap: 6px;
+  margin-left: 0;
   vertical-align: middle;
   transform: translateY(2px);
 }
@@ -1099,18 +1102,33 @@ overflow-wrap: anywhere;
 .profile-info .profile-insignias:empty {
   display: none;
 }
-  
-/* SLYE — insígnias metálicas premium */
-.profile-info .profile-insignias {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  vertical-align: middle;
+
+.profile-info .slye-insignia {
+  width: 44px !important;
+  height: 44px !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  cursor: help;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: drop-shadow(0 0 4px rgba(181, 160, 255, 0.3));
 }
 
-.profile-info .profile-insignias:empty {
-  display: none;
+.profile-info .slye-insignia:hover {
+  transform: scale(1.12);
+  filter:
+    drop-shadow(0 0 4px rgba(255, 255, 255, 0.75))
+    drop-shadow(0 0 10px rgba(181, 160, 255, 0.8));
+}
+
+/* SLYE — ajuste para celulares */
+@media (max-width: 600px) {
+  .profile-info .slye-insignia {
+    width: 36px !important;
+    height: 36px !important;
+  }
 }
 
 .profile-info .slye-insignia {
