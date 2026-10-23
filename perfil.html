@@ -249,31 +249,31 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   align-items: start;
   gap: 5px 18px;
 }
-
-  /* Cabeçalho: foto, nome, usuário e cargo */
+/* SLYE — cabeçalho do perfil alinhado */
 .profile-card.align-left .profile-header-row {
   grid-column: 1 / -1;
   grid-row: 1;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
-  column-gap: 4px !important;
+  gap: 12px;
   width: 100%;
   min-width: 0;
   padding: 2px 125px 0 0;
+  margin: 0;
   box-sizing: border-box;
 }
 /* SLYE — cabeçalho sobre o banner */
 .profile-card.align-left #profileBanner[style*="display: block"] ~ .profile-header-row {
   grid-column: 1 / -1;
   grid-row: 1;
-  align-self: start;
-  z-index: 2;
   position: relative;
+  z-index: 2;
+  align-self: start;
   min-height: 180px;
   height: auto;
-  padding: 24px 125px 84px 0;
+  padding: 24px 125px 24px 0;
   margin: 0;
   box-sizing: border-box;
   align-items: center;
@@ -350,26 +350,27 @@ margin-bottom: 0;
 overflow-wrap: anywhere;
 }
   
-/* SLYE — corrige o alinhamento do status e cargo à esquerda */
+/* SLYE — alinhamento do status, cargo e insígnias */
 .profile-card.align-left .profile-info > .profile-status-role {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  flex-wrap: nowrap !important;
+  flex-wrap: wrap !important;
   align-self: flex-start !important;
-  width: fit-content !important;
+  width: 100% !important;
   max-width: 100% !important;
   gap: 8px !important;
+  min-width: 0 !important;
 }
-
 .profile-card.align-left .profile-info > .profile-status-role > #statusBox,
-.profile-card.align-left .profile-info > .profile-status-role > #roleBadge {
-  width: fit-content !important;
+.profile-card.align-left .profile-info > .profile-status-role > #roleBadge,
+.profile-card.align-left .profile-info > .profile-status-role > #profileInsignias {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
   margin: 0 !important;
-  flex-shrink: 0 !important;
 }
-
 /* SLYE — Hype ao lado das visualizações */
 .profile-card.align-left .stats-container .hype-button {
   margin-left: 0;
@@ -1121,7 +1122,6 @@ overflow-wrap: anywhere;
   flex-wrap: wrap;
   gap: 8px;
 }
-
 .profile-info .profile-status-role .profile-insignias {
   margin-left: 0;
   transform: none;
@@ -1132,7 +1132,6 @@ overflow-wrap: anywhere;
     drop-shadow(0 0 4px rgba(255, 255, 255, 0.75))
     drop-shadow(0 0 10px rgba(181, 160, 255, 0.8));
 }
-
 /* SLYE — ajuste para celulares */
 @media (max-width: 600px) {
   .profile-info .slye-insignia {
@@ -1140,7 +1139,6 @@ overflow-wrap: anywhere;
     height: 37.5px !important;
   }
 }
-
 .profile-info .slye-insignia {
   position: relative;
   display: inline-flex;
@@ -1157,7 +1155,6 @@ overflow-wrap: anywhere;
     transform .2s ease,
     filter .2s ease;
 }
-
 .profile-info .slye-insignia svg {
   display: block;
   width: 100%;
@@ -1241,8 +1238,6 @@ body {
   border-color: rgba(255,255,255,.07);
   letter-spacing: 1.2px;
 }
-
-
 @media (max-width: 600px) {
   .profile-card {
     border-radius: 21px;
@@ -1254,28 +1249,22 @@ body {
   padding: 20px 22px;
   box-sizing: border-box;
 }
-
 .container {
   max-width: 520px;
 }
-
 .avatar-container {
   width: 72px;
   height: 72px;
 }
-
 .profile-card.align-center {
   gap: 12px;
 }
-
 .profile-card.align-center .profile-header-row {
   gap: 10px;
 }
-
 .profile-foot {
   padding: 10px 0 12px;
 }
-
 @media (max-width: 600px) {
   .profile-card {
     padding: 18px 16px;
@@ -1287,23 +1276,17 @@ body {
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  
+
 <!-- CANVAS PARA OS EFEITOS VISUAIS DE FUNDO -->
 <canvas id="effectCanvas"></canvas>
-
 <!-- PLAYER ULTRA MINIMALISTA (FIXO NO CANTO INFERIOR ESQUERDO) -->
-
-
-
 <header id="playerSection" class="fixed z-50 w-[280px] max-w-[90vw]" style="display: none;">
     <div id="playerWrapper" class="glow-border bg-[#09090b]/90 rounded-full px-3 py-1.5 flex items-center justify-between transition-all duration-500 shadow-2xl">
-        
         <!-- Botão Play/Pause -->
         <button id="playPauseBtn" class="player-btn-action glow-btn relative w-7 h-7 rounded-full bg-white text-black flex items-center justify-center focus:outline-none cursor-pointer">
             <i id="playIcon" class="fa-solid fa-play text-[9px] translate-x-[1px]"></i>
             <i id="pauseIcon" class="fa-solid fa-pause text-[9px] hidden"></i>
         </button>
-
         <!-- Status / Nome da Trilha / Canvas -->
         <div class="flex flex-col items-center justify-center flex-1 mx-2.5 overflow-hidden">
             <div class="flex items-center gap-1 mb-0.5 w-full justify-center">
@@ -1317,7 +1300,6 @@ body {
                 <canvas id="visualizer" class="w-full h-full opacity-70"></canvas>
             </div>
         </div>
-
         <!-- Tempo / Mute -->
         <div class="player-text-meta flex items-center gap-2 text-neutral-400">
             <span id="timeDisplay" class="text-[9px] font-mono tracking-tighter text-neutral-500">00:00</span>
@@ -1325,12 +1307,10 @@ body {
                 <i id="volumeIcon" class="fa-solid fa-volume-high text-[10px]"></i>
             </button>
         </div>
-
         <!-- Player oculto do YouTube (Invisível) -->
         <div id="youtubePlayerContainer" style="display:none; position:absolute; pointer-events:none; opacity:0; width:0; height:0; overflow:hidden;"></div>
     </div>
 </header>
-
 <!-- TELA DE ENTRADA (SPLASH SCREEN) -->
 <div class="splash-overlay" id="splashScreen">
   <div class="splash-content">
@@ -1402,8 +1382,7 @@ body {
           </div>
         </div>
       </div>
-      
-<!-- JANELA DA GALERIA SLYE -->
+   <!-- JANELA DA GALERIA SLYE -->
 <div
   id="profile-gallery-modal"
   class="sly-gallery-modal"
@@ -1506,7 +1485,6 @@ body {
 <script>
 // --- SISTEMA DE EFEITOS VISUAIS DE FUNDO (CANVAS) ---
 let currentEffectAnimId = null;
-
 function initVisualEffect(effectName) {
   const canvas = document.getElementById('effectCanvas');
   if (!canvas) return;
@@ -2913,7 +2891,6 @@ if (embedsBar) {
   top: 18px;
   right: 18px;
 }
-
 @media (max-width: 520px) {
   .sly-gallery-window {
     padding: 16px;
@@ -2967,12 +2944,10 @@ if (embedsBar) {
 #handle {
   display: none !important;
 }
-  
-/* SLYE — tooltip personalizado das insígnias */
+  /* SLYE — tooltip personalizado das insígnias */
 .profile-info .slye-insignia {
   position: relative;
 }
-
 .profile-info .slye-insignia::after {
   content: attr(aria-label);
   position: absolute;
@@ -2992,7 +2967,6 @@ if (embedsBar) {
   z-index: 9999;
   transition: opacity .18s ease, transform .18s ease;
 }
-
 .profile-info .slye-insignia:hover::after {
   opacity: 1;
   visibility: visible;
