@@ -363,9 +363,9 @@ overflow-wrap: anywhere;
   gap: 8px !important;
   min-width: 0 !important;
 }
+/* SLYE — status e cargo alinhados abaixo do nome */
 .profile-card.align-left .profile-info > .profile-status-role > #statusBox,
-.profile-card.align-left .profile-info > .profile-status-role > #roleBadge,
-.profile-card.align-left .profile-info > .profile-status-role > #profileInsignias {
+.profile-card.align-left .profile-info > .profile-status-role > #roleBadge {
   flex: 0 1 auto !important;
   min-width: 0 !important;
   max-width: 100% !important;
@@ -1349,18 +1349,17 @@ body {
     <div class="avatar" id="avatar">⌬</div>
   </div>
   <div class="profile-info">
-    
 <div class="profile-name-line">
   <h3 id="name">Carregando...</h3>
+  <div class="profile-insignias" id="profileInsignias"></div>
 </div>
-    <div class="handle" id="handle">@...</div>
-    <div class="profile-status-role">
+<div class="handle" id="handle">@...</div>
+<div class="profile-status-role">
       <div class="live-status animate-item delay-3" id="statusBox">
         <span id="statusEmoji">🎮</span>
         <span id="statusText">Buscando universo...</span>
       </div>
       <div class="role-badge" id="roleBadge">👾 Membro</div>
-      <div class="profile-insignias" id="profileInsignias"></div>
     </div>
   </div>
 </div>
@@ -2966,6 +2965,38 @@ if (embedsBar) {
   pointer-events: none;
   z-index: 9999;
   transition: opacity .18s ease, transform .18s ease;
+}
+  /* SLYE — nome e insígnias na mesma linha */
+.profile-card.align-left .profile-name-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.profile-card.align-left .profile-name-line #name {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.profile-card.align-left .profile-name-line .profile-insignias {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  margin: 0;
+  transform: none;
+  position: relative;
+  z-index: 2;
+}
+.profile-card.align-left .profile-name-line .profile-insignias:empty {
+  display: none;
 }
 .profile-info .slye-insignia:hover::after {
   opacity: 1;
