@@ -179,7 +179,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   grid-row: 1;
   width: 100%;
   min-width: 0;
-  height: auto;
+  height: auto !important;
   min-height: 150px;
   align-self: stretch;
   margin: 0;
@@ -273,7 +273,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   align-self: start;
   min-height: 180px;
   height: auto;
-  padding: 24px 125px 24px 0;
+  padding: 24px 125px 84px 0;
   margin: 0;
   box-sizing: border-box;
   align-items: center;
@@ -281,6 +281,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;over
   /* SLYE — mantém a bio abaixo do banner */
 .profile-card.align-left #profileBanner[style*="display: block"] ~ .bio-preview {
   grid-row: 2;
+  margin-top: -73px;
 }
 .profile-card.align-left #profileBanner[style*="display: block"] ~ .preview-emblems {
  grid-row: 3;
@@ -405,7 +406,6 @@ overflow-wrap: anywhere;
   overflow-wrap: anywhere;
 }
   .profile-card.align-left .profile-status-role #roleBadge {
-  transform: translateY(6px);
   display: inline-flex;
   flex: 0 0 auto;
   width: fit-content;
@@ -428,6 +428,22 @@ overflow-wrap: anywhere;
   min-width: 0;
   z-index: 2;
 }
+@media (max-width: 520px) {
+  .profile-card.align-left .profile-header-row {
+    padding: 48px 12px 0 0;
+  }
+
+  .profile-card.align-left #profileBanner[style*="display: block"] ~ .profile-header-row {
+    padding: 56px 12px 84px 0;
+  }
+
+  .profile-card.align-left .avatar-container {
+    flex-basis: 72px;
+    width: 72px;
+    min-width: 72px;
+    height: 72px;
+  }
+}
 /* SLYE — bio minimalista dentro do banner */
 .profile-card.align-left .bio-preview {
   grid-column: 1 / -1;
@@ -435,7 +451,7 @@ overflow-wrap: anywhere;
   width: calc(100% - 32px);
   max-width: 520px;
   min-width: 0;
-  margin: -73px 0 16px 16px;
+  margin: 4px 0 16px 16px;
   min-height: 0;
   height: auto;
   padding: 4px 9px;
@@ -591,20 +607,6 @@ overflow-wrap: anywhere;
 .profile-card.align-center .public-socials {
   justify-content: center;
 }
-```css
-/* SLYE — status e cargo lado a lado */
-.profile-card.align-left .profile-info .profile-status-role {
-  display: inline-flex !important;
-  flex-direction: row !important;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 8px;
-  width: fit-content;
-  max-width: 100%;
-  min-width: 0;
-}
-
 .profile-card.align-left .profile-info .profile-status-role #statusBox {
   display: inline-flex;
   flex: 0 1 auto;
@@ -1095,8 +1097,8 @@ overflow-wrap: anywhere;
 }
 
 .profile-info .slye-insignia {
-  width: 46px !important;
-  height: 46px !important;
+  width: 24px !important;
+  height: 24px !important;
   max-width: none !important;
   max-height: none !important;
   object-fit: contain;
@@ -1125,8 +1127,8 @@ overflow-wrap: anywhere;
 /* SLYE — ajuste para celulares */
 @media (max-width: 600px) {
   .profile-info .slye-insignia {
-    width: 37.5px !important;
-    height: 37.5px !important;
+    width: 22px !important;
+    height: 22px !important;
   }
 }
 .profile-info .slye-insignia {
