@@ -739,12 +739,6 @@ overflow-wrap: anywhere;
   text-overflow: clip;
 }
 
-.text-effect-glow {
-  color: #ffffff !important;
-  text-shadow: none !important;
-  filter: none !important;
-}
-
 .handle{font-size:13px;font-weight:600;letter-spacing:0.02em;margin-bottom:4px}
 .role-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c084fc;width:fit-content}
 
@@ -2980,10 +2974,12 @@ if (embedsBar) {
   visibility: visible;
   transform: translate(-50%, 0);
 }
-/* SLYE — remove definitivamente o neon do nickname */
+/* SLYE — neon suave no nickname */
 .profile-card.align-left .profile-info .profile-name-line #name {
   color: #ffffff !important;
-  text-shadow: none !important;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.35),
+    0 0 5px rgba(181, 160, 255, 0.25) !important;
   -webkit-text-stroke: 0 transparent !important;
   filter: none !important;
   box-shadow: none !important;
