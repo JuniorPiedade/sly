@@ -1,3 +1,4 @@
+
 /* SLYE.ME — Catálogo oficial de insígnias */
 
 window.SLYEBadges = {
@@ -5,27 +6,27 @@ window.SLYEBadges = {
     id: "beta",
     name: "Membro BETA",
     description: "Fez parte da fase BETA do SLYE.ME.",
-    image: "/assets/badges/beta.png"
+    image: "/assets/logos/badges/beta.svg"
   },
 
   supporter: {
     id: "supporter",
     name: "Support",
     description: "Faz parte da STAFF SLYE.ME.",
-    image: "/assets/badges/supporter.png"
+    image: "/assets/logos/badges/supporter.svg"
   },
 
   booster: {
     id: "booster",
     name: "Booster",
     description: "Possui a insígnia Booster do SLYE.ME.",
-    image: "/assets/badges/booster.png"
+    image: "/assets/logos/badges/booster.svg"
   },
 
   influencer: {
     id: "influencer",
     name: "Influencer",
     description: "Possui a insígnia Influencer do SLYE.ME.",
-    image: "/assets/badges/influencer.png"
+    image: "/assets/logos/badges/influencer.svg"
   }
 };
