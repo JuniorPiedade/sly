@@ -1104,8 +1104,8 @@ overflow-wrap: anywhere;
 }
 
 .profile-info .slye-insignia {
-  width: 44px !important;
-  height: 44px !important;
+  width: 46px !important;
+  height: 46px !important;
   max-width: none !important;
   max-height: none !important;
   object-fit: contain;
@@ -1115,7 +1115,17 @@ overflow-wrap: anywhere;
   transition: transform 0.2s ease, filter 0.2s ease;
   filter: drop-shadow(0 0 4px rgba(181, 160, 255, 0.3));
 }
+  .profile-info .profile-status-role {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
 
+.profile-info .profile-status-role .profile-insignias {
+  margin-left: 0;
+  transform: none;
+}
 .profile-info .slye-insignia:hover {
   transform: scale(1.12);
   filter:
@@ -1126,8 +1136,8 @@ overflow-wrap: anywhere;
 /* SLYE — ajuste para celulares */
 @media (max-width: 600px) {
   .profile-info .slye-insignia {
-    width: 36px !important;
-    height: 36px !important;
+    width: 37.5px !important;
+    height: 37.5px !important;
   }
 }
 
@@ -1364,13 +1374,11 @@ body {
   <h3 id="name">Carregando...</h3>
 </div>
     <div class="handle" id="handle">@...</div>
-<div id="profile-insignias" class="profile-insignias"></div>
     <div class="profile-status-role">
       <div class="live-status animate-item delay-3" id="statusBox">
         <span id="statusEmoji">🎮</span>
         <span id="statusText">Buscando universo...</span>
       </div>
-
       <div class="role-badge" id="roleBadge">👾 Membro</div>
       <div class="profile-insignias" id="profileInsignias"></div>
     </div>
