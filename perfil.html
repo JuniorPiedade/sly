@@ -354,20 +354,27 @@ margin-top: 0;
 margin-bottom: 0;
 overflow-wrap: anywhere;
 }
-  
-/* SLYE — alinhamento do status, cargo e insígnias */
+/* SLYE — status e insígnias em linhas separadas */
 .profile-card.align-left .profile-info > .profile-status-role {
   display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
   justify-content: flex-start !important;
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important;
   align-self: flex-start !important;
   width: 100% !important;
   max-width: 100% !important;
-  gap: 8px !important;
+  gap: 6px !important;
   min-width: 0 !important;
 }
+  /* SLYE — status mantém seu tamanho natural */
+.profile-card.align-left .profile-info > .profile-status-role > #statusBox {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+  
 /* SLYE — status e cargo alinhados abaixo do nome */
 .profile-card.align-left .profile-info > .profile-status-role > #statusBox,
 .profile-card.align-left .profile-info > .profile-status-role > #roleBadge {
