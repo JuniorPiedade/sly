@@ -751,21 +751,66 @@ overflow-wrap: anywhere;
 
 .bio-preview{font-size:13px;margin:4px 0 0;overflow-wrap:anywhere;line-height:1.5}
 
-/* Status compacto (não estica em 100%) */
-.live-status{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:4px 11px;
-  border:1px solid rgba(34,211,238,0.3);
-  background:rgba(34,211,238,0.08);
-  color:#cffafe;
-  border-radius:999px;
-  font-size:10px;
-  font-weight:600;
-  margin:4px 0 0;
-  width:fit-content !important;
+
+/* SLYE — status Neon Glow */
+.live-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 11px;
+
+  border: 1px solid rgba(34, 211, 238, 0.65);
+  background: linear-gradient(
+    110deg,
+    rgba(34, 211, 238, 0.16),
+    rgba(34, 211, 238, 0.07)
+  );
+
+  color: #d9fbff;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  margin: 4px 0 0;
+  width: fit-content !important;
+
+  box-shadow:
+    0 0 5px rgba(34, 211, 238, 0.20),
+    0 0 12px rgba(34, 211, 238, 0.13),
+    inset 0 0 7px rgba(34, 211, 238, 0.07);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
+
+/* Indicador de status: pulsação suave */
+#statusEmoji {
+  display: inline-block;
+  transform-origin: center;
+  animation: slyeStatusPulse 2.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.75));
+}
+
+@keyframes slyeStatusPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(34, 211, 238, 0.45));
+    opacity: 0.9;
+  }
+
+  50% {
+    filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.9));
+    opacity: 1;
+  }
+}
+
+/* Respeita a preferência do usuário por menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  #statusEmoji {
+    animation: none;
+  }
+}
+
 
 
 /* SLYE — emblemas minimalistas com ícones SVG */
