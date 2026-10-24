@@ -1641,7 +1641,7 @@ const emblemNames = {
   lol: 'LoL', habbo: 'Habbo', thesims: 'The Sims', valorant: 'Valorant',
   cod: 'Call Of Duty', cs: 'CS', gta: 'GTA', minecraft: 'Minecraft',
   rpg: 'RPG', artista: 'Artista', artist: 'Criador', musica: 'Música', 
-  fundador: 'Fundador', founder: 'Fundador', geek: 'Geek'
+  geek: 'Geek'
 };
 
 // SLYE — ícones SVG minimalistas para os emblemas
@@ -2292,7 +2292,9 @@ if (avatarEl) {
 const emblemsEl = document.getElementById('emblems');
 
 if (emblemsEl) {
-  emblemsEl.innerHTML = (data.emblems || []).map(id => {
+ emblemsEl.innerHTML = (data.emblems || [])
+  .filter(id => !['fundador', 'founder'].includes(String(id).toLowerCase().trim()))
+  .map(id => 
     const cleanId = String(id).toLowerCase().trim();
     const icon = emblemIcons[cleanId] || emblemIcons.geek;
     const name = emblemNames[cleanId] || cleanId;
