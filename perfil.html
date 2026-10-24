@@ -827,6 +827,25 @@ overflow-wrap: anywhere;
   -webkit-backdrop-filter: none;
 }
 
+/* SLYE — soft glow nos emblemas */
+.preview-emblems .slye-emblem {
+  box-shadow:
+    0 2px 7px rgba(0, 0, 0, 0.16),
+    0 0 8px rgba(181, 160, 255, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.preview-emblems .slye-emblem-icon {
+  filter: drop-shadow(0 0 2px rgba(200, 184, 255, 0.16));
+}
+
+.preview-emblems .slye-emblem:hover {
+  box-shadow:
+    0 3px 9px rgba(0, 0, 0, 0.2),
+    0 0 10px rgba(181, 160, 255, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
 .preview-emblems .slye-emblem:hover {
   background: rgba(255, 255, 255, 0.065);
   border-color: rgba(200, 184, 255, 0.28);
