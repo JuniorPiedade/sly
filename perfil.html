@@ -2288,16 +2288,14 @@ if (avatarEl) {
     avatarEl.textContent = '⌬';
   }
 }
- 
-const emblemsEl = document.getElementById('emblems');
-
-if (emblemsEl) {
 
 const emblemsEl = document.getElementById('emblems');
-
 if (emblemsEl) {
   emblemsEl.innerHTML = (data.emblems || [])
-    .filter(id => !['fundador', 'founder'].includes(String(id).toLowerCase().trim()))
+    .filter(id => {
+      const cleanId = String(id).toLowerCase().trim();
+      return cleanId !== 'fundador' && cleanId !== 'founder';
+    })
     .map(id => {
       const cleanId = String(id).toLowerCase().trim();
       const icon = emblemIcons[cleanId] || emblemIcons.geek;
