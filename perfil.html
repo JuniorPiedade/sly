@@ -752,19 +752,55 @@ overflow-wrap: anywhere;
 .bio-preview{font-size:13px;margin:4px 0 0;overflow-wrap:anywhere;line-height:1.5}
 
 
-/* SLYE — status Neon Glow */
+
+/* SLYE — status minimalista violeta */
 .live-status {
   display: inline-flex;
   align-items: center;
   gap: 7px;
   padding: 4px 11px;
 
-  border: 1px solid rgba(34, 211, 238, 0.65);
+  border: 1px solid rgba(181, 160, 255, 0.20);
   background: linear-gradient(
     110deg,
-    rgba(34, 211, 238, 0.16),
-    rgba(34, 211, 238, 0.07)
+    rgba(181, 160, 255, 0.10),
+    rgba(111, 76, 180, 0.045)
   );
+
+  color: #d8ccff;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 500;
+  margin: 4px 0 0;
+  width: fit-content !important;
+  box-sizing: border-box;
+
+  box-shadow: 0 0 10px rgba(181, 160, 255, 0.035);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Esconde o emoji antigo sem alterar o HTML ou o JavaScript */
+#statusEmoji {
+  display: none !important;
+}
+
+/* Ponto minimalista antes do texto */
+#statusText::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: #b5a0ff;
+  vertical-align: middle;
+  box-shadow: 0 0 5px rgba(181, 160, 255, 0.25);
+}
+
 
   color: #d9fbff;
   border-radius: 999px;
