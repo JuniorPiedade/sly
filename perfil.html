@@ -1319,25 +1319,28 @@ overflow-wrap: anywhere;
     drop-shadow(0 0 9px rgba(220,220,255,.5));
 }
 
-/* Cada insígnia tem uma assinatura visual */
+
+/* SLYE — assinatura visual premium das insígnias */
 .profile-info .slye-insignia-beta {
-  filter: drop-shadow(0 0 4px rgba(255,255,255,.4));
+  filter:
+    drop-shadow(0 0 3px rgba(167, 139, 250, 0.42))
+    drop-shadow(0 0 5px rgba(196, 181, 253, 0.14));
 }
-
 .profile-info .slye-insignia-supporter {
-  filter: drop-shadow(0 0 4px rgba(215,215,230,.45));
+  filter:
+    drop-shadow(0 0 2px rgba(167, 139, 250, 0.32))
+    drop-shadow(0 0 4px rgba(148, 163, 184, 0.20));
 }
-
 .profile-info .slye-insignia-booster {
-  filter: drop-shadow(0 0 5px rgba(255,255,255,.55));
+  filter:
+    drop-shadow(0 0 4px rgba(139, 92, 246, 0.48))
+    drop-shadow(0 0 7px rgba(196, 181, 253, 0.22));
 }
-
 .profile-info .slye-insignia-influencer {
   filter:
-    drop-shadow(0 0 3px rgba(255,255,255,.65))
-    drop-shadow(0 0 7px rgba(200,200,255,.3));
+    drop-shadow(0 0 3px rgba(196, 181, 253, 0.42))
+    drop-shadow(0 0 5px rgba(148, 163, 184, 0.16));
 }
-
 @media (prefers-reduced-motion: reduce) {
   .profile-info .slye-insignia {
     transition: none;
