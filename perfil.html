@@ -2292,20 +2292,25 @@ if (avatarEl) {
 const emblemsEl = document.getElementById('emblems');
 
 if (emblemsEl) {
- emblemsEl.innerHTML = (data.emblems || [])
-  .filter(id => !['fundador', 'founder'].includes(String(id).toLowerCase().trim()))
-  .map(id => 
-    const cleanId = String(id).toLowerCase().trim();
-    const icon = emblemIcons[cleanId] || emblemIcons.geek;
-    const name = emblemNames[cleanId] || cleanId;
 
-    return `
-      <span class="slye-emblem" title="${name}">
-        <span class="slye-emblem-icon">${icon}</span>
-        <span class="slye-emblem-name">${name}</span>
-      </span>
-    `;
-  }).join('');
+const emblemsEl = document.getElementById('emblems');
+
+if (emblemsEl) {
+  emblemsEl.innerHTML = (data.emblems || [])
+    .filter(id => !['fundador', 'founder'].includes(String(id).toLowerCase().trim()))
+    .map(id => {
+      const cleanId = String(id).toLowerCase().trim();
+      const icon = emblemIcons[cleanId] || emblemIcons.geek;
+      const name = emblemNames[cleanId] || cleanId;
+
+      return `
+        <span class="slye-emblem" title="${name}">
+          <span class="slye-emblem-icon">${icon}</span>
+          <span class="slye-emblem-name">${name}</span>
+        </span>
+      `;
+    })
+    .join('');
 }
   // --- RENDERIZAÇÃO DAS REDES SOCIAIS LOCAIS ---
   const socialsBar = document.getElementById('socialsBar');
