@@ -1929,7 +1929,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const handle = rawHandle.trim().replace(/^@/, '');
   const data = await window.islySupabase.getProfileByHandle(handle);
-
+  console.log('SLYE — handle consultado:', handle);
+  console.log('SLYE — perfil retornado pelo Supabase:', data);
+  console.log('SLYE — badges retornadas:', data?.badges);
   if (!data) {
     document.querySelector('.container').innerHTML = `<div class="error-box"><h2>404 — Universo não encontrado</h2><p>O perfil "@${handle}" ainda não foi publicado.</p></div>`;
     return;
