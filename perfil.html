@@ -1941,7 +1941,7 @@ if (insigniasContainer) {
   insigniasContainer.replaceChildren();
 
   const insignias = Array.isArray(data.badges) ? data.badges : [];
-
+  console.log('SLYE — insígnias do perfil:', data.badges);
   insignias.forEach((badgeId) => {
     const badge = window.SLYEBadges?.[badgeId];
 
